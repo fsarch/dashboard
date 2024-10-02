@@ -1,0 +1,58 @@
+@import "./config.utils";
+@import "./config.base";
+
+$custom-padding: add-custom-spacings(
+  $custom-padding,
+  'header',
+  3,
+  4,
+  3,
+  4
+);
+
+$custom-padding: add-custom-spacings(
+  $custom-padding,
+  'ccm-message',
+  2,
+  2,
+  2,
+  2
+);
+
+$custom-border-radius: add-custom-spacings(
+  $custom-border-radius,
+  'ccm-message',
+  3,
+  3,
+  3,
+  3
+);
+
+$custom-background-color: add-custom-color(
+  $custom-background-color,
+  'ccm-message',
+  'var(--color-contrast-light)',
+);
+
+$custom-background-color: add-custom-color(
+  $custom-background-color,
+  'ccm-message-footer',
+  'var(--color-contrast-light)',
+);
+
+$custom-text-color: add-custom-color(
+  $custom-text-color,
+  'ccm-message-subline',
+  'var(--color-contrast-normal)',
+);
+
+$custom-font-size: (
+  ccm-message-subline: var(--font-size-sm),
+);
+
+$custom-gaps: (
+  'ccm-message-list': 'var(--spacing-2)',
+);
+
+$custom-margin: (
+);

@@ -1,0 +1,9 @@
+@import "@/app/_styles/utils";
+
+.root {
+  display: flex;
+  flex-direction: column;
+
+  @include apply-custom-gap('ccm-message-list');
+
+}

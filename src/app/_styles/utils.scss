@@ -1,0 +1,90 @@
+@import "./config";
+
+@mixin spacing() {
+  // SPACING Custom Properties
+  @each $space, $value in $spacing {
+    --spacing-#{$space}: #{$value};
+  }
+
+  // SPACING Custom Properties
+  @each $space, $value in $custom-spacing {
+    --custom-spacing-#{$space}: #{$value};
+  }
+
+  // SPACING Custom Properties
+  @each $space, $value in $custom-padding {
+    --custom-padding-#{$space}: #{$value};
+  }
+
+  // SPACING Custom Properties
+  @each $space, $value in $custom-margin {
+    --custom-margin-#{$space}: #{$value};
+  }
+}
+
+@mixin color() {
+  // SPACING Custom Properties
+  @each $space, $value in $colors {
+    --color-#{$space}: #{$value};
+  }
+
+  // SPACING Custom Properties
+  @each $space, $value in $custom-text-color {
+    --custom-text-color-#{$space}: #{$value};
+  }
+
+  // SPACING Custom Properties
+  @each $space, $value in $custom-background-color {
+    --custom-background-color-#{$space}: #{$value};
+  }
+}
+
+@mixin border-radius() {
+  // SPACING Custom Properties
+  @each $space, $value in $custom-border-radius {
+    --custom-border-radius-#{$space}: #{$value};
+  }
+}
+
+@mixin custom-gap() {
+  // SPACING Custom Properties
+  @each $space, $value in $custom-gaps {
+    --custom-gap-#{$space}: #{$value};
+  }
+}
+
+@mixin custom-font-size() {
+  // SPACING Custom Properties
+  @each $space, $value in $font-size {
+    --font-size-#{$space}: #{$value};
+  }
+
+  // SPACING Custom Properties
+  @each $space, $value in $custom-font-size {
+    --custom-font-size-#{$space}: #{$value};
+  }
+}
+
+@mixin apply-custom-padding($name) {
+  padding: var(--custom-padding- + $name + -top) var(--custom-padding- + $name + -right) var(--custom-padding- + $name + -bottom) var(--custom-padding- + $name + -left)
+}
+
+@mixin apply-custom-background-color($name) {
+  background-color: var(--custom-background-color- + $name)
+}
+
+@mixin apply-custom-text-color($name) {
+  color: var(--custom-text-color- + $name)
+}
+
+@mixin apply-custom-font-size($name) {
+  font-size: var(--custom-font-size- + $name)
+}
+
+@mixin apply-custom-border-radius($name) {
+  border-radius: var(--custom-border-radius- + $name + -top) var(--custom-border-radius- + $name + -right) var(--custom-border-radius- + $name + -bottom) var(--custom-border-radius- + $name + -left)
+}
+
+@mixin apply-custom-gap($name) {
+  gap: var(--custom-gap- + $name)
+}

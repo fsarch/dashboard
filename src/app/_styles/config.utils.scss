@@ -1,0 +1,50 @@
+@use "sass:map";
+
+@function add-custom-spacings($map, $name, $top, $right, $bottom, $left) {
+  @if type-of($top) == number {
+    @if ($top == 0) {
+      $top: 'none';
+    }
+
+    $map: map.set($map, $name + '-top', 'var(--spacing-' + $top + ')');
+  } @else {
+    $map: map.set($map, $name + '-top', $top);
+  }
+
+  @if type-of($right) == number {
+    @if ($right == 0) {
+      $right: 'none';
+    }
+
+    $map: map.set($map, $name + '-right', 'var(--spacing-' + $right + ')');
+  } @else {
+    $map: map.set($map, $name + '-right', $right);
+  }
+
+  @if type-of($bottom) == number {
+    @if ($bottom == 0) {
+      $bottom: 'none';
+    }
+
+    $map: map.set($map, $name + '-bottom', 'var(--spacing-' + $bottom + ')');
+  } @else {
+    $map: map.set($map, $name + '-bottom', $bottom);
+  }
+
+  @if type-of($left) == number {
+    @if ($left == 0) {
+      $left: 'none';
+    }
+
+    $map: map.set($map, $name + '-left', 'var(--spacing-' + $left + ')');
+  } @else {
+    $map: map.set($map, $name + '-left', $left);
+  }
+
+  @return $map;
+}
+
+@function add-custom-color($map, $name, $color) {
+  @return map.set($map, $name, $color);
+}
+

@@ -1,0 +1,38 @@
+@import "@/app/_styles/utils";
+
+.root {
+  @include apply-custom-padding('ccm-message');
+  @include apply-custom-border-radius('ccm-message');
+  @include apply-custom-background-color('ccm-message');
+}
+
+.content {
+
+}
+
+.subline {
+  @include apply-custom-text-color('ccm-message-subline');
+  @include apply-custom-font-size('ccm-message-subline');
+}
+
+.sameUser, .otherUser {
+  max-width: 400px;
+  width: 90%;
+}
+
+.sameUser {
+  align-self: flex-start;
+
+  .content, .subline {
+    text-align: start;
+  }
+}
+
+.otherUser {
+  align-self: flex-end;
+
+  .content, .subline {
+    text-align: end;
+  }
+}
+

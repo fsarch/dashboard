@@ -1,0 +1,5 @@
+@import '@/app/_styles/utils';
+
+.root {
+    @include apply-custom-padding('header');
+}

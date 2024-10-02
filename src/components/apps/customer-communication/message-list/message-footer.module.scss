@@ -1,0 +1,30 @@
+@import "@/app/_styles/utils";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px;
+
+  @include apply-custom-background-color('ccm-message-footer');
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  background-color: #FFFFFF;
+}
+
+.input {
+  flex-grow: 1;
+  min-height: 120px;
+  max-height: 50vh;
+  margin: 10px;
+  overflow-y: auto;
+}
+
+.submit {
+  flex-shrink: 0;
+}
