@@ -1,0 +1,12 @@
+@import "@/app/_styles/utils";
+
+.htmlContent {
+  background-color: #FFFFFF;
+
+  @include apply-custom-border-radius('ccm-message');
+
+  box-sizing: content-box;
+  padding: 8px;
+  width: calc(100% - 16px) !important;
+  max-height: 500px;
+}

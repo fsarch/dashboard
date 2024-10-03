@@ -3,13 +3,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useCurrentServiceId } from "@/utils/hooks/useCurrentServiceId.hook";
 import styles from './markdown-content.module.scss';
+import clsx from "clsx";
 
 type MarkdownContentProps = {
+  className?: string;
   threadId: string;
   messageId: string;
 };
 
 const MarkdownContent: React.FunctionComponent<MarkdownContentProps> = ({
+  className,
   threadId,
   messageId,
 }) => {
@@ -38,8 +41,6 @@ const MarkdownContent: React.FunctionComponent<MarkdownContentProps> = ({
     };
   }, [ref]);
 
-  console.log('height', height);
-
   return (
     <iframe
       style={{
@@ -48,7 +49,7 @@ const MarkdownContent: React.FunctionComponent<MarkdownContentProps> = ({
       ref={ref}
       src={`/ccm/${serviceId}/threads/${threadId}/messages/${messageId}/embed`}
       sandbox="allow-scripts"
-      className={styles.root}
+      className={clsx(styles.root, className)}
     />
   );
 };

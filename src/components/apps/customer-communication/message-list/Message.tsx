@@ -4,6 +4,7 @@ import { TMessage } from "@/services/customer-communication/customer-communicati
 import styles from './message.module.scss';
 import clsx from "clsx";
 import Content from "@/components/apps/customer-communication/message-list/message/content/content.component";
+import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
 
 type MessageProps = {
   message: TMessage;
@@ -23,6 +24,7 @@ const Message: React.FunctionComponent<MessageProps> = ({
       className={clsx(styles.root, {
         [styles.sameUser]: customerId === messageCustomerId,
         [styles.otherUser]: customerId !== messageCustomerId,
+        [styles.fullSize]: message.contentType.id === EContentType.TEXT_HTML,
       })}
     >
       <div className={styles.content}>
