@@ -1,12 +1,4 @@
-@import "./_styles/index.scss";
-
-.body {
-  overflow-y: hidden;
-  height: 100vh;
-  color: #FFFFFF;
-  margin: 0;
-  padding: 0;
-}
+@import "@/app/_styles/index";
 
 .root {
   @include color();
@@ -19,6 +11,10 @@
   flex-direction: column;
 
   height: 100vh;
+
+  padding: 8px;
+
+  background-color: black;
 }
 
 .content {

@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdx-js/mdx": "^3.0.1",
     "@mdxeditor/editor": "^3.11.5",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
     "js-yaml": "^4.1.0",
     "next": "14.2.5",
     "next-auth": "^4.24.8",
+    "next-mdx-remote": "^5.0.0",
     "react": "^18",
     "react-dom": "^18",
     "sass": "^1.79.4"

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.scss";
 import styles from './layout.module.scss';
+import './globals.scss';
 import clsx from "clsx";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getAccessToken } from "@/utils/getAccessToken";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,22 +24,14 @@ export default async function RootLayout({
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = headers().get('X-Original-URL') || '/';
-    console.log('update token');
     return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
   return (
     <html lang="en">
-      <body className={clsx(inter.className, styles.body)}>
-      <div className={styles.root}>
-        <div className={styles.header}>
-          {header}
-        </div>
-        <div className={styles.content}>
-          {children}
-        </div>
-      </div>
-      </body>
+    <body className={clsx(inter.className, styles.body)}>
+    {children}
+    </body>
     </html>
   );
 }

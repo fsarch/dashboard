@@ -1,3 +1,5 @@
+import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
+
 export type TThread = {
   id: string;
   name: string;
@@ -16,7 +18,7 @@ export type TMessage = {
   externalId: string;
   content: string;
   contentType: {
-    id: number;
+    id: EContentType;
   };
   customer?: {
     id: string;
