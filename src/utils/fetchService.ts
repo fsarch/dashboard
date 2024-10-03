@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { getServiceConfigurationById } from "@/utils/configuration.utils";
 import { getAccessToken } from "@/utils/getAccessToken";
 
-export async function fetchService(url: string, init?: RequestInit): Promise<Response> {
-  const serviceId = headers().get('X-Service-Id');
+export async function fetchService(url: string, init?: RequestInit, options?: { serviceId: string; }): Promise<Response> {
+  const serviceId = options?.serviceId ?? headers().get('X-Service-Id');
   if (!serviceId) {
     throw new Error('no service id');
   }

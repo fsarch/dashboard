@@ -1,27 +1,46 @@
 'use client';
 
 import React, { useCallback } from 'react';
-import TextArea from "@/components/universals/forms/TextArea";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import Button from "@/components/universals/forms/Button";
 
 import styles from './message-footer.module.scss';
 import MarkdownHint from "@/components/apps/customer-communication/message-list/footer/markdown-hint.component";
 import MessageInput from "@/components/apps/customer-communication/message-list/footer/message-input.component";
+import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
+import { sendMessage } from "@/components/apps/customer-communication/message-list/message-footer.server-action";
+import { useCurrentServiceId } from "@/utils/hooks/useCurrentServiceId.hook";
+import { useRouter } from "next/navigation";
 
 type MessageFooterProps = {
-
+  threadId: string;
 };
 
-const MessageFooter: React.FunctionComponent<MessageFooterProps> = () => {
-  const handleSubmit = useCallback(() => {
-    console.log('submit');
-  }, []);
+type MessageFooterValues = {
+  content: string;
+  contentType: EContentType;
+};
+
+const MessageFooter: React.FunctionComponent<MessageFooterProps> = ({
+  threadId,
+}) => {
+  const serviceId = useCurrentServiceId();
+
+  const router = useRouter();
+
+  const handleSubmit = useCallback(async (values: MessageFooterValues, helpers: FormikHelpers<MessageFooterValues>) => {
+    await sendMessage(serviceId, threadId, values);
+
+    helpers.resetForm();
+
+    router.refresh();
+  }, [serviceId, threadId, router]);
 
   return (
     <Formik
       initialValues={{
         content: '',
+        contentType: EContentType.TEXT_PLAIN,
       }}
       onSubmit={handleSubmit}
     >
@@ -40,7 +59,7 @@ const MessageFooter: React.FunctionComponent<MessageFooterProps> = () => {
           </div>
           <MarkdownHint
             name="contentType"
-            value="markdown"
+            value={EContentType.TEXT_MARKDOWN}
           />
         </div>
       </Form>

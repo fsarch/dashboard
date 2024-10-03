@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useField } from "formik";
 import {
   BlockTypeSelect,
@@ -20,9 +20,13 @@ const MdxInput: React.FunctionComponent<MdxInputProps> = ({
   name,
   className,
 }) => {
-  const [field, meta] = useField({
+  const [field, meta, helpers] = useField({
     name,
   });
+
+  const handleChange = useCallback(async (markdown: string) => {
+    await helpers.setValue(markdown);
+  }, [helpers]);
 
   return (
     <MDXEditor
@@ -45,7 +49,7 @@ const MdxInput: React.FunctionComponent<MdxInputProps> = ({
       ]}
       className={className}
       markdown={field.value}
-      onChange={field.onChange}
+      onChange={handleChange}
       onBlur={field.onBlur}
     />
   );

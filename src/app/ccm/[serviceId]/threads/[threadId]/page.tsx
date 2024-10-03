@@ -22,7 +22,9 @@ export default async function Home({ params }: { params: { threadId: string } })
         ))}
       </MessageList>
       <div className={styles.answerBar}>
-        <MessageFooter/>
+        <MessageFooter
+          threadId={params.threadId}
+        />
       </div>
     </div>
   );

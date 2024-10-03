@@ -3,7 +3,7 @@ import { useField } from "formik";
 
 type MarkdownHintProps = {
   name: string;
-  value: string;
+  value: string | number;
 };
 
 const MarkdownHint: React.FunctionComponent<MarkdownHintProps> = ({

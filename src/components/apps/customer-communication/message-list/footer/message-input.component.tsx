@@ -7,6 +7,7 @@ import MDXInput from "@/components/universals/forms/MDXInput";
 
 import styles from './message-input.module.scss';
 import clsx from "clsx";
+import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
 
 type MessageInputProps = {
   className?: string;
@@ -15,9 +16,9 @@ type MessageInputProps = {
 const MessageInput: React.FunctionComponent<MessageInputProps> = ({
   className,
 }) => {
-  const { values } = useFormikContext<{ contentType: string; }>();
+  const { values } = useFormikContext<{ contentType: EContentType; }>();
 
-  if (values.contentType === 'markdown') {
+  if (values.contentType === EContentType.TEXT_MARKDOWN) {
     return (
       <MDXInput
         className={clsx(styles.root, className)}
