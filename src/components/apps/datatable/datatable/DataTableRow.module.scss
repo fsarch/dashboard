@@ -1,0 +1,14 @@
+@import "@/app/_styles/utils";
+
+.cell {
+  // hack for correct height of child elements
+  height: 1px;
+}
+
+.rowOverridden {
+  background-color: rgba(0, 255, 0, 0.2);
+}
+
+.cellOverridden {
+  background-color: rgba(0, 255, 0, 0.2);
+}

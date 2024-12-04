@@ -12,6 +12,15 @@ $custom-padding: add-custom-spacings(
 
 $custom-padding: add-custom-spacings(
   $custom-padding,
+  'datatable-cell',
+  2,
+  2,
+  2,
+  2
+);
+
+$custom-padding: add-custom-spacings(
+  $custom-padding,
   'ccm-message',
   2,
   2,

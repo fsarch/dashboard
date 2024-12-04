@@ -7,5 +7,9 @@ export const SERVICES: Record<EServiceType, {
   [EServiceType.CUSTOMER_COMMUNICATION]: {
     name: 'Customer Communication',
     basePath: '/ccm',
-  }
+  },
+  [EServiceType.DATATABLE]: {
+    name: 'Datatable',
+    basePath: '/datatable',
+  },
 };

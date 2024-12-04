@@ -1,0 +1,5 @@
+@import "@/app/_styles/utils";
+
+.cell {
+  @include apply-custom-padding('datatable-cell');
+}
