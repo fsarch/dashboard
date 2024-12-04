@@ -20,7 +20,7 @@ const DataTableIntegerCell: React.FunctionComponent<DataTableIntegerCellProps> =
 
   return (
     <DataTableInputCell
-      value={displayValue}
+      value={displayValue ?? ''}
       onChange={handleChange}
     />
   );

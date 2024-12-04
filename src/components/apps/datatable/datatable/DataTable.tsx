@@ -2,11 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DataTableDto } from "@/services/datatable/datatable.type";
-import { loadDataTableData } from "@/components/apps/datatable/datatable/DataTable.server-action";
+import { loadDataTableData, updateDataTableData } from "@/components/apps/datatable/datatable/DataTable.server-action";
 import DataTableHeader from "@/components/apps/datatable/datatable/DataTableHeader";
 import DataTableRow from "@/components/apps/datatable/datatable/DataTableRow";
 import { DataTableValue } from "@/components/apps/datatable/datatable/DataTable.type";
 import { DataTableUpdateContextProvider } from "@/components/apps/datatable/datatable/constants/DataTableUpdateContext";
+import DataTableMenu from "@/components/apps/datatable/datatable/DataTableMenu";
 
 type DataTableProps = {
   serviceId: string;
@@ -62,8 +63,6 @@ const DataTable: React.FunctionComponent<DataTableProps> = ({
   }), [data, definition, overrideData]);
 
   const handleUpdateCell = useCallback((identifiers: { key: string, object: Record<string, unknown> }, field: string, value: unknown) => {
-    console.log(identifiers, field, value);
-
     setOverrideData((d) => ({
       ...d,
       [identifiers.key]: {
@@ -77,11 +76,42 @@ const DataTable: React.FunctionComponent<DataTableProps> = ({
     }));
   }, [setOverrideData]);
 
-  console.log('overrideData', overrideData);
+  const handleApply = useCallback(async () => {
+    console.log('overrideData', overrideData);
+
+    const updateBody = Object.values(overrideData).map((value) => {
+      return {
+        identifiers: value.identification,
+        patch: value.value,
+      };
+    });
+
+    await updateDataTableData({
+      serviceId,
+      dataTableId,
+      update: updateBody,
+    });
+
+    const loadedData = await loadDataTableData({
+      serviceId,
+      dataTableId,
+    });
+    setData(loadedData);
+
+    setOverrideData({});
+  }, [overrideData, setData, setOverrideData, serviceId, dataTableId]);
+
+  const handleRevert = useCallback(() => {
+    setOverrideData({});
+  }, [setOverrideData]);
 
   return (
     <DataTableUpdateContextProvider onUpdate={handleUpdateCell}>
       <div>
+        <DataTableMenu
+          onApplyClick={handleApply}
+          onRevertClick={handleRevert}
+        />
         <table>
           <thead>
           <DataTableHeader

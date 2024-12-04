@@ -25,8 +25,24 @@ const listDataTableData = async (options: { serviceId: string; dataTableId: stri
   return dataTablesData;
 }
 
+const updateDataTableData = async (options: { serviceId: string; dataTableId: string; update: Array<{ identifiers: Record<string, unknown>; patch: Record<string, unknown> }> }): Promise<Array<unknown>> => {
+  const dataTableDataResponse = await fetchService(`/v1/datatables/${options.dataTableId}/data`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(options.update),
+  }, {
+    serviceId: options.serviceId,
+  });
+  const dataTablesData = await dataTableDataResponse.json();
+
+  return dataTablesData;
+}
+
 export const dataTableService = {
   listDataTables,
   getDataTable,
   listDataTableData,
+  updateDataTableData,
 };

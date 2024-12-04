@@ -21,7 +21,6 @@ export async function fetchService(url: string, init?: RequestInit, options?: { 
 
   if (!requestHeaders.has('Authorization')) {
     const accessToken = await getAccessToken();
-    console.log('add access token', accessToken);
     requestHeaders.set('Authorization', `Bearer ${accessToken}`);
   }
 
