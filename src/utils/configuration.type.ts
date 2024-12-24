@@ -1,6 +1,7 @@
 export enum EServiceType {
   CUSTOMER_COMMUNICATION = 'customer-communication',
   DATATABLE = 'datatable',
+  PIM = 'product',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -15,7 +16,13 @@ export type TDatatableServiceConfiguration = {
   url: string;
 }
 
-export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration;
+export type TProductServiceConfiguration = {
+  id: string;
+  type: EServiceType.PIM,
+  url: string;
+}
+
+export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration | TProductServiceConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

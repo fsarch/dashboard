@@ -32,6 +32,8 @@ export type DataTableBaseMappingDto = {
   selector: string;
 
   isIdentifier: boolean;
+
+  isEditable: boolean;
 }
 
 export type DataTableUuidMappingDto = DataTableBaseMappingDto & {

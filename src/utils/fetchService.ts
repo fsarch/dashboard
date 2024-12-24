@@ -24,8 +24,14 @@ export async function fetchService(url: string, init?: RequestInit, options?: { 
     requestHeaders.set('Authorization', `Bearer ${accessToken}`);
   }
 
-  return await fetch(new URL(url, serviceConfiguration.url), {
+  const fetchUrl = new URL(url, serviceConfiguration.url);
+
+  const res = await fetch(fetchUrl, {
     ...init,
     headers: requestHeaders,
   });
+
+  console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`)
+
+  return res;
 }

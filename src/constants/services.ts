@@ -12,4 +12,8 @@ export const SERVICES: Record<EServiceType, {
     name: 'Datatable',
     basePath: '/datatable',
   },
+  [EServiceType.PIM]: {
+    name: 'Product',
+    basePath: '/product',
+  },
 };

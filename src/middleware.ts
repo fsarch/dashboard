@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SERVICE_ID_REGEX = /^\/(ccm|datatable)\/([^\/]*)\/?/;
+const SERVICE_ID_REGEX = /^\/(ccm|datatable|product)\/([^\/]*)\/?/;
 
 export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);

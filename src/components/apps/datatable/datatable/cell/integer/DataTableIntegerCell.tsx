@@ -22,6 +22,7 @@ const DataTableIntegerCell: React.FunctionComponent<DataTableIntegerCellProps> =
     <DataTableInputCell
       value={displayValue ?? ''}
       onChange={handleChange}
+      disabled={!mapping.isEditable ? false : undefined}
     />
   );
 };
