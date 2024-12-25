@@ -12,6 +12,30 @@ $custom-padding: add-custom-spacings(
 
 $custom-padding: add-custom-spacings(
   $custom-padding,
+  'section',
+  2,
+  2,
+  2,
+  2
+);
+
+$custom-padding: add-custom-spacings(
+  $custom-padding,
+  'list-item',
+  1,
+  2,
+  1,
+  2
+);
+
+$custom-background-color: add-custom-color(
+  $custom-background-color,
+  'list-item--hover',
+  'var(--color-contrast-light)',
+);
+
+$custom-padding: add-custom-spacings(
+  $custom-padding,
   'datatable-cell',
   2,
   2,

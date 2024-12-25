@@ -2,6 +2,10 @@ import { attributeService } from "@/services/product/attribute.service";
 import AttributeEditForm from "@/components/apps/product/attribute/AttributeEditForm";
 import { localizationService } from "@/services/product/localization.service";
 import AttributeLocalization from "@/components/apps/product/attribute/localization/AttributeLocalization";
+import { AttributeType } from "@/services/product/attribute.const";
+import ListAttributeElementList from "@/components/apps/product/attribute/list/ListAttributeElementList";
+import ListAttributeElementCreateForm from "@/components/apps/product/attribute/list/ListAttributeElementCreateForm";
+import Section from "@/components/universals/section/Section";
 
 export default async function Home({ params }: { params: { catalogId: string; attributeId: string; } }) {
   const attribute = await attributeService.getAttribute(params.catalogId, params.attributeId, {
@@ -15,17 +19,32 @@ export default async function Home({ params }: { params: { catalogId: string; at
       <AttributeEditForm
         attribute={attribute}
       />
-      {localizations.map((localization) => (
-        <div key={localization.id}>
-          <h3>{localization.name}</h3>
-          <AttributeLocalization
+      {attribute.attributeTypeId === AttributeType.LIST && (
+        <Section
+          name="Listeneinträge"
+        >
+          <ListAttributeElementList
             catalogId={params.catalogId}
             attributeId={attribute.id}
-            localizationId={localization.id}
-            attributeLocalization={attribute.localizations.find(l => l.localizationId === localization.id)}
           />
-        </div>
-      ))}
+          <ListAttributeElementCreateForm catalogId={params.catalogId} attributeId={params.attributeId}/>
+        </Section>
+      )}
+      <Section
+        name="Localizations"
+      >
+        {localizations.map((localization) => (
+          <div key={localization.id}>
+            <h3>{localization.name}</h3>
+            <AttributeLocalization
+              catalogId={params.catalogId}
+              attributeId={attribute.id}
+              localizationId={localization.id}
+              attributeLocalization={attribute.localizations.find(l => l.localizationId === localization.id)}
+            />
+          </div>
+        ))}
+      </Section>
     </main>
   );
 }

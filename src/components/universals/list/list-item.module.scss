@@ -1,3 +1,9 @@
-.root {
+@import "@/app/_styles/utils";
 
+.root {
+  @include apply-custom-padding('list-item');
+
+  &:hover {
+    @include apply-custom-background-color('list-item--hover');
+  }
 }
