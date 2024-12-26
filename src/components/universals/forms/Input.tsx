@@ -3,12 +3,14 @@ import { Field } from "formik";
 
 type InputProps = {
   name: string;
-  type: 'input' | 'password';
+  type: 'input' | 'password' | 'checkbox';
+  value?: string;
   disabled?: boolean;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
   name,
+  value,
   type,
   disabled,
 }) => {
@@ -16,6 +18,7 @@ const Input: React.FunctionComponent<InputProps> = ({
     <Field
       type={type}
       name={name}
+      value={value}
       disabled={disabled}
     />
   );
