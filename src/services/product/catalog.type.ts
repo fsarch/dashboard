@@ -3,3 +3,7 @@ export type CatalogDto = {
 
   name: string;
 };
+
+export type CreateCatalogDto = {
+  name: string;
+};

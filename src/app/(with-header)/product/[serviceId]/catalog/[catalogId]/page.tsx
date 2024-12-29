@@ -6,13 +6,37 @@ import { attributeService } from "@/services/product/attribute.service";
 import AttributeCreateForm from "@/components/apps/product/attribute/AttributeCreateForm";
 import Section from "@/components/universals/section/Section";
 import { itemTypeService } from "@/services/product/item-type.service";
+import { itemService } from "@/services/product/item.service";
+import ItemCreateForm from "@/components/apps/product/item/create/ItemCreateForm";
 
 export default async function Home({ params }: { params: { catalogId: string } }) {
   const attributes = await attributeService.listAttributes(params.catalogId);
+  const items = await itemService.listItems(params.catalogId);
   const itemTypes = await itemTypeService.listItemTypes(params.catalogId);
 
   return (
     <main>
+      <Section name="Einträge">
+        <List>
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={getServiceLocalUrl(`/catalog/${params.catalogId}/items/${item.id}`)}
+            >
+              <ListItem>
+                {item.name}
+              </ListItem>
+            </Link>
+          ))}
+        </List>
+      </Section>
+      <Section name="Eintrag erstellen">
+        <ItemCreateForm
+          catalogId={params.catalogId}
+          itemTypes={itemTypes}
+        />
+      </Section>
+
       <Section name="Attribute">
         <List>
           {attributes.map((attribute) => (
