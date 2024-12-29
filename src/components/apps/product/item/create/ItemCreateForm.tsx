@@ -13,22 +13,26 @@ import { useRouter } from "next/navigation";
 type ItemCreateFormProps = {
   catalogId: string;
   itemTypes: Array<ItemTypeDto>;
+  parentItemId?: string;
 };
 
 const ItemCreateForm: React.FunctionComponent<ItemCreateFormProps> = ({
   itemTypes,
   catalogId,
+  parentItemId,
 }) => {
   const router = useRouter();
 
   const handleSubmit = useCallback(async (values: ItemCreateDto, helpers: FormikHelpers<ItemCreateDto>) => {
-    console.log('values', values);
-    await createItem(catalogId, values);
+    await createItem(catalogId, {
+      ...values,
+      parentItemId,
+    });
 
     helpers.resetForm();
 
     router.refresh();
-  }, [catalogId, router]);
+  }, [catalogId, router, parentItemId]);
 
   return (
     <Formik
@@ -38,7 +42,11 @@ const ItemCreateForm: React.FunctionComponent<ItemCreateFormProps> = ({
       onSubmit={handleSubmit}
     >
       <Form>
-        <Input name="name" type="input"/>
+        <Input
+          name="name"
+          type="input"
+          required
+        />
         <Select
           name="itemTypeId"
           values={itemTypes.map((itemType) => ({

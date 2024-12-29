@@ -17,5 +17,7 @@ export type ItemDto = {
 
   externalId?: string;
 
+  name: string;
+
   attributes?: Array<ItemAttributeDto>;
 };

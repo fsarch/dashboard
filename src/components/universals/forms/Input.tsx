@@ -6,6 +6,7 @@ type InputProps = {
   type: 'input' | 'password' | 'checkbox';
   value?: string;
   disabled?: boolean;
+  required?: boolean;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
@@ -13,6 +14,7 @@ const Input: React.FunctionComponent<InputProps> = ({
   value,
   type,
   disabled,
+  required,
 }) => {
   return (
     <Field
@@ -20,6 +22,7 @@ const Input: React.FunctionComponent<InputProps> = ({
       name={name}
       value={value}
       disabled={disabled}
+      required={required}
     />
   );
 };
