@@ -61,7 +61,6 @@ COPY next.config.mjs ./
 COPY tsconfig.json ./
 COPY package.json package-lock.json ./
 
-COPY public ./public
 COPY src ./src
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -90,8 +89,6 @@ RUN apk add --no-cache cairo \
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
