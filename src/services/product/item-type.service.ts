@@ -1,5 +1,10 @@
 import { fetchService } from "@/utils/fetchService";
-import { AttributeItemTypeCreateDto, AttributeItemTypeDto, ItemTypeDto } from "@/services/product/item-type.type";
+import {
+  AttributeItemTypeCreateDto,
+  AttributeItemTypeDto,
+  ItemTypeCreateDto,
+  ItemTypeDto
+} from "@/services/product/item-type.type";
 
 const listItemTypes = async (catalogId: string): Promise<Array<ItemTypeDto>> => {
   const itemTypesResponse = await fetchService(`/v1/catalogs/${catalogId}/item-types`);
@@ -39,9 +44,27 @@ const createAttribute = async (
   return await res.json();
 };
 
+const createItemType = async (
+  catalogId: string,
+  createDto: ItemTypeCreateDto,
+) => {
+  const res = await fetchService(`/v1/catalogs/${catalogId}/item-types`, {
+    method: 'POST',
+    body: JSON.stringify({
+      ...createDto,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return await res.json();
+};
+
 export const itemTypeService = {
   listItemTypes,
   getItemType,
   listAttributes,
   createAttribute,
+  createItemType,
 };

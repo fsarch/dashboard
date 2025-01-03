@@ -4,6 +4,10 @@ export type ItemTypeDto = {
   name: string;
 };
 
+export type ItemTypeCreateDto = {
+  name: string;
+};
+
 export type AttributeItemTypeCreateDto = {
   isRequired: boolean;
 }
