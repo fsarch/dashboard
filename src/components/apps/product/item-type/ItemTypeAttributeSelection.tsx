@@ -9,6 +9,8 @@ import {
   updateSelection
 } from "@/components/apps/product/item-type/ItemTypeAttributeSelection.server-action";
 import Button from "@/components/universals/forms/Button";
+import Checkbox from "@/components/universals/forms/Checkbox";
+import { useRouter } from "next/navigation";
 
 type ItemTypeAttributeSelectionProps = {
   catalogId: string;
@@ -23,9 +25,13 @@ const ItemTypeAttributeSelection: React.FunctionComponent<ItemTypeAttributeSelec
   attributes,
   selectedAttributeIds,
 }) => {
+  const router = useRouter();
+
   const handleSubmit = useCallback(async (values: AttributeItemTypeSetDto) => {
     await updateSelection(catalogId, itemTypeId, values);
-  }, [catalogId, itemTypeId]);
+
+    router.refresh();
+  }, [catalogId, itemTypeId, router]);
 
   return (
     <Formik
@@ -40,9 +46,9 @@ const ItemTypeAttributeSelection: React.FunctionComponent<ItemTypeAttributeSelec
             key={attribute.id}
           >
             <label>
-              <Input
-                type="checkbox"
+              <Checkbox
                 name="attributes"
+                value={attribute.id}
                 disabled={selectedAttributeIds.includes(attribute.id)}
               />
               {attribute.name}

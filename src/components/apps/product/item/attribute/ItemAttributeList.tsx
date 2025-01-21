@@ -56,6 +56,8 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
       </h2>
       <ItemAttributeListForm
         initialValue={initialValue}
+        catalogId={catalogId}
+        itemId={itemId}
       >
         {itemTypeBasedAttributes.map((ita) => (
           <Section

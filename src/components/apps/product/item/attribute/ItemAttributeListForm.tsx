@@ -3,21 +3,26 @@
 import React, { PropsWithChildren, useCallback } from 'react';
 import { Form, Formik, FormikHelpers } from "formik";
 import {
-  ItemAttributeListFormDataType
+  ItemAttributeListFormDataType, setItemAttributes
 } from "@/components/apps/product/item/attribute/ItemAttributeListForm.server-action";
 
 
 type ItemAttributeListFormProps = PropsWithChildren<{
   initialValue: ItemAttributeListFormDataType;
+  catalogId: string;
+  itemId: string;
 }>;
 
 const ItemAttributeListForm: React.FunctionComponent<ItemAttributeListFormProps> = ({
   children,
   initialValue,
+  catalogId,
+  itemId,
 }) => {
   const handleSubmit = useCallback(async (values: ItemAttributeListFormDataType, helper: FormikHelpers<ItemAttributeListFormDataType>) => {
+    await setItemAttributes(catalogId, itemId, values);
     console.log('values', values);
-  }, []);
+  }, [catalogId, itemId]);
 
   console.log('initialValue', initialValue);
 
