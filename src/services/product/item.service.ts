@@ -4,8 +4,8 @@ import {
 } from "@/services/product/attribute.type";
 import { ItemCreateDto, ItemDto } from "@/services/product/item.type";
 
-const listItems = async (catalogId: string, parentItemId?: string): Promise<Array<ItemDto>> => {
-  const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items${parentItemId ? `?parentItemId=${parentItemId}` : ''}`);
+const listItems = async (catalogId: string, parentItemId: string | null | undefined): Promise<Array<ItemDto>> => {
+  const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items${parentItemId !== undefined ? `?parentItemId=${parentItemId}` : ''}`);
   const items = await itemResponse.json();
 
   return items;

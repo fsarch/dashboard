@@ -12,7 +12,7 @@ import ItemList from "@/components/apps/product/item/ItemList";
 
 export default async function Home({ params }: { params: { catalogId: string } }) {
   const attributes = await attributeService.listAttributes(params.catalogId);
-  const items = await itemService.listItems(params.catalogId);
+  const items = await itemService.listItems(params.catalogId, null);
   const itemTypes = await itemTypeService.listItemTypes(params.catalogId);
 
   return (

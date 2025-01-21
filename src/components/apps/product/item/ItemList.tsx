@@ -16,7 +16,7 @@ const ItemList: React.FunctionComponent<ItemListProps> = async ({
   catalogId,
   parentItemId,
 }) => {
-  const items = await itemService.listItems(catalogId, parentItemId);
+  const items = await itemService.listItems(catalogId, parentItemId ?? null);
   if (!items) {
     return notFound();
   }
