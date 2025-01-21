@@ -38,6 +38,7 @@ const ItemCreateForm: React.FunctionComponent<ItemCreateFormProps> = ({
     <Formik
       initialValues={{
         itemTypeId: itemTypes[0].id,
+        name: '',
       }}
       onSubmit={handleSubmit}
     >

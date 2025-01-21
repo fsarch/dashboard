@@ -1,6 +1,8 @@
 import { ItemAttributeDto } from "@/services/product/item-attribute.type";
 
 export type ItemCreateDto = {
+  name: string;
+
   itemTypeId: string;
 
   parentItemId?: string;
