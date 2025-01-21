@@ -24,7 +24,15 @@ const createItem = async (catalogId: string, createDto: ItemCreateDto): Promise<
   return items;
 };
 
+const getItem = async (catalogId: string, itemId?: string): Promise<ItemDto> => {
+  const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items/${itemId}`);
+  const item = await itemResponse.json();
+
+  return item;
+}
+
 export const itemService = {
   listItems,
   createItem,
+  getItem,
 };

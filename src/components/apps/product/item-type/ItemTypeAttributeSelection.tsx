@@ -43,7 +43,6 @@ const ItemTypeAttributeSelection: React.FunctionComponent<ItemTypeAttributeSelec
               <Input
                 type="checkbox"
                 name="attributes"
-                value={attribute.id}
                 disabled={selectedAttributeIds.includes(attribute.id)}
               />
               {attribute.name}

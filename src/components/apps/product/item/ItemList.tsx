@@ -44,6 +44,7 @@ const ItemList: React.FunctionComponent<ItemListProps> = async ({
         <ItemCreateForm
           catalogId={catalogId}
           itemTypes={itemTypes}
+          parentItemId={parentItemId}
         />
       </Section>
     </>

@@ -7,7 +7,6 @@ import AttributeCreateForm from "@/components/apps/product/attribute/AttributeCr
 import Section from "@/components/universals/section/Section";
 import { itemTypeService } from "@/services/product/item-type.service";
 import { itemService } from "@/services/product/item.service";
-import ItemCreateForm from "@/components/apps/product/item/create/ItemCreateForm";
 import ItemTypeCreateForm from "@/components/apps/product/item-type/ItemTypeCreateForm";
 import ItemList from "@/components/apps/product/item/ItemList";
 
