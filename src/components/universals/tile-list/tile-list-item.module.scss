@@ -1,0 +1,18 @@
+@import "@/app/_styles/utils";
+
+.root {
+  @include apply-custom-padding('tile-list-item');
+  @include apply-custom-background-color('tile-list-item');
+
+  width: var(--custom-spacing-tile-list-item-size);
+  height: var(--custom-spacing-tile-list-item-size);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.name {
+  text-align: center;
+}

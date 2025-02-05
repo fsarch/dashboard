@@ -1,0 +1,7 @@
+@import "@/app/_styles/utils";
+
+.root {
+  display: flex;
+
+  @include apply-custom-gap('tile-list');
+}

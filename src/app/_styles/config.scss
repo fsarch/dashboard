@@ -52,6 +52,15 @@ $custom-padding: add-custom-spacings(
   2
 );
 
+$custom-padding: add-custom-spacings(
+  $custom-padding,
+  'tile-list-item',
+  2,
+  2,
+  2,
+  2
+);
+
 $custom-border-radius: add-custom-spacings(
   $custom-border-radius,
   'ccm-message',
@@ -73,6 +82,12 @@ $custom-background-color: add-custom-color(
   'var(--color-contrast-light)',
 );
 
+$custom-background-color: add-custom-color(
+  $custom-background-color,
+  'tile-list-item',
+  'var(--color-contrast-light)',
+);
+
 $custom-text-color: add-custom-color(
   $custom-text-color,
   'ccm-message-subline',
@@ -85,7 +100,12 @@ $custom-font-size: (
 
 $custom-gaps: (
   'ccm-message-list': 'var(--spacing-2)',
+  'tile-list': 'var(--spacing-2)',
 );
 
 $custom-margin: (
 );
+
+$custom-spacing: (
+  'tile-list-item-size': '200px'
+)
