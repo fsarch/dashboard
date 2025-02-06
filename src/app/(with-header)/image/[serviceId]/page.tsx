@@ -13,6 +13,7 @@ export default async function Home({ params }: { params: { serviceId: string } }
       <TileList>
         {images.map((image) => (
           <TileListItem
+            key={image.id}
             backgroundImage={`/image/${params.serviceId}/images/blob/${image.id}`}
             name=""
           />
