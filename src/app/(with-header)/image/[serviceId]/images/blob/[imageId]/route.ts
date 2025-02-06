@@ -8,11 +8,11 @@ export const GET = async (
 ) => {
   const imageId = (await params).imageId;
 
-  console.log(imageId)
-
   const image = await imagesAdminService.getRawById(imageId);
 
   return new NextResponse(image, {
-
+    headers: {
+      'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+    },
   })
 };
