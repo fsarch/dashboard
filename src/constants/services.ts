@@ -16,4 +16,8 @@ export const SERVICES: Record<EServiceType, {
     name: 'Product',
     basePath: '/product',
   },
+  [EServiceType.IMAGE]: {
+    name: 'Image',
+    basePath: '/image',
+  },
 };

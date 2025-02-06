@@ -2,6 +2,7 @@ export enum EServiceType {
   CUSTOMER_COMMUNICATION = 'customer-communication',
   DATATABLE = 'datatable',
   PIM = 'product',
+  IMAGE = 'image',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -22,7 +23,13 @@ export type TProductServiceConfiguration = {
   url: string;
 }
 
-export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration | TProductServiceConfiguration;
+export type TImageServiceConfiguration = {
+  id: string;
+  type: EServiceType.IMAGE,
+  url: string;
+}
+
+export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration | TProductServiceConfiguration | TImageServiceConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

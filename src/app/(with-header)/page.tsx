@@ -11,6 +11,9 @@ const apps = [{
 }, {
   name: 'Customer Communication',
   path: '/ccm',
+}, {
+  name: 'Image Server',
+  path: '/image',
 }]
 
 export default async function Home() {
