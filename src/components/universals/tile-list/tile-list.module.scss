@@ -3,5 +3,8 @@
 .root {
   display: flex;
 
+  flex-wrap: wrap;
+  justify-content: center;
+
   @include apply-custom-gap('tile-list');
 }
