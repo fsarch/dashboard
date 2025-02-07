@@ -19,7 +19,24 @@ const getRawById = async (imageId: string): Promise<ArrayBuffer> => {
   return image;
 };
 
+const uploadImage = async (options: { data: Buffer; name?: string; }): Promise<void> => {
+  const headers: Record<string, string> = {};
+  if (options.name) {
+    headers['x-path'] = options.name;
+  }
+
+  const imagesResponse = await fetchService(`/v1/admin/images/_actions/upload`, {
+    method: 'POST',
+    headers,
+    body: options.data,
+  });
+  if (!imagesResponse.ok) {
+    throw new Error('invalid response');
+  }
+};
+
 export const imagesAdminService = {
   listImages,
   getRawById,
+  uploadImage,
 };

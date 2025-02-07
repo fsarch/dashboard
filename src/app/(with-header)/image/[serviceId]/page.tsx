@@ -3,6 +3,7 @@ import ListItem from "@/components/universals/list/ListItem";
 import { imagesAdminService } from "@/services/image/images-admin.service";
 import TileList from "@/components/universals/tile-list/TileList";
 import TileListItem from "@/components/universals/tile-list/TileListItem";
+import ImageUploadForm from "@/components/apps/image/upload/ImageUploadForm";
 
 export default async function Home({ params }: { params: { serviceId: string } }) {
   const images = await imagesAdminService.listImages();
@@ -19,6 +20,9 @@ export default async function Home({ params }: { params: { serviceId: string } }
           />
         ))}
       </TileList>
+      <ImageUploadForm
+        serviceId={params.serviceId}
+      />
     </div>
   );
 }

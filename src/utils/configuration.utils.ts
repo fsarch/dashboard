@@ -27,6 +27,10 @@ export async function getServiceConfiguration<T extends EServiceType>(type: T): 
   return (await getConfiguration()).services.find((s) => s.type === type) as (TServiceConfiguration & { type: T }) | undefined;
 }
 
+export async function getServiceConfigurations<T extends EServiceType>(type: T): Promise<Array<TServiceConfiguration & { type: T }>> {
+  return (await getConfiguration()).services.filter((s) => s.type === type) as Array<TServiceConfiguration & { type: T }>;
+}
+
 
 export async function getServiceConfigurationById(id: string): Promise<TServiceConfiguration | undefined> {
   return (await getConfiguration()).services.find((s) => s.id === id);

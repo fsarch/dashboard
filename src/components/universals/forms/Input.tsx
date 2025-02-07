@@ -3,7 +3,7 @@ import { Field } from "formik";
 
 type InputProps = {
   name: string;
-  type: 'input' | 'text' | 'password' | 'checkbox';
+  type: 'input' | 'text' | 'password' | 'checkbox' | 'file';
   disabled?: boolean;
   required?: boolean;
 };
