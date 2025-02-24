@@ -20,4 +20,8 @@ export const SERVICES: Record<EServiceType, {
     name: 'Image',
     basePath: '/image',
   },
+  [EServiceType.MATERIAL_TRACING]: {
+    name: 'Material Tracing',
+    basePath: '/material-tracing',
+  },
 };

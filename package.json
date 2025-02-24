@@ -16,6 +16,7 @@
     "formik": "^2.4.6",
     "js-yaml": "^4.1.0",
     "jsdom": "^26.0.0",
+    "jsonata": "^2.0.6",
     "next": "14.2.5",
     "next-auth": "^4.24.11",
     "next-mdx-remote": "^5.0.0",

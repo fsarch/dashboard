@@ -14,6 +14,9 @@ const apps = [{
 }, {
   name: 'Image Server',
   path: '/image',
+}, {
+  name: 'Material Tracing',
+  path: '/material-tracing',
 }]
 
 export default async function Home() {

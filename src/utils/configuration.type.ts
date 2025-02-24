@@ -3,6 +3,7 @@ export enum EServiceType {
   DATATABLE = 'datatable',
   PIM = 'product',
   IMAGE = 'image',
+  MATERIAL_TRACING = 'material-tracing',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -33,7 +34,14 @@ export type TImageServiceConfiguration = {
   url: string;
 }
 
-export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration | TProductServiceConfiguration | TImageServiceConfiguration;
+export type TMaterialTracingConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.MATERIAL_TRACING,
+  url: string;
+}
+
+export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration | TProductServiceConfiguration | TImageServiceConfiguration | TMaterialTracingConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;
