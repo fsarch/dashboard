@@ -23,7 +23,7 @@ const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInput
     >
       {input.label}
       <Field name={input.id} as="select">
-        {input.data.value.map((value) => (
+        {(input.data.value ?? []).map((value) => (
           <option key={value.id} value={value.value}>{value.label}</option>
         ))}
       </Field>
