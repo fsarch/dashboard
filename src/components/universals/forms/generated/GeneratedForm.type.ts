@@ -20,9 +20,23 @@ export type TGeneratedFormSelectInput = TGeneratedFormBaseInput & {
   } | TGeneratedFormSelectConstantData;
 };
 
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput;
+export type TGeneratedFormStringConstantData = {
+  $type: 'constant';
+  value: string;
+};
 
-export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
+export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
+  type: 'image-server-upload';
+  imageServerAdminUrl: {
+    $type: 'datasource';
+    value: string;
+  } | TGeneratedFormStringConstantData;
+  transformResponse: TJsonataExpression;
+};
+
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput;
+
+export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | { $type: 'constant'; value: Record<string, unknown>; };
 
 export type TJsonataExpression = {
   $type: 'jsonata';

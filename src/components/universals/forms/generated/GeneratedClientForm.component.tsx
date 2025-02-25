@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import GeneratedFormTextInput from "@/components/universals/forms/generated/inputs/GeneratedFormTextInput.component";
 import GeneratedFormSelectInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormSelectInput.component";
+import GeneratedFormImageServerUploadInput
+  from "@/components/universals/forms/generated/inputs/GeneratedFormImageServerUploadInput.component";
 
 type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
@@ -52,6 +54,15 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
           if (input.type === 'select') {
             return (
               <GeneratedFormSelectInput
+                key={input.id}
+                input={input}
+              />
+            );
+          }
+
+          if (input.type === 'image-server-upload') {
+            return (
+              <GeneratedFormImageServerUploadInput
                 key={input.id}
                 input={input}
               />
