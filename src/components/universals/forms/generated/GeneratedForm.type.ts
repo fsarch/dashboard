@@ -36,7 +36,7 @@ export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
 
 export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput;
 
-export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | { $type: 'constant'; value: Record<string, unknown>; };
+export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
 
 export type TJsonataExpression = {
   $type: 'jsonata';
