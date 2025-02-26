@@ -6,8 +6,11 @@ import clsx from "clsx";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getAccessToken } from "@/utils/getAccessToken";
+import { createRemoteJWKSet, jwtVerify } from "jose";
 
 const inter = Inter({subsets: ["latin"]});
+
+const JWKS = createRemoteJWKSet(new URL(`${process.env.AUTH_ISSUER}/protocol/openid-connect/certs`));
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,7 +26,14 @@ export default async function RootLayout({
 }>) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    const callbackUrl = headers().get('X-Original-URL') || '/';
+    const callbackUrl = (await headers()).get('X-Original-URL') || '/';
+    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+  }
+
+  try {
+    await jwtVerify(accessToken, JWKS);
+  } catch {
+    const callbackUrl = (await headers()).get('X-Original-URL') || '/';
     return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
