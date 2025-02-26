@@ -42,7 +42,7 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
     $type: 'redirect',
     url: {
       $type: 'jsonata',
-      value: "service.localPath & '/materials/' & response.body.id",
+      value: "service.localPath & '/material/' & response.body.id",
     },
   }],
   dataSources: {

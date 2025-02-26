@@ -8,6 +8,14 @@ const listMaterials = async (): Promise<Array<TMaterial>> => {
   return materials;
 };
 
+const getMaterial = async (materialId: string): Promise<TMaterial> => {
+  const materialResponse = await fetchService(`/v1/materials/${materialId}`);
+  const material = await materialResponse.json();
+
+  return material;
+};
+
 export const materialService = {
   listMaterials,
+  getMaterial,
 };

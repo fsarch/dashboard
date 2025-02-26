@@ -65,8 +65,8 @@ export type TGeneratedFormDefinition = {
   inputs: Array<TGeneratedFormInput>;
   endpoint: TGeneratedFormEndpoint;
   initialValues: TGeneratedFormInitialValues;
-  dataSources: Record<string, TGeneratedFormDataSource>;
-  postEndpointActions: Array<TGeneratedFormAction>;
+  dataSources?: Record<string, TGeneratedFormDataSource>;
+  postEndpointActions?: Array<TGeneratedFormAction>;
 };
 
 export type TGeneratedFormSubmitResponse = {

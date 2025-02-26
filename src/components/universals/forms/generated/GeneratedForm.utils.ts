@@ -120,7 +120,7 @@ const createServerAction = (definition: TGeneratedFormDefinition) => {
 }
 
 const evaluateDefinition = async (definition: TGeneratedFormDefinition): Promise<TGeneratedFormDefinition> => {
-  const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources).map(async ([key, value]) => {
+  const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
     const dataResponse = await fetchService(value.path, {
       method: value.method,
     });

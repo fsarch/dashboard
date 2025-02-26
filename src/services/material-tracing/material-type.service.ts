@@ -7,7 +7,14 @@ const listMaterialTypes = async (): Promise<Array<TMaterialType>> => {
 
   return manufacturers;
 };
+const getMaterialType = async (materialTypeId: string): Promise<TMaterialType> => {
+  const materialTypeRespose = await fetchService(`/v1/material-types/${materialTypeId}`);
+  const materialType = await materialTypeRespose.json();
+
+  return materialType;
+};
 
 export const materialTypeService = {
   listMaterialTypes,
+  getMaterialType,
 };

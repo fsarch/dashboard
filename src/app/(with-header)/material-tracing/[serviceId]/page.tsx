@@ -28,6 +28,13 @@ export default async function Home() {
             name="Material Types"
           />
         </Link>
+        <Link
+          href={getServiceLocalUrl("/short-code")}
+        >
+          <TileListItem
+            name="Short Codes"
+          />
+        </Link>
       </TileList>
       <Section name="Materials">
         <List>
