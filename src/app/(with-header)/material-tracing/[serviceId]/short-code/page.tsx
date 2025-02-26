@@ -14,10 +14,10 @@ export default async function Home() {
     <main>
       <Section name="Short Codes">
         <List>
-          {shortCodes.map((shortCode) => (
+          {shortCodes.map(async (shortCode) => (
             <Link
               key={shortCode.id}
-              href={getServiceLocalUrl(`/short-code/${shortCode.code}`)}
+              href={await getServiceLocalUrl(`/short-code/${shortCode.code}`)}
             >
               <ListItem>
                 <div>

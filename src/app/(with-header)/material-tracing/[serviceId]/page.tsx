@@ -15,21 +15,21 @@ export default async function Home() {
     <main>
       <TileList>
         <Link
-          href={getServiceLocalUrl("/manufacturer")}
+          href={await getServiceLocalUrl("/manufacturer")}
         >
           <TileListItem
             name="Manufacturers"
           />
         </Link>
         <Link
-          href={getServiceLocalUrl("/material-type")}
+          href={await getServiceLocalUrl("/material-type")}
         >
           <TileListItem
             name="Material Types"
           />
         </Link>
         <Link
-          href={getServiceLocalUrl("/short-code")}
+          href={await getServiceLocalUrl("/short-code")}
         >
           <TileListItem
             name="Short Codes"
@@ -38,8 +38,8 @@ export default async function Home() {
       </TileList>
       <Section name="Materials">
         <List>
-          {materials.map((material) => (
-            <Link href={getServiceLocalUrl(`/material/${material.id}`)} key={material.id}>
+          {materials.map(async (material) => (
+            <Link href={await getServiceLocalUrl(`/material/${material.id}`)} key={material.id}>
               <ListItem>
                 {material.name}
               </ListItem>

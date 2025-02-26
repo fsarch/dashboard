@@ -102,7 +102,7 @@ const createServerAction = (definition: TGeneratedFormDefinition) => {
                 body: createData,
               },
               service: {
-                localPath: getServiceLocalUrl(''),
+                localPath: await getServiceLocalUrl(''),
               },
             }),
           }

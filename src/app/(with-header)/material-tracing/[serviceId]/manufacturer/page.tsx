@@ -15,10 +15,10 @@ export default async function Home() {
     <main>
       <Section name="Manufacturers">
         <List>
-          {manufacturers.map((manufacturer: any) => (
+          {manufacturers.map(async (manufacturer: any) => (
             <Link
               key={manufacturer.id}
-              href={getServiceLocalUrl(`/manufacturer/${manufacturer.id}`)}
+              href={await getServiceLocalUrl(`/manufacturer/${manufacturer.id}`)}
             >
               <ListItem>
                 {manufacturer.name}

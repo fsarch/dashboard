@@ -9,12 +9,12 @@ type DataTableListItemProps = {
   dataTable: DataTableDto;
 };
 
-const DataTableListItem: React.FunctionComponent<DataTableListItemProps> = ({
+const DataTableListItem: React.FunctionComponent<DataTableListItemProps> = async ({
   dataTable,
 }) => {
   return (
     <Link
-      href={getServiceLocalUrl(`/datatables/${dataTable.id}`)}
+      href={await getServiceLocalUrl(`/datatables/${dataTable.id}`)}
     >
       <ListItem>
         <div>

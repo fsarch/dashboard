@@ -8,12 +8,12 @@ type ThreadListItemProps = {
   thread: TThread;
 };
 
-const ThreadListItem: React.FunctionComponent<ThreadListItemProps> = ({
+const ThreadListItem: React.FunctionComponent<ThreadListItemProps> = async ({
   thread
 }) => {
   return (
     <Link
-      href={getServiceLocalUrl(`/threads/${thread.id}`)}
+      href={await getServiceLocalUrl(`/threads/${thread.id}`)}
     >
       <ListItem>
         <div>

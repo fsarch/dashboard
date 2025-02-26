@@ -16,10 +16,10 @@ export default async function Home() {
     <main>
       <Section name="Kataloge">
         <List>
-          {catalogs.map((catalog) => (
+          {catalogs.map(async (catalog) => (
             <Link
               key={catalog.id}
-              href={getServiceLocalUrl(`/catalog/${catalog.id}`)}
+              href={await getServiceLocalUrl(`/catalog/${catalog.id}`)}
             >
               <ListItem>
                 {catalog.name}
@@ -34,10 +34,10 @@ export default async function Home() {
 
       <Section name="Lokalisierungen">
         <List>
-          {localizations.map((localization) => (
+          {localizations.map(async (localization) => (
             <Link
               key={localization.id}
-              href={getServiceLocalUrl(`/localizations/${localization.id}`)}
+              href={await getServiceLocalUrl(`/localizations/${localization.id}`)}
             >
               <ListItem>
                 {localization.name}

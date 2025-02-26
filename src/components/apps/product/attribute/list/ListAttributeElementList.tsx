@@ -18,9 +18,9 @@ const ListAttributeElementList: React.FunctionComponent<ListAttributeElementList
 
   return (
     <List>
-      {elements.map((element) => (
+      {elements.map(async (element) => (
         <Link
-          href={getServiceLocalUrl(`/catalog/${catalogId}/attributes/${attributeId}/elements/${element.id}`)}
+          href={await getServiceLocalUrl(`/catalog/${catalogId}/attributes/${attributeId}/elements/${element.id}`)}
           key={element.id}
         >
           <ListItem>{element.name}</ListItem>

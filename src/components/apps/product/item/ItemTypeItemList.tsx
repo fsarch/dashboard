@@ -27,10 +27,10 @@ const ItemTypeItemList: React.FunctionComponent<ItemTypeItemListProps> = ({
       name={itemType.name}
     >
       <List>
-        {items?.map((item) => (
+        {items?.map(async (item) => (
           <Link
             key={item.id}
-            href={getServiceLocalUrl(`/catalog/${catalogId}/items/${item.id}`)}
+            href={await getServiceLocalUrl(`/catalog/${catalogId}/items/${item.id}`)}
           >
             <ListItem>
               {item.name}

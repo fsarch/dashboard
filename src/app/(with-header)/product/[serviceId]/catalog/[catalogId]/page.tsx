@@ -24,10 +24,10 @@ export default async function Home(props: { params: Promise<{ catalogId: string 
 
       <Section name="Attribute">
         <List>
-          {attributes.map((attribute) => (
+          {attributes.map(async (attribute) => (
             <Link
               key={attribute.id}
-              href={getServiceLocalUrl(`/catalog/${params.catalogId}/attributes/${attribute.id}`)}
+              href={await getServiceLocalUrl(`/catalog/${params.catalogId}/attributes/${attribute.id}`)}
             >
               <ListItem>
                 {attribute.name}
@@ -44,10 +44,10 @@ export default async function Home(props: { params: Promise<{ catalogId: string 
 
       <Section name="Elementtyp">
         <List>
-          {itemTypes.map((itemType) => (
+          {itemTypes.map(async (itemType) => (
             <Link
               key={itemType.id}
-              href={getServiceLocalUrl(`/catalog/${params.catalogId}/item-type/${itemType.id}`)}
+              href={await getServiceLocalUrl(`/catalog/${params.catalogId}/item-type/${itemType.id}`)}
             >
               <ListItem>
                 {itemType.name}
