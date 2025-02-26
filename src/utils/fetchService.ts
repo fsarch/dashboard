@@ -3,7 +3,7 @@ import { getServiceConfigurationById } from "@/utils/configuration.utils";
 import { getAccessToken } from "@/utils/getAccessToken";
 
 export async function fetchService(url: string, init?: RequestInit, options?: { serviceId: string; }): Promise<Response> {
-  let serviceId = options?.serviceId ?? headers().get('X-Service-Id');
+  let serviceId = options?.serviceId ?? (await headers()).get('X-Service-Id');
   if (Array.isArray(serviceId)) {
     serviceId = serviceId[0];
   }

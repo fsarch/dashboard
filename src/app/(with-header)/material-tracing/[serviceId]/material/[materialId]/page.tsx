@@ -5,7 +5,8 @@ import { manufacturerService } from "@/services/material-tracing/manufacturer.se
 import MaterialShortCodeConnectForm
   from "@/components/apps/material-tracing/short-code/MaterialShortCodeConnectForm.component";
 
-export default async function Home({ params }: { params: { materialId: string } }) {
+export default async function Home(props: { params: Promise<{ materialId: string }> }) {
+  const params = await props.params;
   const material = await materialService.getMaterial(await params.materialId);
   const materialType = await materialTypeService.getMaterialType(material.materialTypeId);
   const manufacturer = await manufacturerService.getManufacturer(materialType.manufacturerId);

@@ -1,7 +1,8 @@
 import ItemList from "@/components/apps/product/item/ItemList";
 import ItemAttributeList from "@/components/apps/product/item/attribute/ItemAttributeList";
 
-export default async function Home({ params }: { params: { catalogId: string; itemId: string; } }) {
+export default async function Home(props: { params: Promise<{ catalogId: string; itemId: string; }> }) {
+  const params = await props.params;
   return (
     <main>
       <ItemList

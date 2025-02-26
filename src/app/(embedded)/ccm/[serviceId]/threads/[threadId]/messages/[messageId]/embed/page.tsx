@@ -10,7 +10,8 @@ import { EContentType } from "@/constants/apps/customer-communication/content-ty
 import Html
   from "@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/html.component";
 
-export default async function Home({ params }: { params: { threadId: string; messageId: string } }) {
+export default async function Home(props: { params: Promise<{ threadId: string; messageId: string }> }) {
+  const params = await props.params;
   const threadMessages = await customerCommunicationService.listThreadMessages(params.threadId);
 
   const message = threadMessages.find((m) => m.id === params.messageId);

@@ -5,7 +5,8 @@ import TileList from "@/components/universals/tile-list/TileList";
 import TileListItem from "@/components/universals/tile-list/TileListItem";
 import ImageUploadForm from "@/components/apps/image/upload/ImageUploadForm";
 
-export default async function Home({ params }: { params: { serviceId: string } }) {
+export default async function Home(props: { params: Promise<{ serviceId: string }> }) {
+  const params = await props.params;
   const images = await imagesAdminService.listImages();
 
   return (

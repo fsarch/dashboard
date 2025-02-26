@@ -1,4 +1,4 @@
-@import "./config";
+@use "./config" as *;
 
 @mixin spacing() {
   // SPACING Custom Properties

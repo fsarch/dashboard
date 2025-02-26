@@ -10,7 +10,8 @@ import { itemService } from "@/services/product/item.service";
 import ItemTypeCreateForm from "@/components/apps/product/item-type/ItemTypeCreateForm";
 import ItemList from "@/components/apps/product/item/ItemList";
 
-export default async function Home({ params }: { params: { catalogId: string } }) {
+export default async function Home(props: { params: Promise<{ catalogId: string }> }) {
+  const params = await props.params;
   const attributes = await attributeService.listAttributes(params.catalogId);
   const items = await itemService.listItems(params.catalogId, null);
   const itemTypes = await itemTypeService.listItemTypes(params.catalogId);

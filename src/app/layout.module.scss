@@ -1,4 +1,4 @@
-@import "./_styles/index.scss";
+@use "./_styles/index.scss" as *;
 
 .body {
   overflow-y: hidden;

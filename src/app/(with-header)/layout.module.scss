@@ -1,4 +1,4 @@
-@import "@/app/_styles/index";
+@use "@/app/_styles/index" as *;
 
 .root {
   @include color();

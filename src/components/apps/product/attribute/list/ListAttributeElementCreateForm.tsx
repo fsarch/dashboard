@@ -15,7 +15,7 @@ type ListAttributeElementListProps = {
   attributeId: string;
 };
 
-const ListAttributeElementList: React.FunctionComponent<ListAttributeElementListProps> = async ({
+const ListAttributeElementList: React.FunctionComponent<ListAttributeElementListProps> = ({
   catalogId,
   attributeId,
 }) => {

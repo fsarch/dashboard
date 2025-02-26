@@ -4,8 +4,9 @@ import DataTable from "@/components/apps/datatable/datatable/DataTable";
 import { dataTableService } from "@/services/datatable/datatable.service";
 import { notFound } from "next/navigation";
 
-export default async function Home({ params }: { params: { dataTableId: string } }) {
-  const serviceId = headers().get('X-Service-Id');
+export default async function Home(props: { params: Promise<{ dataTableId: string }> }) {
+  const params = await props.params;
+  const serviceId = (await headers()).get('X-Service-Id');
   const definition = await dataTableService.getDataTable(params.dataTableId);
   if (!definition) {
     return notFound();

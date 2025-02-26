@@ -7,7 +7,8 @@ import ListAttributeElementList from "@/components/apps/product/attribute/list/L
 import ListAttributeElementCreateForm from "@/components/apps/product/attribute/list/ListAttributeElementCreateForm";
 import Section from "@/components/universals/section/Section";
 
-export default async function Home({ params }: { params: { catalogId: string; attributeId: string; } }) {
+export default async function Home(props: { params: Promise<{ catalogId: string; attributeId: string; }> }) {
+  const params = await props.params;
   const attribute = await attributeService.getAttribute(params.catalogId, params.attributeId, {
     include: ['localizations'],
   });

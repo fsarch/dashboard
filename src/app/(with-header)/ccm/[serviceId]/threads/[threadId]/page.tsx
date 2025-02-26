@@ -7,7 +7,8 @@ import TextArea from "@/components/universals/forms/TextArea";
 import MessageFooter from "@/components/apps/customer-communication/message-list/MessageFooter";
 import { threadId } from "node:worker_threads";
 
-export default async function Home({ params }: { params: { threadId: string } }) {
+export default async function Home(props: { params: Promise<{ threadId: string }> }) {
+  const params = await props.params;
   const threadMessages = await customerCommunicationService.listThreadMessages(params.threadId);
 
   return (

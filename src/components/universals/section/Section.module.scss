@@ -1,4 +1,4 @@
-@import "@/app/_styles/utils";
+@use '@/app/_styles/utils' as *;
 
 .root {
   @include apply-custom-padding('section');

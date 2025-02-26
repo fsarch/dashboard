@@ -4,7 +4,8 @@ import { attributeService } from "@/services/product/attribute.service";
 import Section from "@/components/universals/section/Section";
 import ItemTypeAttributeSelection from "@/components/apps/product/item-type/ItemTypeAttributeSelection";
 
-export default async function Home({ params }: { params: { catalogId: string; itemTypeId: string; } }) {
+export default async function Home(props: { params: Promise<{ catalogId: string; itemTypeId: string; }> }) {
+  const params = await props.params;
   const itemType = await itemTypeService.getItemType(params.catalogId, params.itemTypeId);
   if (!itemType) {
     return notFound();

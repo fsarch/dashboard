@@ -7,7 +7,10 @@ import ListAttributeElementList from "@/components/apps/product/attribute/list/L
 import AttributeElementLocalization
   from "@/components/apps/product/attribute/list/element-localization/AttributeElementLocalization";
 
-export default async function Home({ params }: { params: { catalogId: string; attributeId: string; elementId: string; } }) {
+export default async function Home(
+  props: { params: Promise<{ catalogId: string; attributeId: string; elementId: string; }> }
+) {
+  const params = await props.params;
   const attributeLocalizations = await attributeService.listAttributeElementLocalizations(params.catalogId, params.attributeId, params.elementId);
   const localizations = await localizationService.listLocalizations();
 

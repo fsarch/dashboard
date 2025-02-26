@@ -1,7 +1,8 @@
 @use "sass:map";
+@use "sass:meta";
 
 @function add-custom-spacings($map, $name, $top, $right, $bottom, $left) {
-  @if type-of($top) == number {
+  @if meta.type-of($top) == number {
     @if ($top == 0) {
       $top: 'none';
     }
@@ -11,7 +12,7 @@
     $map: map.set($map, $name + '-top', $top);
   }
 
-  @if type-of($right) == number {
+  @if meta.type-of($right) == number {
     @if ($right == 0) {
       $right: 'none';
     }
@@ -21,7 +22,7 @@
     $map: map.set($map, $name + '-right', $right);
   }
 
-  @if type-of($bottom) == number {
+  @if meta.type-of($bottom) == number {
     @if ($bottom == 0) {
       $bottom: 'none';
     }
@@ -31,7 +32,7 @@
     $map: map.set($map, $name + '-bottom', $bottom);
   }
 
-  @if type-of($left) == number {
+  @if meta.type-of($left) == number {
     @if ($left == 0) {
       $left: 'none';
     }

@@ -1,5 +1,8 @@
-@import "./config.utils";
-@import "./config.base";
+@use "./config.utils" as *;
+@use "./config.base" as *;
+
+@forward "./config.utils";
+@forward "./config.base";
 
 $custom-padding: add-custom-spacings(
   $custom-padding,
