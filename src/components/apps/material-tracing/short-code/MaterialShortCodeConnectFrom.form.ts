@@ -7,7 +7,7 @@ export const MATERIAL_SHORT_CODE_CONNECT_FORM: TGeneratedFormDefinition = {
     label: 'ShortCode',
   }],
   initialValues: {
-    name: '',
+    shortCode: '',
   },
   endpoint: {
     path: {

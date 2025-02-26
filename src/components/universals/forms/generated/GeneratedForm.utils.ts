@@ -78,6 +78,7 @@ const executePostSubmitAction = async (
 
   const context = {
     form: formData,
+    args,
   };
 
   const [path, body] = await Promise.all([

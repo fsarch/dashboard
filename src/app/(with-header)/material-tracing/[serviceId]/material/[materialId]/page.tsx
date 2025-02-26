@@ -10,25 +10,29 @@ export default async function Home(props: { params: Promise<{ materialId: string
   const material = await materialService.getMaterial(await params.materialId);
   const materialType = await materialTypeService.getMaterialType(material.materialTypeId);
   const manufacturer = await manufacturerService.getManufacturer(materialType.manufacturerId);
+  const shortCodes = await materialService.listShortCodes(await params.materialId);
+  const hasShortCode = shortCodes.length > 0;
 
   return (
     <main>
-      <pre>
-        {JSON.stringify(material, null, 2)}
-      </pre>
-
       <Section name="Informationen">
         Name: {material.name}<br />
         Material: {materialType.name}<br />
         Hersteller: {manufacturer.name}<br />
       </Section>
-      <Section name="ShortCode verknüpfen">
-        <MaterialShortCodeConnectForm
-          args={{
-            materialId: material.id,
-          }}
-        />
-      </Section>
+      {hasShortCode ? (
+        <Section name="ShortCode">
+          ShortCode: {shortCodes[0].code}
+        </Section>
+      ) : (
+        <Section name="ShortCode verknüpfen">
+          <MaterialShortCodeConnectForm
+            args={{
+              materialId: material.id,
+            }}
+          />
+        </Section>
+      )}
     </main>
   );
 }
