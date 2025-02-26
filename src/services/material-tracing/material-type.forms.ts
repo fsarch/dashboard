@@ -33,7 +33,7 @@ export const MATERIAL_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": body.{ "id": id, "value": id, "label": name } }',
+        value: '{ "body": [body.{ "id": id, "value": id, "label": name }] }',
       },
     },
   },
