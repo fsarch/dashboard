@@ -19,103 +19,105 @@ function evaluateField(value: string | TJsonataExpression) {
   return async (value: unknown) => expressionBuilder.evaluate(value);
 }
 
-const createServerAction = (definition: TGeneratedFormDefinition) => {
+const executePostSubmitAction = async (
+  definition: TGeneratedFormDefinition,
+  formData: Record<string, unknown>,
+  args: Record<string, unknown> | undefined,
+): Promise<TGeneratedFormSubmitResponse> => {
   const pathExpression = evaluateField(definition.endpoint.path);
   const bodyExpression = evaluateField(definition.endpoint.body);
 
-  return async (formData: Record<string, unknown>): Promise<TGeneratedFormSubmitResponse> => {
-    const evaluatedDefinition = await evaluateDefinition(definition);
+  const evaluatedDefinition = await evaluateDefinition(definition);
 
-    await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
-      if (input.type === 'image-server-upload') {
-        const dataToUpload = formData[input.id] as { $type: 'files'; files: [{ name: string; type: string; base64: string; }] };
+  await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
+    if (input.type === 'image-server-upload') {
+      const dataToUpload = formData[input.id] as { $type: 'files'; files: [{ name: string; type: string; base64: string; }] };
 
-        if (!dataToUpload.files[0]) {
-          formData[input.id] = null;
-          return;
-        }
+      if (!dataToUpload.files[0]) {
+        formData[input.id] = null;
+        return;
+      }
 
-        if (input.imageServerAdminUrl.$type !== 'constant') {
-          throw new Error('unevaluated expression for imageServerAdminUrl');
-        }
+      if (input.imageServerAdminUrl.$type !== 'constant') {
+        throw new Error('unevaluated expression for imageServerAdminUrl');
+      }
 
-        const imageData = Buffer.from(dataToUpload.files[0].base64, 'base64');
-        const baseUrl = input.imageServerAdminUrl.value;
+      const imageData = Buffer.from(dataToUpload.files[0].base64, 'base64');
+      const baseUrl = input.imageServerAdminUrl.value;
 
-        const uploadResponse = await fetchService(`${baseUrl}/v1/admin/images/_actions/upload`, {
-          method: 'POST',
-          body: imageData,
-          headers: {
-            'Content-Type': dataToUpload.files[0].type,
+      const uploadResponse = await fetchService(`${baseUrl}/v1/admin/images/_actions/upload`, {
+        method: 'POST',
+        body: imageData,
+        headers: {
+          'Content-Type': dataToUpload.files[0].type,
+        },
+      });
+
+      if (uploadResponse.status !== 201) {
+        console.error({
+          message: 'invalid response code from image server',
+          data: {
+            status: uploadResponse.status,
           },
         });
+        throw new Error('could not upload image to image-server');
+      }
 
-        if (uploadResponse.status !== 201) {
-          console.error({
-            message: 'invalid response code from image server',
-            data: {
-              status: uploadResponse.status,
+      const body = await uploadResponse.json();
+      let response = {
+        body,
+      };
+
+      if (input.transformResponse) {
+        response = await jsonata(input.transformResponse.value).evaluate(response);
+      }
+
+      formData[input.id] = response.body;
+    }
+  }));
+
+  const context = {
+    form: formData,
+  };
+
+  const [path, body] = await Promise.all([
+    pathExpression(context),
+    bodyExpression(context),
+  ]);
+
+  const createResponse = await fetchService(path, {
+    method: definition.endpoint.method,
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const createData = await createResponse.json();
+
+  const actions = await Promise.all((evaluatedDefinition.postEndpointActions ?? []).map(async (postEndpointAction) => {
+    if (postEndpointAction.url.$type === "jsonata") {
+      return {
+        ...postEndpointAction,
+        url: {
+          $type: 'constant',
+          value: await jsonata(postEndpointAction.url.value).evaluate({
+            response: {
+              body: createData,
             },
-          });
-          throw new Error('could not upload image to image-server');
-        }
-
-        const body = await uploadResponse.json();
-        let response = {
-          body,
-        };
-
-        if (input.transformResponse) {
-          response = await jsonata(input.transformResponse.value).evaluate(response);
-        }
-
-        formData[input.id] = response.body;
-      }
-    }));
-
-    const context = {
-      form: formData,
-    };
-
-    const [path, body] = await Promise.all([
-      pathExpression(context),
-      bodyExpression(context),
-    ]);
-
-    const createResponse = await fetchService(path, {
-      method: definition.endpoint.method,
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const createData = await createResponse.json();
-
-    const actions = await Promise.all((evaluatedDefinition.postEndpointActions ?? []).map(async (postEndpointAction) => {
-      if (postEndpointAction.url.$type === "jsonata") {
-        return {
-          ...postEndpointAction,
-          url: {
-            $type: 'constant',
-            value: await jsonata(postEndpointAction.url.value).evaluate({
-              response: {
-                body: createData,
-              },
-              service: {
-                localPath: await getServiceLocalUrl(''),
-              },
-            }),
-          }
+            service: {
+              localPath: await getServiceLocalUrl(''),
+            },
+          }),
         }
       }
-    }));
+    }
+  }));
 
-    return {
-      response: {
-        body: createData,
-      },
-      actions: actions.filter((a): a is TGeneratedFormAction => !!a),
-    };
+  return {
+    response: {
+      body: createData,
+    },
+    actions: actions.filter((a): a is TGeneratedFormAction => !!a),
   };
 }
 
@@ -171,6 +173,6 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition): Promise
 };
 
 export const generatedFormUtils = {
-  createServerAction,
+  executePostSubmitAction,
   evaluateDefinition,
 };

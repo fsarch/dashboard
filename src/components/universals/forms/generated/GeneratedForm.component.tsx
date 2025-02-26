@@ -9,21 +9,27 @@ import GeneratedClientForm from "@/components/universals/forms/generated/Generat
 import { generatedFormUtils } from "@/components/universals/forms/generated/GeneratedForm.utils";
 
 type GeneratedFormProps = {
-  onSubmit: (data: TGeneratedFormInitialValues) => Promise<TGeneratedFormSubmitResponse>;
   definition: TGeneratedFormDefinition;
+  args?: Record<string, unknown>;
 };
 
 const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
-  onSubmit,
   definition,
+  args,
 }) => {
   const evaluatedDefinition = await generatedFormUtils.evaluateDefinition(definition);
+
+  async function handleSubmit(data: TGeneratedFormInitialValues): Promise<TGeneratedFormSubmitResponse> {
+    'use server';
+
+    return generatedFormUtils.executePostSubmitAction(definition, data, args);
+  }
 
   return (
     <GeneratedClientForm
       definition={evaluatedDefinition.inputs}
       initialValues={evaluatedDefinition.initialValues}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     />
   );
 };
