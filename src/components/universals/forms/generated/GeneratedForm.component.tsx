@@ -3,13 +3,13 @@ import 'server-only';
 import React from 'react';
 import {
   TGeneratedFormDefinition,
-  TGeneratedFormInitialValues,
+  TGeneratedFormInitialValues, TGeneratedFormSubmitResponse,
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import GeneratedClientForm from "@/components/universals/forms/generated/GeneratedClientForm.component";
 import { generatedFormUtils } from "@/components/universals/forms/generated/GeneratedForm.utils";
 
 type GeneratedFormProps = {
-  onSubmit: (data: TGeneratedFormInitialValues) => Promise<void>;
+  onSubmit: (data: TGeneratedFormInitialValues) => Promise<TGeneratedFormSubmitResponse>;
   definition: TGeneratedFormDefinition;
 };
 

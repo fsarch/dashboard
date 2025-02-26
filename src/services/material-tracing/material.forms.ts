@@ -23,7 +23,7 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
     },
     transformResponse: {
       $type: 'jsonata',
-      value: 'body.id',
+      value: '{ "body": body.id }',
     },
   }],
   initialValues: {
@@ -38,6 +38,13 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
       value: 'form',
     },
   },
+  postEndpointActions: [{
+    $type: 'redirect',
+    url: {
+      $type: 'jsonata',
+      value: "service.localPath & '/materials/' & response.body.id",
+    },
+  }],
   dataSources: {
     materialTypes: {
       $type: 'fetch',

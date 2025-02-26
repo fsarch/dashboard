@@ -3,7 +3,7 @@
 import React, { useCallback } from 'react';
 import {
   TGeneratedFormInitialValues,
-  TGeneratedFormInput
+  TGeneratedFormInput, TGeneratedFormSubmitResponse
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import { Form, Formik, FormikHelpers } from "formik";
 import Button from "@/components/universals/forms/Button";
@@ -18,7 +18,7 @@ import GeneratedFormImageServerUploadInput
 type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
   initialValues: TGeneratedFormInitialValues;
-  onSubmit: (data: TGeneratedFormInitialValues) => Promise<void>;
+  onSubmit: (data: TGeneratedFormInitialValues) => Promise<TGeneratedFormSubmitResponse>;
 };
 
 const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = ({
@@ -29,10 +29,22 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
   const router = useRouter();
 
   const handleSubmit = useCallback(async (data: TGeneratedFormInitialValues, helper: FormikHelpers<TGeneratedFormInitialValues>) => {
-    await onSubmit(data);
+    const response = await onSubmit(data);
 
     router.refresh();
     helper.resetForm();
+
+    if (response.actions) {
+      response.actions.forEach((action) => {
+        if (action.$type === 'redirect') {
+          if (action.url.$type !== 'constant') {
+            return;
+          }
+
+          router.push(action.url.value);
+        }
+      });
+    }
   }, [onSubmit, router]);
 
   return (

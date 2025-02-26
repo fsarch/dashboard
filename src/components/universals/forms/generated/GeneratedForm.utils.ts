@@ -1,10 +1,13 @@
 import {
+  TGeneratedFormAction,
   TGeneratedFormDefinition,
-  TGeneratedFormInitialValues, TGeneratedFormSelectConstantData, TGeneratedFormStringConstantData, TJsonataExpression
+  TGeneratedFormSelectConstantData,
+  TGeneratedFormStringConstantData, TGeneratedFormSubmitResponse,
+  TJsonataExpression,
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import jsonata from "jsonata";
 import { fetchService } from "@/utils/fetchService";
-import { getAccessToken } from "@/utils/getAccessToken";
+import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 
 function evaluateField(value: string | TJsonataExpression) {
   if (typeof value === "string") {
@@ -20,12 +23,10 @@ const createServerAction = (definition: TGeneratedFormDefinition) => {
   const pathExpression = evaluateField(definition.endpoint.path);
   const bodyExpression = evaluateField(definition.endpoint.body);
 
-  return async (formData: Record<string, unknown>) => {
+  return async (formData: Record<string, unknown>): Promise<TGeneratedFormSubmitResponse> => {
     const evaluatedDefinition = await evaluateDefinition(definition);
 
-    console.log('definition')
-
-    evaluatedDefinition.inputs.map(async (input) => {
+    await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
       if (input.type === 'image-server-upload') {
         const dataToUpload = formData[input.id] as { $type: 'files'; files: [{ name: string; type: string; base64: string; }] };
 
@@ -41,16 +42,21 @@ const createServerAction = (definition: TGeneratedFormDefinition) => {
         const imageData = Buffer.from(dataToUpload.files[0].base64, 'base64');
         const baseUrl = input.imageServerAdminUrl.value;
 
-        const uploadResponse = await fetch(`${baseUrl}/v1/admin/images/_actions/upload`, {
+        const uploadResponse = await fetchService(`${baseUrl}/v1/admin/images/_actions/upload`, {
           method: 'POST',
           body: imageData,
           headers: {
             'Content-Type': dataToUpload.files[0].type,
-            Authorization: `Bearer ${await getAccessToken()}`,
           },
         });
 
         if (uploadResponse.status !== 201) {
+          console.error({
+            message: 'invalid response code from image server',
+            data: {
+              status: uploadResponse.status,
+            },
+          });
           throw new Error('could not upload image to image-server');
         }
 
@@ -65,13 +71,11 @@ const createServerAction = (definition: TGeneratedFormDefinition) => {
 
         formData[input.id] = response.body;
       }
-    });
+    }));
 
     const context = {
       form: formData,
     };
-
-    console.log('formData', formData);
 
     const [path, body] = await Promise.all([
       pathExpression(context),
@@ -87,7 +91,31 @@ const createServerAction = (definition: TGeneratedFormDefinition) => {
     });
     const createData = await createResponse.json();
 
-    return createData;
+    const actions = await Promise.all((evaluatedDefinition.postEndpointActions ?? []).map(async (postEndpointAction) => {
+      if (postEndpointAction.url.$type === "jsonata") {
+        return {
+          ...postEndpointAction,
+          url: {
+            $type: 'constant',
+            value: await jsonata(postEndpointAction.url.value).evaluate({
+              response: {
+                body: createData,
+              },
+              service: {
+                localPath: getServiceLocalUrl(''),
+              },
+            }),
+          }
+        }
+      }
+    }));
+
+    return {
+      response: {
+        body: createData,
+      },
+      actions: actions.filter((a): a is TGeneratedFormAction => !!a),
+    };
   };
 }
 
@@ -138,6 +166,7 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition): Promise
     dataSources: definition.dataSources,
     initialValues: mappedInitialValues,
     endpoint: definition.endpoint,
+    postEndpointActions: definition.postEndpointActions,
   };
 };
 

@@ -56,9 +56,22 @@ export type TGeneratedFormEndpoint = {
   body: string | TJsonataExpression;
 }
 
+export type TGeneratedFormAction = {
+  $type: 'redirect',
+  url: TGeneratedFormStringConstantData | TJsonataExpression,
+};
+
 export type TGeneratedFormDefinition = {
   inputs: Array<TGeneratedFormInput>;
   endpoint: TGeneratedFormEndpoint;
   initialValues: TGeneratedFormInitialValues;
   dataSources: Record<string, TGeneratedFormDataSource>;
+  postEndpointActions: Array<TGeneratedFormAction>;
+};
+
+export type TGeneratedFormSubmitResponse = {
+  response: {
+    body: Record<string, unknown>;
+  };
+  actions: Array<TGeneratedFormAction>;
 };
