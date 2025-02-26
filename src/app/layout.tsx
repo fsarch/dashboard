@@ -6,11 +6,12 @@ import clsx from "clsx";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getAccessToken } from "@/utils/getAccessToken";
-import { createRemoteJWKSet, jwtVerify } from "jose";
+import { jwtVerify } from "jose";
+import { getJwks } from "@/utils/getJwks";
 
 const inter = Inter({subsets: ["latin"]});
 
-const JWKS = createRemoteJWKSet(new URL(`${process.env.AUTH_ISSUER}/protocol/openid-connect/certs`));
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,6 +25,8 @@ export default async function RootLayout({
   header: React.ReactNode;
   children: React.ReactNode;
 }>) {
+  const JWKS = getJwks();
+
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
