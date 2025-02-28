@@ -23,8 +23,16 @@ const getMaterial = async (materialId: string): Promise<TMaterial> => {
   return material;
 };
 
+const listMaterialsByShortCode = async (code: string): Promise<Array<TMaterial>> => {
+  const materialsResponse = await fetchService(`/v1/short-codes/${code}/materials`);
+  const materials = await materialsResponse.json();
+
+  return materials;
+};
+
 export const materialService = {
   listMaterials,
   getMaterial,
   listShortCodes,
+  listMaterialsByShortCode,
 };

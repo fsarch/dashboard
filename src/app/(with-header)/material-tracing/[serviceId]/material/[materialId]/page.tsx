@@ -3,7 +3,7 @@ import Section from "@/components/universals/section/Section";
 import { materialTypeService } from "@/services/material-tracing/material-type.service";
 import { manufacturerService } from "@/services/material-tracing/manufacturer.service";
 import MaterialShortCodeConnectForm
-  from "@/components/apps/material-tracing/short-code/MaterialShortCodeConnectForm.component";
+  from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeConnectForm.component";
 
 export default async function Home(props: { params: Promise<{ materialId: string }> }) {
   const params = await props.params;
