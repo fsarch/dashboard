@@ -48,6 +48,7 @@ export type TGeneratedFormDataSource = {
   path: string;
   method: string;
   transformResponse: TJsonataExpression;
+  headers?: Record<string, string>;
 };
 
 export type TGeneratedFormEndpoint = {

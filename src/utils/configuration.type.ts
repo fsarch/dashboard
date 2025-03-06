@@ -4,6 +4,7 @@ export enum EServiceType {
   PIM = 'product',
   IMAGE = 'image',
   MATERIAL_TRACING = 'material-tracing',
+  CUSTOM_APP = 'custom-app',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -41,7 +42,20 @@ export type TMaterialTracingConfiguration = {
   url: string;
 }
 
-export type TServiceConfiguration = TCustomerCommunicationServiceConfiguration | TDatatableServiceConfiguration | TProductServiceConfiguration | TImageServiceConfiguration | TMaterialTracingConfiguration;
+export type TCustomAppConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.CUSTOM_APP,
+  url: string;
+  path: string;
+};
+
+export type TServiceConfiguration = TCustomAppConfiguration
+  | TCustomerCommunicationServiceConfiguration
+  | TDatatableServiceConfiguration
+  | TProductServiceConfiguration
+  | TImageServiceConfiguration
+  | TMaterialTracingConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

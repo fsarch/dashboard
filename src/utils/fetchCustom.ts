@@ -1,6 +1,6 @@
 import { getAccessToken } from "@/utils/getAccessToken";
 
-export async function fetchService(url: string, init?: RequestInit): Promise<Response> {
+export async function fetchCustom(url: string, init?: RequestInit): Promise<Response> {
   const requestHeaders = new Headers(init?.headers);
 
   if (!requestHeaders.has('Authorization')) {
