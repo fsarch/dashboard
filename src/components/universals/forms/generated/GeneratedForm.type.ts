@@ -55,6 +55,7 @@ export type TGeneratedFormEndpoint = {
   path: string | TJsonataExpression;
   method: string;
   body: string | TJsonataExpression;
+  headers?: Record<string, string>;
 }
 
 export type TGeneratedFormAction = {

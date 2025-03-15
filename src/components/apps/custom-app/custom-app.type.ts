@@ -1,12 +1,26 @@
 import {
-  TGeneratedFormDataSource,
+  TGeneratedFormAction,
+  TGeneratedFormDataSource, TGeneratedFormEndpoint, TGeneratedFormInitialValues, TGeneratedFormInput,
   TJsonataExpression
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 
 export type TCustomAppClickHandler = {
-  $type: 'open-service-view'
+  $type: 'open-service-view';
   path: TJsonataExpression;
+} | ({
+  $type: 'fetch';
+} & TGeneratedFormEndpoint);
+
+export type TCustomAppClickHandlerResponse = {
+  $type: 'open-url',
+  url: string;
 };
+
+export type TCustomAppClickHandlerFunc = (
+  data: {
+    query: Record<string, string>;
+  }
+) => Promise<TCustomAppClickHandlerResponse | null>;
 
 export type TDataSourceRef = {
   $type: 'datasource';
@@ -40,7 +54,26 @@ export type TViewGroupView = {
   views: Array<TView>;
 };
 
-export type TView = TViewGroupView | TListView;
+export type TFormView = {
+  $type: 'form';
+  inputs: Array<TGeneratedFormInput>;
+  endpoint: TGeneratedFormEndpoint;
+  initialValues: TGeneratedFormInitialValues;
+  postEndpointActions?: Array<TGeneratedFormAction>;
+};
+
+export type TButtonView = {
+  $type: 'button';
+  label: string;
+  click: TCustomAppClickHandler;
+};
+
+export type TIframeView = {
+  $type: 'iframe';
+  url: string | TJsonataExpression;
+};
+
+export type TView = TViewGroupView | TListView | TFormView | TButtonView | TIframeView;
 
 export type TCustomAppListView = TListView & TCustomAppBaseView;
 

@@ -8,6 +8,8 @@ import {
   TConfiguration,
   TServiceConfiguration
 } from "@/utils/configuration.type";
+import { headers } from "next/headers";
+import { PageNotFoundError } from "next/dist/shared/lib/utils";
 
 const YAML_CONFIG_FILENAME = 'config.yml'
 
@@ -34,4 +36,17 @@ export async function getServiceConfigurations<T extends EServiceType>(type: T):
 
 export async function getServiceConfigurationById(id: string): Promise<TServiceConfiguration | undefined> {
   return (await getConfiguration()).services.find((s) => s.id === id);
+}
+
+export async function getCurrentServiceConfiguration<T extends EServiceType>(type: T): Promise<TServiceConfiguration & { type: T }> {
+  const serviceId = (await headers()).get('X-Service-Id');
+
+  const foundServiceType = (await getConfiguration()).services.find((s) => s.id === serviceId);
+
+  if (!foundServiceType || foundServiceType.type !== type) {
+    throw new PageNotFoundError('service configuration not found');
+  }
+
+  return foundServiceType as TServiceConfiguration & { type: T };
+
 }

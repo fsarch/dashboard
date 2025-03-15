@@ -1,13 +1,20 @@
-import { getServiceConfigurationById } from "@/utils/configuration.utils";
-import { TConfiguration, type TCustomAppConfiguration } from "@/utils/configuration.type";
+import { getCurrentServiceConfiguration, getServiceConfigurationById } from "@/utils/configuration.utils";
+import { EServiceType, type TCustomAppConfiguration } from "@/utils/configuration.type";
 import * as yaml from "js-yaml";
 import { readFile } from "node:fs/promises";
-import { resolve, dirname } from "node:path";
-import { TCustomAppConfig } from "@/components/apps/custom-app/custom-app.type";
-import { TGeneratedFormDataSource } from "@/components/universals/forms/generated/GeneratedForm.type";
-import { fetchService } from "@/utils/fetchService";
+import { dirname, resolve } from "node:path";
+import {
+  TCustomAppClickHandler,
+  TCustomAppClickHandlerFunc,
+  TCustomAppConfig
+} from "@/components/apps/custom-app/custom-app.type";
+import {
+  TGeneratedFormDataSource,
+  TJsonataExpression
+} from "@/components/universals/forms/generated/GeneratedForm.type";
 import jsonata from "jsonata";
 import { fetchCustom } from "@/utils/fetchCustom";
+import { headers } from "next/headers";
 
 let configuration: TCustomAppConfig | null = null;
 
@@ -65,8 +72,67 @@ async function evaluateDatasources(
   return Object.fromEntries(entries);
 }
 
+async function createClickAction(handler: TCustomAppClickHandler): Promise<TCustomAppClickHandlerFunc> {
+  return async (data) => {
+    'use server';
+
+    const service = await getCurrentServiceConfiguration(EServiceType.CUSTOM_APP);
+
+    if (handler.$type === 'fetch') {
+      const url = typeof handler.path === 'string'
+        ? handler.path
+        : await jsonata(handler.path.value).evaluate({
+          query: data.query,
+          service: {
+            baseUrl: service.url,
+          },
+        });
+
+      await fetchCustom(url.toString(), {
+        method: handler.method,
+        headers: handler.headers,
+      });
+
+      return null;
+    }
+
+    console.log('test');
+
+    return null;
+  };
+}
+
+export const createEvaluableExpression = (expression: string | TJsonataExpression) => {
+  if (typeof expression === 'string') {
+    return async () => expression;
+  }
+
+  const jsonataExpression = jsonata(expression.value);
+
+  return async (additionalInput: Record<string, unknown>) => {
+    const urlString = (await headers()).get('x-original-url');
+    let query;
+
+    if (urlString) {
+      try {
+        const url = new URL(urlString);
+        query = Object.fromEntries(url.searchParams.entries());
+      } catch {
+        // ignore
+      }
+    }
+
+    return jsonataExpression.evaluate({
+      query,
+      ...additionalInput,
+    });
+  };
+};
+
 export const customAppUtils = {
   getCustomAppConfig,
   evaluateDatasources,
   evaluateDatasource,
+  createClickAction,
+  createEvaluableExpression,
 };
