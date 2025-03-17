@@ -24,4 +24,8 @@ export const SERVICES: Record<EServiceType, {
     name: 'Material Tracing',
     basePath: '/material-tracing',
   },
+  [EServiceType.CUSTOM_APP]: {
+    name: 'CustomApp',
+    basePath: '/custom-app',
+  },
 };
