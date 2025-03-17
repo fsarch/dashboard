@@ -26,7 +26,7 @@ const MaterialShortCodeInfoComponent: React.FunctionComponent<MaterialShortCodeI
         Hersteller: {manufacturer.name}<br />
       </Section>
       <Section name="Material auschecken">
-        // TODO
+        {/* TODO */}
       </Section>
       <Section name="Verbindung aufheben">
         <MaterialShortCodeDeleteForm
