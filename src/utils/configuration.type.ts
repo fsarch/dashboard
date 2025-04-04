@@ -5,6 +5,7 @@ export enum EServiceType {
   IMAGE = 'image',
   MATERIAL_TRACING = 'material-tracing',
   CUSTOM_APP = 'custom-app',
+  PDF_RENDER = 'pdf-render',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -42,6 +43,13 @@ export type TMaterialTracingConfiguration = {
   url: string;
 }
 
+export type TPdfRenderConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.PDF_RENDER,
+  url: string;
+}
+
 export type TCustomAppConfiguration = {
   id: string;
   name?: string;
@@ -55,7 +63,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TDatatableServiceConfiguration
   | TProductServiceConfiguration
   | TImageServiceConfiguration
-  | TMaterialTracingConfiguration;
+  | TMaterialTracingConfiguration
+  | TPdfRenderConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

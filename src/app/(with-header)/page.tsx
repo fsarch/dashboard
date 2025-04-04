@@ -20,6 +20,9 @@ const apps = [{
 }, {
   name: 'Material Tracing',
   path: '/material-tracing',
+}, {
+  name: 'PDF Render',
+  path: '/pdf-render',
 }]
 
 export default async function Home() {

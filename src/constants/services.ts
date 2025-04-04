@@ -28,4 +28,8 @@ export const SERVICES: Record<EServiceType, {
     name: 'CustomApp',
     basePath: '/custom-app',
   },
+  [EServiceType.PDF_RENDER]: {
+    name: 'PDF Render',
+    basePath: '/pdf-render',
+  },
 };
