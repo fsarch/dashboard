@@ -17,9 +17,6 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ shor
           code={shortCodeCode}
         />
       ) : null}
-      <Section name="Material entfernen">
-
-      </Section>
     </main>
   );
 }

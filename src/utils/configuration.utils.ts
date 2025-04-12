@@ -38,6 +38,23 @@ export async function getServiceConfigurationById(id: string): Promise<TServiceC
   return (await getConfiguration()).services.find((s) => s.id === id);
 }
 
+export async function getCurrentServiceId(): Promise<string> {
+  return (await headers()).get('X-Service-Id')!;
+}
+
+export async function getCurrentServiceType(): Promise<EServiceType> {
+  return (await headers()).get('X-Service-Type') as EServiceType;
+}
+
+export async function getDefaultServiceId(serviceType: EServiceType): Promise<string> {
+  const defaultId = (await getConfiguration()).defaults[serviceType]?.id;
+  if (!defaultId) {
+    throw new Error('non-configured default service');
+  }
+
+  return defaultId;
+}
+
 export async function getCurrentServiceConfiguration<T extends EServiceType>(type: T): Promise<TServiceConfiguration & { type: T }> {
   const serviceId = (await headers()).get('X-Service-Id');
 

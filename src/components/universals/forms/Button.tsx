@@ -1,11 +1,12 @@
 'use client';
 
-import React, { PropsWithChildren } from 'react';
+import React, { MouseEventHandler, PropsWithChildren } from 'react';
 
 type ButtonProps = PropsWithChildren<{
   name?: string;
   type: 'button' | 'submit' | 'reset';
   className?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }>;
 
 const Button: React.FunctionComponent<ButtonProps> = ({
@@ -13,12 +14,14 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   type,
   children,
   className,
+  onClick,
 }) => {
   return (
     <button
       className={className}
       type={type}
       name={name}
+      onClick={onClick}
     >
       {children}
     </button>

@@ -5,6 +5,9 @@ import { manufacturerService } from "@/services/material-tracing/manufacturer.se
 import Section from "@/components/universals/section/Section";
 import MaterialShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteForm.component";
+import MaterialInfo from "@/components/apps/material-tracing/material/MaterialInfo.component";
+import QrCodeDownloadButton from "@/components/universals/qr-code/QRCodeDownloadButton.component";
+import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
 
 type MaterialShortCodeInfoComponentProps = {
   code: string;
@@ -15,27 +18,45 @@ const MaterialShortCodeInfoComponent: React.FunctionComponent<MaterialShortCodeI
 }) => {
   const materials = await materialService.listMaterialsByShortCode(code);
   const material = materials[0];
-  const materialType = await materialTypeService.getMaterialType(material.materialTypeId);
-  const manufacturer = await manufacturerService.getManufacturer(materialType.manufacturerId);
 
   return (
     <>
-      <Section name="Informationen">
-        Name: {material.name}<br />
-        Material: {materialType.name}<br />
-        Hersteller: {manufacturer.name}<br />
+      {material ? (
+        <Section name="Informationen">
+          <MaterialInfo
+            material={material}
+          />
+        </Section>
+      ) : undefined}
+      <Section name="ShortCode herunterladen">
+        <QrCodeDownloadButton
+          type={QRCodeType.ROUND}
+          value={code}
+          open={false}
+        >
+          Download
+        </QrCodeDownloadButton>
+        <QrCodeDownloadButton
+          type={QRCodeType.ROUND}
+          value={code}
+          open={true}
+        >
+          Show
+        </QrCodeDownloadButton>
       </Section>
       <Section name="Material auschecken">
         {/* TODO */}
       </Section>
-      <Section name="Verbindung aufheben">
-        <MaterialShortCodeDeleteForm
-          args={{
-            materialId: material.id,
-            shortCode: code,
-          }}
-        />
-      </Section>
+      {material ? (
+        <Section name="Verbindung aufheben">
+          <MaterialShortCodeDeleteForm
+            args={{
+              materialId: material.id,
+              shortCode: code,
+            }}
+          />
+        </Section>
+      ) : undefined}
     </>
   );
 };

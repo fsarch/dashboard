@@ -1,6 +1,8 @@
 'use server';
 
 import { fetchService } from "@/utils/fetchService";
+import { getCurrentServiceId, getCurrentServiceType, getDefaultServiceId } from "@/utils/configuration.utils";
+import { EServiceType } from "@/utils/configuration.type";
 
 export type TPdfRenderFormData = {
   content: {
@@ -13,18 +15,29 @@ export type TPdfRenderFormData = {
     };
     export: {
       format: string;
+      width?: string | number;
+      height?: string | number;
     };
   };
 };
 
 export const renderPdf = async (data: TPdfRenderFormData) => {
-  console.log('data', data);
+  const currentServiceId = await getCurrentServiceId();
+  const currentServiceType = await getCurrentServiceType();
+
+  let serviceId = currentServiceId;
+  if (currentServiceType !== EServiceType.PDF_RENDER) {
+    serviceId = await getDefaultServiceId(EServiceType.PDF_RENDER);
+  }
+
   const res = await fetchService('/pdf/_actions/render', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
+  }, {
+    serviceId,
   });
 
   if (!res.ok) {
