@@ -7,8 +7,12 @@ const listPartTypes = async (): Promise<Array<TPartType>> => {
 
   return partTypes;
 };
-const getPartType = async (partTypeId: string): Promise<TPartType> => {
+const getPartType = async (partTypeId: string): Promise<TPartType | null> => {
   const partTypeResponse = await fetchService(`/v1/part-types/${partTypeId}`);
+  if (!partTypeResponse.ok) {
+    return null;
+  }
+
   const partType = await partTypeResponse.json();
 
   return partType;

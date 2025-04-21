@@ -36,6 +36,13 @@ export default async function Home() {
           />
         </Link>
         <Link
+          href={await getServiceLocalUrl("/part")}
+        >
+          <TileListItem
+            name="Part"
+          />
+        </Link>
+        <Link
           href={await getServiceLocalUrl("/short-code")}
         >
           <TileListItem
