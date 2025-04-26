@@ -3,6 +3,11 @@ import { notFound } from "next/navigation";
 import { partService } from "@/services/material-tracing/part.service";
 import PartShortCodeConnectForm
   from "@/components/apps/material-tracing/short-code/part/PartShortCodeConnectForm.component";
+import React from "react";
+import {
+  PartMaterialShortCodeConnectForm
+} from "@/components/apps/material-tracing/short-code/part/PartMaterialShortCodeConnectForm.component";
+import PartMaterialList from "@/components/apps/material-tracing/short-code/part/PartMaterialList.component";
 
 export default async function Home({ params }: Readonly<{ params: Promise<{ partId: string; }> }>) {
   const part = await partService.getPart((await params).partId);
@@ -32,6 +37,16 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
           />
         </Section>
       )}
+      <Section name="Materials">
+        <PartMaterialList
+          partId={part.id}
+        />
+      </Section>
+      <Section name="Material per ShortCode verbinden">
+        <PartMaterialShortCodeConnectForm
+          partId={part.id}
+        />
+      </Section>
     </main>
   );
 }
