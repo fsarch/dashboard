@@ -29,7 +29,7 @@ const listShortCodes = async (partId: string): Promise<Array<TShortCode>> => {
 };
 
 const listPartsByShortCode = async (code: string): Promise<Array<TMaterial>> => {
-  const partsResponse = await fetchService(`/v1/short-codes/${code}/materials`);
+  const partsResponse = await fetchService(`/v1/short-codes/${code}/parts`);
   const parts = await partsResponse.json();
 
   return parts;
@@ -49,6 +49,26 @@ const listMaterials = async (partId: string): Promise<Array<TMaterial>> => {
   return materials;
 };
 
+const getOrCreatePartPart = async (partId: string, childPartId: string, amount: number): Promise<void> => {
+  const partPartResponse = await fetchService(`/v1/parts/${partId}/parts/${childPartId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      amount,
+    }),
+  });
+  await partPartResponse.json();
+};
+
+const listPartParts = async (partId: string): Promise<Array<TPart>> => {
+  const partsResponse = await fetchService(`/v1/parts/${partId}/parts`);
+  const parts = await partsResponse.json();
+
+  return parts;
+};
+
 export const partService = {
   listParts,
   getPart,
@@ -56,4 +76,6 @@ export const partService = {
   listPartsByShortCode,
   getOrCreateMaterial,
   listMaterials,
+  getOrCreatePartPart,
+  listPartParts,
 };
