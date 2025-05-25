@@ -12,7 +12,13 @@ type DefaultPageProps = PropsWithChildren<{
 export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
   children,
 }) => {
-  const baseConfiguration = await getCurrentServiceBaseConfiguration();
+  let baseConfiguration;
+  try {
+    baseConfiguration = await getCurrentServiceBaseConfiguration();
+  } catch {
+    return children;
+  }
+
   const config = SERVICES[baseConfiguration.type];
 
   return (
