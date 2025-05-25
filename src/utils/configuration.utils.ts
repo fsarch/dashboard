@@ -10,6 +10,7 @@ import {
 } from "@/utils/configuration.type";
 import { headers } from "next/headers";
 import { PageNotFoundError } from "next/dist/shared/lib/utils";
+import { ServerLogger } from "@/utils/ServerLogger";
 
 const YAML_CONFIG_FILENAME = 'config.yml'
 
@@ -61,6 +62,9 @@ export async function getCurrentServiceBaseConfiguration(): Promise<TServiceConf
   const foundServiceType = (await getConfiguration()).services.find((s) => s.id === serviceId);
 
   if (!foundServiceType) {
+    ServerLogger.Instance.debug(`could not get service configuration for {id}`, {
+      serviceId,
+    });
     throw new PageNotFoundError('service configuration not found');
   }
 
@@ -71,6 +75,10 @@ export async function getCurrentServiceConfiguration<T extends EServiceType>(typ
   const foundServiceType = await getCurrentServiceBaseConfiguration();
 
   if (foundServiceType.type !== type) {
+    ServerLogger.Instance.debug(`could not get service configuration for {type}`, {
+      type,
+      foundServiceType,
+    });
     throw new PageNotFoundError('service configuration not found');
   }
 
