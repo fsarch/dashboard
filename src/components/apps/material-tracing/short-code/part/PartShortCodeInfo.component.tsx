@@ -26,22 +26,6 @@ const PartShortCodeInfoComponent: React.FunctionComponent<PartShortCodeInfoCompo
         <Section name="Informationen">
         </Section>
       ) : undefined}
-      <Section name="ShortCode herunterladen">
-        <QrCodeDownloadButton
-          type={QRCodeType.ROUND}
-          value={code}
-          open={false}
-        >
-          Download
-        </QrCodeDownloadButton>
-        <QrCodeDownloadButton
-          type={QRCodeType.ROUND}
-          value={code}
-          open={true}
-        >
-          Show
-        </QrCodeDownloadButton>
-      </Section>
     </>
   );
 };

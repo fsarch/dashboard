@@ -28,22 +28,6 @@ const MaterialShortCodeInfoComponent: React.FunctionComponent<MaterialShortCodeI
           />
         </Section>
       ) : undefined}
-      <Section name="ShortCode herunterladen">
-        <QrCodeDownloadButton
-          type={QRCodeType.ROUND}
-          value={code}
-          open={false}
-        >
-          Download
-        </QrCodeDownloadButton>
-        <QrCodeDownloadButton
-          type={QRCodeType.ROUND}
-          value={code}
-          open={true}
-        >
-          Show
-        </QrCodeDownloadButton>
-      </Section>
       <Section name="Material auschecken">
         {/* TODO */}
       </Section>
