@@ -1,5 +1,25 @@
 @use '@/app/_styles/utils' as *;
 
 .root {
+    display: flex;
+
     @include apply-custom-padding('header');
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.iconWrapper {
+    display: flex;
+
+    align-items: center;
+}
+
+.icon, .iconLogout {
+    width: 2rem;
+}
+
+.title {
+    @include apply-custom-padding('header');
+
+    flex-grow: 1;
 }
