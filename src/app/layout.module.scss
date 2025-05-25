@@ -1,6 +1,12 @@
 @use "./_styles/index.scss" as *;
 
 .body {
+  @include color();
+  @include spacing();
+  @include border-radius();
+  @include custom-gap();
+  @include custom-font-size();
+
   overflow-y: hidden;
   height: 100vh;
   width: 100vw;
@@ -10,12 +16,6 @@
 }
 
 .root {
-  @include color();
-  @include spacing();
-  @include border-radius();
-  @include custom-gap();
-  @include custom-font-size();
-
   display: flex;
   flex-direction: column;
 

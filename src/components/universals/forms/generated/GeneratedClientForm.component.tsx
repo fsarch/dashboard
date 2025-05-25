@@ -7,13 +7,13 @@ import {
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import { Form, Formik, FormikHelpers } from "formik";
 import Button from "@/components/universals/forms/Button";
-import Input from "@/components/universals/forms/Input";
 import { useRouter } from "next/navigation";
 import GeneratedFormTextInput from "@/components/universals/forms/generated/inputs/GeneratedFormTextInput.component";
 import GeneratedFormSelectInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormSelectInput.component";
 import GeneratedFormImageServerUploadInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormImageServerUploadInput.component";
+import { useWithLoading } from "@/components/universals/loader/LoadingProvider.context";
 
 type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
@@ -28,8 +28,10 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
 }) => {
   const router = useRouter();
 
+  const withLoader = useWithLoading();
+
   const handleSubmit = useCallback(async (data: TGeneratedFormInitialValues, helper: FormikHelpers<TGeneratedFormInitialValues>) => {
-    const response = await onSubmit(data);
+    const response = await withLoader(() => onSubmit(data));
 
     router.refresh();
     helper.resetForm();

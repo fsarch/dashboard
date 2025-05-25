@@ -8,6 +8,8 @@ import {
   connectPartMaterialShortCode, ConnectPartMaterialShortCode
 } from "@/components/apps/material-tracing/short-code/part/PartMaterialShortCodeConnectForm.server-action";
 import { useRouter } from "next/navigation";
+import QrInput from "@/components/universals/forms/QrInput";
+import { useWithLoading } from "@/components/universals/loader/LoadingProvider.context";
 
 type PartMaterialShortCodeConnectFormProps = {
   partId: string;
@@ -19,11 +21,13 @@ export const PartMaterialShortCodeConnectForm: React.FunctionComponent<PartMater
 }) => {
   const router = useRouter();
 
+  const withLoader = useWithLoading();
+
   const handleSubmit = useCallback(async (value: ConnectPartMaterialShortCode) => {
-    await connectPartMaterialShortCode({
+    await withLoader(() => connectPartMaterialShortCode({
       value,
       partId,
-    });
+    }));
     router.refresh();
   }, [router, partId]);
 
@@ -35,7 +39,7 @@ export const PartMaterialShortCodeConnectForm: React.FunctionComponent<PartMater
       }}
     >
       <Form>
-        <Input name="shortCode" type="input"/>
+        <QrInput name="shortCode"/>
         <Button type="submit">
           Erstellen
         </Button>

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import {
   connectPartPartShortCode,
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.server-action";
+import QrInput from "@/components/universals/forms/QrInput";
 
 type PartPartShortCodeConnectFormProps = {
   partId: string;
@@ -43,7 +44,7 @@ export const PartPartShortCodeConnectForm: React.FunctionComponent<PartPartShort
       }}
     >
       <Form>
-        <Input name="shortCode" type="input"/>
+        <QrInput name="shortCode"/>
         <Input name="amount" type="number"/>
         <Button type="submit">
           Erstellen

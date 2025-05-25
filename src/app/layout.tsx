@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { getAccessToken } from "@/utils/getAccessToken";
 import { jwtVerify } from "jose";
 import { getJwks } from "@/utils/getJwks";
+import LoadingProvider from "@/components/universals/loader/LoadingProvider";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -43,7 +44,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
     <body className={clsx(inter.className, styles.body)}>
-    {children}
+    <LoadingProvider>
+      {children}
+    </LoadingProvider>
     </body>
     </html>
   );

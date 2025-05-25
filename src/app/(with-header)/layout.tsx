@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import styles from './layout.module.scss';
+import DialogProvider from "@/components/universals/dialog/DialogProvider.component";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,13 +23,15 @@ export default async function RootLayout(props: LayoutProps | LayoutPropsExtende
   } = props as LayoutPropsExtended;
 
   return (
-    <div className={styles.root}>
-      <div className={styles.header}>
-        {header}
+    <DialogProvider>
+      <div className={styles.root}>
+        <div className={styles.header}>
+          {header}
+        </div>
+        <div className={styles.content}>
+          {children}
+        </div>
       </div>
-      <div className={styles.content}>
-        {children}
-      </div>
-    </div>
+    </DialogProvider>
   );
 }

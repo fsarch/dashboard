@@ -1,0 +1,28 @@
+@use "@/app/_styles/utils" as *;
+
+.modal {
+  display: flex;
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  align-items: center;
+
+  gap: 1rem;
+
+  @include apply-custom-background-color('loading-overlay-background');
+  @include apply-custom-padding('loading-overlay');
+  @include apply-custom-border-radius('loading-overlay');
+}
+
+.backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+}

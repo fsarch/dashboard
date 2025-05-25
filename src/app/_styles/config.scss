@@ -37,6 +37,21 @@ $custom-background-color: add-custom-color(
   'var(--color-contrast-light)',
 );
 
+$custom-background-color: add-custom-color(
+  $custom-background-color,
+  'loading-overlay-background',
+  'var(--color-contrast-light)',
+);
+
+$custom-padding: add-custom-spacings(
+  $custom-padding,
+  'loading-overlay',
+  3,
+  4,
+  3,
+  3
+);
+
 $custom-padding: add-custom-spacings(
   $custom-padding,
   'datatable-cell',
@@ -67,6 +82,16 @@ $custom-padding: add-custom-spacings(
 $custom-border-radius: add-custom-spacings(
   $custom-border-radius,
   'ccm-message',
+  3,
+  3,
+  3,
+  3
+);
+
+
+$custom-border-radius: add-custom-spacings(
+  $custom-border-radius,
+  'loading-overlay',
   3,
   3,
   3,

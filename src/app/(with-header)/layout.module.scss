@@ -1,12 +1,6 @@
 @use "@/app/_styles/index" as *;
 
 .root {
-  @include color();
-  @include spacing();
-  @include border-radius();
-  @include custom-gap();
-  @include custom-font-size();
-
   display: flex;
   flex-direction: column;
 
