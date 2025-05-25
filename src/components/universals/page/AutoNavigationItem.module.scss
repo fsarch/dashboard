@@ -1,0 +1,13 @@
+@use "@/app/_styles/utils" as *;
+
+.root {
+}
+
+.root:hover {
+  @include apply-custom-background-color('navigation--hover');
+}
+
+.link {
+  display: block;
+  padding: 10px;
+}

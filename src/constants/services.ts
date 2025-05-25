@@ -3,6 +3,10 @@ import { EServiceType } from "@/utils/configuration.type";
 export const SERVICES: Record<EServiceType, {
   name: string;
   basePath: string;
+  navigation?: Array<{
+    name: string;
+    path: string;
+  }>;
 }> = {
   [EServiceType.CUSTOMER_COMMUNICATION]: {
     name: 'Customer Communication',
@@ -23,6 +27,25 @@ export const SERVICES: Record<EServiceType, {
   [EServiceType.MATERIAL_TRACING]: {
     name: 'Material Tracing',
     basePath: '/material-tracing',
+    navigation: [{
+      name: 'Home',
+      path: '/',
+    }, {
+      name: 'Manufacturers',
+      path: '/manufacturer',
+    }, {
+      name: 'Material-Types',
+      path: '/material-type',
+    }, {
+      name: 'Parts',
+      path: '/part',
+    }, {
+      name: 'Part-Types',
+      path: '/part-type',
+    }, {
+      name: 'Short-Codes',
+      path: '/short-code',
+    }]
   },
   [EServiceType.CUSTOM_APP]: {
     name: 'CustomApp',

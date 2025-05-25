@@ -14,12 +14,14 @@ type LayoutProps = {
 type LayoutPropsExtended = {
   children?: React.ReactNode
   header: React.ReactNode;
+  navigation: React.ReactNode;
 }
 
 export default async function RootLayout(props: LayoutProps | LayoutPropsExtended) {
   const {
     children,
     header,
+    navigation,
   } = props as LayoutPropsExtended;
 
   return (
@@ -27,6 +29,9 @@ export default async function RootLayout(props: LayoutProps | LayoutPropsExtende
       <div className={styles.root}>
         <div className={styles.header}>
           {header}
+        </div>
+        <div className={styles.navigation}>
+          {navigation}
         </div>
         <div className={styles.content}>
           {children}

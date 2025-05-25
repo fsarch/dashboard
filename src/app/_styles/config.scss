@@ -106,6 +106,12 @@ $custom-background-color: add-custom-color(
 
 $custom-background-color: add-custom-color(
   $custom-background-color,
+  'navigation--hover',
+  'var(--color-contrast-light)',
+);
+
+$custom-background-color: add-custom-color(
+  $custom-background-color,
   'ccm-message-footer',
   'var(--color-contrast-light)',
 );

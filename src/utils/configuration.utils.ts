@@ -55,15 +55,24 @@ export async function getDefaultServiceId(serviceType: EServiceType): Promise<st
   return defaultId;
 }
 
-export async function getCurrentServiceConfiguration<T extends EServiceType>(type: T): Promise<TServiceConfiguration & { type: T }> {
+export async function getCurrentServiceBaseConfiguration(): Promise<TServiceConfiguration> {
   const serviceId = (await headers()).get('X-Service-Id');
 
   const foundServiceType = (await getConfiguration()).services.find((s) => s.id === serviceId);
 
-  if (!foundServiceType || foundServiceType.type !== type) {
+  if (!foundServiceType) {
+    throw new PageNotFoundError('service configuration not found');
+  }
+
+  return foundServiceType;
+}
+
+export async function getCurrentServiceConfiguration<T extends EServiceType>(type: T): Promise<TServiceConfiguration & { type: T }> {
+  const foundServiceType = await getCurrentServiceBaseConfiguration();
+
+  if (foundServiceType.type !== type) {
     throw new PageNotFoundError('service configuration not found');
   }
 
   return foundServiceType as TServiceConfiguration & { type: T };
-
 }
