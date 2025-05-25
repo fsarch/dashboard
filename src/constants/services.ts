@@ -34,6 +34,9 @@ export const SERVICES: Record<EServiceType, {
       name: 'Manufacturers',
       path: '/manufacturer',
     }, {
+      name: 'Materials',
+      path: '/material',
+    }, {
       name: 'Material-Types',
       path: '/material-type',
     }, {
