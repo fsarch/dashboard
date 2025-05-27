@@ -1,10 +1,10 @@
-import React from 'react';
-import Input from "@/components/universals/forms/Input";
+import React, { useId } from 'react';
 import {
   TGeneratedFormSelectInput,
-  TGeneratedFormTextInput
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import { Field } from "formik";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
+import styles from './GeneratedFormSelectInput.module.scss';
 
 type GeneratedFormSelectInputProps = {
   input: TGeneratedFormSelectInput;
@@ -13,21 +13,28 @@ type GeneratedFormSelectInputProps = {
 const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInputProps> = ({
   input,
 }) => {
+  const id = useId();
+
   if (input.data.$type !== 'constant') {
     return null;
   }
 
   return (
-    <label
-      key={input.id}
+    <FieldsetRow
+      label={(
+        <label
+          htmlFor={id}
+        >
+          {input.label}
+        </label>
+      )}
     >
-      {input.label}
-      <Field name={input.id} as="select">
+      <Field className={styles.input} id={id} name={input.id} as="select">
         {(input.data.value ?? []).map((value) => (
           <option key={value.id} value={value.value}>{value.label}</option>
         ))}
       </Field>
-    </label>
+    </FieldsetRow>
   );
 };
 

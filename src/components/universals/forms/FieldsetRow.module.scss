@@ -1,0 +1,18 @@
+.root {
+  display: table-row;
+}
+
+.label {
+  display: table-cell;
+
+  padding-right: 10px;
+}
+
+.children {
+  display: table-cell;
+}
+
+.label, .children {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

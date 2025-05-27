@@ -1,7 +1,9 @@
 import React from 'react';
 import { Field } from "formik";
+import styles from './Input.module.scss';
 
 type InputProps = {
+  id?: string;
   name: string;
   type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number';
   disabled?: boolean;
@@ -9,6 +11,7 @@ type InputProps = {
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
+  id,
   name,
   type,
   disabled,
@@ -16,6 +19,8 @@ const Input: React.FunctionComponent<InputProps> = ({
 }) => {
   return (
     <Field
+      className={styles.root}
+      id={id}
       type={type}
       name={name}
       disabled={disabled}

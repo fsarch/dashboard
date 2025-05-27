@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  width: 100%;
+
+  outline: none;
+  border: 1px solid #999999;
+  border-radius: 5px;
+
+  background-color: #333333;
+
+  overflow: hidden;
+}
+
+.input {
+  outline: none;
+  border: none;
+  margin: 0;
+  background: none;
+
+  padding: 5px 10px;
+
+  flex-grow: 1;
+}
+
+.button {
+  background-color: #999999;
+
+  outline: none;
+  border: none;
+
+  padding: 5px 10px;
+}

@@ -14,6 +14,14 @@ const PartMaterialList: React.FunctionComponent<PartMaterialListProps> = async (
 }) => {
   const materials = await partService.listMaterials(partId);
 
+  if (!materials?.length) {
+    return (
+      <div>
+        Keine Materials verbunden.
+      </div>
+    );
+  }
+
   return (
     <List>
       {materials.map(async (material) => (

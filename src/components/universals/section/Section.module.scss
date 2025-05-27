@@ -2,4 +2,6 @@
 
 .root {
   @include apply-custom-padding('section');
+
+  margin: 20px 0;
 }

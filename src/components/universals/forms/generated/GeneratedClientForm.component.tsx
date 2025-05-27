@@ -14,6 +14,7 @@ import GeneratedFormSelectInput
 import GeneratedFormImageServerUploadInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormImageServerUploadInput.component";
 import { useWithLoading } from "@/components/universals/loader/LoadingProvider.context";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
 
 type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
@@ -55,36 +56,38 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
       onSubmit={handleSubmit}
     >
       <Form>
-        {definition.map((input) => {
-          if (input.type === 'text') {
-            return (
-              <GeneratedFormTextInput
-                key={input.id}
-                input={input}
-              />
-            );
-          }
+        <Fieldset>
+          {definition.map((input) => {
+            if (input.type === 'text') {
+              return (
+                <GeneratedFormTextInput
+                  key={input.id}
+                  input={input}
+                />
+              );
+            }
 
-          if (input.type === 'select') {
-            return (
-              <GeneratedFormSelectInput
-                key={input.id}
-                input={input}
-              />
-            );
-          }
+            if (input.type === 'select') {
+              return (
+                <GeneratedFormSelectInput
+                  key={input.id}
+                  input={input}
+                />
+              );
+            }
 
-          if (input.type === 'image-server-upload') {
-            return (
-              <GeneratedFormImageServerUploadInput
-                key={input.id}
-                input={input}
-              />
-            );
-          }
+            if (input.type === 'image-server-upload') {
+              return (
+                <GeneratedFormImageServerUploadInput
+                  key={input.id}
+                  input={input}
+                />
+              );
+            }
 
-          return null;
-        })}
+            return null;
+          })}
+        </Fieldset>
         <Button type="submit">
           Erstellen
         </Button>

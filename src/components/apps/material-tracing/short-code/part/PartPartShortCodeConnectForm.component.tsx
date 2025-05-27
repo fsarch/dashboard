@@ -9,6 +9,8 @@ import {
   connectPartPartShortCode,
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.server-action";
 import QrInput from "@/components/universals/forms/QrInput";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 
 type PartPartShortCodeConnectFormProps = {
   partId: string;
@@ -44,8 +46,25 @@ export const PartPartShortCodeConnectForm: React.FunctionComponent<PartPartShort
       }}
     >
       <Form>
-        <QrInput name="shortCode"/>
-        <Input name="amount" type="number"/>
+        <Fieldset>
+          <FieldsetRow
+            label={(
+              <label htmlFor="part-part-short-code">ShortCode</label>
+            )}
+          >
+            <QrInput
+              id="part-part-short-code"
+              name="shortCode"
+            />
+          </FieldsetRow>
+          <FieldsetRow
+            label={(
+              <label htmlFor="part-part-amount">Anzahl</label>
+            )}
+          >
+            <Input id="part-part-amount" name="amount" type="number"/>
+          </FieldsetRow>
+        </Fieldset>
         <Button type="submit">
           Erstellen
         </Button>

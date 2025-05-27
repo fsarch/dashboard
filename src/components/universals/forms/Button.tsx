@@ -1,6 +1,8 @@
 'use client';
 
 import React, { MouseEventHandler, PropsWithChildren } from 'react';
+import clsx from 'clsx';
+import styles from './Button.module.scss';
 
 type ButtonProps = PropsWithChildren<{
   name?: string;
@@ -18,7 +20,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={className}
+      className={clsx(styles.root, className)}
       type={type}
       name={name}
       onClick={onClick}

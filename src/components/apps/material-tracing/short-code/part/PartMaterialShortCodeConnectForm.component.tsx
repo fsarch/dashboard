@@ -10,6 +10,8 @@ import {
 import { useRouter } from "next/navigation";
 import QrInput from "@/components/universals/forms/QrInput";
 import { useWithLoading } from "@/components/universals/loader/LoadingProvider.context";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 
 type PartMaterialShortCodeConnectFormProps = {
   partId: string;
@@ -39,7 +41,18 @@ export const PartMaterialShortCodeConnectForm: React.FunctionComponent<PartMater
       }}
     >
       <Form>
-        <QrInput name="shortCode"/>
+        <Fieldset>
+          <FieldsetRow
+            label={(
+              <label htmlFor="part-material-short-code">ShortCode</label>
+            )}
+          >
+            <QrInput
+              id="part-material-short-code"
+              name="shortCode"
+            />
+          </FieldsetRow>
+        </Fieldset>
         <Button type="submit">
           Erstellen
         </Button>

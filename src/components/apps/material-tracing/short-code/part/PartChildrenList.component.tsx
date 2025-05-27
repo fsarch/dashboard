@@ -14,6 +14,14 @@ const PartChildrenList: React.FunctionComponent<PartPartListProps> = async ({
 }) => {
   const parts = await partService.listPartParts(partId);
 
+  if (!parts?.length) {
+    return (
+      <div>
+        Keine Parts verbunden.
+      </div>
+    );
+  }
+
   return (
     <List>
       {parts.map(async (part) => (

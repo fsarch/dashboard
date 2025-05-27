@@ -26,9 +26,6 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
   return (
     <main>
       <Section name="Informationen">
-        Name: {part.name}<br />
-        ExternalId: {part.externalId || '-'}
-
         <PartUpdateForm
           args={{
             part
