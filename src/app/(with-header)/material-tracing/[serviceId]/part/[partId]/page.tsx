@@ -12,6 +12,7 @@ import {
   PartPartShortCodeConnectForm
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component";
 import PartChildrenList from "@/components/apps/material-tracing/short-code/part/PartChildrenList.component";
+import PartUpdateForm from "@/components/apps/material-tracing/part/PartInfoForm.component";
 
 export default async function Home({ params }: Readonly<{ params: Promise<{ partId: string; }> }>) {
   const part = await partService.getPart((await params).partId);
@@ -27,6 +28,12 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
       <Section name="Informationen">
         Name: {part.name}<br />
         ExternalId: {part.externalId || '-'}
+
+        <PartUpdateForm
+          args={{
+            part
+          }}
+        />
       </Section>
       {hasShortCode ? (
         <Section name="ShortCode">

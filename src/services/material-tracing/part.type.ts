@@ -3,4 +3,5 @@ export type TPart = {
   name: string;
   partTypeId: string;
   externalId?: string;
+  amount: number;
 };

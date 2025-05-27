@@ -27,7 +27,7 @@ const executePostSubmitAction = async (
   const pathExpression = evaluateField(definition.endpoint.path);
   const bodyExpression = evaluateField(definition.endpoint.body);
 
-  const evaluatedDefinition = await evaluateDefinition(definition);
+  const evaluatedDefinition = await evaluateDefinition(definition, { args });
 
   await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
     if (input.type === 'image-server-upload') {
@@ -122,7 +122,7 @@ const executePostSubmitAction = async (
   };
 }
 
-const evaluateDefinition = async (definition: TGeneratedFormDefinition): Promise<TGeneratedFormDefinition> => {
+const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }: { args?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
     const dataResponse = await fetchService(value.path, {
       method: value.method,
@@ -161,7 +161,7 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition): Promise
   });
 
   const mappedInitialValues = definition.initialValues.$type === 'jsonata'
-    ? await jsonata(definition.initialValues.value as string).evaluate({ dataSource: dataSourceData })
+    ? await jsonata(definition.initialValues.value as string).evaluate({ dataSource: dataSourceData, args })
     : definition.initialValues;
 
   return {

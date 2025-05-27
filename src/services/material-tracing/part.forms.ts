@@ -6,6 +6,10 @@ export const PART_CREATE_FORM: TGeneratedFormDefinition = {
     type: 'text',
     label: 'Name',
   }, {
+    id: 'amount',
+    type: 'text',
+    label: 'Amount',
+  }, {
     id: 'partTypeId',
     type: 'select',
     label: 'Part Type',
@@ -16,14 +20,14 @@ export const PART_CREATE_FORM: TGeneratedFormDefinition = {
   }],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "partTypeId": dataSource.partTypes[0].id }'
+    value: '{ "name": "", "partTypeId": dataSource.partTypes[0].id, "amount": 1 }'
   },
   endpoint: {
     path: '/v1/parts',
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: 'form',
+      value: '{ "name": form.name, "partTypeId": form.partTypeId, "amount": $number(form.amount) }',
     },
   },
   postEndpointActions: [{
