@@ -1,19 +1,26 @@
 import React from 'react';
 import { Field } from "formik";
+import styles from './Select.module.scss';
 
 type SelectProps = {
+  id?: string;
   name: string;
-  values: Array<{ value: string; label: string; }>
+  values: Array<{ id?: string; value: string; label: string; }>
 };
 
 const Select: React.FunctionComponent<SelectProps> = ({
+  id,
   name,
   values,
 }) => {
   return (
-    <Field as="select" name={name}>
+    <Field
+      id={id}
+      className={styles.input}
+      as="select" name={name}
+    >
       {values.map((value) => (
-        <option key={value.value} value={value.value}>{value.label}</option>
+        <option key={value.id ?? value.value} value={value.value}>{value.label}</option>
       ))}
     </Field>
   );

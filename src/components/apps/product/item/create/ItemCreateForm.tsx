@@ -9,6 +9,9 @@ import Button from '@/components/universals/forms/Button';
 import Select from "@/components/universals/forms/Select";
 import { createItem } from "@/components/apps/product/item/create/ItemCreateForm.server-action";
 import { useRouter } from "next/navigation";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
+import SimpleFieldsetRow from '@/components/universals/forms/SimpleFieldsetRow.component';
 
 type ItemCreateFormProps = {
   catalogId: string;
@@ -43,19 +46,31 @@ const ItemCreateForm: React.FunctionComponent<ItemCreateFormProps> = ({
       onSubmit={handleSubmit}
     >
       <Form>
-        <Input
-          name="name"
-          type="input"
-          required
-        />
-        <Select
-          name="itemTypeId"
-          values={itemTypes.map((itemType) => ({
-            value: itemType.id,
-            label: itemType.name,
-          }))}
-        />
-        <Button type="submit">Erstellen</Button>
+        <Fieldset>
+          <SimpleFieldsetRow label="Name">
+            {(id) => (
+              <Input
+                id={id}
+                name="name"
+                type="input"
+                required
+              />
+            )}
+          </SimpleFieldsetRow>
+          <SimpleFieldsetRow label="Item-Type">
+            {(id) => (
+              <Select
+                id={id}
+                name="itemTypeId"
+                values={itemTypes.map((itemType) => ({
+                  value: itemType.id,
+                  label: itemType.name,
+                }))}
+              />
+            )}
+          </SimpleFieldsetRow>
+          <Button type="submit">Erstellen</Button>
+        </Fieldset>
       </Form>
     </Formik>
   );

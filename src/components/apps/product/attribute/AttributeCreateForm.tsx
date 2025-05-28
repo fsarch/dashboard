@@ -10,6 +10,8 @@ import { AttributeType } from "@/services/product/attribute.const";
 import Select from "@/components/universals/forms/Select";
 import AttributeSettings from './create/AttributeSettings';
 import { useRouter } from "next/navigation";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
 
 type AttributeCreateFormProps = {
   catalogId: string;
@@ -36,30 +38,45 @@ const AttributeCreateForm: React.FunctionComponent<AttributeCreateFormProps> = (
       }}
     >
       <Form>
-        <Input name="name" type="input"/>
-        <Select
-          name="attributeTypeId"
-          values={[{
-            label: 'Text',
-            value: AttributeType.TEXT,
-          }, {
-            label: 'Boolean',
-            value: AttributeType.BOOLEAN,
-          }, {
-            label: 'JSON',
-            value: AttributeType.JSON,
-          }, {
-            label: 'List',
-            value: AttributeType.LIST,
-          }, {
-            label: 'Number',
-            value: AttributeType.NUMBER,
-          }]}
-        />
-        <AttributeSettings/>
-        <Button type="submit">
-          Erstellen
-        </Button>
+        <Fieldset>
+          <SimpleFieldsetRow label="Name">
+            {(id) => (
+              <Input
+                id={id}
+                name="name"
+                type="input"
+              />
+            )}
+          </SimpleFieldsetRow>
+          <SimpleFieldsetRow label="Name">
+            {(id) => (
+              <Select
+                id={id}
+                name="attributeTypeId"
+                values={[{
+                  label: 'Text',
+                  value: AttributeType.TEXT,
+                }, {
+                  label: 'Boolean',
+                  value: AttributeType.BOOLEAN,
+                }, {
+                  label: 'JSON',
+                  value: AttributeType.JSON,
+                }, {
+                  label: 'List',
+                  value: AttributeType.LIST,
+                }, {
+                  label: 'Number',
+                  value: AttributeType.NUMBER,
+                }]}
+              />
+            )}
+          </SimpleFieldsetRow>
+          <AttributeSettings/>
+          <Button type="submit">
+            Erstellen
+          </Button>
+        </Fieldset>
       </Form>
     </Formik>
   );

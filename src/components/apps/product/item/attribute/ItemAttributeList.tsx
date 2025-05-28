@@ -11,6 +11,8 @@ import {
   ItemAttributeListFormDataType
 } from "@/components/apps/product/item/attribute/ItemAttributeListForm.server-action";
 import Button from "@/components/universals/forms/Button";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
 
 type ItemAttributeListProps = {
   catalogId: string;
@@ -47,8 +49,6 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
     return acc;
   }, { attributes: {} } as ItemAttributeListFormDataType);
 
-  console.log('itemTypeBasedAttributes', itemTypeBasedAttributes);
-
   return (
     <div>
       <h2>
@@ -59,19 +59,24 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
         catalogId={catalogId}
         itemId={itemId}
       >
-        {itemTypeBasedAttributes.map((ita) => (
-          <Section
-            name={ita.attribute.name}
-            key={ita.attribute.id}
-          >
-            <ItemAttribute
-              attribute={ita.attribute}
-              value={ita.value}
-              isRequired={ita.isRequired}
-            />
-          </Section>
-        ))}
-        <Button type="submit">Speichern</Button>
+        <Fieldset>
+          {itemTypeBasedAttributes.map((ita) => (
+            <SimpleFieldsetRow
+              label={ita.attribute.name}
+              key={ita.attribute.id}
+            >
+              {(id) => (
+                <ItemAttribute
+                  id={id}
+                  attribute={ita.attribute}
+                  value={ita.value}
+                  isRequired={ita.isRequired}
+                />
+              )}
+            </SimpleFieldsetRow>
+          ))}
+          <Button type="submit">Speichern</Button>
+        </Fieldset>
       </ItemAttributeListForm>
     </div>
   );

@@ -7,6 +7,8 @@ import Input from "@/components/universals/forms/Input";
 import Button from "@/components/universals/forms/Button";
 import { ItemTypeCreateDto } from "@/services/product/item-type.type";
 import { createItemType } from "@/components/apps/product/item-type/ItemTypeCreateForm.server-action";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
 
 type ItemTypeCreateFormProps = {
   catalogId: string;
@@ -32,10 +34,20 @@ const ItemTypeCreateForm: React.FunctionComponent<ItemTypeCreateFormProps> = ({
       }}
     >
       <Form>
-        <Input name="name" type="input"/>
-        <Button type="submit">
-          Erstellen
-        </Button>
+        <Fieldset>
+          <SimpleFieldsetRow label="Name">
+            {(id) => (
+              <Input
+                id={id}
+                name="name"
+                type="input"
+              />
+            )}
+          </SimpleFieldsetRow>
+          <Button type="submit">
+            Erstellen
+          </Button>
+        </Fieldset>
       </Form>
     </Formik>
   );

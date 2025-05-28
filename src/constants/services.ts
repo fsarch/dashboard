@@ -40,7 +40,7 @@ export const SERVICES: Record<EServiceType, {
       path: '/localization',
     }],
     routes: {
-      '/catalog/:catalogId': {
+      '/catalog/:catalogId{/*path}': {
         navigation: [{
           name: 'Up',
           path: '/',

@@ -16,7 +16,6 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
 
   return (
     <main>
-      Attribute
       <AttributeEditForm
         attribute={attribute}
       />

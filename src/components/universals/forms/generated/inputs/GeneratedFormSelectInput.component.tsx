@@ -2,9 +2,8 @@ import React, { useId } from 'react';
 import {
   TGeneratedFormSelectInput,
 } from "@/components/universals/forms/generated/GeneratedForm.type";
-import { Field } from "formik";
 import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
-import styles from './GeneratedFormSelectInput.module.scss';
+import Select from "@/components/universals/forms/Select";
 
 type GeneratedFormSelectInputProps = {
   input: TGeneratedFormSelectInput;
@@ -29,11 +28,7 @@ const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInput
         </label>
       )}
     >
-      <Field className={styles.input} id={id} name={input.id} as="select">
-        {(input.data.value ?? []).map((value) => (
-          <option key={value.id} value={value.value}>{value.label}</option>
-        ))}
-      </Field>
+      <Select id={id} name={input.id} values={input.data.value ?? []}/>
     </FieldsetRow>
   );
 };
