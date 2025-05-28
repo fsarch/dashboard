@@ -4,6 +4,7 @@ import ListItem from "@/components/universals/list/ListItem";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import Link from "next/link";
 import Section from "@/components/universals/section/Section";
+import CatalogCreateForm from "@/components/apps/product/catalog/CatalogCreateForm";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home() {
@@ -24,6 +25,9 @@ export default async function Home() {
             </Link>
           ))}
         </List>
+      </Section>
+      <Section name="Katalog erstellen">
+        <CatalogCreateForm />
       </Section>
     </DefaultPage>
   );

@@ -32,17 +32,41 @@ export const SERVICES: Record<EServiceType, {
     navigation: [{
       name: 'Home',
       path: '/',
+    }, {
+      name: 'Kataloge',
+      path: '/catalog',
+    }, {
+      name: 'Lokalisierungen',
+      path: '/localization',
     }],
     routes: {
       '/catalog/:catalogId': {
         navigation: [{
-          name: 'Home',
+          name: 'Up',
           path: '/',
+        }, {
+          name: 'Home',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId",
+          },
+        }, {
+          name: 'Items',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/item'",
+          },
         }, {
           name: 'Attributes',
           path: {
             $type: 'jsonata',
             value: "'/catalog/' & params.catalogId & '/attribute'",
+          },
+        }, {
+          name: 'Element-Types',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/item-type'",
           },
         }],
       },
