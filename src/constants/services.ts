@@ -1,12 +1,22 @@
 import { EServiceType } from "@/utils/configuration.type";
 
+export type NavigationItem = {
+  name: string;
+  path: string | {
+    $type: 'jsonata',
+    value: string;
+  };
+};
+
 export const SERVICES: Record<EServiceType, {
   name: string;
   basePath: string;
-  navigation?: Array<{
-    name: string;
-    path: string;
-  }>;
+  navigation?: Array<NavigationItem>;
+  routes?: {
+    [route: string]: {
+      navigation?: Array<NavigationItem>;
+    };
+  };
 }> = {
   [EServiceType.CUSTOMER_COMMUNICATION]: {
     name: 'Customer Communication',
@@ -19,6 +29,24 @@ export const SERVICES: Record<EServiceType, {
   [EServiceType.PIM]: {
     name: 'Product',
     basePath: '/product',
+    navigation: [{
+      name: 'Home',
+      path: '/',
+    }],
+    routes: {
+      '/catalog/:catalogId': {
+        navigation: [{
+          name: 'Home',
+          path: '/',
+        }, {
+          name: 'Attributes',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/attribute'",
+          },
+        }],
+      },
+    },
   },
   [EServiceType.IMAGE]: {
     name: 'Image',
@@ -48,7 +76,7 @@ export const SERVICES: Record<EServiceType, {
     }, {
       name: 'Short-Codes',
       path: '/short-code',
-    }]
+    }],
   },
   [EServiceType.CUSTOM_APP]: {
     name: 'CustomApp',

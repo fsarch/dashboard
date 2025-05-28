@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SERVICES } from "@/constants/services";
 
 const basePaths = Object.values(SERVICES).map((s) => s.basePath.substring(1));
-const SERVICE_ID_REGEX = new RegExp(`^\\/(${basePaths.join('|')})\\/([^\\/]*)\\/?`);
+const SERVICE_ID_REGEX = new RegExp(`^\\/(${basePaths.join('|')})\\/([^\\/]*)(\\/.*)?`);
 
 export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
@@ -11,6 +11,7 @@ export async function middleware(request: NextRequest) {
   if (matches) {
     requestHeaders.set('X-Service-Id', matches[2]);
     requestHeaders.set('X-Service-Type', matches[1]);
+    requestHeaders.set('X-Service-Path', matches[3] ?? '/');
   }
 
   requestHeaders.set('X-Original-URL', request.nextUrl.href);

@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from "next/link";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import AutoNavigationItem from "@/components/universals/page/AutoNavigationItem.component";
 
