@@ -31,8 +31,19 @@ const getItem = async (catalogId: string, itemId?: string): Promise<ItemDto> => 
   return item;
 }
 
+const deleteItem = async (catalogId: string, itemId: string): Promise<void> => {
+  const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items/${itemId}`, {
+    method: 'DELETE',
+  });
+
+  if (!itemResponse.ok) {
+    throw new Error('could not delete item');
+  }
+}
+
 export const itemService = {
   listItems,
   createItem,
   getItem,
+  deleteItem,
 };

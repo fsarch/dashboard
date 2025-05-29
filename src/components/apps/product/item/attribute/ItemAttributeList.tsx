@@ -50,10 +50,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
   }, { attributes: {} } as ItemAttributeListFormDataType);
 
   return (
-    <div>
-      <h2>
-        Attribute
-      </h2>
+    <Section name="Attribute">
       <ItemAttributeListForm
         initialValue={initialValue}
         catalogId={catalogId}
@@ -78,7 +75,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
           <Button type="submit">Speichern</Button>
         </Fieldset>
       </ItemAttributeListForm>
-    </div>
+    </Section>
   );
 };
 

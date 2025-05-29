@@ -1,17 +1,24 @@
-import React, { PropsWithChildren } from 'react';
+import React, { CSSProperties, PropsWithChildren } from 'react';
 import styles from './Section.module.scss';
 
 type SectionProps = PropsWithChildren<{
   name: string;
+  color?: string;
 }>;
 
 const Section: React.FunctionComponent<SectionProps> = ({
   name,
+  color,
   children,
 }) => {
   return (
-    <fieldset className={styles.root}>
-      <legend>
+    <fieldset
+      style={{
+        '--color': color,
+      } as CSSProperties}
+      className={styles.root}
+    >
+      <legend className={styles.legend}>
         {name}
       </legend>
       <div>

@@ -3,5 +3,13 @@
 .root {
   @include apply-custom-padding('section');
 
+  --color: #FFFFFF;
+
   margin: 20px 0;
+
+  border-color: var(--color);
+}
+
+.legend {
+  color: var(--color);
 }

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { TReducerDialog } from "@/components/universals/dialog/DialogProvider.reducer";
 import { TDialogResult } from "@/components/universals/dialog/dialog.type";
+import styles from './DialogProviderDialog.module.scss';
 
 type DialogProviderDialogProps = {
   value: TReducerDialog<unknown, unknown>;
@@ -37,7 +38,7 @@ const DialogProviderDialog: React.FunctionComponent<DialogProviderDialogProps> =
   const Component = value.component;
 
   return (
-    <dialog ref={dialogRef}>
+    <dialog ref={dialogRef} className={styles.root}>
       <Component
         value={value.value}
         onResult={handleResult}
