@@ -18,7 +18,17 @@ const getPartType = async (partTypeId: string): Promise<TPartType | null> => {
   return partType;
 };
 
+const deletePartType = async (partTypeId: string): Promise<void> => {
+  const partTypeResponse = await fetchService(`/v1/part-types/${partTypeId}`, {
+    method: 'DELETE',
+  });
+  if (!partTypeResponse.ok) {
+    throw new Error('could not remove part-type')
+  }
+};
+
 export const partTypeService = {
   listPartTypes,
   getPartType,
+  deletePartType,
 };
