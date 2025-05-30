@@ -15,7 +15,17 @@ const getManufacturer = async (manufacturerId: string): Promise<TManufacturer> =
   return manufacturer;
 };
 
+const deleteManufacturer = async (manufacturerId: string): Promise<void> => {
+  const manufacturerResponse = await fetchService(`/v1/manufacturers/${manufacturerId}`, {
+    method: 'DELETE',
+  });
+  if (!manufacturerResponse) {
+    throw new Error('could not remove manufacturer');
+  }
+};
+
 export const manufacturerService = {
   listManufacturers,
   getManufacturer,
+  deleteManufacturer,
 };
