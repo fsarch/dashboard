@@ -13,8 +13,18 @@ const getMaterialType = async (materialTypeId: string): Promise<TMaterialType> =
 
   return materialType;
 };
+const deleteMaterialType = async (materialTypeId: string): Promise<void> => {
+  const materialTypeRespose = await fetchService(`/v1/material-types/${materialTypeId}`, {
+    method: 'DELETE',
+  });
+
+  if (!materialTypeRespose.ok) {
+    throw new Error('could not delete materialType');
+  }
+};
 
 export const materialTypeService = {
   listMaterialTypes,
   getMaterialType,
+  deleteMaterialType,
 };
