@@ -30,9 +30,19 @@ const listMaterialsByShortCode = async (code: string): Promise<Array<TMaterial>>
   return materials;
 };
 
+const deleteMaterial = async (materialId: string): Promise<void> => {
+  const materialResponse = await fetchService(`/v1/materials/${materialId}`, {
+    method: 'DELETE',
+  });
+  if (!materialResponse) {
+    throw new Error('could not remove material');
+  }
+};
+
 export const materialService = {
   listMaterials,
   getMaterial,
   listShortCodes,
   listMaterialsByShortCode,
+  deleteMaterial,
 };

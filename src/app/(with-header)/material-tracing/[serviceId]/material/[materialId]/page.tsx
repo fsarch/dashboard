@@ -4,6 +4,11 @@ import { materialTypeService } from "@/services/material-tracing/material-type.s
 import { manufacturerService } from "@/services/material-tracing/manufacturer.service";
 import MaterialShortCodeConnectForm
   from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeConnectForm.component";
+import ManufacturerRemove
+  from "@/app/(with-header)/material-tracing/[serviceId]/manufacturer/[manufacturerId]/_components/remove/ManufacturerRemove.component";
+import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import MaterialRemove
+  from "@/app/(with-header)/material-tracing/[serviceId]/material/[materialId]/_components/remove/MaterialRemove.component";
 
 export default async function Home(props: { params: Promise<{ materialId: string }> }) {
   const params = await props.params;
@@ -33,6 +38,11 @@ export default async function Home(props: { params: Promise<{ materialId: string
           />
         </Section>
       )}
+
+      <MaterialRemove
+        materialId={material.id}
+        homeUrl={await getServiceLocalUrl('/material')}
+      />
     </main>
   );
 }
