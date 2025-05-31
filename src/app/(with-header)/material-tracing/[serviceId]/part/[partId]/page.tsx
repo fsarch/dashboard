@@ -13,6 +13,9 @@ import {
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component";
 import PartChildrenList from "@/components/apps/material-tracing/short-code/part/PartChildrenList.component";
 import PartUpdateForm from "@/components/apps/material-tracing/part/PartInfoForm.component";
+import PartRemove
+  from "@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.component";
+import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 
 export default async function Home({ params }: Readonly<{ params: Promise<{ partId: string; }> }>) {
   const part = await partService.getPart((await params).partId);
@@ -65,6 +68,10 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
           partId={part.id}
         />
       </Section>
+      <PartRemove
+        partId={part.id}
+        homeUrl={await getServiceLocalUrl('/part')}
+      />
     </main>
   );
 }

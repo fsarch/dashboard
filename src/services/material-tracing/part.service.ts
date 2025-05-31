@@ -21,6 +21,15 @@ const getPart = async (partId: string): Promise<TPart | null> => {
   return part;
 };
 
+const deletePart = async (partId: string): Promise<void> => {
+  const partResponse = await fetchService(`/v1/parts/${partId}`, {
+    method: 'DELETE',
+  });
+  if (!partResponse.ok) {
+    throw new Error('could not delete part');
+  }
+};
+
 const listShortCodes = async (partId: string): Promise<Array<TShortCode>> => {
   const partShortCodesResponse = await fetchService(`/v1/parts/${partId}/short-codes`);
   const partShortCodes = await partShortCodesResponse.json();
@@ -78,4 +87,5 @@ export const partService = {
   listMaterials,
   getOrCreatePartPart,
   listPartParts,
+  deletePart,
 };

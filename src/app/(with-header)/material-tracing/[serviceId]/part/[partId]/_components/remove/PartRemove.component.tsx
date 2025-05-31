@@ -8,16 +8,16 @@ import ConfirmDialogComponent from "@/components/universals/dialogs/confirm/Conf
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import Button from "@/components/universals/forms/Button";
 import {
-  removePartType
-} from "@/app/(with-header)/material-tracing/[serviceId]/part-type/[partTypeId]/remove/PartTypeRemove.server-action";
+  removePart
+} from "@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.server-action";
 
-type PartTypeRemoveProps = {
-  partTypeId: string;
+type PartRemoveProps = {
+  partId: string;
   homeUrl: string;
 };
 
-const PartTypeRemove: React.FunctionComponent<PartTypeRemoveProps> = ({
-  partTypeId,
+const PartRemove: React.FunctionComponent<PartRemoveProps> = ({
+  partId,
   homeUrl,
 }) => {
   const openDialog = useOpenDialog();
@@ -26,7 +26,7 @@ const PartTypeRemove: React.FunctionComponent<PartTypeRemoveProps> = ({
 
   const handleDeleteClick = useCallback(async () => {
     const dialogRes = await openDialog(ConfirmDialogComponent, {
-      text: 'Möchtest du diesen PartType wirklich löschen?',
+      text: 'Möchtest du diesen Part wirklich löschen?',
       successButtonText: 'Löschen',
       successButtonColor: '#BB0000',
     }).result;
@@ -34,10 +34,10 @@ const PartTypeRemove: React.FunctionComponent<PartTypeRemoveProps> = ({
       return;
     }
 
-    await removePartType(partTypeId);
+    await removePart(partId);
 
     router.push(homeUrl);
-  }, [partTypeId, homeUrl]);
+  }, [partId, homeUrl]);
 
   return (
     <Section
@@ -49,10 +49,10 @@ const PartTypeRemove: React.FunctionComponent<PartTypeRemoveProps> = ({
         onClick={handleDeleteClick}
         color="#BB0000"
       >
-        PartType löschen
+        Part löschen
       </Button>
     </Section>
   );
 };
 
-export default PartTypeRemove;
+export default PartRemove;
