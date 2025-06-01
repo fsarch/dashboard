@@ -1,9 +1,10 @@
-import Section from "@/components/universals/section/Section";
 import { partTypeService } from "@/services/material-tracing/part-type.service";
 import { notFound } from "next/navigation";
 import PartTypeRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/part-type/[partTypeId]/_components/remove/PartTypeRemove.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import PartTypeInformation
+  from "@/app/(with-header)/material-tracing/[serviceId]/part-type/[partTypeId]/_components/information/PartTypeInformation.component";
 
 export default async function Home({ params }: Readonly<{ params: Promise<{ partTypeId: string; }> }>) {
   const partType = await partTypeService.getPartType((await params).partTypeId);
@@ -13,10 +14,7 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
 
   return (
     <main>
-      <Section name="Informationen">
-        Name: {partType.name}<br />
-        ExternalId: {partType.externalId || '-'}
-      </Section>
+      <PartTypeInformation partType={partType} />
       <PartTypeRemove
         partTypeId={partType.id}
         homeUrl={await getServiceLocalUrl('/part-type')}

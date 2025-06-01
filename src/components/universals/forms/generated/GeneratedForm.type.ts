@@ -63,12 +63,17 @@ export type TGeneratedFormAction = {
   url: TGeneratedFormStringConstantData | TJsonataExpression,
 };
 
+export type TSubmitButtonsFormDefinition = {
+  submitButtonText: string;
+};
+
 export type TGeneratedFormDefinition = {
   inputs: Array<TGeneratedFormInput>;
   endpoint: TGeneratedFormEndpoint;
   initialValues: TGeneratedFormInitialValues;
   dataSources?: Record<string, TGeneratedFormDataSource>;
   postEndpointActions?: Array<TGeneratedFormAction>;
+  buttons?: TSubmitButtonsFormDefinition;
 };
 
 export type TGeneratedFormSubmitResponse = {

@@ -170,6 +170,7 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }
     initialValues: mappedInitialValues,
     endpoint: definition.endpoint,
     postEndpointActions: definition.postEndpointActions,
+    buttons: definition.buttons,
   };
 };
 

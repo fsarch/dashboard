@@ -3,7 +3,7 @@
 import React, { useCallback } from 'react';
 import {
   TGeneratedFormInitialValues,
-  TGeneratedFormInput, TGeneratedFormSubmitResponse
+  TGeneratedFormInput, TGeneratedFormSubmitResponse, TSubmitButtonsFormDefinition
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import { Form, Formik, FormikHelpers } from "formik";
 import Button from "@/components/universals/forms/Button";
@@ -20,12 +20,14 @@ type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
   initialValues: TGeneratedFormInitialValues;
   onSubmit: (data: TGeneratedFormInitialValues) => Promise<TGeneratedFormSubmitResponse>;
+  buttons?: TSubmitButtonsFormDefinition;
 };
 
 const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = ({
   definition,
   initialValues,
   onSubmit,
+  buttons,
 }) => {
   const router = useRouter();
 
@@ -89,7 +91,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
           })}
         </Fieldset>
         <Button type="submit">
-          Erstellen
+          {buttons?.submitButtonText ?? 'Erstellen'}
         </Button>
       </Form>
     </Formik>
