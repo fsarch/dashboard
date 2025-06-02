@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Local from "next/font/local";
 import styles from './layout.module.scss';
 import './globals.scss';
 import clsx from "clsx";
@@ -10,7 +10,7 @@ import { jwtVerify } from "jose";
 import { getJwks } from "@/utils/getJwks";
 import LoadingProvider from "@/components/universals/loader/LoadingProvider";
 
-const inter = Inter({subsets: ["latin"]});
+const inter = Local({ src: './_fonts/inter/Inter-Regular.woff2' });
 
 export const revalidate = 0;
 
