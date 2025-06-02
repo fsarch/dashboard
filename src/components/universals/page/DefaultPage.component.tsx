@@ -56,6 +56,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
 
         return {
           ...navigation,
+          isSelected: false,
           path,
         };
       } catch (error) {
@@ -64,6 +65,15 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
         return navigation;
       }
     }));
+
+    if (serviceRoute) {
+      navigations = navigations.map((navigation) => {
+        return {
+          ...navigation,
+          isSelected: serviceRoute.localeCompare(navigation.path as string) === 0,
+        };
+      });
+    }
   }
 
   return (
@@ -74,7 +84,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
       {navigations ? (
         <nav className={styles.navigation}>
           <AutoNavigation
-            navigation={navigations as unknown as Array<{ name: string; path: string }>}
+            navigation={navigations as unknown as Array<{ name: string; path: string; isSelected: boolean; }>}
           />
         </nav>
       ) : null}

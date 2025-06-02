@@ -11,3 +11,8 @@
   display: block;
   padding: 10px;
 }
+
+.selected .link {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}

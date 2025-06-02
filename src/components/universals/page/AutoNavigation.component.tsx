@@ -6,6 +6,7 @@ type AutoNavigationComponentProps = {
   navigation: Array<{
     name: string;
     path: string;
+    isSelected: boolean;
   }>
 };
 
@@ -17,9 +18,11 @@ export const AutoNavigation: React.FunctionComponent<AutoNavigationComponentProp
       {navigation.map(async ({
         name,
         path,
+        isSelected,
       }) => (
         <AutoNavigationItem
           key={name}
+          isSelected={isSelected}
           href={await getServiceLocalUrl(path)}
         >
           {name}
