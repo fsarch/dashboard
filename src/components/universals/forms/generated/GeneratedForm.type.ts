@@ -3,8 +3,13 @@ export type TGeneratedFormBaseInput = {
   label: string;
 };
 
+export type TGeneratedFormTextInputButton = {
+  type: 'qr-scanner';
+};
+
 export type TGeneratedFormTextInput = TGeneratedFormBaseInput & {
   type: 'text',
+  buttons: Array<TGeneratedFormTextInputButton>;
 };
 
 export type TGeneratedFormSelectConstantData = {

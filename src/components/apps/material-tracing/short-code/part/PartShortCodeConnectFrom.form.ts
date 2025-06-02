@@ -5,6 +5,9 @@ export const PART_SHORT_CODE_CONNECT_FORM: TGeneratedFormDefinition = {
     id: 'shortCode',
     type: 'text',
     label: 'ShortCode',
+    buttons: [{
+      type: 'qr-scanner',
+    }],
   }],
   initialValues: {
     shortCode: '',
