@@ -16,5 +16,5 @@ export const useWithLoading = (): <T>(cb: () => Promise<T>, text?: string) => Pr
     } finally {
       loader.close();
     }
-  }, [loading.showLoading]);
+  }, [loading]);
 }
