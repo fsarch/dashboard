@@ -37,7 +37,7 @@ const listShortCodes = async (partId: string): Promise<Array<TShortCode>> => {
   return partShortCodes;
 };
 
-const listPartsByShortCode = async (code: string): Promise<Array<TMaterial>> => {
+const listPartsByShortCode = async (code: string): Promise<Array<TPart>> => {
   const partsResponse = await fetchService(`/v1/short-codes/${code}/parts`);
   const parts = await partsResponse.json();
 

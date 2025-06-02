@@ -3,12 +3,15 @@ import TileListItem from "@/components/universals/tile-list/TileListItem";
 import TileList from "@/components/universals/tile-list/TileList";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import ShortCodeScannerBanner
+  from "@/app/(with-header)/material-tracing/[serviceId]/_components/ShortCodeScannerBanner.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
   return (
     <main>
+      <ShortCodeScannerBanner/>
       <TileList>
         <Link
           href={await getServiceLocalUrl("/manufacturer")}

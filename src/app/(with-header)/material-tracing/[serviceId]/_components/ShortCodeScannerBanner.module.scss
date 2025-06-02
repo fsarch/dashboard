@@ -1,0 +1,38 @@
+.root {
+  position: relative;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  min-height: 70px;
+
+  background-color: #888888;
+
+  margin: 8px 0;
+}
+
+.input {
+  position: relative;
+
+  z-index: 1;
+
+  text-align: center;
+
+  padding: 5px 10px;
+
+  outline: none;
+  border: 1px solid #999999;
+  border-radius: 5px;
+
+  background-color: #333333;
+}
+
+.button {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+}
