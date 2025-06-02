@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import styles from './layout.module.scss';
 import DialogProvider from "@/components/universals/dialog/DialogProvider.component";
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css';
+
+config.autoAddCss = false
 
 export const metadata: Metadata = {
   title: "Create Next App",

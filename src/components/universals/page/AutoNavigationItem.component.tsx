@@ -39,8 +39,6 @@ const AutoNavigationItem: React.FunctionComponent<AutoNavigationItemProps> = ({
     liRef.current.scrollIntoView(true);
   }, [isSelected]);
 
-  console.log('icon', icon);
-
   return (
     <li
       ref={liRef}
