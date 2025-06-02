@@ -104,7 +104,7 @@ export const SERVICES: Record<EServiceType, {
         }, {
           $type: 'fa-icon',
           icon: 'vial',
-          transform: 'shrink-8',
+          transform: 'shrink-8 down-2',
           color: '#000000',
         }],
       }
@@ -123,7 +123,7 @@ export const SERVICES: Record<EServiceType, {
         }, {
           $type: 'fa-icon',
           icon: 'cube',
-          transform: 'shrink-8',
+          transform: 'shrink-8 down-2',
           color: '#000000',
         }],
       },
