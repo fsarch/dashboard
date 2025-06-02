@@ -14,8 +14,9 @@ const NavigationTileList: React.FunctionComponent<NavigationTileListProps> = asy
 }) => {
   return (
     <TileList>
-      {navigation.map(async (navigationItem) => (
+      {navigation.map(async (navigationItem, index) => (
         <Link
+          key={index}
           href={await getServiceLocalUrl(navigationItem.path as string)}
         >
           <TileListItem
