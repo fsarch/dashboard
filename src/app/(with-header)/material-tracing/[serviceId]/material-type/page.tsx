@@ -8,6 +8,9 @@ import {
 } from "@/components/apps/material-tracing/material-type/MaterialTypeCreateForm.component";
 import { materialTypeService } from "@/services/material-tracing/material-type.service";
 import Link from "next/link";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
   const manufacturers = await manufacturerService.listManufacturers();

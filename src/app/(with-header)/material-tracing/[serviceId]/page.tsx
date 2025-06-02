@@ -2,9 +2,11 @@ import Link from "next/link";
 import TileListItem from "@/components/universals/tile-list/TileListItem";
 import TileList from "@/components/universals/tile-list/TileList";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
-
   return (
     <main>
       <TileList>

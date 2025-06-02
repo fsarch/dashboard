@@ -7,6 +7,9 @@ import { EShortCodeType } from "@/services/material-tracing/short-code.type";
 import PartShortCodeInfoComponent from "@/components/apps/material-tracing/short-code/part/PartShortCodeInfo.component";
 import QrCodeDownloadButton from "@/components/universals/qr-code/QRCodeDownloadButton.component";
 import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home({ params }: Readonly<{ params: Promise<{ shortCode: string; }> }>) {
   const shortCodeCode = (await params).shortCode;

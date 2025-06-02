@@ -16,6 +16,9 @@ import PartUpdateForm from "@/components/apps/material-tracing/part/PartInfoForm
 import PartRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home({ params }: Readonly<{ params: Promise<{ partId: string; }> }>) {
   const part = await partService.getPart((await params).partId);

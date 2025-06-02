@@ -7,6 +7,9 @@ import { manufacturerService } from "@/services/material-tracing/manufacturer.se
 import {
   ManufacturerCreateForm
 } from "@/components/apps/material-tracing/manufacturer/ManufacturerCreateForm.component";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
   const manufacturers = await manufacturerService.listManufacturers();

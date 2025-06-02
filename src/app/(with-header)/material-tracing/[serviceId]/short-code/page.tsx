@@ -6,6 +6,9 @@ import Link from "next/link";
 import React from "react";
 import Section from "@/components/universals/section/Section";
 import { ShortCodeCreateForm } from "@/components/apps/material-tracing/short-code/ShortCodeCreateForm.component";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
   const shortCodes = await shortCodeService.listShortCodes();

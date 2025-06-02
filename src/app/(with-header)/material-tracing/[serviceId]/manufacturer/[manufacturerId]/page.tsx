@@ -3,6 +3,9 @@ import { manufacturerService } from "@/services/material-tracing/manufacturer.se
 import ManufacturerRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/manufacturer/[manufacturerId]/_components/remove/ManufacturerRemove.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home({ params }: { params: Promise<{ manufacturerId: string }> }) {
   const manufacturer = await manufacturerService.getManufacturer((await params).manufacturerId);
