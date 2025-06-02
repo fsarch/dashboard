@@ -5,12 +5,13 @@ import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import ShortCodeScannerBanner
   from "@/app/(with-header)/material-tracing/[serviceId]/_components/ShortCodeScannerBanner.component";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
   return (
-    <main>
+    <DefaultPage>
       <ShortCodeScannerBanner/>
       <TileList>
         <Link
@@ -56,6 +57,6 @@ export default async function Home() {
           />
         </Link>
       </TileList>
-    </main>
+    </DefaultPage>
   );
 }

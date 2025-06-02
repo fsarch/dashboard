@@ -7,6 +7,7 @@ import React from "react";
 import Section from "@/components/universals/section/Section";
 import { ShortCodeCreateForm } from "@/components/apps/material-tracing/short-code/ShortCodeCreateForm.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -14,7 +15,7 @@ export default async function Home() {
   const shortCodes = await shortCodeService.listShortCodes();
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Short Codes">
         <List>
           {shortCodes.map(async (shortCode) => (
@@ -34,6 +35,6 @@ export default async function Home() {
       <Section name="Short Code erstellen">
         <ShortCodeCreateForm/>
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

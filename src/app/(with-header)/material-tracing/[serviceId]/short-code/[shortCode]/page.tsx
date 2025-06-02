@@ -8,6 +8,7 @@ import PartShortCodeInfoComponent from "@/components/apps/material-tracing/short
 import QrCodeDownloadButton from "@/components/universals/qr-code/QRCodeDownloadButton.component";
 import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -16,7 +17,7 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ shor
   const shortCode = await shortCodeService.getShortCode(shortCodeCode);
 
   return (
-    <main>
+    <DefaultPage>
       <h1>{shortCode.code}</h1>
       {shortCode.shortCodeTypeId === EShortCodeType.MATERIAL ? (
         <MaterialShortCodeInfoComponent
@@ -45,6 +46,6 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ shor
           Show
         </QrCodeDownloadButton>
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

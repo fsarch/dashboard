@@ -4,6 +4,7 @@ import ManufacturerRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/manufacturer/[manufacturerId]/_components/remove/ManufacturerRemove.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -11,7 +12,7 @@ export default async function Home({ params }: { params: Promise<{ manufacturerI
   const manufacturer = await manufacturerService.getManufacturer((await params).manufacturerId);
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Information">
         Name: {manufacturer.name}
       </Section>
@@ -19,6 +20,6 @@ export default async function Home({ params }: { params: Promise<{ manufacturerI
         manufacturerId={manufacturer.id}
         homeUrl={await getServiceLocalUrl('/manufacturer')}
       />
-    </main>
+    </DefaultPage>
   );
 }

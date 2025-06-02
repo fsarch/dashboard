@@ -8,6 +8,7 @@ import {
   ManufacturerCreateForm
 } from "@/components/apps/material-tracing/manufacturer/ManufacturerCreateForm.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -15,7 +16,7 @@ export default async function Home() {
   const manufacturers = await manufacturerService.listManufacturers();
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Manufacturers">
         <List>
           {manufacturers.map(async (manufacturer: any) => (
@@ -33,6 +34,6 @@ export default async function Home() {
       <Section name="Manufacturers erstellen">
         <ManufacturerCreateForm />
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

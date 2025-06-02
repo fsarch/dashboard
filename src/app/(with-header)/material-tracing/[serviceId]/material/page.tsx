@@ -6,6 +6,7 @@ import Section from "@/components/universals/section/Section";
 import { MaterialCreateForm } from "@/components/apps/material-tracing/material/MaterialCreateForm.component";
 import { materialService } from "@/services/material-tracing/material.service";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -13,7 +14,7 @@ export default async function Home() {
   const materials = await materialService.listMaterials();
 
   return (
-    <>
+    <DefaultPage>
       <Section name="Materials">
         <List>
           {materials.map(async (material) => (
@@ -28,6 +29,6 @@ export default async function Home() {
       <Section name="Material erstellen">
         <MaterialCreateForm/>
       </Section>
-    </>
+    </DefaultPage>
   );
 }

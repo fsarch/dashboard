@@ -8,6 +8,7 @@ import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import MaterialRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/material/[materialId]/_components/remove/MaterialRemove.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -20,7 +21,7 @@ export default async function Home(props: { params: Promise<{ materialId: string
   const hasShortCode = shortCodes.length > 0;
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Informationen">
         Name: {material.name}<br />
         Material: {materialType.name}<br />
@@ -44,6 +45,6 @@ export default async function Home(props: { params: Promise<{ materialId: string
         materialId={material.id}
         homeUrl={await getServiceLocalUrl('/material')}
       />
-    </main>
+    </DefaultPage>
   );
 }

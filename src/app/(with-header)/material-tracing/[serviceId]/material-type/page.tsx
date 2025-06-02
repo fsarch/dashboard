@@ -9,6 +9,7 @@ import {
 import { materialTypeService } from "@/services/material-tracing/material-type.service";
 import Link from "next/link";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -17,7 +18,7 @@ export default async function Home() {
   const materialTypes = await materialTypeService.listMaterialTypes();
 
   return (
-    <main>
+    <DefaultPage>
       {manufacturers.map((manufacturer) => (
         <Section name={manufacturer.name} key={manufacturer.id}>
           <List>
@@ -37,6 +38,6 @@ export default async function Home() {
       <Section name="MaterialType erstellen">
         <MaterialTypeCreateForm />
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

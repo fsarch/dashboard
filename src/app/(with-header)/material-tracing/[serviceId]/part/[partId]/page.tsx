@@ -17,6 +17,7 @@ import PartRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -30,7 +31,7 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
   const hasShortCode = shortCodes.length > 0;
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Informationen">
         <PartUpdateForm
           args={{
@@ -75,6 +76,6 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
         partId={part.id}
         homeUrl={await getServiceLocalUrl('/part')}
       />
-    </main>
+    </DefaultPage>
   );
 }

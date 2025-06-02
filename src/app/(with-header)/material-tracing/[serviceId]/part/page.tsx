@@ -7,6 +7,7 @@ import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm
 import { partService } from "@/services/material-tracing/part.service";
 import { PART_CREATE_FORM } from "@/services/material-tracing/part.forms";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -14,7 +15,7 @@ export default async function Home() {
   const parts = await partService.listParts();
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Part-Types">
         <List>
           {parts.map(async (part) => (
@@ -34,6 +35,6 @@ export default async function Home() {
           definition={PART_CREATE_FORM}
         />
       </Section>
-    </main>
+    </DefaultPage>
   );
 }
