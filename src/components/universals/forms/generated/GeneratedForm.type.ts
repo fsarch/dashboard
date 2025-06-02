@@ -9,7 +9,7 @@ export type TGeneratedFormTextInputButton = {
 
 export type TGeneratedFormTextInput = TGeneratedFormBaseInput & {
   type: 'text',
-  buttons: Array<TGeneratedFormTextInputButton>;
+  buttons?: Array<TGeneratedFormTextInputButton>;
 };
 
 export type TGeneratedFormSelectConstantData = {
