@@ -1,4 +1,6 @@
-import React, { PropsWithChildren } from 'react';
+'use client';
+
+import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import Link from "next/link";
 import styles from './AutoNavigationItem.module.scss';
 import clsx from "clsx";
@@ -13,8 +15,28 @@ const AutoNavigationItem: React.FunctionComponent<AutoNavigationItemProps> = ({
   isSelected,
   href,
 }) => {
+  const liRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    if (!isSelected) {
+      return;
+    }
+
+    if (!liRef.current) {
+      return;
+    }
+
+    const isMobile = window.matchMedia("(max-width: 800px)");
+    if (!isMobile) {
+      return;
+    }
+
+    liRef.current.scrollIntoView(true);
+  }, [isSelected]);
+
   return (
     <li
+      ref={liRef}
       className={clsx(styles.root, {
         [styles.selected]: isSelected,
       })}

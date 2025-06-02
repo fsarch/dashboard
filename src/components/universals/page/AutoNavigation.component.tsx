@@ -1,6 +1,7 @@
 import React from 'react';
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import AutoNavigationItem from "@/components/universals/page/AutoNavigationItem.component";
+import styles from './AutoNavigation.module.scss';
 
 type AutoNavigationComponentProps = {
   navigation: Array<{
@@ -14,7 +15,7 @@ export const AutoNavigation: React.FunctionComponent<AutoNavigationComponentProp
   navigation,
 }) => {
   return (
-    <ul>
+    <ul className={styles.root}>
       {navigation.map(async ({
         name,
         path,

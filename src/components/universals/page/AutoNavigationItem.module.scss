@@ -1,6 +1,7 @@
 @use "@/app/_styles/utils" as *;
 
 .root {
+
 }
 
 .root:hover {
@@ -10,6 +11,8 @@
 .link {
   display: block;
   padding: 10px;
+
+  white-space: nowrap;
 }
 
 .selected .link {

@@ -2,13 +2,30 @@
   display: grid;
 
   grid-template-areas:
+    'header'
+    'navigation'
+    'main';
+
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content;
+
+  gap: 5px;
+}
+
+.navigation {
+  width: 100%;
+  overflow: auto;
+}
+
+@media only screen and (min-device-width: 800px) {
+  .root {
+    grid-template-areas:
     'header header'
     'navigation main';
 
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: max-content auto;
-
-  gap: 5px;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: max-content auto;
+  }
 }
 
 .header {
