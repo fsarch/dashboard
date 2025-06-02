@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { match } from 'path-to-regexp';
 import memoize from 'lodash.memoize';
 import jsonata from "jsonata";
+import { TIcon } from "@/components/universals/icon/Icon.type";
 
 type DefaultPageProps = PropsWithChildren<{
 
@@ -56,7 +57,6 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
 
         return {
           ...navigation,
-          isSelected: false,
           path,
         };
       } catch (error) {
@@ -84,7 +84,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
       {navigations ? (
         <nav className={styles.navigation}>
           <AutoNavigation
-            navigation={navigations as unknown as Array<{ name: string; path: string; isSelected: boolean; }>}
+            navigation={navigations as unknown as Array<{ name: string; path: string; isSelected: boolean; icon?: TIcon; }>}
           />
         </nav>
       ) : null}

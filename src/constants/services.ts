@@ -1,4 +1,5 @@
 import { EServiceType } from "@/utils/configuration.type";
+import { TIcon } from "@/components/universals/icon/Icon.type";
 
 export type NavigationItem = {
   name: string;
@@ -6,6 +7,7 @@ export type NavigationItem = {
     $type: 'jsonata',
     value: string;
   };
+  icon?: TIcon;
 };
 
 export const SERVICES: Record<EServiceType, {
@@ -82,24 +84,53 @@ export const SERVICES: Record<EServiceType, {
     navigation: [{
       name: 'Home',
       path: '/',
+      icon: 'home',
     }, {
       name: 'Manufacturers',
       path: '/manufacturer',
+      icon: 'industry',
     }, {
       name: 'Materials',
       path: '/material',
+      icon: 'vial',
     }, {
       name: 'Material-Types',
       path: '/material-type',
+      icon: {
+        $type: 'layers',
+        icons: [{
+          $type: 'fa-icon',
+          icon: 'file',
+        }, {
+          $type: 'fa-icon',
+          icon: 'vial',
+          transform: 'shrink-8',
+          color: '#000000',
+        }],
+      }
     }, {
       name: 'Parts',
       path: '/part',
+      icon: 'cube',
     }, {
       name: 'Part-Types',
       path: '/part-type',
+      icon: {
+        $type: 'layers',
+        icons: [{
+          $type: 'fa-icon',
+          icon: 'file',
+        }, {
+          $type: 'fa-icon',
+          icon: 'cube',
+          transform: 'shrink-8',
+          color: '#000000',
+        }],
+      },
     }, {
       name: 'Short-Codes',
       path: '/short-code',
+      icon: 'qrcode',
     }],
   },
   [EServiceType.CUSTOM_APP]: {

@@ -1,7 +1,6 @@
 @use "@/app/_styles/utils" as *;
 
 .root {
-
 }
 
 .root:hover {
@@ -18,4 +17,10 @@
 .selected .link {
   text-decoration: underline;
   text-decoration-thickness: 2px;
+}
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  margin-right: 4px;
 }
