@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
 import styles from './Loader.module.scss';
 
 type LoaderProps = {
-
+  size?: number;
 };
 
-const Loader: React.FunctionComponent<LoaderProps> = () => {
+const Loader: React.FunctionComponent<LoaderProps> = ({
+  size = 48,
+}) => {
   return (
-    <div className={styles.loader}/>
+    <div
+      style={{
+        '--size': `${size}px`,
+      } as CSSProperties}
+      className={styles.loader}
+    />
   );
 };
 

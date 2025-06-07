@@ -14,6 +14,8 @@
   --hover-color: #888888;
   --text-color: #FFFFFF;
   --hover-text-color: #FFFFFF;
+  --disabled-color: #444444;
+  --disabled-text-color: #FFFFFF;
 
   color: var(--text-color);
   background-color: var(--color);
@@ -22,4 +24,9 @@
 .root:hover {
   color: var(--hover-text-color);
   background-color: var(--hover-color);
+}
+
+.root:disabled {
+  color: var(--disabled-text-color);
+  background-color: var(--disabled-color);
 }

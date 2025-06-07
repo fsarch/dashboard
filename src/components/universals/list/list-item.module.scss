@@ -4,6 +4,7 @@
   @include apply-custom-padding('list-item');
 
   display: flex;
+  gap: 8px;
 
   &:hover {
     @include apply-custom-background-color('list-item--hover');

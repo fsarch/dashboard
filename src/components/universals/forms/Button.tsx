@@ -11,6 +11,7 @@ type ButtonProps = PropsWithChildren<{
   className?: string;
   color?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }>;
 
 const Button: React.FunctionComponent<ButtonProps> = ({
@@ -20,6 +21,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   className,
   onClick,
   color,
+  disabled,
 }) => {
   const style = useMemo((): CSSProperties => {
     if (!color) {
@@ -27,14 +29,18 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     }
 
     const hoverColor = Color(color).lighten(0.3);
+    const disabledColor = Color(color).darken(0.5);
     const textColor = Color(color).isLight() ? '#000000' : '#FFFFFF';
     const hoverTextColor = Color(textColor).isLight() ? '#000000' : '#FFFFFF';
+    const disabledTextColor = Color(disabledColor).isLight() ? '#000000' : '#FFFFFF';
 
     return {
       '--color': color,
       '--hover-color': hoverColor,
       '--text-color': textColor,
       '--hover-text-color': hoverTextColor,
+      '--disabled-color': disabledColor,
+      '--disabled-text-color': disabledTextColor,
     } as CSSProperties;
   }, [color]);
 
@@ -45,6 +51,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       type={type}
       name={name}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
