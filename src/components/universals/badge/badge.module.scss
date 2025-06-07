@@ -1,0 +1,16 @@
+.root {
+  --color: #AAAAAA;
+  --text-color: #000000;
+
+  background-color: var(--color);
+  color: var(--text-color);
+
+  padding: 0.1rem 0.5rem;
+
+  box-sizing: content-box;
+
+  height: 1rem;
+  font-size: 0.8rem;
+
+  border-radius: 0.5rem;
+}

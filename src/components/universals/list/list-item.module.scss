@@ -3,7 +3,17 @@
 .root {
   @include apply-custom-padding('list-item');
 
+  display: flex;
+
   &:hover {
     @include apply-custom-background-color('list-item--hover');
   }
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.right {
+
 }
