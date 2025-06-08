@@ -47,7 +47,7 @@ export const SERVICES: Record<EServiceType, {
           name: 'Up',
           path: '/',
         }, {
-          name: 'Home',
+          name: 'Übersicht',
           path: {
             $type: 'jsonata',
             value: "'/catalog/' & params.catalogId",
@@ -82,9 +82,9 @@ export const SERVICES: Record<EServiceType, {
     name: 'Material Tracing',
     basePath: '/material-tracing',
     navigation: [{
-      name: 'Home',
+      name: 'Übersicht',
       path: '/',
-      icon: 'home',
+      icon: 'layer-group',
     }, {
       name: 'Manufacturers',
       path: '/manufacturer',
