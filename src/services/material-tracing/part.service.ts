@@ -11,7 +11,7 @@ const listParts = async (): Promise<Array<TPart>> => {
 };
 
 const getPart = async (partId: string): Promise<TPart | null> => {
-  const partResponse = await fetchService(`/v1/parts/${partId}`);
+  const partResponse = await fetchService(`/v1/parts/${partId}?include=availableAmount`);
   if (!partResponse.ok) {
     return null;
   }

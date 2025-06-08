@@ -4,6 +4,7 @@ import List from "@/components/universals/list/List";
 import ListItem from "@/components/universals/list/ListItem";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import Link from "next/link";
+import Badge from "@/components/universals/badge/badge.component";
 
 type PartPartListProps = {
   partId: string;
@@ -26,7 +27,13 @@ const PartChildrenList: React.FunctionComponent<PartPartListProps> = async ({
     <List>
       {parts.map(async (part) => (
         <Link href={await getServiceLocalUrl(`/part/${part.id}`)} key={part.id}>
-          <ListItem>
+          <ListItem
+            right={(
+              <Badge>
+                {part.amount}
+              </Badge>
+            )}
+          >
             {part.name}
           </ListItem>
         </Link>

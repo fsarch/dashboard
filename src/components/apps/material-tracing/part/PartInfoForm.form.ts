@@ -8,7 +8,12 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   }, {
     id: 'amount',
     type: 'text',
-    label: 'Amount',
+    label: 'Anzahl',
+  }, {
+    id: 'availableAmount',
+    type: 'text',
+    label: 'Verfügbare Anzahl',
+    isEnabled: false,
   }, {
     id: 'externalId',
     type: 'text',

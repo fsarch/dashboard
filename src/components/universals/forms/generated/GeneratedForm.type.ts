@@ -10,6 +10,7 @@ export type TGeneratedFormTextInputButton = {
 export type TGeneratedFormTextInput = TGeneratedFormBaseInput & {
   type: 'text',
   buttons?: Array<TGeneratedFormTextInputButton>;
+  isEnabled?: boolean,
 };
 
 export type TGeneratedFormSelectConstantData = {

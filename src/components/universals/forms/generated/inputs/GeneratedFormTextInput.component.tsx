@@ -29,6 +29,7 @@ const GeneratedFormTextInput: React.FunctionComponent<GeneratedFormTextInputProp
           id={id}
           name={input.id}
           type="text"
+          disabled={input.isEnabled === false}
         />
       )}
     </FieldsetRow>
