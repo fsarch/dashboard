@@ -93,7 +93,7 @@ const executePostSubmitAction = async (
       'Content-Type': 'application/json',
     },
   });
-  const createData = await createResponse.json();
+  const createData = createResponse.headers.get('Content-Type')?.startsWith('application/json') ? await createResponse.json() : null;
 
   const actions = await Promise.all((evaluatedDefinition.postEndpointActions ?? []).map(async (postEndpointAction) => {
     if (postEndpointAction.url.$type === "jsonata") {

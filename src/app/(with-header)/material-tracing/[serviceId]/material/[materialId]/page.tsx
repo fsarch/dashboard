@@ -9,6 +9,12 @@ import MaterialRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/material/[materialId]/_components/remove/MaterialRemove.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
+import { MATERIAL_CHECKOUT_FORM } from "@/components/apps/material-tracing/material/MaterialCheckout.form";
+import { datetimeUtils } from "@/utils/datetime.utils";
+import MaterialShortCodeDeleteForm
+  from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteForm.component";
+import React from "react";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -27,9 +33,30 @@ export default async function Home(props: { params: Promise<{ materialId: string
         Material: {materialType.name}<br />
         Hersteller: {manufacturer.name}<br />
       </Section>
+      <Section name="Material ausbuchen">
+        {material.checkoutTime ? (
+          <div>
+            Das Material wurde bereits am <b>{datetimeUtils.formatDate(material.checkoutTime)}</b> ausgebucht.
+          </div>
+        ) : (
+          <GeneratedForm
+            definition={MATERIAL_CHECKOUT_FORM}
+            args={{
+              materialId: material.id,
+            }}
+          />
+        )}
+      </Section>
       {hasShortCode ? (
         <Section name="ShortCode">
           ShortCode: {shortCodes[0].code}
+
+          <MaterialShortCodeDeleteForm
+            args={{
+              materialId: material.id,
+              shortCode: shortCodes[0].code,
+            }}
+          />
         </Section>
       ) : (
         <Section name="ShortCode verknüpfen">

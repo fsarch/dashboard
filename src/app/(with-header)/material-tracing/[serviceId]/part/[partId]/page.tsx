@@ -18,6 +18,8 @@ import PartRemove
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import PartShortCodeDeleteForm
+  from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -42,6 +44,13 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
       {hasShortCode ? (
         <Section name="ShortCode">
           ShortCode: {shortCodes[0].code}
+
+          <PartShortCodeDeleteForm
+            args={{
+              partId: part.id,
+              shortCode: shortCodes[0].code,
+            }}
+          />
         </Section>
       ) : (
         <Section name="ShortCode verknüpfen">
