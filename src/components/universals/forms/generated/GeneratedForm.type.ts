@@ -19,6 +19,7 @@ export type TGeneratedFormSelectConstantData = {
 
 export type TGeneratedFormSelectInput = TGeneratedFormBaseInput & {
   type: 'select';
+  enableSearch?: boolean;
   data: {
     $type: 'datasource';
     value: string;

@@ -1,0 +1,51 @@
+.root {
+  position: relative;
+}
+
+.input {
+  display: block;
+  width: 100%;
+
+  outline: none;
+}
+
+.searchInput {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+}
+
+.input, .searchInput {
+  border: 1px solid #999999;
+
+  border-radius: 5px;
+
+  padding: 5px 10px;
+
+  background-color: #333333;
+}
+
+.searchInputVisible {
+  opacity: 1;
+}
+
+.datatable {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+
+  max-height: 200px;
+  overflow: auto;
+
+  background-color: #333333;
+  border: 1px solid #999999;
+
+  display: none;
+}
+
+.datatableVisible {
+  display: block;
+}

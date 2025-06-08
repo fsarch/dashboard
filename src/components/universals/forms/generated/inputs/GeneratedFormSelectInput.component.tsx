@@ -4,6 +4,7 @@ import {
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 import Select from "@/components/universals/forms/Select";
+import SearchableSelect from "@/components/universals/forms/searchable-select/SearchableSelect.component";
 
 type GeneratedFormSelectInputProps = {
   input: TGeneratedFormSelectInput;
@@ -28,7 +29,19 @@ const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInput
         </label>
       )}
     >
-      <Select id={id} name={input.id} values={input.data.value ?? []}/>
+      {input.enableSearch ? (
+        <SearchableSelect
+          id={id}
+          name={input.id}
+          values={input.data.value ?? []}
+        />
+      ) : (
+        <Select
+          id={id}
+          name={input.id}
+          values={input.data.value ?? []}
+        />
+      )}
     </FieldsetRow>
   );
 };

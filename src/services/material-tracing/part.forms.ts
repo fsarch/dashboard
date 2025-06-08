@@ -13,6 +13,7 @@ export const PART_CREATE_FORM: TGeneratedFormDefinition = {
     id: 'partTypeId',
     type: 'select',
     label: 'Part Type',
+    enableSearch: true,
     data: {
       $type: 'datasource',
       value: 'partTypes',
