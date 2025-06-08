@@ -1,13 +1,7 @@
 import React from 'react';
-import { materialService } from "@/services/material-tracing/material.service";
-import { materialTypeService } from "@/services/material-tracing/material-type.service";
-import { manufacturerService } from "@/services/material-tracing/manufacturer.service";
 import Section from "@/components/universals/section/Section";
-import MaterialShortCodeDeleteForm
-  from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteForm.component";
-import MaterialInfo from "@/components/apps/material-tracing/material/MaterialInfo.component";
-import QrCodeDownloadButton from "@/components/universals/qr-code/QRCodeDownloadButton.component";
-import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
+import PartShortCodeDeleteForm
+  from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
 import { partService } from "@/services/material-tracing/part.service";
 
 type PartShortCodeInfoComponentProps = {
@@ -23,8 +17,18 @@ const PartShortCodeInfoComponent: React.FunctionComponent<PartShortCodeInfoCompo
   return (
     <>
       {part ? (
-        <Section name="Informationen">
-        </Section>
+        <>
+          <Section name="Informationen">
+          </Section>
+          <Section name="Connected Part">
+            <PartShortCodeDeleteForm
+              args={{
+                partId: part.id,
+                shortCode: code,
+              }}
+            />
+          </Section>
+        </>
       ) : undefined}
     </>
   );
