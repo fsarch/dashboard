@@ -5,13 +5,14 @@ import Link from "next/link";
 import Section from "@/components/universals/section/Section";
 import { itemTypeService } from "@/services/product/item-type.service";
 import ItemTypeCreateForm from "@/components/apps/product/item-type/ItemTypeCreateForm";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home(props: { params: Promise<{ catalogId: string }> }) {
   const params = await props.params;
   const itemTypes = await itemTypeService.listItemTypes(params.catalogId);
 
   return (
-    <main>
+    <DefaultPage>
       <Section name="Elementtyp">
         <List>
           {itemTypes.map(async (itemType) => (
@@ -32,6 +33,6 @@ export default async function Home(props: { params: Promise<{ catalogId: string 
           catalogId={params.catalogId}
         />
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

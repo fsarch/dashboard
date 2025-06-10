@@ -1,11 +1,8 @@
 import { attributeService } from "@/services/product/attribute.service";
-import AttributeEditForm from "@/components/apps/product/attribute/AttributeEditForm";
 import { localizationService } from "@/services/product/localization.service";
-import AttributeLocalization from "@/components/apps/product/attribute/localization/AttributeLocalization";
-import { AttributeType } from "@/services/product/attribute.const";
-import ListAttributeElementList from "@/components/apps/product/attribute/list/ListAttributeElementList";
 import AttributeElementLocalization
   from "@/components/apps/product/attribute/list/element-localization/AttributeElementLocalization";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home(
   props: { params: Promise<{ catalogId: string; attributeId: string; elementId: string; }> }
@@ -15,7 +12,7 @@ export default async function Home(
   const localizations = await localizationService.listLocalizations();
 
   return (
-    <main>
+    <DefaultPage>
       Element-Localizations
       {localizations.map((localization) => (
         <div key={localization.id}>
@@ -29,6 +26,6 @@ export default async function Home(
           />
         </div>
       ))}
-    </main>
+    </DefaultPage>
   );
 }

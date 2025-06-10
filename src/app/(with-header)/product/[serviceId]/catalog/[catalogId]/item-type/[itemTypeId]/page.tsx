@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { attributeService } from "@/services/product/attribute.service";
 import Section from "@/components/universals/section/Section";
 import ItemTypeAttributeSelection from "@/components/apps/product/item-type/ItemTypeAttributeSelection";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home(props: { params: Promise<{ catalogId: string; itemTypeId: string; }> }) {
   const params = await props.params;
@@ -16,7 +17,7 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
   const selectedAttributeIds = attributeItemTypes.map((attributeItemType) => attributeItemType.attributeId);
 
   return (
-    <main>
+    <DefaultPage>
       <h1>{itemType.name}</h1>
       <Section name="Attribute">
         <ItemTypeAttributeSelection
@@ -26,6 +27,6 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
           selectedAttributeIds={selectedAttributeIds}
         />
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

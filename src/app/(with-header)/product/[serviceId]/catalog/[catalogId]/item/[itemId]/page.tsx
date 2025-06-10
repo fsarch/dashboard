@@ -2,11 +2,12 @@ import ItemList from "@/components/apps/product/item/ItemList";
 import ItemAttributeList from "@/components/apps/product/item/attribute/ItemAttributeList";
 import ItemRemove from "@/components/apps/product/item/remove/ItemRemove";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home(props: { params: Promise<{ catalogId: string; itemId: string; }> }) {
   const params = await props.params;
   return (
-    <main>
+    <DefaultPage>
       <ItemList
         catalogId={params.catalogId}
         parentItemId={params.itemId}
@@ -20,6 +21,6 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
         itemId={params.itemId}
         homeUrl={await getServiceLocalUrl(`/catalog/${params.catalogId}`)}
       />
-    </main>
+    </DefaultPage>
   );
 }

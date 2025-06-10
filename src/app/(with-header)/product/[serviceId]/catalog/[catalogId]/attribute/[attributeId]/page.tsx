@@ -6,6 +6,7 @@ import { AttributeType } from "@/services/product/attribute.const";
 import ListAttributeElementList from "@/components/apps/product/attribute/list/ListAttributeElementList";
 import ListAttributeElementCreateForm from "@/components/apps/product/attribute/list/ListAttributeElementCreateForm";
 import Section from "@/components/universals/section/Section";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home(props: { params: Promise<{ catalogId: string; attributeId: string; }> }) {
   const params = await props.params;
@@ -15,7 +16,7 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
   const localizations = await localizationService.listLocalizations();
 
   return (
-    <main>
+    <DefaultPage>
       <AttributeEditForm
         attribute={attribute}
       />
@@ -45,6 +46,6 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
           </div>
         ))}
       </Section>
-    </main>
+    </DefaultPage>
   );
 }

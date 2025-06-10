@@ -6,9 +6,9 @@ import { attributeService } from "@/services/product/attribute.service";
 import AttributeCreateForm from "@/components/apps/product/attribute/AttributeCreateForm";
 import Section from "@/components/universals/section/Section";
 import { itemTypeService } from "@/services/product/item-type.service";
-import { itemService } from "@/services/product/item.service";
 import ItemTypeCreateForm from "@/components/apps/product/item-type/ItemTypeCreateForm";
 import ItemList from "@/components/apps/product/item/ItemList";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home(props: { params: Promise<{ catalogId: string }> }) {
   const params = await props.params;
@@ -16,7 +16,7 @@ export default async function Home(props: { params: Promise<{ catalogId: string 
   const itemTypes = await itemTypeService.listItemTypes(params.catalogId);
 
   return (
-    <main>
+    <DefaultPage>
       <ItemList
         catalogId={params.catalogId}
       />
@@ -61,6 +61,6 @@ export default async function Home(props: { params: Promise<{ catalogId: string 
           catalogId={params.catalogId}
         />
       </Section>
-    </main>
+    </DefaultPage>
   );
 }
