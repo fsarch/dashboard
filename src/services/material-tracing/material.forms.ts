@@ -25,6 +25,7 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
       $type: 'jsonata',
       value: '{ "body": body.id }',
     },
+    preferCapture: 'environment',
   }],
   initialValues: {
     $type: 'jsonata',

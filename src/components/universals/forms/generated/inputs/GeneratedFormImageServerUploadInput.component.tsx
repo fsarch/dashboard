@@ -55,6 +55,7 @@ const GeneratedFormImageServerUploadInput: React.FunctionComponent<GeneratedForm
         type="file"
         onChange={handleFileChange}
         accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+        capture={input.preferCapture}
       />
     </label>
   );

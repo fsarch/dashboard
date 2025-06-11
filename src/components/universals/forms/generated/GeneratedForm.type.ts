@@ -39,6 +39,7 @@ export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
     value: string;
   } | TGeneratedFormStringConstantData;
   transformResponse: TJsonataExpression;
+  preferCapture?: 'environment' | 'user';
 };
 
 export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput;
