@@ -1,8 +1,10 @@
 function getUserMediaStream(): Promise<MediaStream> {
   return new Promise<MediaStream>((resolve, reject) => {
     navigator.getUserMedia({
-      video: true,
-      audio: false
+      video: {
+        facingMode: 'environment',
+      },
+      audio: false,
     }, (stream) => {
       resolve(stream);
     }, (error) => {
