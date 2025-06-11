@@ -54,7 +54,10 @@ const ImageUploadForm: React.FunctionComponent<ImageUploadFormProps> = ({
       >
         <Form>
           <Input type="text" name="name" />
-          <FileInput name="file" />
+          <FileInput
+            name="file"
+            capture="environment"
+          />
           <Button type="submit">
             Hochladen
           </Button>

@@ -6,6 +6,7 @@ type FileInputProps = {
   disabled?: boolean;
   required?: boolean;
   multiple?: boolean;
+  capture?: 'user' | 'environment';
 };
 
 const FileInput: React.FunctionComponent<FileInputProps> = ({
@@ -13,6 +14,7 @@ const FileInput: React.FunctionComponent<FileInputProps> = ({
   disabled,
   required,
   multiple,
+  capture,
 }) => {
   const [field, meta, helpers] = useField(name);
 
@@ -34,6 +36,7 @@ const FileInput: React.FunctionComponent<FileInputProps> = ({
       required={required}
       onChange={handleChange}
       multiple={multiple}
+      capture={capture}
     />
   );
 };
