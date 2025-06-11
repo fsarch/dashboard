@@ -23,7 +23,7 @@ export async function generateQrCode({
     <body style="margin: 0; padding: 0;">
     <div style="padding: 2vmax">
     ${qrCodeDataUrls.map(({ value, qrCode }) => `
-        <div style="border-radius: 100vmax; width: 96vw; height: 96vh; overflow: hidden; position: relative; box-sizing: border-box">
+        <div style="border-radius: 100vmax; width: 96vw; height: 96vh; overflow: hidden; position: relative; box-sizing: border-box; break-after: page">
             <img src="${qrCode}" style="top: 4vh; width: 75vw; height: 75vh; position: absolute; left: 50%; transform: translateX(-50%)"/>
             <div style="position: absolute; bottom: 4vh; left: 50%; transform: translateX(-50%); font-family: Arial, sans-serif">${value}</div>
         </div>
