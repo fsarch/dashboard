@@ -17,8 +17,19 @@ const getItemType = async (catalogId: string, itemTypeId: string): Promise<ItemT
   return (await listItemTypes(catalogId)).find(it => it.id = itemTypeId) ?? null;
 };
 
-const listAttributes = async (catalogId: string, itemTypeId: string): Promise<Array<AttributeItemTypeDto>> => {
-  const itemTypesResponse = await fetchService(`/v1/catalogs/${catalogId}/item-types/${itemTypeId}/attributes`);
+export type TListAttributeOptions = {
+  embed: Array<'attribute'>;
+};
+
+const listAttributes = async (catalogId: string, itemTypeId: string, options?: TListAttributeOptions): Promise<Array<AttributeItemTypeDto>> => {
+  const searchParams = new URLSearchParams();
+  if (options?.embed) {
+    options.embed.forEach((embed) => {
+      searchParams.append('embed', embed);
+    });
+  }
+
+  const itemTypesResponse = await fetchService(`/v1/catalogs/${catalogId}/item-types/${itemTypeId}/attributes?${searchParams}`);
   const itemType = await itemTypesResponse.json();
 
   return itemType;

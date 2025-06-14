@@ -24,8 +24,6 @@ const ItemAttributeListForm: React.FunctionComponent<ItemAttributeListFormProps>
     console.log('values', values);
   }, [catalogId, itemId]);
 
-  console.log('initialValue', initialValue);
-
   return (
     <Formik
       onSubmit={handleSubmit}

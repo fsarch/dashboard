@@ -2,19 +2,34 @@
 
 import { ItemAttributeDto } from "@/services/product/item-attribute.type";
 import { itemAttributeService } from "@/services/product/item-attribute.service";
+import { itemTypeService } from "@/services/product/item-type.service";
+import { itemService } from "@/services/product/item.service";
+import { AttributeType } from "@/services/product/attribute.const";
 
 export type ItemAttributeListFormDataType = {
   attributes: Record<string, ItemAttributeDto>;
 };
 
 export async function setItemAttributes(catalogId: string, itemId: string, formData: ItemAttributeListFormDataType) {
-  const elements = Object.entries(formData.attributes);
+  const item = await itemService.getItem(catalogId, itemId);
+  const attributes = await itemTypeService.listAttributes(catalogId, item.itemTypeId, {
+    embed: ['attribute'],
+  });
 
   const results: Array<{ status: number; data: unknown }> = [];
 
-  for (let i = 0; i < elements.length; i++) {
+  for (let attribute of attributes) {
+    if (!(attribute.attributeId in formData.attributes)) {
+      continue;
+    }
+
     try {
-      const res = await itemAttributeService.setItemAttribute(catalogId, itemId, elements[i][0], elements[i][1]);
+      let value = formData.attributes[attribute.attributeId];
+      if (attribute.attribute?.attributeTypeId === AttributeType.LIST) {
+        value.value = (value.value as Array<string>).map((id) => ({ id }));
+      }
+
+      const res = await itemAttributeService.setItemAttribute(catalogId, itemId, attribute.attributeId, value);
       results.push({
         status: 201,
         data: res,

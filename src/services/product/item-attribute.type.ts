@@ -15,4 +15,10 @@ export type ItemTextAttributeDto = ItemAttributeBaseDto & {
   value: string;
 };
 
-export type ItemAttributeDto = ItemTextAttributeDto;
+export type ItemListAttributeDto = ItemAttributeBaseDto & {
+  attributeTypeId: AttributeType.LIST;
+
+  value: unknown;
+};
+
+export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto;

@@ -13,6 +13,7 @@ import {
 import Button from "@/components/universals/forms/Button";
 import Fieldset from "@/components/universals/forms/Fieldset.component";
 import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
+import { AttributeType } from "@/services/product/attribute.const";
 
 type ItemAttributeListProps = {
   catalogId: string;
@@ -44,6 +45,10 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
     .filter(a => a) as Array<{ isRequired: boolean; attribute: AttributeDto; value: ItemAttributeDto }>;
 
   const initialValue = itemTypeBasedAttributes.reduce((acc, value) => {
+    if (value.value && value.attribute.attributeTypeId === AttributeType.LIST) {
+      value.value.value = (value.value.value as Array<{ id: string }> | undefined)?.map(({ id }) => id);
+    }
+
     acc.attributes[value.attribute.id] = value.value;
 
     return acc;
@@ -68,6 +73,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
                   attribute={ita.attribute}
                   value={ita.value}
                   isRequired={ita.isRequired}
+                  catalogId={catalogId}
                 />
               )}
             </SimpleFieldsetRow>
