@@ -9,7 +9,6 @@ export default async function Home({ params }: { params: Promise<{ functionId: s
 
   return (
     <DefaultPage>
-      Function-Overview
       <Editor
         versionId={version?.id}
         value={version?.code ?? ''}

@@ -8,6 +8,7 @@ import {
   executeFunction
 } from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.server-action";
 import styles from './TestFunction.module.scss';
+import IconButtonContent from "@/components/universals/forms/button/IconButtonContent";
 
 type TestFunctionDialogType = TDialogComponent<{ functionId: string; versionId: string; }, void>;
 
@@ -54,6 +55,7 @@ const TestFunctionDialog: TestFunctionDialogType = ({
           onChange={handleChange}
           height="20vh"
           width="50vw"
+          theme="vs-dark"
         />
       </div>
       {result ? (
@@ -63,12 +65,17 @@ const TestFunctionDialog: TestFunctionDialogType = ({
           </pre>
         </div>
       ) : null}
-      <div>
+      <div
+        className={styles.buttonWrapper}
+      >
         <Button
           type="button"
           onClick={handleRunTest}
+          color="#2F9F38"
         >
-          Ausführen
+          <IconButtonContent icon="play">
+            Ausführen
+          </IconButtonContent>
         </Button>
         <Button
           type="button"

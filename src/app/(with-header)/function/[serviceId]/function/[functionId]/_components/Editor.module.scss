@@ -1,0 +1,15 @@
+.space {
+  flex-grow: 1;
+}
+
+.toolbar {
+  display: flex;
+
+  padding: 8px;
+}
+
+.toolbarGroup {
+  display: flex;
+
+  gap: 8px;
+}

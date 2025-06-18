@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
 import TestFunctionDialog
   from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.dialog";
+import IconButtonContent from '@/components/universals/forms/button/IconButtonContent';
+import styles from './Editor.module.scss';
 
 loader.config({
   paths: {
@@ -85,34 +87,59 @@ const Editor: React.FunctionComponent<EditorProps> = ({
 
   return (
     <>
-      <div>
-        <Button
-          type="button"
-          onClick={handleTest}
+      <div
+        className={styles.toolbar}
+      >
+        <div
+          className={styles.toolbarGroup}
         >
-          Testen
-        </Button>
-        <Button
-          type="button"
-          onClick={handleSave}
+          <Button
+            type="button"
+            onClick={handleTest}
+            color="#2F9F38"
+          >
+            <IconButtonContent
+              icon="flask-vial"
+            >
+              Testen
+            </IconButtonContent>
+          </Button>
+          <Button
+            type="button"
+            onClick={handleSave}
+            color="#2f609f"
+          >
+            <IconButtonContent
+              icon="floppy-disk"
+            >
+              Speichern
+            </IconButtonContent>
+          </Button>
+        </div>
+        <div className={styles.space} />
+        <div
+          className={styles.toolbarGroup}
         >
-          Speichern
-        </Button>
-        <Button
-          type="button"
-          onClick={handlePublish}
-        >
-          Veröffentlichen
-        </Button>
+          <Button
+            type="button"
+            onClick={handlePublish}
+            color="#c45c16"
+          >
+            <IconButtonContent
+              icon="cloud-arrow-up"
+            >
+              Veröffentlichen
+            </IconButtonContent>
+          </Button>
+        </div>
       </div>
       <MonacoEditor
         height="90vh"
         defaultLanguage="javascript"
         defaultValue={value}
         onChange={handleChange}
-      >
-
-      </MonacoEditor>
+        theme="vs-dark"
+      />
     </>
   );
 };
