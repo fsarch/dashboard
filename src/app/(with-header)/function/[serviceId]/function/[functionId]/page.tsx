@@ -5,14 +5,14 @@ import Editor from "@/app/(with-header)/function/[serviceId]/function/[functionI
 export default async function Home({ params }: { params: Promise<{ functionId: string }> }) {
   const functionId = (await params).functionId;
   const functionVersions = await functionService.getFunctionVersions(functionId);
-  const version = functionVersions.toSorted((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime())[0];
+  const version = functionVersions.toSorted((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime())?.[0];
 
 
   return (
     <DefaultPage>
       Function-Overview
       <Editor
-        value={version.code}
+        value={version?.code ?? ''}
         functionId={functionId}
       />
     </DefaultPage>
