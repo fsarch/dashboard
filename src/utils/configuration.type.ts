@@ -56,6 +56,7 @@ export type TFunctionConfiguration = {
   name?: string;
   type: EServiceType.FUNCTION,
   url: string;
+  worker_url?: string;
 }
 
 export type TCustomAppConfiguration = {

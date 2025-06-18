@@ -10,6 +10,9 @@ import {
   saveCode
 } from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/Editor.server-action";
 import { useRouter } from "next/navigation";
+import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
+import TestFunctionDialog
+  from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.dialog";
 
 loader.config({
   paths: {
@@ -26,11 +29,13 @@ loader.config({
 type EditorProps = {
   value: string;
   functionId: string;
+  versionId?: string;
 };
 
 const Editor: React.FunctionComponent<EditorProps> = ({
   value,
   functionId,
+  versionId,
 }) => {
   const valueRef = useRef<string | null>(null);
 
@@ -65,9 +70,28 @@ const Editor: React.FunctionComponent<EditorProps> = ({
     router.refresh();
   }, [functionId, router]);
 
+  const openDialog = useOpenDialog();
+
+  const handleTest = useCallback(async () => {
+    if (!versionId) {
+      return;
+    }
+
+    openDialog(TestFunctionDialog, {
+      versionId,
+      functionId,
+    })
+  }, [functionId, versionId]);
+
   return (
     <>
       <div>
+        <Button
+          type="button"
+          onClick={handleTest}
+        >
+          Testen
+        </Button>
         <Button
           type="button"
           onClick={handleSave}
