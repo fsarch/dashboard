@@ -149,4 +149,8 @@ export const SERVICES: Record<EServiceType, {
     name: 'PDF Render',
     basePath: '/pdf-render',
   },
+  [EServiceType.FUNCTION]: {
+    name: 'Functions',
+    basePath: '/function',
+  },
 };

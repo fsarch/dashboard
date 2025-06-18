@@ -23,6 +23,9 @@ const apps = [{
 }, {
   name: 'PDF Render',
   path: '/pdf-render',
+}, {
+  name: 'Functions',
+  path: '/function',
 }]
 
 export default async function Home() {
