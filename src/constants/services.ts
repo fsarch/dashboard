@@ -152,5 +152,10 @@ export const SERVICES: Record<EServiceType, {
   [EServiceType.FUNCTION]: {
     name: 'Functions',
     basePath: '/function',
+    navigation: [{
+      name: 'Funktionen',
+      path: '/',
+      icon: 'layer-group',
+    }],
   },
 };
