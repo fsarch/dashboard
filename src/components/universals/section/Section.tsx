@@ -14,7 +14,6 @@ const Section: React.FunctionComponent<SectionProps> = ({
   children,
   className,
 }) => {
-  console.log(color);
   return (
     <fieldset
       style={{

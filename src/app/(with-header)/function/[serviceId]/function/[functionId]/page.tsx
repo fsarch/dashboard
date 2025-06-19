@@ -2,11 +2,15 @@ import { functionService } from "@/services/function/function.service";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Editor from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/Editor.component";
 import styles from './page.module.scss';
+import {
+  customApiUtils
+} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/editor-types/customApi.utils";
 
 export default async function Home({ params }: { params: Promise<{ functionId: string }> }) {
   const functionId = (await params).functionId;
   const functionVersions = await functionService.getFunctionVersions(functionId);
   const version = functionVersions.toSorted((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime())?.[0];
+  const workerMeta = await functionService.getWorkerMeta();
 
   return (
     <DefaultPage
@@ -19,6 +23,7 @@ export default async function Home({ params }: { params: Promise<{ functionId: s
           versionId={version?.id}
           value={version?.code ?? ''}
           functionId={functionId}
+          apiType={customApiUtils.generateApiTypes(workerMeta.api)}
         />
       </div>
     </DefaultPage>

@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "npm run copy",
     "build": "next build",
+    "preebuild": "npm run copy",
     "start": "next start",
     "lint": "next lint",
-    "copy": "mkdir -p ./public/assets && cp -R ./node_modules/monaco-editor/min ./public/assets/monaco"
+    "copy": "npm run copy:editor-files && npm run copy:editor-definitions",
+    "copy:editor-files": "mkdir -p ./public/assets && cp -R ./node_modules/monaco-editor/min ./public/assets/monaco",
+    "copy:editor-definitions": "node ./scripts/combine-editor-types.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

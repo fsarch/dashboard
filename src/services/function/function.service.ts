@@ -1,11 +1,18 @@
 import { fetchService } from "@/utils/fetchService";
-import { FunctionDto, FunctionVersionDto } from "@/services/function/function.type";
+import { FunctionDto, FunctionVersionDto, WorkerMetaDto } from "@/services/function/function.type";
 
 const listFunctions = async (): Promise<Array<FunctionDto>> => {
   const functionsResponse = await fetchService('/v1/functions');
   const functions = await functionsResponse.json();
 
   return functions;
+};
+
+const getWorkerMeta = async (): Promise<WorkerMetaDto> => {
+  const workerMetaResponse = await fetchService('/v1/.meta/worker');
+  const workerMeta = await workerMetaResponse.json();
+
+  return workerMeta;
 };
 
 const getFunctionVersions = async (functionId: string): Promise<Array<FunctionVersionDto>> => {
@@ -44,4 +51,5 @@ export const functionService = {
   getFunctionVersions,
   setFunctionVersionCode,
   publishFunctionCode,
+  getWorkerMeta,
 };

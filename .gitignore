@@ -42,3 +42,4 @@ next-env.d.ts
 /config.yml
 /addons
 /public/assets/monaco
+*.generated.ts

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useCallback, useRef, KeyboardEvent } from 'react';
-import MonacoEditor from '@monaco-editor/react';
+import MonacoEditor, { Monaco } from '@monaco-editor/react';
+import { editor } from 'monaco-editor';
 import dynamic from "next/dynamic";
 import loader from '@monaco-editor/loader';
 import {
@@ -18,6 +19,9 @@ import IconActionButton from "@/components/universals/forms/button/IconActionBut
 import { colors } from "@/app/_styles/colors";
 import { useLoadingState } from "@/components/universals/forms/button/useLoadingState";
 import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
+import {
+  API_EXTRA_LIBS,
+} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/editor-types/definitions.generated";
 
 loader.config({
   paths: {
@@ -35,12 +39,14 @@ type EditorProps = {
   value: string;
   functionId: string;
   versionId?: string;
+  apiType: string;
 };
 
 const Editor: React.FunctionComponent<EditorProps> = ({
   value,
   functionId,
   versionId,
+  apiType,
 }) => {
   const valueRef = useRef<string | null>(null);
 
@@ -87,7 +93,33 @@ const Editor: React.FunctionComponent<EditorProps> = ({
       versionId,
       functionId,
     })
-  }, [functionId, versionId]);
+  }, [functionId, versionId, openDialog]);
+
+  const handleMount = useCallback((editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+    editor.onDidFocusEditorText(() => {
+      monaco.languages.typescript.javascriptDefaults.setExtraLibs([
+        {
+          content: `
+            declare interface FsArchApi {
+            }
+        
+            declare var fsarch: FsArchApi;
+          `,
+          filePath: 'api.d.ts',
+        },
+        ...API_EXTRA_LIBS,
+        {
+          // content: `
+          // declare interface FsArchApi {
+          //    pdf: FsArchApiCatalog.${API_SERVICES['pdf-server']};
+          // }
+          // `,
+          content: apiType,
+          filePath: 'custom-api.d.ts',
+        },
+      ]);
+    });
+  }, []);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!event.ctrlKey && !event.metaKey) {
@@ -150,6 +182,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         defaultValue={value}
         onChange={handleChange}
         theme="vs-dark"
+        onMount={handleMount}
       />
     </div>
   );

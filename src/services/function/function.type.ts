@@ -10,3 +10,13 @@ export type FunctionVersionDto = {
   isActive?: boolean;
   creationTime: string;
 };
+
+export type WorkerMetaApiDto = {
+  [key: string]: {
+    type: 'pdf-server';
+  };
+};
+
+export type WorkerMetaDto = {
+  api: WorkerMetaApiDto;
+};
