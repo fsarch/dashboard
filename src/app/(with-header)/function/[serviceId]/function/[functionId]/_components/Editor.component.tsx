@@ -95,17 +95,6 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         >
           <Button
             type="button"
-            onClick={handleTest}
-            color="#2F9F38"
-          >
-            <IconButtonContent
-              icon="flask-vial"
-            >
-              Testen
-            </IconButtonContent>
-          </Button>
-          <Button
-            type="button"
             onClick={handleSave}
             color="#2f609f"
           >
@@ -113,6 +102,17 @@ const Editor: React.FunctionComponent<EditorProps> = ({
               icon="floppy-disk"
             >
               Speichern
+            </IconButtonContent>
+          </Button>
+          <Button
+            type="button"
+            onClick={handleTest}
+            color="#2F9F38"
+          >
+            <IconButtonContent
+              icon="flask-vial"
+            >
+              Testen
             </IconButtonContent>
           </Button>
         </div>

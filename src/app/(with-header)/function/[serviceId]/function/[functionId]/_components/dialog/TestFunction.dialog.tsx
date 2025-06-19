@@ -48,13 +48,15 @@ const TestFunctionDialog: TestFunctionDialogType = ({
 
   return (
     <Dialog>
-      <div>
+      <div
+        className={styles.editorWrapper}
+      >
         <Editor
           defaultLanguage="json"
           defaultValue={DEFAULT_VALUE}
           onChange={handleChange}
-          height="20vh"
-          width="50vw"
+          height="100%"
+          width="100%"
           theme="vs-dark"
         />
       </div>
