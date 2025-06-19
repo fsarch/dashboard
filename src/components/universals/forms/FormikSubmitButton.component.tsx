@@ -3,8 +3,7 @@
 import React, { PropsWithChildren } from 'react';
 import Button from "@/components/universals/forms/Button";
 import { useFormikContext } from "formik";
-import Loader from "@/components/universals/loader/Loader";
-import styles from './FormikSubmitButton.module.scss';
+import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
 
 type FormikSubmitButtonProps = PropsWithChildren<{
 
@@ -16,21 +15,14 @@ const FormikSubmitButton: React.FunctionComponent<FormikSubmitButtonProps> = ({
   const { isSubmitting } = useFormikContext();
 
   return (
-    <div className={styles.root}>
+    <InlineLoadingWrapper isLoading={isSubmitting}>
       <Button
         type="submit"
         disabled={isSubmitting}
       >
         {children}
       </Button>
-      {isSubmitting && (
-        <div className={styles.loader}>
-          <Loader
-            size={32}
-          />
-        </div>
-      )}
-    </div>
+    </InlineLoadingWrapper>
   );
 };
 

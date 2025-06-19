@@ -15,6 +15,8 @@ import TestFunctionDialog
   from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.dialog";
 import IconButtonContent from '@/components/universals/forms/button/IconButtonContent';
 import styles from './Editor.module.scss';
+import IconButton from "@/components/universals/forms/button/IconButton";
+import IconActionButton from "@/components/universals/forms/button/IconActionButton";
 
 loader.config({
   paths: {
@@ -93,44 +95,35 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         <div
           className={styles.toolbarGroup}
         >
-          <Button
+          <IconActionButton
             type="button"
             onClick={handleSave}
             color="#2f609f"
+            icon="floppy-disk"
           >
-            <IconButtonContent
-              icon="floppy-disk"
-            >
-              Speichern
-            </IconButtonContent>
-          </Button>
-          <Button
+            Speichern
+          </IconActionButton>
+          <IconButton
             type="button"
             onClick={handleTest}
             color="#2F9F38"
+            icon="flask-vial"
           >
-            <IconButtonContent
-              icon="flask-vial"
-            >
-              Testen
-            </IconButtonContent>
-          </Button>
+            Testen
+          </IconButton>
         </div>
         <div className={styles.space} />
         <div
           className={styles.toolbarGroup}
         >
-          <Button
+          <IconActionButton
             type="button"
             onClick={handlePublish}
             color="#c45c16"
+            icon="cloud-arrow-up"
           >
-            <IconButtonContent
-              icon="cloud-arrow-up"
-            >
-              Veröffentlichen
-            </IconButtonContent>
-          </Button>
+            Veröffentlichen
+          </IconActionButton>
         </div>
       </div>
       <MonacoEditor

@@ -9,6 +9,7 @@ import {
 } from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.server-action";
 import styles from './TestFunction.module.scss';
 import IconButtonContent from "@/components/universals/forms/button/IconButtonContent";
+import IconActionButton from "@/components/universals/forms/button/IconActionButton";
 
 type TestFunctionDialogType = TDialogComponent<{ functionId: string; versionId: string; }, void>;
 
@@ -70,15 +71,14 @@ const TestFunctionDialog: TestFunctionDialogType = ({
       <div
         className={styles.buttonWrapper}
       >
-        <Button
+        <IconActionButton
           type="button"
           onClick={handleRunTest}
           color="#2F9F38"
+          icon="play"
         >
-          <IconButtonContent icon="play">
-            Ausführen
-          </IconButtonContent>
-        </Button>
+          Ausführen
+        </IconActionButton>
         <Button
           type="button"
           onClick={() => onResult({ status: DialogResult.CANCEL })}

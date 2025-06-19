@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styles from './Button.module.scss';
 import Color from "color";
 
-type ButtonProps = PropsWithChildren<{
+export type ButtonProps = PropsWithChildren<{
   name?: string;
   type: 'button' | 'submit' | 'reset';
   className?: string;
