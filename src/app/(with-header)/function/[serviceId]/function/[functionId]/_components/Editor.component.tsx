@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, KeyboardEvent } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import dynamic from "next/dynamic";
 import loader from '@monaco-editor/loader';
@@ -16,6 +16,8 @@ import styles from './Editor.module.scss';
 import IconButton from "@/components/universals/forms/button/IconButton";
 import IconActionButton from "@/components/universals/forms/button/IconActionButton";
 import { colors } from "@/app/_styles/colors";
+import { useLoadingState } from "@/components/universals/forms/button/useLoadingState";
+import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
 
 loader.config({
   paths: {
@@ -50,7 +52,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
     valueRef.current = value;
   }, []);
 
-  const handleSave = useCallback(async () =>  {
+  const handleSaveIntern = useCallback(async () =>  {
     const code = valueRef.current;
 
     if (code === null) {
@@ -59,6 +61,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
 
     await saveCode(functionId, code);
   }, [functionId]);
+  const [isSaving, handleSave] = useLoadingState(handleSaveIntern);
 
   const router = useRouter();
 
@@ -86,22 +89,37 @@ const Editor: React.FunctionComponent<EditorProps> = ({
     })
   }, [functionId, versionId]);
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!event.ctrlKey && !event.metaKey) {
+      return;
+    }
+
+    if (event.key === 's') {
+      event.preventDefault();
+      handleSave();
+    }
+  }
+
   return (
-    <>
+    <div
+      onKeyDown={handleKeyDown}
+    >
       <div
         className={styles.toolbar}
       >
         <div
           className={styles.toolbarGroup}
         >
-          <IconActionButton
-            type="button"
-            onClick={handleSave}
-            color={colors.lightBlue}
-            icon="floppy-disk"
-          >
-            Speichern
-          </IconActionButton>
+          <InlineLoadingWrapper isLoading={isSaving}>
+            <IconButton
+              type="button"
+              onClick={handleSave}
+              color={colors.lightBlue}
+              icon="floppy-disk"
+            >
+              Speichern
+            </IconButton>
+          </InlineLoadingWrapper>
           <IconButton
             type="button"
             onClick={handleTest}
@@ -132,7 +150,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         onChange={handleChange}
         theme="vs-dark"
       />
-    </>
+    </div>
   );
 };
 

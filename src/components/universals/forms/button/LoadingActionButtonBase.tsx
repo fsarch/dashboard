@@ -1,5 +1,6 @@
-import React, { MouseEvent, useCallback, useState } from 'react';
+import React, { MouseEvent } from 'react';
 import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
+import { useLoadingState } from "@/components/universals/forms/button/useLoadingState";
 
 export type LoadingButtonBaseProps = {
   onClick: (event: MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -15,16 +16,7 @@ const LoadingActionButtonBase: React.FunctionComponent<LoadingButtonBaseProps> =
   disabled,
   children,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = useCallback(async (event: MouseEvent<HTMLButtonElement>) => {
-    try {
-      setIsLoading(true);
-      await onClick(event);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [setIsLoading, onClick]);
+  const [isLoading, handleClick] = useLoadingState(onClick);
 
   return (
     <InlineLoadingWrapper
