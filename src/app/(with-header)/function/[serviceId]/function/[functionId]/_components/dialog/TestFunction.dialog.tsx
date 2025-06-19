@@ -8,8 +8,13 @@ import {
   executeFunction
 } from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.server-action";
 import styles from './TestFunction.module.scss';
-import IconButtonContent from "@/components/universals/forms/button/IconButtonContent";
 import IconActionButton from "@/components/universals/forms/button/IconActionButton";
+import TestFunctionResult
+  from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunctionResult.component";
+import {
+  TestFunctionResultType
+} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.type";
+import { colors } from "@/app/_styles/colors";
 
 type TestFunctionDialogType = TDialogComponent<{ functionId: string; versionId: string; }, void>;
 
@@ -20,7 +25,7 @@ const TestFunctionDialog: TestFunctionDialogType = ({
   onResult,
 }) => {
   const [requestArgs, setRequestArgs] = useState<string>(DEFAULT_VALUE);
-  const [result, setResult] = useState<{ result: unknown } | null>(null);
+  const [result, setResult] = useState<TestFunctionResultType | null>(null);
 
   const handleRunTest = useCallback(async () => {
     const args = JSON.parse(requestArgs);
@@ -28,13 +33,9 @@ const TestFunctionDialog: TestFunctionDialogType = ({
       throw new Error('invalid provided body');
     }
 
-    console.log('run test', value.functionId, value.versionId, args);
-
     const response = await executeFunction(value.functionId, value.versionId, {
       args
     });
-
-    console.log('response', response);
 
     setResult(response);
   }, [value.versionId, value.functionId]);
@@ -62,11 +63,9 @@ const TestFunctionDialog: TestFunctionDialogType = ({
         />
       </div>
       {result ? (
-        <div className={styles.resultData}>
-          <pre>
-            {JSON.stringify(result.result, null, 2)}
-          </pre>
-        </div>
+        <TestFunctionResult
+          result={result}
+        />
       ) : null}
       <div
         className={styles.buttonWrapper}
@@ -74,7 +73,7 @@ const TestFunctionDialog: TestFunctionDialogType = ({
         <IconActionButton
           type="button"
           onClick={handleRunTest}
-          color="#2F9F38"
+          color={colors.lightGreen}
           icon="play"
         >
           Ausführen

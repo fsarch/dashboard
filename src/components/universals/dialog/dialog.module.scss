@@ -11,6 +11,11 @@
   outline: 0;
 
   padding: 10px;
+
+  max-width: 95vw;
+  max-height: 95vh;
+
+  overflow: auto;
 }
 
 .overlay {

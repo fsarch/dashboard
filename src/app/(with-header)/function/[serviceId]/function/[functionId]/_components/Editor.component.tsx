@@ -4,7 +4,6 @@ import React, { useCallback, useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import dynamic from "next/dynamic";
 import loader from '@monaco-editor/loader';
-import Button from "@/components/universals/forms/Button";
 import {
   publishCode,
   saveCode
@@ -13,10 +12,10 @@ import { useRouter } from "next/navigation";
 import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
 import TestFunctionDialog
   from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.dialog";
-import IconButtonContent from '@/components/universals/forms/button/IconButtonContent';
 import styles from './Editor.module.scss';
 import IconButton from "@/components/universals/forms/button/IconButton";
 import IconActionButton from "@/components/universals/forms/button/IconActionButton";
+import { colors } from "@/app/_styles/colors";
 
 loader.config({
   paths: {
@@ -98,7 +97,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
           <IconActionButton
             type="button"
             onClick={handleSave}
-            color="#2f609f"
+            color={colors.lightBlue}
             icon="floppy-disk"
           >
             Speichern
@@ -106,7 +105,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
           <IconButton
             type="button"
             onClick={handleTest}
-            color="#2F9F38"
+            color={colors.lightGreen}
             icon="flask-vial"
           >
             Testen
@@ -119,7 +118,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
           <IconActionButton
             type="button"
             onClick={handlePublish}
-            color="#c45c16"
+            color={colors.orange}
             icon="cloud-arrow-up"
           >
             Veröffentlichen
