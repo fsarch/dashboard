@@ -1,6 +1,7 @@
 import { functionService } from "@/services/function/function.service";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Editor from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/Editor.component";
+import styles from './page.module.scss';
 
 export default async function Home({ params }: { params: Promise<{ functionId: string }> }) {
   const functionId = (await params).functionId;
@@ -8,12 +9,18 @@ export default async function Home({ params }: { params: Promise<{ functionId: s
   const version = functionVersions.toSorted((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime())?.[0];
 
   return (
-    <DefaultPage>
-      <Editor
-        versionId={version?.id}
-        value={version?.code ?? ''}
-        functionId={functionId}
-      />
+    <DefaultPage
+      className={styles.root}
+    >
+      <div
+        className={styles.wrapper}
+      >
+        <Editor
+          versionId={version?.id}
+          value={version?.code ?? ''}
+          functionId={functionId}
+        />
+      </div>
     </DefaultPage>
   );
 }

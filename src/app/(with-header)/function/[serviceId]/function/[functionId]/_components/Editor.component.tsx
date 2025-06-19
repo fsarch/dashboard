@@ -102,6 +102,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
 
   return (
     <div
+      className={styles.root}
       onKeyDown={handleKeyDown}
     >
       <div
@@ -144,7 +145,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         </div>
       </div>
       <MonacoEditor
-        height="90vh"
+        height="100%"
         defaultLanguage="javascript"
         defaultValue={value}
         onChange={handleChange}

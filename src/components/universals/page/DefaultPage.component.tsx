@@ -9,9 +9,10 @@ import { match } from 'path-to-regexp';
 import memoize from 'lodash.memoize';
 import jsonata from "jsonata";
 import { TIcon } from "@/components/universals/icon/Icon.type";
+import clsx from 'clsx';
 
 type DefaultPageProps = PropsWithChildren<{
-
+  className?: string;
 }>;
 
 const createPathMatcher = memoize((route: string) => {
@@ -20,6 +21,7 @@ const createPathMatcher = memoize((route: string) => {
 
 export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
   children,
+  className,
 }) => {
   let baseConfiguration;
   try {
@@ -77,7 +79,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
   }
 
   return (
-    <div className={styles.root}>
+    <div className={clsx(className, styles.root)}>
       <header className={styles.header}>
         <Header title={baseConfiguration.name ?? 'Unknown Service'}/>
       </header>

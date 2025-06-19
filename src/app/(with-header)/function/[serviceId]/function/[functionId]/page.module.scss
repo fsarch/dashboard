@@ -1,0 +1,10 @@
+.root {
+  height: calc(100vh - 16px);
+  overflow: hidden;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
