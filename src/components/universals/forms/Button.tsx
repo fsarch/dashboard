@@ -31,7 +31,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     const hoverColor = Color(color).lighten(0.3);
     const disabledColor = Color(color).darken(0.5);
     const textColor = Color(color).isLight() ? '#000000' : '#FFFFFF';
-    const hoverTextColor = Color(textColor).isLight() ? '#000000' : '#FFFFFF';
+    const hoverTextColor = Color(hoverColor).isLight() ? '#000000' : '#FFFFFF';
     const disabledTextColor = Color(disabledColor).isLight() ? '#000000' : '#FFFFFF';
 
     return {
