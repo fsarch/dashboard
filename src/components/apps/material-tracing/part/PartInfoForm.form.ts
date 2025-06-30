@@ -31,7 +31,7 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "partTypeId": form.partTypeId, "amount": $number(form.amount) }',
+      value: '{ "name": form.name, "partTypeId": form.partTypeId, "amount": $number(form.amount), "externalId": form.externalId }',
     },
   },
   dataSources: {},
