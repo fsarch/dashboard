@@ -20,6 +20,7 @@ import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import PartShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
+import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -81,6 +82,10 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
           partId={part.id}
         />
       </Section>
+      <Actions
+        type="part"
+        basePath={`/v1/parts/${part.id}`}
+      />
       <PartRemove
         partId={part.id}
         homeUrl={await getServiceLocalUrl('/part')}
