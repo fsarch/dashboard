@@ -9,6 +9,7 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
     id: 'materialTypeId',
     type: 'select',
     label: 'Material Type',
+    enableSearch: true,
     data: {
       $type: 'datasource',
       value: 'materialTypes',
