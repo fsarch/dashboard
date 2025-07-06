@@ -9,6 +9,7 @@ import QrCodeDownloadButton from "@/components/universals/qr-code/QRCodeDownload
 import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -46,6 +47,10 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ shor
           Show
         </QrCodeDownloadButton>
       </Section>
+      <Actions
+        type="short_code"
+        basePath={`/v1/short-codes/${shortCode.code}`}
+      />
     </DefaultPage>
   );
 }

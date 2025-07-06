@@ -4,7 +4,7 @@ import ActionButton from "@/app/(with-header)/material-tracing/[serviceId]/_comp
 import Section from "@/components/universals/section/Section";
 
 type ActionsProps = {
-  type: 'part';
+  type: 'part' | 'manufacturer' | 'material' | 'material_type' | 'part_type' | 'short_code';
   basePath: string;
 };
 

@@ -5,6 +5,7 @@ import MaterialTypeRemove
 import { materialTypeService } from "@/services/material-tracing/material-type.service";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -16,6 +17,10 @@ export default async function Home({ params }: { params: Promise<{ materialTypeI
       <Section name="Information">
         Name: {materialType.name}
       </Section>
+      <Actions
+        type="material_type"
+        basePath={`/v1/material-types/${materialType.id}`}
+      />
       <MaterialTypeRemove
         materialTypeId={materialType.id}
         homeUrl={await getServiceLocalUrl('/material-type')}

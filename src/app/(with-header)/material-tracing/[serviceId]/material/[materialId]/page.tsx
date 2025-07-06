@@ -15,6 +15,7 @@ import { datetimeUtils } from "@/utils/datetime.utils";
 import MaterialShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteForm.component";
 import React from "react";
+import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -33,6 +34,10 @@ export default async function Home(props: { params: Promise<{ materialId: string
         Material: {materialType.name}<br />
         Hersteller: {manufacturer.name}<br />
       </Section>
+      <Actions
+        type="material"
+        basePath={`/v1/materials/${material.id}`}
+      />
       <Section name="Material ausbuchen">
         {material.checkoutTime ? (
           <div>

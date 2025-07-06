@@ -7,6 +7,7 @@ import PartTypeInformation
   from "@/app/(with-header)/material-tracing/[serviceId]/part-type/[partTypeId]/_components/information/PartTypeInformation.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -19,6 +20,10 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
   return (
     <DefaultPage>
       <PartTypeInformation partType={partType} />
+      <Actions
+        type="part_type"
+        basePath={`/v1/part-types/${partType.id}`}
+      />
       <PartTypeRemove
         partTypeId={partType.id}
         homeUrl={await getServiceLocalUrl('/part-type')}

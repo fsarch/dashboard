@@ -5,6 +5,7 @@ import ManufacturerRemove
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -16,6 +17,10 @@ export default async function Home({ params }: { params: Promise<{ manufacturerI
       <Section name="Information">
         Name: {manufacturer.name}
       </Section>
+      <Actions
+        type="manufacturer"
+        basePath={`/v1/manufacturers/${manufacturer.id}`}
+      />
       <ManufacturerRemove
         manufacturerId={manufacturer.id}
         homeUrl={await getServiceLocalUrl('/manufacturer')}
