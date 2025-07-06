@@ -1,11 +1,19 @@
 function getUserMediaStream(): Promise<MediaStream> {
+  const constraints = {
+    video: {
+      facingMode: 'environment',
+    },
+    audio: false,
+  };
+
+  if (navigator.mediaDevices?.getUserMedia) {
+    return navigator.mediaDevices.getUserMedia(constraints);
+  }
+
   return new Promise<MediaStream>((resolve, reject) => {
-    navigator.getUserMedia({
-      video: {
-        facingMode: 'environment',
-      },
-      audio: false,
-    }, (stream) => {
+    const getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
+
+    getUserMedia(constraints, (stream) => {
       resolve(stream);
     }, (error) => {
       // An error occurred

@@ -3,6 +3,8 @@ import { TDialogComponent } from "@/components/universals/dialog/dialog.type";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import Dialog from "@/components/universals/dialog/dialog.component";
 import { codeScannerDialogUtils } from "@/components/universals/dialogs/code-scanner/CodeScannerDialog.utils";
+import { BrowserDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/BrowserDecoder";
+import { QuaggaDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/QuaggaDecoder";
 
 type CodeScannerDialogType = TDialogComponent<{ enableQRCode: boolean }, { value: string }>;
 
@@ -13,14 +15,6 @@ const CodeScannerDialog: CodeScannerDialogType = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    // check compatibility
-    if (!("BarcodeDetector" in globalThis)) {
-      console.log("Barcode Detector is not supported by this browser.");
-      return;
-    }
-
-    console.log("Barcode Detector supported!");
-
     const canvas = canvasRef.current;
     if (!canvas) {
       return;
@@ -38,9 +32,9 @@ const CodeScannerDialog: CodeScannerDialogType = ({
         abortSignal: abortController.signal,
       });
 
-      const barcodeDetector = new (window as any).BarcodeDetector({
-        formats: ["qr_code"],
-      });
+      const barcodeDetector = await BrowserDecoder.IsSupported()
+        ? new BrowserDecoder()
+        : new QuaggaDecoder();
 
       const draw = async () => {
         if (abortController.signal.aborted) {
@@ -59,13 +53,13 @@ const CodeScannerDialog: CodeScannerDialogType = ({
           streamResponse.video.videoHeight,
         );
 
-        const results = await barcodeDetector.detect(canvas) as Array<{ rawValue: string; }>;
+        const response = await barcodeDetector.analyse(canvas);
 
-        if (!results.length) {
+        if (!response.results.length) {
           return;
         }
 
-        const { rawValue } = results[0];
+        const { rawValue } = response.results[0];
 
         abortController.abort();
 
