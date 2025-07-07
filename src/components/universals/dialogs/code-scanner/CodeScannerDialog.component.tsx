@@ -5,6 +5,7 @@ import Dialog from "@/components/universals/dialog/dialog.component";
 import { codeScannerDialogUtils } from "@/components/universals/dialogs/code-scanner/CodeScannerDialog.utils";
 import { BrowserDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/BrowserDecoder";
 import { QuaggaDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/QuaggaDecoder";
+import { QrDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/QrDecoder";
 
 type CodeScannerDialogType = TDialogComponent<{ enableQRCode: boolean }, { value: string }>;
 
@@ -34,7 +35,7 @@ const CodeScannerDialog: CodeScannerDialogType = ({
 
       const barcodeDetector = await BrowserDecoder.IsSupported()
         ? new BrowserDecoder()
-        : new QuaggaDecoder();
+        : new QrDecoder();
 
       const draw = async () => {
         if (abortController.signal.aborted) {

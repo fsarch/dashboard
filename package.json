@@ -34,6 +34,7 @@
     "next-mdx-remote": "^5.0.0",
     "path-to-regexp": "^8.2.0",
     "pino": "^9.7.0",
+    "qr-scanner": "^1.4.2",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

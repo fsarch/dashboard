@@ -14,7 +14,7 @@ export class BrowserDecoder implements IDecoder {
 
   constructor() {
     this.barcodeDecoder = new (window as any).BarcodeDetector({
-      formats: ['ean_13', 'ean_8'],
+      formats: ['qr_code'],
     });
   }
 
