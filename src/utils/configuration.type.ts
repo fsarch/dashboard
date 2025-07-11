@@ -7,6 +7,7 @@ export enum EServiceType {
   CUSTOM_APP = 'custom-app',
   PDF_RENDER = 'pdf-render',
   FUNCTION = 'function',
+  PRINTER = 'printer',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -67,6 +68,13 @@ export type TCustomAppConfiguration = {
   path: string;
 };
 
+export type TPrinterConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.PRINTER,
+  url: string;
+}
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -74,7 +82,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TImageServiceConfiguration
   | TMaterialTracingConfiguration
   | TPdfRenderConfiguration
-  | TFunctionConfiguration;
+  | TFunctionConfiguration
+  | TPrinterConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

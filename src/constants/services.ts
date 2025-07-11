@@ -158,4 +158,8 @@ export const SERVICES: Record<EServiceType, {
       icon: 'layer-group',
     }],
   },
+  [EServiceType.PRINTER]: {
+    name: 'Printer Server',
+    basePath: '/printer',
+  },
 };
