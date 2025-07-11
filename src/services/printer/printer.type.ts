@@ -6,7 +6,40 @@ export type PrinterDto = {
   creationTime: Date;
 };
 
-export interface PrintJobDto {
+export type AlignmentReceiptDataDto = {
+  $type: 'alignment';
+  alignment: 'left' | 'center' | 'right';
+  children: ReceiptDataDto[];
+};
+
+export type TextFormatDto = {
+  font?: 'a' | 'b' | 'c';
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean | 2;
+};
+
+export type TextReceiptDataDto = {
+  $type: 'text';
+  value: string;
+  format?: TextFormatDto;
+};
+
+export type CutReceiptDataDto = {
+  $type: 'cut';
+};
+
+export type NewlineReceiptDataDto = {
+  $type: 'newline';
+};
+
+export type ReceiptDataDto =
+  | AlignmentReceiptDataDto
+  | TextReceiptDataDto
+  | CutReceiptDataDto
+  | NewlineReceiptDataDto;
+
+export type PrintJobDto = {
   id: string;
   printerId: string;
   printJobTypeId: string;
@@ -16,4 +49,5 @@ export interface PrintJobDto {
   printTime: string | null;
   creationTime: Date;
   receiptData?: any;
-}
+  data?: Array<ReceiptDataDto>;
+};
