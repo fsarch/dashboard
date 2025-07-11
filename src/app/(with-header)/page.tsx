@@ -26,6 +26,9 @@ const apps = [{
 }, {
   name: 'Functions',
   path: '/function',
+}, {
+  name: 'Printer',
+  path: '/printer',
 }]
 
 export default async function Home() {
