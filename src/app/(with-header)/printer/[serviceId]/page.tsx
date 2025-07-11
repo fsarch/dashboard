@@ -5,6 +5,7 @@ import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import { printerService } from "@/services/printer/printer.service";
 import Section from "@/components/universals/section/Section";
+import { PrinterCreateForm } from "@/components/apps/printer/PrinterCreateForm.component";
 
 export default async function Home() {
   const printers = await printerService.listPrinters();
@@ -24,6 +25,9 @@ export default async function Home() {
             </Link>
           ))}
         </List>
+      </Section>
+      <Section name="Create Printer">
+        <PrinterCreateForm/>
       </Section>
     </DefaultPage>
   );
