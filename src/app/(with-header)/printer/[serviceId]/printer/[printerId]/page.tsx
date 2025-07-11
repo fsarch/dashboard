@@ -2,6 +2,7 @@ import { printerService } from "@/services/printer/printer.service";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Section from "@/components/universals/section/Section";
 import Link from "next/link";
+import Button from "@/components/universals/forms/Button";
 
 export default async function Home({ params }: { params: Promise<{ printerId: string, serviceId: string }> }) {
   const { printerId, serviceId } = await params;
@@ -12,7 +13,9 @@ export default async function Home({ params }: { params: Promise<{ printerId: st
       <Section name="Printer Details">
         <p>{printer.name}</p>
         <Link href={`/printer/${serviceId}/printer/${printerId}/jobs`}>
-          View Jobs
+          <Button type="button">
+            Jobs anzeigen
+          </Button>
         </Link>
       </Section>
     </DefaultPage>
