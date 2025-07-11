@@ -5,9 +5,3 @@ export type PrinterDto = {
   externalId: string | null;
   creationTime: Date;
 };
-
-export type CreatePrinterDto = {
-  printerTypeId: string;
-  name: string;
-  externalId?: string;
-};
