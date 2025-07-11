@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import { SERVICES } from "@/constants/services";
 
 export default async function Home() {
-  const foundService = await getServiceConfiguration(EServiceType.PRINTER_SERVER);
+  const foundService = await getServiceConfiguration(EServiceType.PRINTER);
 
   if (foundService) {
-    return redirect(`${SERVICES[EServiceType.PRINTER_SERVER].basePath}/${foundService.id}`)
+    return redirect(`${SERVICES[EServiceType.PRINTER].basePath}/${foundService.id}`)
   }
 
   return (
