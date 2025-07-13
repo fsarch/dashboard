@@ -50,10 +50,17 @@ namespace FsArchApiCatalog {
     createReceiptJob(printerId: string, data: ReceiptDataDto, options?: { externalId?: string }): Promise<PrintJobDto>;
   }
 
-  declare interface PrinterServerApi {
+  interface PrinterPrintersApi {
     /**
-     * Manage print jobs
+     * Manage print jobs of a specific printer
      */
     readonly jobs: PrinterJobsApi;
+  }
+
+  declare interface PrinterServerApi {
+    /**
+     * Manage printers
+     */
+    readonly printers: PrinterPrintersApi;
   }
 }
