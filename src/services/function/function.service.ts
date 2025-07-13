@@ -1,5 +1,6 @@
 import { fetchService } from "@/utils/fetchService";
 import { FunctionDto, FunctionVersionDto, WorkerMetaDto } from "@/services/function/function.type";
+import { ReceiptDataDto, PrintJobDto } from "@/services/printer/printer.type";
 
 const listFunctions = async (): Promise<Array<FunctionDto>> => {
   const functionsResponse = await fetchService('/v1/functions');
@@ -46,10 +47,31 @@ const publishFunctionCode = async (functionId: string): Promise<void> => {
   return functionVersions;
 };
 
+const createReceiptJob = async (
+  printerId: string, 
+  data: ReceiptDataDto, 
+  options?: { externalId?: string }
+): Promise<PrintJobDto> => {
+  const createJobResponse = await fetchService(`/v1/printers/${printerId}/jobs`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data,
+      externalId: options?.externalId || null,
+    }),
+  });
+  const job = await createJobResponse.json();
+
+  return job;
+};
+
 export const functionService = {
   listFunctions,
   getFunctionVersions,
   setFunctionVersionCode,
   publishFunctionCode,
   getWorkerMeta,
+  createReceiptJob,
 };
