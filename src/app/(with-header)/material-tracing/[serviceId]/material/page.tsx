@@ -15,7 +15,10 @@ export default async function Home() {
 
   return (
     <DefaultPage>
-      <Section name="Materials">
+      <Section name="Material erstellen">
+        <MaterialCreateForm/>
+      </Section>
+      <Section name="Materialien">
         <List>
           {materials.map(async (material) => (
             <Link href={await getServiceLocalUrl(`/material/${material.id}`)} key={material.id}>
@@ -25,9 +28,6 @@ export default async function Home() {
             </Link>
           ))}
         </List>
-      </Section>
-      <Section name="Material erstellen">
-        <MaterialCreateForm/>
       </Section>
     </DefaultPage>
   );

@@ -18,6 +18,10 @@ export default async function Home() {
 
   return (
     <DefaultPage>
+      <Section name="Short Code erstellen">
+        <ShortCodeCreateForm/>
+      </Section>
+
       <Section name="Exporte">
         <Link href={await getServiceLocalUrl('/short-code/batch-export')}>
           <Button type="button">
@@ -42,9 +46,6 @@ export default async function Home() {
             </Link>
           ))}
         </List>
-      </Section>
-      <Section name="Short Code erstellen">
-        <ShortCodeCreateForm/>
       </Section>
     </DefaultPage>
   );

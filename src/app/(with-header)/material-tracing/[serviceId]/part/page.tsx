@@ -16,7 +16,12 @@ export default async function Home() {
 
   return (
     <DefaultPage>
-      <Section name="Parts">
+      <Section name="Bauteil erstellen">
+        <GeneratedForm
+          definition={PART_CREATE_FORM}
+        />
+      </Section>
+      <Section name="Bauteile">
         <List>
           {parts.map(async (part) => (
             <Link
@@ -29,11 +34,6 @@ export default async function Home() {
             </Link>
           ))}
         </List>
-      </Section>
-      <Section name="Part erstellen">
-        <GeneratedForm
-          definition={PART_CREATE_FORM}
-        />
       </Section>
     </DefaultPage>
   );

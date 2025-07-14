@@ -17,7 +17,10 @@ export default async function Home() {
 
   return (
     <DefaultPage>
-      <Section name="Manufacturers">
+      <Section name="Hersteller erstellen">
+        <ManufacturerCreateForm />
+      </Section>
+      <Section name="Hersteller">
         <List>
           {manufacturers.map(async (manufacturer: any) => (
             <Link
@@ -30,9 +33,6 @@ export default async function Home() {
             </Link>
           ))}
         </List>
-      </Section>
-      <Section name="Manufacturers erstellen">
-        <ManufacturerCreateForm />
       </Section>
     </DefaultPage>
   );
