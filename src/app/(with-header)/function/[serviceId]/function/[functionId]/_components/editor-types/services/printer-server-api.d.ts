@@ -47,7 +47,7 @@ namespace FsArchApiCatalog {
      * @param data The receipt data to print
      * @param options Optional parameters including external ID for tracking
      */
-    createReceiptJob(printerId: string, data: ReceiptDataDto, options?: { externalId?: string }): Promise<PrintJobDto>;
+    createReceiptJob(printerId: string, data: Array<ReceiptDataDto>, options?: { externalId?: string }): Promise<PrintJobDto>;
   }
 
   interface PrinterPrintersApi {
