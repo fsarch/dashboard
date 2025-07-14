@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent, useCallback, useId } from 'react';
 import {
   TGeneratedFormImageServerUploadInput,
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import { useField } from "formik";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 
 type GeneratedFormImageServerUploadInputProps = {
   input: TGeneratedFormImageServerUploadInput;
@@ -28,6 +29,8 @@ const toBase64 = (file: File) => new Promise((resolve, reject) => {
 const GeneratedFormImageServerUploadInput: React.FunctionComponent<GeneratedFormImageServerUploadInputProps> = ({
   input,
 }) => {
+  const id = useId();
+
   const [, , helper] = useField(input.id);
 
   const handleFileChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,17 +50,23 @@ const GeneratedFormImageServerUploadInput: React.FunctionComponent<GeneratedForm
   }, [helper]);
 
   return (
-    <label
-      key={input.id}
+    <FieldsetRow
+      label={(
+        <label
+          htmlFor={id}
+        >
+          {input.label}
+        </label>
+      )}
     >
-      {input.label}
       <input
         type="file"
+        id={id}
         onChange={handleFileChange}
         accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
         capture={input.preferCapture}
       />
-    </label>
+    </FieldsetRow>
   );
 };
 
