@@ -8,6 +8,8 @@ type InputProps = {
   type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number';
   disabled?: boolean;
   required?: boolean;
+  min?: number;
+  max?: number;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
@@ -16,6 +18,8 @@ const Input: React.FunctionComponent<InputProps> = ({
   type,
   disabled,
   required,
+  min,
+  max,
 }) => {
   return (
     <Field
@@ -25,6 +29,8 @@ const Input: React.FunctionComponent<InputProps> = ({
       name={name}
       disabled={disabled}
       required={required}
+      min={min}
+      max={max}
     />
   );
 };
