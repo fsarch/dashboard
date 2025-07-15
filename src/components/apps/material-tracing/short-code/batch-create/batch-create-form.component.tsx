@@ -22,24 +22,18 @@ const BatchCreateForm: React.FunctionComponent<BatchCreateFormProps> = ({
 
     try {
       const result = await batchCreateShortCodes(Number(values.amount));
-      
+
       if (result.success) {
         // Open the generated PDF
         const contentType = 'application/pdf';
         base64Utils.open(contentType, result.base64);
-        
+
         // Show success message with details about any failures
         let message = `Successfully created ${result.shortCodes.length} short codes!`;
         if (result.failedCount > 0) {
           message += `\n\n${result.failedCount} short codes failed to create`;
-          if (result.errors.length > 0) {
-            message += `:\n${result.errors.slice(0, 3).join('\n')}`;
-            if (result.errors.length > 3) {
-              message += `\n... and ${result.errors.length - 3} more errors`;
-            }
-          }
+          alert(message);
         }
-        alert(message);
       } else {
         alert(`Error: ${result.error}`);
       }
