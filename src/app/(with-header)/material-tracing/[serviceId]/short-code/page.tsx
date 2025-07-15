@@ -10,6 +10,8 @@ import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Button from "@/components/universals/forms/Button";
 import ShortCodeTypeBadge from "@/components/apps/material-tracing/short-code/badge/short-code-type-badge.component";
+import BatchCreateForm from "@/components/apps/material-tracing/short-code/batch-create/batch-create-form.component";
+import FormikSubmitButton from "@/components/universals/forms/FormikSubmitButton.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -20,6 +22,14 @@ export default async function Home() {
     <DefaultPage>
       <Section name="Short Code erstellen">
         <ShortCodeCreateForm/>
+      </Section>
+
+      <Section name="Batch erstellen">
+        <BatchCreateForm>
+          <FormikSubmitButton>
+            Batch erstellen
+          </FormikSubmitButton>
+        </BatchCreateForm>
       </Section>
 
       <Section name="Exporte">
