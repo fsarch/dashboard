@@ -8,6 +8,8 @@ export const batchCreateShortCodes = async (amount: number): Promise<{
   success: true;
   base64: string;
   shortCodes: TShortCode[];
+  failedCount: number;
+  errors: Array<string>;
 } | {
   success: false;
   error: string;
@@ -21,10 +23,18 @@ export const batchCreateShortCodes = async (amount: number): Promise<{
 
   try {
     // Create the short codes
-    const createdShortCodes = await shortCodeService.batchCreateShortCodes(amount);
+    const result = await shortCodeService.batchCreateShortCodes(amount);
+    
+    // If no short codes were created successfully, return an error
+    if (result.shortCodes.length === 0) {
+      return {
+        success: false,
+        error: `Failed to create any short codes. Errors: ${result.errors.join(', ')}`
+      };
+    }
     
     // Extract the codes for QR generation
-    const codes = createdShortCodes.map(shortCode => shortCode.code);
+    const codes = result.shortCodes.map(shortCode => shortCode.code);
     
     // Generate PDF with QR codes
     const response = await generateQrCode({
@@ -34,7 +44,9 @@ export const batchCreateShortCodes = async (amount: number): Promise<{
     return {
       success: true,
       base64: response.base64,
-      shortCodes: createdShortCodes,
+      shortCodes: result.shortCodes,
+      failedCount: result.failedCount,
+      errors: result.errors,
     };
   } catch (error) {
     console.error('Error creating short codes:', error);
