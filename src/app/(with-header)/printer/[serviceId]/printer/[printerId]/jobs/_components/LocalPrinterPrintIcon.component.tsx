@@ -74,6 +74,9 @@ function encodeReceiptData(data: Array<ReceiptDataDto>, encoder: ReceiptPrinterE
       case 'newline':
         encoder.newline();
         break;
+      case 'qr-code':
+        encoder.qrcode(item.value);
+        break;
       default:
         console.warn(`Unknown receipt data type`, {
           item,

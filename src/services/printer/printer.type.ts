@@ -33,11 +33,17 @@ export type NewlineReceiptDataDto = {
   $type: 'newline';
 };
 
+export type QrReceiptDataDto = {
+  $type: 'qr-code';
+  value: string;
+};
+
 export type ReceiptDataDto =
   | AlignmentReceiptDataDto
   | TextReceiptDataDto
   | CutReceiptDataDto
-  | NewlineReceiptDataDto;
+  | NewlineReceiptDataDto
+  | QrReceiptDataDto;
 
 export type PrintJobDto = {
   id: string;

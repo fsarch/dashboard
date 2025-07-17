@@ -28,7 +28,12 @@ namespace FsArchApiCatalog {
     $type: 'newline';
   };
 
-  type ReceiptDataDto = AlignmentReceiptDataDto | TextReceiptDataDto | CutReceiptDataDto | NewlineReceiptDataDto;
+  type QrReceiptDataDto = {
+    $type: 'qr-code';
+    value: string;
+  };
+
+  type ReceiptDataDto = AlignmentReceiptDataDto | TextReceiptDataDto | CutReceiptDataDto | NewlineReceiptDataDto | QrReceiptDataDto;
 
   type PrintJobDto = {
     id: string;
