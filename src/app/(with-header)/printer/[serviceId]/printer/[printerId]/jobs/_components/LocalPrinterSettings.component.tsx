@@ -21,11 +21,11 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
   const router = useRouter();
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const timeout = setInterval(() => {
       router.refresh();
     }, 10_000);
 
-    return () => clearTimeout(timeout);
+    return () => clearInterval(timeout);
   }, [router]);
 
   const handleConnectClick = useCallback(async () => {
