@@ -1,12 +1,13 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect } from 'react';
 import Section from "@/components/universals/section/Section";
 import Button from "@/components/universals/forms/Button";
 import {
   LocalPrinterProvider, TLocalPrinterContext
 } from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinter.context";
 import type WebUSBReceiptPrinterType from '@point-of-sale/webusb-receipt-printer';
+import { useRouter } from "next/navigation";
 
 type LocalPrinterSettingsProps = PropsWithChildren<{
 
@@ -16,6 +17,16 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
   children,
 }) => {
   const [printer, setPrinter] = React.useState<TLocalPrinterContext | null>(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      router.refresh();
+    }, 10_000);
+
+    return () => clearTimeout(timeout);
+  }, [router]);
 
   const handleConnectClick = useCallback(async () => {
     // @ts-ignore
