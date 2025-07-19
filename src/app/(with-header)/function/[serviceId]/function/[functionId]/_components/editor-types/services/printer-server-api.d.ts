@@ -12,6 +12,7 @@ namespace FsArchApiCatalog {
   type AlignmentReceiptDataDto = {
     $type: 'alignment';
     value: 'left' | 'center' | 'right';
+    children: Array<SimpleReceiptDataDto>;
   };
 
   type TextReceiptDataDto = {
@@ -33,7 +34,8 @@ namespace FsArchApiCatalog {
     value: string;
   };
 
-  type ReceiptDataDto = AlignmentReceiptDataDto | TextReceiptDataDto | CutReceiptDataDto | NewlineReceiptDataDto | QrReceiptDataDto;
+  type SimpleReceiptDataDto = TextReceiptDataDto | CutReceiptDataDto | NewlineReceiptDataDto | QrReceiptDataDto;
+  type ReceiptDataDto = AlignmentReceiptDataDto | SimpleReceiptDataDto;
 
   type PrintJobDto = {
     id: string;
