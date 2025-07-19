@@ -6,7 +6,11 @@ namespace FsArchApiCatalog {
     bold?: boolean;
     italic?: boolean;
     underline?: boolean;
-    fontSize?: number;
+    size?: number;
+  };
+
+  type LineFormatDto = {
+    font?: 'a' | 'b' | 'c';
   };
 
   type AlignmentReceiptDataDto = {
@@ -19,6 +23,12 @@ namespace FsArchApiCatalog {
     $type: 'text';
     value: string;
     format?: TextFormatDto;
+  };
+
+  type LineReceiptDataDto = {
+    $type: 'line';
+    children: Array<SimpleReceiptDataDto>;
+    format?: LineFormatDto;
   };
 
   type CutReceiptDataDto = {
@@ -35,7 +45,7 @@ namespace FsArchApiCatalog {
   };
 
   type SimpleReceiptDataDto = TextReceiptDataDto | CutReceiptDataDto | NewlineReceiptDataDto | QrReceiptDataDto;
-  type ReceiptDataDto = AlignmentReceiptDataDto | SimpleReceiptDataDto;
+  type ReceiptDataDto = AlignmentReceiptDataDto | SimpleReceiptDataDto | LineReceiptDataDto;
 
   type PrintJobDto = {
     id: string;
