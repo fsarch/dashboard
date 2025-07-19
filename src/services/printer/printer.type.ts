@@ -13,16 +13,26 @@ export type AlignmentReceiptDataDto = {
 };
 
 export type TextFormatDto = {
-  font?: 'a' | 'b' | 'c';
   bold?: boolean;
   italic?: boolean;
   underline?: boolean | 2;
+  size?: number;
+};
+
+export type LineFormatDto = {
+  font?: 'a' | 'b' | 'c';
 };
 
 export type TextReceiptDataDto = {
   $type: 'text';
   value: string;
   format?: TextFormatDto;
+};
+
+export type LineReceiptDataDto = {
+  $type: 'line';
+  children: Array<ReceiptDataDto>;
+  format?: LineFormatDto;
 };
 
 export type CutReceiptDataDto = {
@@ -43,6 +53,7 @@ export type ReceiptDataDto =
   | TextReceiptDataDto
   | CutReceiptDataDto
   | NewlineReceiptDataDto
+  | LineReceiptDataDto
   | QrReceiptDataDto;
 
 export type PrintJobDto = {

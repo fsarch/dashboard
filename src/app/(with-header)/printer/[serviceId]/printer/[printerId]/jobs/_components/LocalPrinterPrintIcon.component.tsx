@@ -22,8 +22,8 @@ function encodeReceiptTextData(
   encoder: ReceiptPrinterEncoder,
 ) {
   // SET format styles
-  if (item.format?.font) {
-    encoder.font(item.format.font)
+  if (item.format?.size) {
+    encoder.size(item.format.size);
   }
 
   if (item.format?.bold) {
@@ -54,6 +54,24 @@ function encodeReceiptTextData(
     encoder.bold(false);
   }
 
+  if (item.format?.size) {
+    encoder.size(1);
+  }
+}
+
+function encodeReceiptLineData(
+  item: ReceiptDataDto & { $type: 'line' },
+  encoder: ReceiptPrinterEncoder,
+) {
+  // SET format styles
+  if (item.format?.font) {
+    encoder.font(item.format.font);
+  }
+
+  encodeReceiptData(item.children, encoder);
+
+  encoder.newline();
+
   if (item.format?.font) {
     encoder.font(DEFAULT_FONT);
   }
@@ -72,6 +90,9 @@ function encodeReceiptData(data: Array<ReceiptDataDto>, encoder: ReceiptPrinterE
         break;
       case 'text':
         encodeReceiptTextData(item, encoder);
+        break;
+      case 'line':
+        encodeReceiptLineData(item, encoder);
         break;
       case 'cut':
         encoder.cut();
