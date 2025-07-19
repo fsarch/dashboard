@@ -7,6 +7,9 @@ import {
 } from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinter.context";
 import ReceiptPrinterEncoder, { PrinterLanguage } from '@point-of-sale/receipt-printer-encoder';
 import { PrintJobDto, ReceiptDataDto } from "@/services/printer/printer.type";
+import {
+  updateCollectionTime, updatePrintTime
+} from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinterPrintIcon.server-action";
 
 type LocalPrinterPrintIconProps = {
   job: PrintJobDto;
@@ -102,6 +105,8 @@ const LocalPrinterPrintIcon: React.FunctionComponent<LocalPrinterPrintIconProps>
       return;
     }
 
+    await updateCollectionTime(job.printerId, job.id);
+
     const { device, printer } = localPrinter;
 
     console.log('printer.language', printer, device);
@@ -117,6 +122,8 @@ const LocalPrinterPrintIcon: React.FunctionComponent<LocalPrinterPrintIconProps>
     const data = encoder.encode();
 
     await printer.print(data as any);
+
+    await updatePrintTime(job.printerId, job.id);
   }, [localPrinter, job]);
 
   if (!localPrinter) {

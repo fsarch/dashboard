@@ -12,7 +12,7 @@ import LocalPrinterPrintIcon
 
 export default async function JobsPage({ params }: { params: Promise<{ printerId: string }> }) {
   const printerId = (await params).printerId;
-  const jobs = await printerService.getJobs(printerId);
+  const jobs = await printerService.getNonPrinterJobs(printerId);
 
   return (
     <DefaultPage>
