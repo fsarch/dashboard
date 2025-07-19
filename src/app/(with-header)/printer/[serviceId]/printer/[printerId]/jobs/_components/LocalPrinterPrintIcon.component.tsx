@@ -64,6 +64,8 @@ function encodeReceiptData(data: Array<ReceiptDataDto>, encoder: ReceiptPrinterE
         item.children.forEach((child) => {
           encodeReceiptData([child], encoder);
         });
+        encoder.newline(); // Add a newline after processing children
+        encoder.align('left'); // Reset alignment to left after processing children
         break;
       case 'text':
         encodeReceiptTextData(item, encoder);
