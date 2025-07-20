@@ -12,5 +12,11 @@ export type TActionResponse = {
       base64: string;
       mimeType: string;
     };
+  } | {
+    $type: 'dialog';
+    value: {
+      $type: 'confirm';
+      text: string;
+    };
   }>;
 };

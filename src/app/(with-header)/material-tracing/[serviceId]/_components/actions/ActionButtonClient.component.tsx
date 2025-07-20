@@ -5,6 +5,7 @@ import { TActionResponse } from "@/services/material-tracing/action.type";
 import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
 import BinaryDialog from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/dialog/Binary.dialog";
 import ActionButton from "@/components/universals/forms/button/ActionButton";
+import ConfirmDialogComponent from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
 
 type ActionButtonClientProps = {
   onClick: () => Promise<TActionResponse>;
@@ -35,6 +36,18 @@ const ActionButtonClient: React.FunctionComponent<ActionButtonClientProps> = ({
 
           await dialogRes.result;
         }
+      } else if (action.$type === 'dialog') {
+        const value = action.value;
+
+        if (value.$type === 'confirm') {
+          const dialogRes = openDialog(ConfirmDialogComponent, {
+            text: value.text,
+          });
+
+          await dialogRes.result;
+        }
+      } else {
+        console.info('unknown action type', action);
       }
     }
 
