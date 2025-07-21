@@ -5,9 +5,9 @@ import Dialog from "@/components/universals/dialog/dialog.component";
 import Button from "@/components/universals/forms/Button";
 import styles from './ConfirmDialog.module.scss';
 
-type CodeScannerDialogType = TDialogComponent<{ text: string; successButtonText?: string; successButtonColor?: string; }, void>;
+type ConfirmDialogType = TDialogComponent<{ text: string; successButtonText?: string; successButtonColor?: string; }, void>;
 
-const CodeScannerDialog: CodeScannerDialogType = ({
+const ConfirmDialog: ConfirmDialogType = ({
   value,
   onResult,
 }) => {
@@ -36,4 +36,4 @@ const CodeScannerDialog: CodeScannerDialogType = ({
   );
 };
 
-export default CodeScannerDialog;
+export default ConfirmDialog;
