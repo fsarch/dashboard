@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import Header from "@/components/navigation/Header";
 import { getCurrentServiceBaseConfiguration } from "@/utils/configuration.utils";
-import { NavigationItem, SERVICES } from "@/constants/services";
+import { NavigationItem, APPS } from "@/constants/apps";
 import { AutoNavigation } from "@/components/universals/page/AutoNavigation.component";
 import styles from './DefaultPage.module.scss';
 import { headers } from "next/headers";
@@ -30,7 +30,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
     return children;
   }
 
-  const config = SERVICES[baseConfiguration.type];
+  const config = APPS[baseConfiguration.type];
 
   let navigations: Array<NavigationItem> | undefined = config.navigation;
   let matchedRouteParams: Partial<Record<string, string | Array<string>>> = {};

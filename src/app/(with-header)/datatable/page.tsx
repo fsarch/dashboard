@@ -1,13 +1,13 @@
 import { getServiceConfiguration } from "@/utils/configuration.utils";
 import { EServiceType } from "@/utils/configuration.type";
 import { redirect } from "next/navigation";
-import { SERVICES } from "@/constants/services";
+import { APPS } from "@/constants/apps";
 
 export default async function Home() {
   const foundService = await getServiceConfiguration(EServiceType.DATATABLE);
 
   if (foundService) {
-    return redirect(`${SERVICES[EServiceType.DATATABLE].basePath}/${foundService.id}`)
+    return redirect(`${APPS[EServiceType.DATATABLE].basePath}/${foundService.id}`)
   }
 
   return (

@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 import { getCurrentServiceBaseConfiguration } from "@/utils/configuration.utils";
-import { SERVICES } from "@/constants/services";
+import { APPS } from "@/constants/apps";
 
 export function createAutomaticMetadata(): () => Promise<Metadata> {
   return async () => {
     const serviceConfiguration = await getCurrentServiceBaseConfiguration();
-    const serviceTypeName = SERVICES[serviceConfiguration.type].name
+    const serviceTypeName = APPS[serviceConfiguration.type].name
 
     const parts = [];
     parts.push(serviceTypeName);

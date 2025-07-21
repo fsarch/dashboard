@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SERVICES } from "@/constants/services";
+import { APPS } from "@/constants/apps";
 
-const basePaths = Object.values(SERVICES).map((s) => s.basePath.substring(1));
+const basePaths = Object.values(APPS).map((s) => s.basePath.substring(1));
 const SERVICE_ID_REGEX = new RegExp(`^\\/(${basePaths.join('|')})\\/([^\\/]*)(\\/.*)?`);
 
 export async function middleware(request: NextRequest) {

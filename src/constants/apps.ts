@@ -10,7 +10,7 @@ export type NavigationItem = {
   icon?: TIcon;
 };
 
-export const SERVICES: Record<EServiceType, {
+export const APPS: Record<EServiceType, {
   name: string;
   basePath: string;
   navigation?: Array<NavigationItem>;

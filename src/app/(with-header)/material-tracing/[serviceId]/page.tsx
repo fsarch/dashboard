@@ -3,7 +3,7 @@ import ShortCodeScannerBanner
   from "@/app/(with-header)/material-tracing/[serviceId]/_components/ShortCodeScannerBanner.component";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import NavigationTileList from "@/components/universals/page/navigation/tile-list/NavigationTileList.component";
-import { SERVICES } from "@/constants/services";
+import { APPS } from "@/constants/apps";
 import { EServiceType } from "@/utils/configuration.type";
 
 export const generateMetadata = createAutomaticMetadata();
@@ -13,7 +13,7 @@ export default async function Home() {
     <DefaultPage>
       <ShortCodeScannerBanner/>
       <NavigationTileList
-        navigation={SERVICES[EServiceType.MATERIAL_TRACING].navigation ?? []}
+        navigation={APPS[EServiceType.MATERIAL_TRACING].navigation ?? []}
       />
     </DefaultPage>
   );

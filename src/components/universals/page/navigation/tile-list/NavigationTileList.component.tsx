@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationItem } from "@/constants/services";
+import { NavigationItem } from "@/constants/apps";
 import Link from "next/link";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import TileListItem from "@/components/universals/tile-list/TileListItem";
