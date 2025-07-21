@@ -7,7 +7,7 @@ import React from "react";
 import {
   PartMaterialShortCodeConnectForm
 } from "@/components/apps/material-tracing/short-code/part/PartMaterialShortCodeConnectForm.component";
-import PartMaterialList from "@/components/apps/material-tracing/short-code/part/PartMaterialList.component";
+import PartMaterialList from "@/components/apps/material-tracing/short-code/part/part-material/PartMaterialList.component";
 import {
   PartPartShortCodeConnectForm
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component";

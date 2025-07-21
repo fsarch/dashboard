@@ -51,6 +51,15 @@ const getOrCreateMaterial = async (partId: string, materialId: string): Promise<
   await partMaterialResponse.json();
 };
 
+const deletePartMaterial = async (partId: string, materialId: string): Promise<void> => {
+  const partMaterialResponse = await fetchService(`/v1/parts/${partId}/materials/${materialId}`, {
+    method: 'DELETE',
+  });
+  if (!partMaterialResponse.ok) {
+    throw new Error('could not delete part material');
+  }
+};
+
 const listMaterials = async (partId: string): Promise<Array<TMaterial>> => {
   const materialsResponse = await fetchService(`/v1/parts/${partId}/materials`);
   const materials = await materialsResponse.json();
@@ -93,6 +102,7 @@ export const partService = {
   listShortCodes,
   listPartsByShortCode,
   getOrCreateMaterial,
+  deletePartMaterial,
   listMaterials,
   getOrCreatePartPart,
   listPartParts,
