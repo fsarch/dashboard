@@ -6,7 +6,7 @@ A new app has to be registered in the src/apps/constants file.
 
 Each app has its own directory inside the src/apps/(with-header) directory, which contains the app's specific routes.
 
-Inside the src/apps/(with-headeer)/:appName directory, there is an additional directory with the [serviceId]. A page.tsx file inside the apps root directory handles redirection, when there is only one registered backend for the app.
+Inside the src/apps/(with-header)/:appName directory, there is an additional directory with the [serviceId]. A page.tsx file inside the apps root directory handles redirection, when there is only one registered backend for the app.
 
 Each app has its own directory inside the src/components/apps directory, which contains the app's specific components that could be reused inside the same app.
 
