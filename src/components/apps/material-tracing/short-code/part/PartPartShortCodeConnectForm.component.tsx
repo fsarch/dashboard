@@ -66,7 +66,7 @@ export const PartPartShortCodeConnectForm: React.FunctionComponent<PartPartShort
           </FieldsetRow>
         </Fieldset>
         <Button type="submit">
-          Erstellen
+          Verbinden
         </Button>
       </Form>
     </Formik>

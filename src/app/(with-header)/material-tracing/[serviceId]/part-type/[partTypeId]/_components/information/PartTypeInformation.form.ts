@@ -12,7 +12,7 @@ export const PART_TYPE_UPDATE_FORM: TGeneratedFormDefinition = {
   }, {
     id: 'hint',
     type: 'text',
-    label: 'Hint',
+    label: 'Hinweis',
   }],
   initialValues: {
     $type: 'jsonata',

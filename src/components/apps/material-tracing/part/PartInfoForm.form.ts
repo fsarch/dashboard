@@ -21,11 +21,7 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   }, {
     id: 'hint',
     type: 'text',
-    label: 'Hint',
-  }, {
-    id: 'checkoutTime',
-    type: 'text',
-    label: 'Checkout Time',
+    label: 'Hinweis',
   }],
   initialValues: {
     $type: 'jsonata',
@@ -43,4 +39,7 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     },
   },
   dataSources: {},
+  buttons: {
+    submitButtonText: 'Aktualisieren',
+  },
 };

@@ -8,7 +8,7 @@ export const MANUFACTURER_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   }, {
     id: 'hint',
     type: 'text',
-    label: 'Hint',
+    label: 'Hinweis',
   }, {
     id: 'externalId',
     type: 'text',
@@ -26,7 +26,7 @@ export const MANUFACTURER_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "hint": form.hint }',
+      value: '{ "name": form.name, "hint": form.hint, "externalId": form.externalId }',
     },
   },
   buttons: {

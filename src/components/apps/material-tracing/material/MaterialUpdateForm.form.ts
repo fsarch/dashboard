@@ -8,7 +8,7 @@ export const MATERIAL_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   }, {
     id: 'hint',
     type: 'text',
-    label: 'Hint',
+    label: 'Hinweis',
   }, {
     id: 'externalId',
     type: 'text',

@@ -4,7 +4,7 @@ export const SHORT_CODE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   inputs: [{
     id: 'hint',
     type: 'text',
-    label: 'Hint',
+    label: 'Hinweis',
   }],
   initialValues: {
     $type: 'jsonata',
