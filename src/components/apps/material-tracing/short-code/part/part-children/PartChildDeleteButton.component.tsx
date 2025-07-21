@@ -23,8 +23,6 @@ const PartChildDeleteButton: React.FunctionComponent<PartChildDeleteButtonProps>
   const router = useRouter();
 
   const handleClick = useCallback(async (event: MouseEvent<HTMLButtonElement>) => {
-    console.log('Delete child part', partId, childPartId);
-
     const dialog = openDialog(ConfirmDialog, {
       text: 'Möchten Sie dieses Bauteil wirklich entfernen?',
     });
