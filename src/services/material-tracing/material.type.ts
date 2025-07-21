@@ -5,4 +5,5 @@ export type TMaterial = {
   imageRef?: string;
   externalId?: string;
   checkoutTime?: string;
+  hint?: string;
 };

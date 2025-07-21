@@ -4,4 +4,6 @@ export type TPart = {
   partTypeId: string;
   externalId?: string;
   amount: number;
+  hint?: string;
+  checkoutTime?: string;
 };

@@ -7,6 +7,8 @@ export type TShortCode = {
   id: string;
   code: string;
   shortCodeTypeId: EShortCodeType;
+  hint?: string;
+  externalId?: string;
 };
 
 export type TShortCodeCreate = {

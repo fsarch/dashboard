@@ -10,6 +10,7 @@ import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
+import ShortCodeUpdateForm from "@/components/apps/material-tracing/short-code/ShortCodeUpdateForm.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -20,6 +21,15 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ shor
   return (
     <DefaultPage>
       <h1>{shortCode.code}</h1>
+      
+      <Section name="Informationen">
+        <ShortCodeUpdateForm
+          args={{
+            shortCode
+          }}
+        />
+      </Section>
+      
       {shortCode.shortCodeTypeId === EShortCodeType.MATERIAL ? (
         <MaterialShortCodeInfoComponent
           code={shortCodeCode}
