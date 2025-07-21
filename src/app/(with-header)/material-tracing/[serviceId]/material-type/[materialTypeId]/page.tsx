@@ -6,6 +6,7 @@ import { materialTypeService } from "@/services/material-tracing/material-type.s
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
+import MaterialTypeUpdateForm from "@/components/apps/material-tracing/material-type/MaterialTypeUpdateForm.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -14,8 +15,12 @@ export default async function Home({ params }: { params: Promise<{ materialTypeI
 
   return (
     <DefaultPage>
-      <Section name="Information">
-        Name: {materialType.name}
+      <Section name="Informationen">
+        <MaterialTypeUpdateForm
+          args={{
+            materialType
+          }}
+        />
       </Section>
       <Actions
         type="material_type"

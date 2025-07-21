@@ -18,6 +18,10 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     id: 'externalId',
     type: 'text',
     label: 'External Id',
+  }, {
+    id: 'hint',
+    type: 'text',
+    label: 'Hinweis',
   }],
   initialValues: {
     $type: 'jsonata',
@@ -31,8 +35,11 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "partTypeId": form.partTypeId, "amount": $number(form.amount), "externalId": form.externalId }',
+      value: '{ "name": form.name, "amount": $number(form.amount), "externalId": form.externalId, "hint": form.hint, "checkoutTime": form.checkoutTime }',
     },
   },
   dataSources: {},
+  buttons: {
+    submitButtonText: 'Aktualisieren',
+  },
 };

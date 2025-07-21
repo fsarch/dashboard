@@ -12,6 +12,8 @@ type PartUpdateFormProps = {
       amount: number;
       externalId?: string;
       availableAmount?: string;
+      hint?: string;
+      checkoutTime?: string;
     },
   };
 };

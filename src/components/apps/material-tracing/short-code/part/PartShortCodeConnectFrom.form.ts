@@ -24,4 +24,7 @@ export const PART_SHORT_CODE_CONNECT_FORM: TGeneratedFormDefinition = {
     },
   },
   dataSources: {},
+  buttons: {
+    submitButtonText: 'Verknüpfen',
+  },
 };

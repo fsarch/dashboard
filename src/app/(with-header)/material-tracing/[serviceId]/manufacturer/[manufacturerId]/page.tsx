@@ -6,6 +6,7 @@ import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
+import ManufacturerUpdateForm from "@/components/apps/material-tracing/manufacturer/ManufacturerUpdateForm.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -14,8 +15,12 @@ export default async function Home({ params }: { params: Promise<{ manufacturerI
 
   return (
     <DefaultPage>
-      <Section name="Information">
-        Name: {manufacturer.name}
+      <Section name="Informationen">
+        <ManufacturerUpdateForm
+          args={{
+            manufacturer
+          }}
+        />
       </Section>
       <Actions
         type="manufacturer"

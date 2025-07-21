@@ -16,6 +16,7 @@ import MaterialShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteForm.component";
 import React from "react";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
+import MaterialUpdateForm from "@/components/apps/material-tracing/material/MaterialUpdateForm.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -30,9 +31,15 @@ export default async function Home(props: { params: Promise<{ materialId: string
   return (
     <DefaultPage>
       <Section name="Informationen">
-        Name: {material.name}<br />
-        Material: {materialType.name}<br />
-        Hersteller: {manufacturer.name}<br />
+        <MaterialUpdateForm
+          args={{
+            material
+          }}
+        />
+        <div style={{ marginTop: '1rem' }}>
+          Material: {materialType.name}<br />
+          Hersteller: {manufacturer.name}<br />
+        </div>
       </Section>
       <Actions
         type="material"
