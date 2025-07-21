@@ -5,6 +5,9 @@ import ListItem from "@/components/universals/list/ListItem";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import Link from "next/link";
 import Badge from "@/components/universals/badge/badge.component";
+import PartChildDeleteButton
+  from "@/components/apps/material-tracing/short-code/part/part-children/PartChildDeleteButton.component";
+import ListItemActionList from "@/components/universals/list/ListItemActionList";
 
 type PartPartListProps = {
   partId: string;
@@ -29,9 +32,15 @@ const PartChildrenList: React.FunctionComponent<PartPartListProps> = async ({
         <Link href={await getServiceLocalUrl(`/part/${part.id}`)} key={part.id}>
           <ListItem
             right={(
-              <Badge>
-                {part.amount}
-              </Badge>
+              <ListItemActionList>
+                <PartChildDeleteButton
+                  partId={partId}
+                  childPartId={part.id}
+                />
+                <Badge>
+                  {part.amount}
+                </Badge>
+              </ListItemActionList>
             )}
           >
             {part.name}

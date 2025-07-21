@@ -71,6 +71,15 @@ const getOrCreatePartPart = async (partId: string, childPartId: string, amount: 
   await partPartResponse.json();
 };
 
+const deletePartPart = async (partId: string, childPartId: string): Promise<void> => {
+  const partPartResponse = await fetchService(`/v1/parts/${partId}/parts/${childPartId}`, {
+    method: 'DELETE',
+  });
+  if (!partPartResponse.ok) {
+    throw new Error('could not delete part part');
+  }
+};
+
 const listPartParts = async (partId: string): Promise<Array<TPart>> => {
   const partsResponse = await fetchService(`/v1/parts/${partId}/parts`);
   const parts = await partsResponse.json();
@@ -88,4 +97,5 @@ export const partService = {
   getOrCreatePartPart,
   listPartParts,
   deletePart,
+  deletePartPart,
 };

@@ -11,7 +11,7 @@ import PartMaterialList from "@/components/apps/material-tracing/short-code/part
 import {
   PartPartShortCodeConnectForm
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component";
-import PartChildrenList from "@/components/apps/material-tracing/short-code/part/PartChildrenList.component";
+import PartChildrenList from "@/components/apps/material-tracing/short-code/part/part-children/PartChildrenList.component";
 import PartUpdateForm from "@/components/apps/material-tracing/part/PartInfoForm.component";
 import PartRemove
   from "@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.component";
