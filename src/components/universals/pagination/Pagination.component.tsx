@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import Button from '@/components/universals/forms/Button';
 import styles from './Pagination.module.scss';
+import selectStyles from '@/components/universals/forms/Select.module.scss';
 
 type PaginationProps = {
   currentPage: number;
@@ -45,7 +47,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
           id="pageSize"
           value={pageSize}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
-          className={styles.select}
+          className={selectStyles.input}
         >
           {pageSizeOptions.map((size) => (
             <option key={size} value={size}>
@@ -69,25 +71,25 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
       </div>
 
       <div className={styles.navigation}>
-        <button
+        <Button
+          type="button"
           onClick={handlePrevious}
           disabled={currentPage <= 1}
-          className={styles.button}
         >
           Previous
-        </button>
+        </Button>
         
         <span className={styles.pageNumber}>
           Page {currentPage}
         </span>
         
-        <button
+        <Button
+          type="button"
           onClick={handleNext}
           disabled={!hasNextPage}
-          className={styles.button}
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );
