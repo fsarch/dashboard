@@ -42,7 +42,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
   return (
     <div className={styles.pagination}>
       <div className={styles.pageSize}>
-        <label htmlFor="pageSize">Items per page:</label>
+        <label htmlFor="pageSize">Einträge pro Seite:</label>
         <select
           id="pageSize"
           value={pageSize}
@@ -60,7 +60,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
       <div className={styles.info}>
         {totalItems !== undefined ? (
           <span>
-            Showing {startItem}-{Math.min(endItem, totalItems)} of {totalItems} items
+            Zeige {startItem}-{Math.min(endItem, totalItems)} von {totalItems} Einträgen
           </span>
         ) : (
           <span>
@@ -76,19 +76,19 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
           onClick={handlePrevious}
           disabled={currentPage <= 1}
         >
-          Previous
+          Zurück
         </Button>
-        
+
         <span className={styles.pageNumber}>
-          Page {currentPage}
+          Seite {currentPage}
         </span>
-        
+
         <Button
           type="button"
           onClick={handleNext}
           disabled={!hasNextPage}
         >
-          Next
+          Weiter
         </Button>
       </div>
     </div>
