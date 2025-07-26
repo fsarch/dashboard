@@ -19,7 +19,7 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
   const router = useRouter();
   const processedJobsRef = useRef<Set<string>>(new Set());
 
-  const processNewJobs = useCallback(async () => {
+  const processNewJobs = useCallback(async (signal: AbortSignal) => {
     if (!localPrinter?.autoPrint || !localPrinter.printer) {
       return;
     }
@@ -33,6 +33,10 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
 
     for (const job of newJobs) {
       try {
+        if (signal.aborted) {
+          return;
+        }
+
         if (processedJobsRef.current.has(job.id)) {
           continue;
         }
@@ -59,7 +63,12 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
       return;
     }
 
-    processNewJobs();
+    const abortController = new AbortController();
+    processNewJobs(abortController.signal);
+
+    return () => {
+      abortController.abort();
+    }
   }, [localPrinter?.autoPrint, jobs, processNewJobs]);
 
   // Clean up processed jobs list periodically to prevent memory leaks
