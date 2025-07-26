@@ -25,7 +25,7 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
     }
 
     // Find new jobs that haven't been processed yet
-    const newJobs = jobs.filter(job => 
+    const newJobs = jobs.filter(job =>
       !processedJobsRef.current.has(job.id) &&
       !job.printTime && // Not yet printed
       job.data // Has printable data
@@ -33,10 +33,14 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
 
     for (const job of newJobs) {
       try {
+        if (processedJobsRef.current.has(job.id)) {
+          continue;
+        }
+
         console.log(`Auto-printing job ${job.id}...`);
         await executeAutoPrintJob(localPrinter, job);
         processedJobsRef.current.add(job.id);
-        
+
         // Refresh to show updated job status
         router.refresh();
       } catch (error) {
