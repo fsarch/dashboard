@@ -1,18 +1,25 @@
-import List from "@/components/universals/list/List";
-import ListItem from "@/components/universals/list/ListItem";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import Section from "@/components/universals/section/Section";
-import Link from "next/link";
 import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
 import { partService } from "@/services/material-tracing/part.service";
 import { PART_CREATE_FORM } from "@/services/material-tracing/part.forms";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import PartsList from "@/components/apps/material-tracing/part/PartsList.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
-  const parts = await partService.listParts();
+  // Load initial page of parts (page 1, 25 items)
+  const initialParts = await partService.listParts({ skip: 0, take: 25 });
+  
+  // Add URLs to each part
+  const partsWithUrls = await Promise.all(
+    initialParts.map(async (part) => ({
+      ...part,
+      url: await getServiceLocalUrl(`/part/${part.id}`)
+    }))
+  );
 
   return (
     <DefaultPage>
@@ -22,18 +29,7 @@ export default async function Home() {
         />
       </Section>
       <Section name="Bauteile">
-        <List>
-          {parts.map(async (part) => (
-            <Link
-              key={part.id}
-              href={await getServiceLocalUrl(`/part/${part.id}`)}
-            >
-              <ListItem>
-                {part.name}
-              </ListItem>
-            </Link>
-          ))}
-        </List>
+        <PartsList initialParts={partsWithUrls} />
       </Section>
     </DefaultPage>
   );

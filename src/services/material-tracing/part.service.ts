@@ -3,8 +3,18 @@ import { TPart } from "@/services/material-tracing/part.type";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
 import { TMaterial } from "@/services/material-tracing/material.type";
 
-const listParts = async (): Promise<Array<TPart>> => {
-  const partsResponse = await fetchService('/v1/parts');
+const listParts = async (options?: { skip?: number; take?: number }): Promise<Array<TPart>> => {
+  const url = new URL('/v1/parts', 'http://localhost'); // Base URL will be replaced by fetchService
+  
+  if (options?.skip !== undefined) {
+    url.searchParams.append('skip', options.skip.toString());
+  }
+  
+  if (options?.take !== undefined) {
+    url.searchParams.append('take', options.take.toString());
+  }
+
+  const partsResponse = await fetchService(url.pathname + url.search);
   const parts = await partsResponse.json();
 
   return parts;

@@ -29,4 +29,5 @@
 .root:disabled {
   color: var(--disabled-text-color);
   background-color: var(--disabled-color);
+  cursor: not-allowed;
 }

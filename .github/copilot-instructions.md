@@ -17,3 +17,5 @@ When writing code inside an app route/service/server-component the utility fetch
 There is a GeneratedForm component which should be primarily used when creating, updating or deleting data. When not applicable, use a form with formik, a server-action and a service.
 
 When displaying alerts, always use the useOpenDialog hook with the AlertDialog component.
+
+Use already existing components for buttons, inputs, drop-downs, etc. from src/components/universals.
