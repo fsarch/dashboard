@@ -13,6 +13,8 @@ export type TLocalPrinterContext = {
     language?: string;
     codepageMapping?: any;
   };
+  autoPrint: boolean;
+  setAutoPrint: (enabled: boolean) => void;
 };
 
 const LocalPrinterContext = createContext<TLocalPrinterContext | null>(null);

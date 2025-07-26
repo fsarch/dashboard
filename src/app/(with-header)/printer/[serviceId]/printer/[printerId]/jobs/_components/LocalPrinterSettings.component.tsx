@@ -1,6 +1,6 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback, useEffect } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import Section from "@/components/universals/section/Section";
 import Button from "@/components/universals/forms/Button";
 import {
@@ -17,6 +17,7 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
   children,
 }) => {
   const [printer, setPrinter] = React.useState<TLocalPrinterContext | null>(null);
+  const [autoPrint, setAutoPrint] = useState(false);
 
   const router = useRouter();
 
@@ -34,7 +35,7 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
 
     const receiptPrinter: WebUSBReceiptPrinterType = new WebUSBReceiptPrinter();
 
-    const res = await new Promise<TLocalPrinterContext>((resolve) => {
+    const res = await new Promise<Omit<TLocalPrinterContext, 'autoPrint' | 'setAutoPrint'>>((resolve) => {
       receiptPrinter.addEventListener('connected', (device) => {
         console.log(`Connected to ${device.manufacturerName} ${device.productName} (#${device.serialNumber})`);
 
@@ -55,18 +56,62 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
       receiptPrinter.connect();
     });
 
-    setPrinter(res);
-  }, [setPrinter]);
+    const printerContext: TLocalPrinterContext = {
+      ...res,
+      autoPrint,
+      setAutoPrint,
+    };
+
+    setPrinter(printerContext);
+  }, [autoPrint, setAutoPrint]);
+
+  const handleAutoPrintToggle = useCallback(() => {
+    const newAutoPrint = !autoPrint;
+    setAutoPrint(newAutoPrint);
+    
+    if (printer) {
+      setPrinter({
+        ...printer,
+        autoPrint: newAutoPrint,
+        setAutoPrint,
+      });
+    }
+  }, [autoPrint, printer, setAutoPrint]);
 
   return (
     <>
       <Section name="Lokale Druckereinstellungen">
-        <Button
-          type="button"
-          onClick={handleConnectClick}
-        >
-          Drucker verbinden
-        </Button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <Button
+            type="button"
+            onClick={handleConnectClick}
+          >
+            Drucker verbinden
+          </Button>
+          
+          {printer && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={autoPrint}
+                  onChange={handleAutoPrintToggle}
+                  style={{ marginRight: '0.5rem' }}
+                />
+                Auto-Druck aktivieren
+              </label>
+              {autoPrint && (
+                <span style={{ 
+                  color: 'green', 
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold' 
+                }}>
+                  ● Aktiv
+                </span>
+              )}
+            </div>
+          )}
+        </div>
       </Section>
       <LocalPrinterProvider value={printer}>
         {children}

@@ -9,6 +9,8 @@ import LocalPrinterSettings
   from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinterSettings.component";
 import LocalPrinterPrintIcon
   from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinterPrintIcon.component";
+import AutoPrintMonitor
+  from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/AutoPrintMonitor.component";
 
 export default async function JobsPage({ params }: { params: Promise<{ printerId: string }> }) {
   const printerId = (await params).printerId;
@@ -17,6 +19,7 @@ export default async function JobsPage({ params }: { params: Promise<{ printerId
   return (
     <DefaultPage>
       <LocalPrinterSettings>
+        <AutoPrintMonitor printerId={printerId} jobs={jobs} />
         <Section name="Printer Jobs">
           <List>
             {jobs.map((job) => (
