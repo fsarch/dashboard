@@ -42,8 +42,8 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
         }
 
         console.log(`Auto-printing job ${job.id}...`);
-        await executeAutoPrintJob(localPrinter, job);
         processedJobsRef.current.add(job.id);
+        await executeAutoPrintJob(localPrinter, job);
 
         // Refresh to show updated job status
         router.refresh();
