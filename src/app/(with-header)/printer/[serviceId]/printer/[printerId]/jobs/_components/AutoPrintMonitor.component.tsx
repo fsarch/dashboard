@@ -55,6 +55,9 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
     }
 
     console.log(`[${executionId}] End execution`);
+
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
     // Refresh to show updated job status
     router.refresh();
   }, [localPrinter, jobs, router]);
