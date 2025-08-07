@@ -2,7 +2,7 @@ import { fetchService } from "@/utils/fetchService";
 import { ImageDto } from "@/services/image/images-admin.type";
 
 const listImages = async (): Promise<Array<ImageDto>> => {
-  const imagesResponse = await fetchService('/v1/admin/images');
+  const imagesResponse = await fetchService('/v1/admin/images?embed=slugs');
   const images = await imagesResponse.json();
 
   return images;

@@ -5,6 +5,7 @@ import { APPS } from "@/constants/apps";
 import List from "@/components/universals/list/List";
 import Link from "next/link";
 import ListItem from "@/components/universals/list/ListItem";
+import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
 export default async function Home() {
   const foundServices = await getServiceConfigurations(EServiceType.IMAGE);
@@ -14,17 +15,19 @@ export default async function Home() {
   }
 
   return (
-    <List>
-      {foundServices.map((service) => (
-        <Link
-          key={service.id}
-          href={`/image/${service.id}`}
-        >
-          <ListItem>
-            {service.name || service.id}
-          </ListItem>
-        </Link>
-      ))}
-    </List>
+    <DefaultPage>
+      <List>
+        {foundServices.map((service) => (
+          <Link
+            key={service.id}
+            href={`/image/${service.id}`}
+          >
+            <ListItem>
+              {service.name || service.id}
+            </ListItem>
+          </Link>
+        ))}
+      </List>
+    </DefaultPage>
   );
 }

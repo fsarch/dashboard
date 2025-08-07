@@ -78,6 +78,8 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
     }
   }
 
+  console.log('baseConfiguration', baseConfiguration);
+
   return (
     <div className={clsx(className, styles.root)}>
       <header className={styles.header}>

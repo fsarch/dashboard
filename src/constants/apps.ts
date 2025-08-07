@@ -85,6 +85,15 @@ export const APPS: Record<EServiceType, {
   [EServiceType.IMAGE]: {
     name: 'Image',
     basePath: '/image',
+    navigation: [{
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    }, {
+      name: 'Bilder',
+      path: '/',
+      icon: 'images',
+    }],
   },
   [EServiceType.MATERIAL_TRACING]: {
     name: 'Material Tracing',

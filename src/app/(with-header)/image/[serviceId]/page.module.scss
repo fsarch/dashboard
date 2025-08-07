@@ -1,0 +1,46 @@
+.imageListItem {
+  display: flex;
+  flex-direction: row;
+
+  gap: 8px;
+}
+
+.imageListItemHeadlineBadges {
+  display: inline-flex;
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.imageListItemPreview {
+  background: repeating-conic-gradient(#A0A0A0 0 25%, #606060 0 50%) 50% / 20px 20px
+}
+
+.imageListItemDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageListItemDetailsList {
+  display: grid;
+  grid-template-columns: fit-content(33%) auto;
+  max-width: 500px;
+
+  dt {
+    grid-column: 1;
+    padding-right: 8px;
+  }
+
+  dd {
+    grid-column: 2;
+  }
+}
+
+.imageListItemSlugsList {
+  list-style: none;
+}
