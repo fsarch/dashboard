@@ -7,6 +7,9 @@ import styles from "./page.module.scss";
 import Badge from "@/components/universals/badge/badge.component";
 import { colors } from "@/app/_styles/colors";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+
+export const generateMetadata = createAutomaticMetadata();
 
 function formatFileSize(size: number): string {
   if (size < 1024) {
