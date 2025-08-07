@@ -5,7 +5,9 @@ import { APPS } from "@/constants/apps";
 import List from "@/components/universals/list/List";
 import Link from "next/link";
 import ListItem from "@/components/universals/list/ListItem";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import styles from "@/components/universals/page/DefaultPage.module.scss";
+import DefaultPageHeader from "@/components/universals/page/DefaultPageHeader.component";
+import React from "react";
 
 export default async function Home() {
   const foundServices = await getServiceConfigurations(EServiceType.IMAGE);
@@ -15,7 +17,11 @@ export default async function Home() {
   }
 
   return (
-    <DefaultPage>
+    <div>
+      <DefaultPageHeader
+        className={styles.header}
+        title="Image Server"
+      />
       <List>
         {foundServices.map((service) => (
           <Link
@@ -28,6 +34,6 @@ export default async function Home() {
           </Link>
         ))}
       </List>
-    </DefaultPage>
+    </div>
   );
 }

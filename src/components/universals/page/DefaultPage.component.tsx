@@ -10,6 +10,7 @@ import memoize from 'lodash.memoize';
 import jsonata from "jsonata";
 import { TIcon } from "@/components/universals/icon/Icon.type";
 import clsx from 'clsx';
+import DefaultPageHeader from "@/components/universals/page/DefaultPageHeader.component";
 
 type DefaultPageProps = PropsWithChildren<{
   className?: string;
@@ -82,9 +83,10 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
 
   return (
     <div className={clsx(className, styles.root)}>
-      <header className={styles.header}>
-        <Header title={baseConfiguration.name ?? 'Unknown Service'}/>
-      </header>
+      <DefaultPageHeader
+        className={styles.header}
+        title={baseConfiguration.name ?? 'Unknown Service'}
+      />
       {navigations ? (
         <nav className={styles.navigation}>
           <AutoNavigation
