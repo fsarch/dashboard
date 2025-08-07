@@ -1,4 +1,3 @@
-import { imagesService } from "@/services/image/images.service";
 import { NextResponse } from "next/server";
 import { imagesAdminService } from "@/services/image/images-admin.service";
 
@@ -8,7 +7,9 @@ export const GET = async (
 ) => {
   const imageId = (await params).imageId;
 
-  const image = await imagesAdminService.getRawById(imageId);
+  const image = await imagesAdminService.getRawById(imageId, {
+    size: 250,
+  });
 
   return new NextResponse(image, {
     headers: {

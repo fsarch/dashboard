@@ -8,8 +8,13 @@ const listImages = async (): Promise<Array<ImageDto>> => {
   return images;
 };
 
-const getRawById = async (imageId: string): Promise<ArrayBuffer> => {
-  const imagesResponse = await fetchService(`/v1/admin/images/${imageId}/raw`, {
+const getRawById = async (imageId: string, options: { size?: number; } = {}): Promise<ArrayBuffer> => {
+  const queryParams = new URLSearchParams();
+  if (options.size) {
+    queryParams.set('size', options.size.toString());
+  }
+
+  const imagesResponse = await fetchService(`/v1/admin/images/${imageId}/raw?${queryParams}`, {
     headers: {
       'Accept': 'image/png',
     },
