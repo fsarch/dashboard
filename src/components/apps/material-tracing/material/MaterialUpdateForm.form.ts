@@ -3,15 +3,15 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const MATERIAL_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'hint',
-    type: 'text',
+    $type: 'text',
     label: 'Hinweis',
   }, {
     id: 'externalId',
-    type: 'text',
+    $type: 'text',
     label: 'External Id',
   }],
   initialValues: {

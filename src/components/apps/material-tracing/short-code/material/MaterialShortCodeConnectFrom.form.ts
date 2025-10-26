@@ -3,10 +3,10 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const MATERIAL_SHORT_CODE_CONNECT_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'shortCode',
-    type: 'text',
+    $type: 'text',
     label: 'ShortCode',
     buttons: [{
-      type: 'qr-scanner',
+      $type: 'qr-scanner',
     }],
   }],
   initialValues: {

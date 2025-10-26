@@ -27,6 +27,7 @@
     "color": "^5.0.0",
     "dompurify": "^3.2.4",
     "formik": "^2.4.6",
+    "joi": "^18.0.1",
     "js-yaml": "^4.1.0",
     "jsdom": "^26.0.0",
     "jsonata": "^2.0.6",
@@ -57,6 +58,7 @@
     "@types/webrtc": "^0.0.46",
     "eslint": "^9.21.0",
     "eslint-config-next": "15.1.7",
+    "joi-to-json": "^5.0.0",
     "typescript": "^5.7.3"
   }
 }

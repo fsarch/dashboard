@@ -46,7 +46,7 @@ export type TListViewItem = {
 
 export type TCustomAppBaseView = {
   id: string;
-  datasource: Record<string, TGeneratedFormDataSource>;
+  datasource?: Record<string, TGeneratedFormDataSource>;
 };
 
 export type TViewGroupView = {

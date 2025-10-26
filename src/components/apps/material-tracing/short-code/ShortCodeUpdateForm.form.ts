@@ -3,7 +3,7 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const SHORT_CODE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   inputs: [{
     id: 'hint',
-    type: 'text',
+    $type: 'text',
     label: 'Hinweis',
   }],
   initialValues: {

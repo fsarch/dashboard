@@ -7,12 +7,16 @@ type FormViewProps = {
 };
 
 const FormView: React.FunctionComponent<FormViewProps> = ({
-  view
+  view,
+  dataSource,
 }) => {
   return (
     <div>
       <pre>
         {JSON.stringify(view, null, 2)}
+      </pre>
+      <pre>
+        {JSON.stringify(dataSource, null, 2)}
       </pre>
     </div>
   );

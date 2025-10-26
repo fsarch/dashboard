@@ -7,15 +7,19 @@ import { View } from "@/components/apps/custom-app/views/View.component";
 type CustomAppViewComponentProps = {
   view: TCustomAppView;
   app: TCustomAppConfiguration;
+  searchParams: Record<string, string>;
 };
 
 const CustomAppViewComponent: React.FunctionComponent<CustomAppViewComponentProps> = async ({
   view,
   app,
+  searchParams,
 }) => {
   const dataSource = await customAppUtils.evaluateDatasources(view.datasource, {
     baseUrl: app.url,
-    context: {},
+    context: {
+      query: searchParams,
+    },
   });
 
   return (

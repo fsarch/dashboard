@@ -8,10 +8,15 @@ import {
 import jsonata from "jsonata";
 import { fetchService } from "@/utils/fetchService";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
 
-function evaluateField(value: string | TJsonataExpression) {
+function evaluateField(value: string | TJsonataExpression | undefined) {
   if (typeof value === "string") {
     return async () => value;
+  }
+
+  if (!value) {
+    return async () => undefined;
   }
 
   const expressionBuilder = jsonata(value.value);
@@ -30,7 +35,7 @@ const executePostSubmitAction = async (
   const evaluatedDefinition = await evaluateDefinition(definition, { args });
 
   await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
-    if (input.type === 'image-server-upload') {
+    if (input.$type === 'image-server-upload') {
       const dataToUpload = formData[input.id] as { $type: 'files'; files: [{ name: string; type: string; base64: string; }] };
 
       if (!dataToUpload.files[0]) {
@@ -124,7 +129,8 @@ const executePostSubmitAction = async (
 
 const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }: { args?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
-    const dataResponse = await fetchService(value.path, {
+    const path = await jsonataUtils.evaluateStringValue(value.path);
+    const dataResponse = await fetchService(path, {
       method: value.method,
     });
     const rawData = await dataResponse.json();
@@ -137,7 +143,7 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }
   })));
 
   const mappedInputs = definition.inputs.map((input) => {
-    if (input.type === 'select' && input.data.$type === 'datasource') {
+    if (input.$type === 'select' && input.data.$type === 'datasource') {
       return {
         ...input,
         data: {
@@ -147,7 +153,7 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }
       }
     }
 
-    if (input.type === 'image-server-upload' && input.imageServerAdminUrl.$type === 'datasource') {
+    if (input.$type === 'image-server-upload' && input.imageServerAdminUrl.$type === 'datasource') {
       return {
         ...input,
         imageServerAdminUrl: {

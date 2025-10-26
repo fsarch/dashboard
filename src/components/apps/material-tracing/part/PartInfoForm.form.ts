@@ -3,24 +3,24 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'amount',
-    type: 'text',
+    $type: 'text',
     label: 'Anzahl',
   }, {
     id: 'availableAmount',
-    type: 'text',
+    $type: 'text',
     label: 'Verfügbare Anzahl',
     isEnabled: false,
   }, {
     id: 'externalId',
-    type: 'text',
+    $type: 'text',
     label: 'External Id',
   }, {
     id: 'hint',
-    type: 'text',
+    $type: 'text',
     label: 'Hinweis',
   }],
   initialValues: {

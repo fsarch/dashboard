@@ -4,11 +4,11 @@ export type TGeneratedFormBaseInput = {
 };
 
 export type TGeneratedFormTextInputButton = {
-  type: 'qr-scanner';
+  $type: 'qr-scanner';
 };
 
 export type TGeneratedFormTextInput = TGeneratedFormBaseInput & {
-  type: 'text',
+  $type: 'text',
   buttons?: Array<TGeneratedFormTextInputButton>;
   isEnabled?: boolean,
 };
@@ -19,7 +19,7 @@ export type TGeneratedFormSelectConstantData = {
 };
 
 export type TGeneratedFormSelectInput = TGeneratedFormBaseInput & {
-  type: 'select';
+  $type: 'select';
   enableSearch?: boolean;
   data: {
     $type: 'datasource';
@@ -33,7 +33,7 @@ export type TGeneratedFormStringConstantData = {
 };
 
 export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
-  type: 'image-server-upload';
+  $type: 'image-server-upload';
   imageServerAdminUrl: {
     $type: 'datasource';
     value: string;
@@ -53,7 +53,7 @@ export type TJsonataExpression = {
 
 export type TGeneratedFormDataSource = {
   $type: 'fetch',
-  path: string;
+  path: string | TJsonataExpression;
   method: string;
   transformResponse: TJsonataExpression;
   headers?: Record<string, string>;
@@ -62,7 +62,7 @@ export type TGeneratedFormDataSource = {
 export type TGeneratedFormEndpoint = {
   path: string | TJsonataExpression;
   method: string;
-  body: string | TJsonataExpression;
+  body?: string | TJsonataExpression;
   headers?: Record<string, string>;
 }
 
