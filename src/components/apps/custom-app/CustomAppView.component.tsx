@@ -15,17 +15,20 @@ const CustomAppViewComponent: React.FunctionComponent<CustomAppViewComponentProp
   app,
   searchParams,
 }) => {
+  const context = {
+    query: searchParams,
+  };
+
   const dataSource = await customAppUtils.evaluateDatasources(view.datasource, {
     baseUrl: app.url,
-    context: {
-      query: searchParams,
-    },
+    context,
   });
 
   return (
     <View
       view={view}
       dataSource={dataSource}
+      context={context}
     />
   );
 };

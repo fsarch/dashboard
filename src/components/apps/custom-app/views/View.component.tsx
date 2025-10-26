@@ -8,11 +8,13 @@ import IframeView from "@/components/apps/custom-app/views/iframe/IframeView.com
 type CustomAppViewGroupViewComponentProps = {
   view: TViewGroupView;
   dataSource: Record<string, unknown>;
+  context?: Record<string, unknown>;
 };
 
 export const ViewGroup: React.FunctionComponent<CustomAppViewGroupViewComponentProps> = async ({
   view,
   dataSource,
+  context,
 }) => {
   return (
     <div>
@@ -21,6 +23,7 @@ export const ViewGroup: React.FunctionComponent<CustomAppViewGroupViewComponentP
           key={index}
           view={vi}
           dataSource={dataSource}
+          context={context}
         />
       ))}
     </div>
@@ -30,11 +33,13 @@ export const ViewGroup: React.FunctionComponent<CustomAppViewGroupViewComponentP
 type CustomAppViewComponentProps = {
   view: TView;
   dataSource: Record<string, unknown>;
+  context?: Record<string, unknown>;
 };
 
 export const View: React.FunctionComponent<CustomAppViewComponentProps> = async ({
   view,
   dataSource,
+  context,
 }) => {
   if (view.$type === 'list') {
     return <CustomAppListView
@@ -47,6 +52,7 @@ export const View: React.FunctionComponent<CustomAppViewComponentProps> = async 
     return <ViewGroup
       view={view}
       dataSource={dataSource}
+      context={context}
     />;
   }
 
@@ -54,6 +60,7 @@ export const View: React.FunctionComponent<CustomAppViewComponentProps> = async 
     return <FormView
       view={view}
       dataSource={dataSource}
+      context={context}
     />
   }
 

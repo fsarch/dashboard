@@ -28,6 +28,7 @@ const executePostSubmitAction = async (
   definition: TGeneratedFormDefinition,
   formData: Record<string, unknown>,
   args: Record<string, unknown> | undefined,
+  context?: Record<string, unknown>,
 ): Promise<TGeneratedFormSubmitResponse> => {
   const pathExpression = evaluateField(definition.endpoint.path);
   const bodyExpression = evaluateField(definition.endpoint.body);
@@ -81,14 +82,15 @@ const executePostSubmitAction = async (
     }
   }));
 
-  const context = {
+  const requestContext = {
+    ...context,
     form: formData,
     args,
   };
 
   const [path, body] = await Promise.all([
-    pathExpression(context),
-    bodyExpression(context),
+    pathExpression(requestContext),
+    bodyExpression(requestContext),
   ]);
 
   const createResponse = await fetchService(path, {
@@ -129,7 +131,7 @@ const executePostSubmitAction = async (
 
 const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }: { args?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
-    const path = await jsonataUtils.evaluateStringValue(value.path);
+    const path = await jsonataUtils.evaluateStringValue(value.path, args);
     const dataResponse = await fetchService(path, {
       method: value.method,
     });

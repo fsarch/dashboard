@@ -60,7 +60,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
       <Form>
         <Fieldset>
           {definition.map((input) => {
-            if (input.type === 'text') {
+            if (input.$type === 'text') {
               return (
                 <GeneratedFormTextInput
                   key={input.id}
@@ -69,7 +69,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
               );
             }
 
-            if (input.type === 'select') {
+            if (input.$type === 'select') {
               return (
                 <GeneratedFormSelectInput
                   key={input.id}
@@ -78,7 +78,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
               );
             }
 
-            if (input.type === 'image-server-upload') {
+            if (input.$type === 'image-server-upload') {
               return (
                 <GeneratedFormImageServerUploadInput
                   key={input.id}
