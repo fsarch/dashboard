@@ -19,7 +19,7 @@ const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
   args,
   context,
 }) => {
-  const evaluatedDefinition = await generatedFormUtils.evaluateDefinition(definition, { args });
+  const evaluatedDefinition = await generatedFormUtils.evaluateDefinition(definition, { args, context });
 
   async function handleSubmit(data: TGeneratedFormInitialValues): Promise<TGeneratedFormSubmitResponse> {
     'use server';

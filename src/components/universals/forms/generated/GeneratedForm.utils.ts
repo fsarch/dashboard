@@ -9,6 +9,7 @@ import jsonata from "jsonata";
 import { fetchService } from "@/utils/fetchService";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
+import { contextUtils } from "@/components/universals/forms/generated/context.utils";
 
 function evaluateField(value: string | TJsonataExpression | undefined) {
   if (typeof value === "string") {
@@ -129,7 +130,7 @@ const executePostSubmitAction = async (
   };
 }
 
-const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }: { args?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
+const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, context }: { args?: Record<string, unknown>; context?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
     const path = await jsonataUtils.evaluateStringValue(value.path, args);
     const dataResponse = await fetchService(path, {
@@ -137,11 +138,15 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }
     });
     const rawData = await dataResponse.json();
 
-    const transformedResponse = await (jsonata(value.transformResponse.value).evaluate({
+    let responseData = {
       body: rawData,
-    }));
+    };
 
-    return [key, transformedResponse.body];
+    if (value.transformResponse?.value) {
+      responseData = await (jsonata(value.transformResponse.value).evaluate(responseData));
+    }
+
+    return [key, responseData.body];
   })));
 
   const mappedInputs = definition.inputs.map((input) => {
@@ -168,8 +173,15 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args }
     return input;
   });
 
+  const mergedContext = contextUtils.merge(context, {
+    dataSource: dataSourceData,
+    ...context,
+  });
+
   const mappedInitialValues = definition.initialValues.$type === 'jsonata'
-    ? await jsonata(definition.initialValues.value as string).evaluate({ dataSource: dataSourceData, args })
+    ? await jsonata(definition.initialValues.value as string).evaluate(
+      mergedContext
+    )
     : definition.initialValues;
 
   return {

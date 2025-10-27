@@ -42,7 +42,14 @@ export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
   preferCapture?: 'environment' | 'user';
 };
 
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput;
+export type TGeneratedNestedForm = TGeneratedFormBaseInput & {
+  $type: 'nested-form';
+  isArray?: boolean;
+  addInitialValues?: Record<string, unknown>;
+  inputs: Array<TGeneratedFormInput>;
+};
+
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm;
 
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
 
@@ -55,7 +62,7 @@ export type TGeneratedFormDataSource = {
   $type: 'fetch',
   path: string | TJsonataExpression;
   method: string;
-  transformResponse: TJsonataExpression;
+  transformResponse?: TJsonataExpression;
   headers?: Record<string, string>;
 };
 

@@ -15,6 +15,8 @@ import GeneratedFormImageServerUploadInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormImageServerUploadInput.component";
 import { useWithLoading } from "@/components/universals/loader/LoadingProvider.context";
 import Fieldset from "@/components/universals/forms/Fieldset.component";
+import GeneratedNestedForm from "@/components/universals/forms/generated/inputs/nested/GeneratedFormNestedForm.component";
+import { renderGeneratedFormInputs } from "@/components/universals/forms/generated/renderGeneratedFormInputs";
 
 type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
@@ -59,36 +61,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
     >
       <Form>
         <Fieldset>
-          {definition.map((input) => {
-            if (input.$type === 'text') {
-              return (
-                <GeneratedFormTextInput
-                  key={input.id}
-                  input={input}
-                />
-              );
-            }
-
-            if (input.$type === 'select') {
-              return (
-                <GeneratedFormSelectInput
-                  key={input.id}
-                  input={input}
-                />
-              );
-            }
-
-            if (input.$type === 'image-server-upload') {
-              return (
-                <GeneratedFormImageServerUploadInput
-                  key={input.id}
-                  input={input}
-                />
-              );
-            }
-
-            return null;
-          })}
+          {renderGeneratedFormInputs(definition)}
         </Fieldset>
         <Button type="submit">
           {buttons?.submitButtonText ?? 'Erstellen'}

@@ -4,18 +4,15 @@ import * as yaml from "js-yaml";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import {
-  TConstantRef,
   TCustomAppClickHandler,
   TCustomAppClickHandlerFunc,
-  TCustomAppConfig, TDataSourceRef, TFormView, TView
+  TCustomAppConfig, TFormView,
 } from "@/components/apps/custom-app/custom-app.type";
 import {
-  TGeneratedFormAction,
   TGeneratedFormDataSource,
-  TGeneratedFormEndpoint,
-  TGeneratedFormInitialValues,
-  TGeneratedFormInput, TGeneratedFormSelectInput,
-  TGeneratedFormTextInput, TGeneratedFormTextInputButton,
+  TGeneratedFormSelectInput,
+  TGeneratedFormTextInput,
+  TGeneratedNestedForm,
   TJsonataExpression
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import jsonata from "jsonata";
@@ -136,6 +133,19 @@ const FORM_BASE_INPUT_PROPERTIES = {
   label: Joi.string().required(),
 };
 
+const FORM_NESTED_FORM_VIEW_SCHEMA = Joi.object<TGeneratedNestedForm>({
+  ...FORM_BASE_INPUT_PROPERTIES,
+  $type: Joi.string().allow('nested-form').required(),
+  isArray: Joi.bool(),
+  addInitialValues: Joi.object().pattern(Joi.string(), Joi.any()),
+  inputs: Joi.array().items(Joi.link('#form-inputs')).required(),
+});
+
+const FORM_TIME_INPUT_VIEW_SCHEMA = Joi.object({
+  ...FORM_BASE_INPUT_PROPERTIES,
+  $type: Joi.string().allow('time').required(),
+});
+
 const FORM_TEXT_INPUT_SCHEMA = Joi.object<TGeneratedFormTextInput>({
   ...FORM_BASE_INPUT_PROPERTIES,
   $type: Joi.string().allow('text').required(),
@@ -167,7 +177,9 @@ const FORM_SELECT_INPUT_SCHEMA = Joi.object<TGeneratedFormSelectInput>({
 const FORM_INPUTS_SCHEMA = Joi.alternatives(
   FORM_TEXT_INPUT_SCHEMA,
   FORM_SELECT_INPUT_SCHEMA,
-);
+  FORM_NESTED_FORM_VIEW_SCHEMA,
+  FORM_TIME_INPUT_VIEW_SCHEMA,
+).id('form-inputs');
 
 const FORM_FORM_VIEW_SCHEMA = Joi.object<TFormView>({
   $type: Joi.string().allow('form').required(),

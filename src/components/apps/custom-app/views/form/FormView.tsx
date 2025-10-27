@@ -11,12 +11,16 @@ type FormViewProps = {
 const FormView: React.FunctionComponent<FormViewProps> = ({
   view,
   context,
+  dataSource,
 }) => {
   return (
     <div>
       <GeneratedForm
         definition={view}
-        context={context}
+        context={{
+          ...context,
+          dataSource,
+        }}
       />
     </div>
   );

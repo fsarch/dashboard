@@ -3,6 +3,7 @@ import Input from "@/components/universals/forms/Input";
 import { TGeneratedFormTextInput } from "@/components/universals/forms/generated/GeneratedForm.type";
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import QrInput from "@/components/universals/forms/QrInput";
+import { nestedFormUtils } from "@/components/universals/forms/generated/inputs/nested/nested-form.utils";
 
 type GeneratedFormTextInputProps = {
   input: TGeneratedFormTextInput;
@@ -12,6 +13,9 @@ const GeneratedFormTextInput: React.FunctionComponent<GeneratedFormTextInputProp
   input,
 }) => {
   const id = useId();
+  const name = nestedFormUtils.useInputName(input.id);
+
+  console.log('name', name);
 
   return (
     <FieldsetRow
@@ -19,15 +23,15 @@ const GeneratedFormTextInput: React.FunctionComponent<GeneratedFormTextInputProp
         <label htmlFor={id}>{input.label}</label>
       )}
     >
-      {input.buttons && input.buttons[0].type === 'qr-scanner' ? (
+      {input.buttons && input.buttons[0].$type === 'qr-scanner' ? (
         <QrInput
           id={id}
-          name={input.id}
+          name={name}
         />
       ) : (
         <Input
           id={id}
-          name={input.id}
+          name={name}
           type="text"
           disabled={input.isEnabled === false}
         />
