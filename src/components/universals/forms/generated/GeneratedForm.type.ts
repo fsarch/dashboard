@@ -13,6 +13,16 @@ export type TGeneratedFormTextInput = TGeneratedFormBaseInput & {
   isEnabled?: boolean,
 };
 
+export type TGeneratedFormTimeInput = TGeneratedFormBaseInput & {
+  $type: 'time',
+  isEnabled?: boolean,
+};
+
+export type TGeneratedFormNumberInput = TGeneratedFormBaseInput & {
+  $type: 'number',
+  isEnabled?: boolean,
+};
+
 export type TGeneratedFormSelectConstantData = {
   $type: 'constant';
   value: Array<{ id: string; value: string; label: string; }>;
@@ -49,7 +59,7 @@ export type TGeneratedNestedForm = TGeneratedFormBaseInput & {
   inputs: Array<TGeneratedFormInput>;
 };
 
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm;
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput;
 
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
 

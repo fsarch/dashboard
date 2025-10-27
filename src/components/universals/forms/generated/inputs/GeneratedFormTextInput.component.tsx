@@ -15,8 +15,6 @@ const GeneratedFormTextInput: React.FunctionComponent<GeneratedFormTextInputProp
   const id = useId();
   const name = nestedFormUtils.useInputName(input.id);
 
-  console.log('name', name);
-
   return (
     <FieldsetRow
       label={(

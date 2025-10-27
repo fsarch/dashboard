@@ -5,6 +5,9 @@ import GeneratedFormSelectInput
 import GeneratedFormImageServerUploadInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormImageServerUploadInput.component";
 import GeneratedNestedForm from "@/components/universals/forms/generated/inputs/nested/GeneratedFormNestedForm.component";
+import GeneratedFormTimeInput from "@/components/universals/forms/generated/inputs/GeneratedFormTimeInput.component";
+import GeneratedFormNumberInput
+  from "@/components/universals/forms/generated/inputs/GeneratedFormNumberInput.component";
 
 export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'text') {
@@ -19,6 +22,24 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'select') {
     return (
       <GeneratedFormSelectInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'number') {
+    return (
+      <GeneratedFormNumberInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'time') {
+    return (
+      <GeneratedFormTimeInput
         key={input.id}
         input={input}
       />

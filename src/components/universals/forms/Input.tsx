@@ -5,11 +5,12 @@ import styles from './Input.module.scss';
 type InputProps = {
   id?: string;
   name: string;
-  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number';
+  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number' | 'time';
   disabled?: boolean;
   required?: boolean;
   min?: number;
   max?: number;
+  step?: number;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
@@ -20,6 +21,7 @@ const Input: React.FunctionComponent<InputProps> = ({
   required,
   min,
   max,
+  step,
 }) => {
   return (
     <Field
@@ -31,6 +33,7 @@ const Input: React.FunctionComponent<InputProps> = ({
       required={required}
       min={min}
       max={max}
+      step={step}
     />
   );
 };
