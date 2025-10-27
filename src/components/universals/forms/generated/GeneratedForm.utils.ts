@@ -11,29 +11,12 @@ import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
 import { contextUtils } from "@/components/universals/forms/generated/context.utils";
 
-function evaluateField(value: string | TJsonataExpression | undefined) {
-  if (typeof value === "string") {
-    return async () => value;
-  }
-
-  if (!value) {
-    return async () => undefined;
-  }
-
-  const expressionBuilder = jsonata(value.value);
-
-  return async (value: unknown) => expressionBuilder.evaluate(value);
-}
-
 const executePostSubmitAction = async (
   definition: TGeneratedFormDefinition,
   formData: Record<string, unknown>,
   args: Record<string, unknown> | undefined,
   context?: Record<string, unknown>,
 ): Promise<TGeneratedFormSubmitResponse> => {
-  const pathExpression = evaluateField(definition.endpoint.path);
-  const bodyExpression = evaluateField(definition.endpoint.body);
-
   const evaluatedDefinition = await evaluateDefinition(definition, { args });
 
   await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
@@ -90,14 +73,15 @@ const executePostSubmitAction = async (
   };
 
   const [path, body] = await Promise.all([
-    pathExpression(requestContext),
-    bodyExpression(requestContext),
+    jsonataUtils.evaluateStringValue(definition.endpoint.path, requestContext),
+    jsonataUtils.evaluateValue(definition.endpoint.body, requestContext),
   ]);
 
   const createResponse = await fetchService(path, {
     method: definition.endpoint.method,
     body: JSON.stringify(body),
     headers: {
+      ...definition.endpoint.headers,
       'Content-Type': 'application/json',
     },
   });

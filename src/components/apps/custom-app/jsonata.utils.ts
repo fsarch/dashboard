@@ -11,6 +11,17 @@ async function evaluateStringValue(value: string | TJsonataExpression, context?:
   return expressionBuilder.evaluate(value, context);
 }
 
+async function evaluateValue(value: TJsonataExpression | undefined, context?: Record<string, unknown>): Promise<unknown> {
+  if (!value) {
+    return undefined;
+  }
+
+  const expressionBuilder = jsonata(value.value);
+
+  return expressionBuilder.evaluate(context);
+}
+
 export const jsonataUtils = {
   evaluateStringValue,
+  evaluateValue,
 };

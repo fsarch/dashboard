@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TGeneratedNestedForm } from "@/components/universals/forms/generated/GeneratedForm.type";
 import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 import { useFormikContext } from "formik";
@@ -16,8 +16,15 @@ const GeneratedNestedForm: React.FunctionComponent<GeneratedNestedFormProps> = (
   input,
   renderFormInputs,
 }) => {
-  const { values } = useFormikContext<any>();
+  const { values, setValues } = useFormikContext<any>();
   const elements = (values?.[input.id] ?? []) as Array<unknown>;
+
+  const handleCreate = useCallback(() => {
+    setValues((val: any) => ({
+      ...val,
+      [input.id]: [...(val?.[input.id] ?? []), { ...input.addInitialValues }],
+    }));
+  }, [setValues, input.addInitialValues, input.id]);
 
   return (
     <FieldsetRow label={input.label}>
@@ -37,6 +44,7 @@ const GeneratedNestedForm: React.FunctionComponent<GeneratedNestedFormProps> = (
             </NestedFormContextProvider>
           </Fieldset>
         ))}
+        <button type="button" onClick={handleCreate}>Element hinzufügen</button>
       </div>
     </FieldsetRow>
   );

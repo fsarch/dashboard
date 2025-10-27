@@ -69,7 +69,7 @@ export type TGeneratedFormDataSource = {
 export type TGeneratedFormEndpoint = {
   path: string | TJsonataExpression;
   method: string;
-  body?: string | TJsonataExpression;
+  body?: TJsonataExpression;
   headers?: Record<string, string>;
 }
 
