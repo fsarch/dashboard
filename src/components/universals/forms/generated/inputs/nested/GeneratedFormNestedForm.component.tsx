@@ -6,6 +6,10 @@ import Fieldset from "@/components/universals/forms/Fieldset.component";
 import type { TRenderGeneratedFormInputsFunc } from "@/components/universals/forms/generated/renderGeneratedFormInputs";
 import styles from './GeneratedFormNestedForm.module.scss';
 import { NestedFormContextProvider } from "@/components/universals/forms/generated/inputs/nested/nested-form.context";
+import IconButton from "@/components/universals/forms/button/IconButton";
+import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
+import ConfirmDialog from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
+import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 
 type GeneratedNestedFormProps = {
   input: TGeneratedNestedForm;
@@ -26,23 +30,62 @@ const GeneratedNestedForm: React.FunctionComponent<GeneratedNestedFormProps> = (
     }));
   }, [setValues, input.addInitialValues, input.id]);
 
+  const openDialog = useOpenDialog();
+
+  const handleDelete = useCallback(async (value: unknown) => {
+    const dialogResult = await openDialog(ConfirmDialog, {
+      text: 'Möchten Sie dieses Element wirklich löschen?',
+    }).result;
+
+    if (dialogResult.status !== DialogResult.SUCCESS) {
+      return;
+    }
+
+    setValues((val: any) => {
+      const idx = val?.[input.id]?.indexOf(value);
+      if (idx === undefined || idx === null || idx === -1) {
+        return val;
+      }
+
+      const updatedArray = [...(val[input.id] ?? [])];
+      updatedArray.splice(idx, 1);
+      return {
+        ...val,
+        [input.id]: updatedArray,
+      };
+    });
+  }, [setValues, input.id]);
+
   return (
     <FieldsetRow label={input.label}>
-      Nested Form
       <div className={styles.fieldsetWrapper}>
         {elements.map((value, index) => (
-          <Fieldset
+          <div
             key={index}
-            className={styles.fieldset}
+            className={styles.itemWrapper}
           >
-            <NestedFormContextProvider
-              value={{ path: [input.id, index] }}
+            <div className={styles.itemHeadlineWrapper}>
+              <div className={styles.itemHeadline}>
+                Element {index}
+              </div>
+              <div>
+                <IconButton
+                  type="button"
+                  icon="trash-can"
+                  onClick={() => handleDelete(value)}
+                />
+              </div>
+            </div>
+            <Fieldset
+              className={styles.fieldset}
             >
-              Element {index}
-
-              {renderFormInputs(input.inputs)}
-            </NestedFormContextProvider>
-          </Fieldset>
+              <NestedFormContextProvider
+                value={{ path: [input.id, index] }}
+              >
+                {renderFormInputs(input.inputs)}
+              </NestedFormContextProvider>
+            </Fieldset>
+          </div>
         ))}
         <button type="button" onClick={handleCreate}>Element hinzufügen</button>
       </div>
