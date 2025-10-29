@@ -133,13 +133,18 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
     return [key, responseData.body];
   })));
 
+  const mergedContext = contextUtils.merge(context, {
+    dataSource: dataSourceData,
+    ...context,
+  });
+
   const mappedInputs = definition.inputs.map((input) => {
     if (input.$type === 'select' && input.data.$type === 'datasource') {
       return {
         ...input,
         data: {
           $type: 'constant',
-          value: dataSourceData[input.data.value],
+          value: (mergedContext.dataSource ?? dataSourceData)[input.data.value],
         } as TGeneratedFormSelectConstantData,
       }
     }
@@ -155,11 +160,6 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
     }
 
     return input;
-  });
-
-  const mergedContext = contextUtils.merge(context, {
-    dataSource: dataSourceData,
-    ...context,
   });
 
   const mappedInitialValues = definition.initialValues.$type === 'jsonata'
