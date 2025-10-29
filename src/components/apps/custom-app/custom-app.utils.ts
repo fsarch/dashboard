@@ -20,6 +20,7 @@ import { fetchCustom } from "@/utils/fetchCustom";
 import { headers } from "next/headers";
 import Joi from "joi";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
+import { NavigationItem } from "@/constants/apps";
 
 let configuration: TCustomAppConfig | null = null;
 
@@ -237,6 +238,12 @@ const CUSTOM_APP_VIEW_GROUP_SCHEMA = Joi.object({
   views: Joi.array().items(FORM_VIEWS_SCHEMA).required(),
 });
 
+const CUSTOM_APP_NAVIGATION_ITEM_SCHEMA = Joi.object<NavigationItem>({
+  name: Joi.string().required(),
+  icon: Joi.string().required(),
+  path: Joi.string().required(),
+});
+
 export const CUSTOM_APP_SCHEMA = Joi.object<TCustomAppConfig>({
   mainView: Joi.string().required(),
   name: Joi.string().required(),
@@ -246,6 +253,7 @@ export const CUSTOM_APP_SCHEMA = Joi.object<TCustomAppConfig>({
       CUSTOM_APP_VIEW_GROUP_SCHEMA.required(),
     ]).required(),
   ).required(),
+  navigation: Joi.array().items(CUSTOM_APP_NAVIGATION_ITEM_SCHEMA),
 });
 
 async function validateCustomAppConfig(config: TCustomAppConfig): Promise<boolean> {

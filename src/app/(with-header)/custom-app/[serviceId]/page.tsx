@@ -2,7 +2,7 @@ import { customAppUtils } from "@/components/apps/custom-app/custom-app.utils";
 import { PageNotFoundError } from "next/dist/shared/lib/utils";
 import CustomAppViewComponent from "@/components/apps/custom-app/CustomAppView.component";
 import { getServiceConfigurationById } from "@/utils/configuration.utils";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import { CustomAppDefaultPage } from "@/components/universals/page/CustomAppDefaultPage.component";
 
 export default async function Home({ params, searchParams }: Readonly<{
   params: Promise<{ serviceId: string }>;
@@ -21,12 +21,15 @@ export default async function Home({ params, searchParams }: Readonly<{
   }
 
   return (
-    <DefaultPage>
+    <CustomAppDefaultPage
+      config={customAppConfig}
+      view={customAppConfig.mainView}
+    >
       <CustomAppViewComponent
         view={view}
         app={customApp}
         searchParams={await searchParams}
       />
-    </DefaultPage>
+    </CustomAppDefaultPage>
   );
 }

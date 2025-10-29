@@ -1,27 +1,32 @@
 import React, { PropsWithChildren } from 'react';
 import { getCurrentServiceBaseConfiguration } from "@/utils/configuration.utils";
-import { NavigationItem, APPS } from "@/constants/apps";
+import { NavigationItem } from "@/constants/apps";
 import { AutoNavigation } from "@/components/universals/page/AutoNavigation.component";
 import styles from './DefaultPage.module.scss';
 import { headers } from "next/headers";
 import { match } from 'path-to-regexp';
 import memoize from 'lodash.memoize';
-import jsonata from "jsonata";
 import { TIcon } from "@/components/universals/icon/Icon.type";
 import clsx from 'clsx';
 import DefaultPageHeader from "@/components/universals/page/DefaultPageHeader.component";
+import { TCustomAppConfig } from "@/components/apps/custom-app/custom-app.type";
+import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
 
-type DefaultPageProps = PropsWithChildren<{
+type CustomAppDefaultPageProps = PropsWithChildren<{
   className?: string;
+  config: TCustomAppConfig;
+  view: string;
 }>;
 
 const createPathMatcher = memoize((route: string) => {
   return match(route);
 });
 
-export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
+export const CustomAppDefaultPage: React.FunctionComponent<CustomAppDefaultPageProps> = async ({
   children,
   className,
+  config,
+  view,
 }) => {
   let baseConfiguration;
   try {
@@ -30,21 +35,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
     return children;
   }
 
-  const config = APPS[baseConfiguration.type];
-
   let navigations: Array<NavigationItem> | undefined = config.navigation;
-  let matchedRouteParams: Partial<Record<string, string | Array<string>>> = {};
-
-  const serviceRoute = (await headers()).get('X-Service-Path');
-  if (config.routes) {
-    Object.entries(config.routes).forEach(([route, routeDefinition]) => {
-      const match = createPathMatcher(route)(serviceRoute ?? '/');
-      if (match) {
-        navigations = routeDefinition.navigation;
-        matchedRouteParams = match.params;
-      }
-    });
-  }
 
   if (navigations) {
     navigations = await Promise.all(navigations.map(async (navigation) => {
@@ -53,9 +44,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
       }
 
       try {
-        const path = await jsonata(navigation.path.value).evaluate({
-          params: matchedRouteParams,
-        });
+        const path = await jsonataUtils.evaluateStringValue(navigation.path.value);
 
         return {
           ...navigation,
@@ -68,6 +57,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
       }
     }));
 
+    const serviceRoute = (await headers()).get('X-Service-Path')?.substring(1);
     if (serviceRoute) {
       navigations = navigations.map((navigation) => {
         return {
