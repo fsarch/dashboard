@@ -75,7 +75,13 @@ export type TIframeView = {
   url: string | TJsonataExpression;
 };
 
-export type TView = TViewGroupView | TListView | TFormView | TButtonView | TIframeView;
+export type TSectionView = {
+  $type: 'section';
+  views: Array<TView>;
+  label: string;
+};
+
+export type TView = TViewGroupView | TListView | TFormView | TButtonView | TIframeView | TSectionView;
 
 export type TCustomAppListView = TListView & TCustomAppBaseView;
 

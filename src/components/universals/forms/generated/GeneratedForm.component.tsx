@@ -26,7 +26,7 @@ const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
 
     return generatedFormUtils.executePostSubmitAction(definition, data, args, context);
   }
-console.log('evaluatedDefinition.initialValues', evaluatedDefinition.initialValues);
+
   return (
     <GeneratedClientForm
       definition={evaluatedDefinition.inputs}

@@ -4,6 +4,23 @@ import CustomAppListView from "@/components/apps/custom-app/views/list/CustomApp
 import FormView from "@/components/apps/custom-app/views/form/FormView";
 import ButtonView from "@/components/apps/custom-app/views/button/ButtonView.component";
 import IframeView from "@/components/apps/custom-app/views/iframe/IframeView.component";
+import { SectionView } from "@/components/apps/custom-app/views/section/SectionView.component";
+
+export const renderViews = async (views: Array<TView>, { dataSource, context }: {
+  dataSource: Record<string, unknown>;
+  context?: Record<string, unknown>;
+}) => {
+  return views.map((view, index) => (
+    <View
+      key={index}
+      view={view}
+      dataSource={dataSource}
+      context={context}
+    />
+  ));
+};
+
+export type TRenderViewsFunc = typeof renderViews;
 
 type CustomAppViewGroupViewComponentProps = {
   view: TViewGroupView;
@@ -18,14 +35,7 @@ export const ViewGroup: React.FunctionComponent<CustomAppViewGroupViewComponentP
 }) => {
   return (
     <div>
-      {view.views.map((vi, index) => (
-        <View
-          key={index}
-          view={vi}
-          dataSource={dataSource}
-          context={context}
-        />
-      ))}
+      {await renderViews(view.views, { dataSource, context })}
     </div>
   )
 };
@@ -68,6 +78,15 @@ export const View: React.FunctionComponent<CustomAppViewComponentProps> = async 
     return <ButtonView
       view={view}
       dataSource={dataSource}
+    />
+  }
+
+  if (view.$type === 'section') {
+    return <SectionView
+      view={view}
+      dataSource={dataSource}
+      renderViews={renderViews}
+      context={context}
     />
   }
 

@@ -6,7 +6,7 @@ import { dirname, resolve } from "node:path";
 import {
   TCustomAppClickHandler,
   TCustomAppClickHandlerFunc,
-  TCustomAppConfig, TFormView,
+  TCustomAppConfig, TFormView, TSectionView,
 } from "@/components/apps/custom-app/custom-app.type";
 import {
   TGeneratedFormDataSource,
@@ -212,6 +212,12 @@ const FORM_VIEW_GROUP_VIEW_PROPERTIES = {
   ).required(),
 };
 
+const SECTION_COMPONENT_SCHEMA = Joi.object<TSectionView>({
+  $type: Joi.string().allow('section').required(),
+  label: Joi.string().required(),
+  views: Joi.array().items(Joi.link('#form-views')).required(),
+});
+
 const FORM_VIEW_GROUP_SCHEMA = Joi.object(FORM_VIEW_GROUP_VIEW_PROPERTIES);
 
 const FORM_VIEWS_SCHEMA = Joi.alternatives(
@@ -220,6 +226,7 @@ const FORM_VIEWS_SCHEMA = Joi.alternatives(
   FORM_BUTTON_VIEW_SCHEMA,
   FORM_IFRAME_VIEW_SCHEMA,
   FORM_FORM_VIEW_SCHEMA,
+  SECTION_COMPONENT_SCHEMA,
 ).id('form-views');
 
 const CUSTOM_APP_BASE_VIEW_PROPERTIES = {
