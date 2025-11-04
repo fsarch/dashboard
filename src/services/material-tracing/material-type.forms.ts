@@ -3,11 +3,11 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const MATERIAL_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'manufacturerId',
-    type: 'select',
+    $type: 'select',
     label: 'Manufacturer',
     data: {
       $type: 'datasource',

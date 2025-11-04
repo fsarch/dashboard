@@ -3,15 +3,15 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const PART_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'amount',
-    type: 'text',
+    $type: 'text',
     label: 'Amount',
   }, {
     id: 'partTypeId',
-    type: 'select',
+    $type: 'select',
     label: 'Part Type',
     enableSearch: true,
     data: {

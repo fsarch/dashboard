@@ -3,11 +3,11 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'materialTypeId',
-    type: 'select',
+    $type: 'select',
     label: 'Material Type',
     enableSearch: true,
     data: {
@@ -16,7 +16,7 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
     },
   }, {
     id: 'imageRef',
-    type: 'image-server-upload',
+    $type: 'image-server-upload',
     label: 'Bild',
     imageServerAdminUrl: {
       $type: 'datasource',

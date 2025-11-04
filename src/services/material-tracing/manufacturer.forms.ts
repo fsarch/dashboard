@@ -3,7 +3,7 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const MANUFACTURER_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }],
   initialValues: {

@@ -3,11 +3,11 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const PART_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'externalId',
-    type: 'text',
+    $type: 'text',
     label: 'ExternalId',
   }],
   initialValues: {

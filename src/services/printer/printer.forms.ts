@@ -3,7 +3,7 @@ import { TGeneratedFormDefinition } from "@/components/universals/forms/generate
 export const PRINTER_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{
     id: 'printerTypeId',
-    type: 'select',
+    $type: 'select',
     label: 'Printer Type',
     data: {
       $type: 'constant',
@@ -15,11 +15,11 @@ export const PRINTER_CREATE_FORM: TGeneratedFormDefinition = {
     },
   }, {
     id: 'name',
-    type: 'text',
+    $type: 'text',
     label: 'Name',
   }, {
     id: 'externalId',
-    type: 'text',
+    $type: 'text',
     label: 'External ID (Optional)',
   }],
   initialValues: {
