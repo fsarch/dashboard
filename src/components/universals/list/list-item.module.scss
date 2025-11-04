@@ -7,7 +7,7 @@
   gap: 8px;
 
   &:hover {
-    @include apply-custom-background-color('list-item--hover');
+    background-color: rgba(var(--color-primary-rgb), 0.2);
   }
 }
 

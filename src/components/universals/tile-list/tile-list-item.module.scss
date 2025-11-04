@@ -13,6 +13,12 @@
   align-items: center;
 
   background-size: cover;
+
+  transition: color .2s ease-in-out;
+}
+
+.root:hover {
+  color: rgb(var(--color-primary-rgb));
 }
 
 .icon {

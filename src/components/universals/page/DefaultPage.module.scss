@@ -15,6 +15,12 @@
 .navigation {
   width: 100%;
   overflow: auto;
+
+  background-color: #111111;
+  box-shadow: #111111 0 0 8px;
+  border-right: 1px solid #0F0F0F;
+
+  padding: 8px;
 }
 
 @media only screen and (min-width: 800px) {
@@ -23,8 +29,10 @@
     'header header'
     'navigation main';
 
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 220px 1fr;
     grid-template-rows: max-content auto;
+
+    height: 100%;
   }
 
   .navigation {
@@ -39,8 +47,13 @@
 
 .navigation {
   grid-area: navigation;
+
+  padding-top: 8px;
 }
 
 .main {
   grid-area: main;
+
+  padding: 8px;
+  padding-top: 16px;
 }

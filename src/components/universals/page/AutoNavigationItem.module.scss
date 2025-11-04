@@ -4,7 +4,7 @@
 }
 
 .root:hover {
-  @include apply-custom-background-color('navigation--hover');
+  background-color: rgba(var(--color-primary-rgb), 0.2);
 }
 
 .link {

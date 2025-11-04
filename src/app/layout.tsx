@@ -9,6 +9,7 @@ import { getAccessToken } from "@/utils/getAccessToken";
 import { jwtVerify } from "jose";
 import { getJwks } from "@/utils/getJwks";
 import LoadingProvider from "@/components/universals/loader/LoadingProvider";
+import { CSSProperties } from "react";
 
 const inter = Local({ src: './_fonts/inter/Inter-Regular.woff2' });
 
@@ -49,7 +50,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-    <body className={clsx(inter.className, styles.body)}>
+    <body
+      className={clsx(inter.className, styles.body)}
+      style={{
+        '--color-primary-rgb': '255, 105, 180',
+      } as CSSProperties}
+    >
     <LoadingProvider>
       {children}
     </LoadingProvider>

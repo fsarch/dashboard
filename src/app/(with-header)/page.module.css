@@ -1,0 +1,19 @@
+.root {
+    padding: 16px;
+}
+
+.pageTitle {
+    font-size: 2.7rem;
+
+    margin-top: 16px;
+    margin-bottom: 8px;
+
+    text-align: center;
+}
+
+.pageTitlePerson {
+    font-size: 3rem;
+
+    color: rgb(var(--color-primary-rgb));
+    font-weight: bold;
+}
