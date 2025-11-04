@@ -1,9 +1,15 @@
 import React from 'react';
 import { AttributeDto } from "@/services/product/attribute.type";
-import { ItemAttributeDto, ItemListAttributeDto, ItemTextAttributeDto } from "@/services/product/item-attribute.type";
+import {
+  ItemAttributeDto,
+  ItemBooleanAttributeDto,
+  ItemListAttributeDto,
+  ItemTextAttributeDto
+} from "@/services/product/item-attribute.type";
 import { AttributeType } from "@/services/product/attribute.const";
 import ItemTextAttribute from "@/components/apps/product/item/attribute/types/ItemTextAttribute";
 import ItemListAttribute from "@/components/apps/product/item/attribute/types/ItemListAttribute";
+import ItemBooleanAttribute from "@/components/apps/product/item/attribute/types/ItemBooleanAttribute";
 
 type ItemAttributeProps = {
   id?: string;
@@ -26,6 +32,16 @@ const ItemAttribute: React.FunctionComponent<ItemAttributeProps> = ({
         id={id}
         attribute={attribute}
         value={value as ItemTextAttributeDto}
+      />
+    );
+  }
+
+  if (attribute.attributeTypeId === AttributeType.BOOLEAN) {
+    return (
+      <ItemBooleanAttribute
+        id={id}
+        attribute={attribute}
+        value={value as ItemBooleanAttributeDto}
       />
     );
   }

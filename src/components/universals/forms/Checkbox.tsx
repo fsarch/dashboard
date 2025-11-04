@@ -4,13 +4,15 @@ import React from 'react';
 import { Field } from "formik";
 
 type CheckboxProps = {
+  id?: string;
   name: string;
   disabled?: boolean;
   required?: boolean;
-  value: string;
+  value?: string;
 };
 
 const Checkbox: React.FunctionComponent<CheckboxProps> = ({
+  id,
   name,
   disabled,
   required,
@@ -18,6 +20,7 @@ const Checkbox: React.FunctionComponent<CheckboxProps> = ({
 }) => {
   return (
     <Field
+      id={id}
       type="checkbox"
       value={value}
       name={name}

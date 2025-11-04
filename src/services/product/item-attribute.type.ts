@@ -15,10 +15,16 @@ export type ItemTextAttributeDto = ItemAttributeBaseDto & {
   value: string;
 };
 
+export type ItemBooleanAttributeDto = ItemAttributeBaseDto & {
+  attributeTypeId: AttributeType.BOOLEAN;
+
+  value: boolean;
+};
+
 export type ItemListAttributeDto = ItemAttributeBaseDto & {
   attributeTypeId: AttributeType.LIST;
 
   value: unknown;
 };
 
-export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto;
+export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto | ItemBooleanAttributeDto;

@@ -11,6 +11,7 @@ type InputProps = {
   min?: number;
   max?: number;
   step?: number;
+  value?: string;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({

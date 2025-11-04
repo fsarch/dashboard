@@ -49,6 +49,14 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
       value.value.value = (value.value.value as Array<{ id: string }> | undefined)?.map(({ id }) => id);
     }
 
+    if (value.attribute.attributeTypeId === AttributeType.BOOLEAN) {
+      if (!value.value) {
+        value.value = {
+          value: false,
+        } as any;
+      }
+    }
+
     acc.attributes[value.attribute.id] = value.value;
 
     return acc;
