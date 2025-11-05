@@ -65,6 +65,13 @@ export const APPS: Record<EServiceType, {
           },
           icon: 'sitemap',
         }, {
+          name: 'Item-List',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/item-list'",
+          },
+          icon: 'list',
+        }, {
           name: 'Attributes',
           path: {
             $type: 'jsonata',

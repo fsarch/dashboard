@@ -4,8 +4,25 @@ import {
 } from "@/services/product/attribute.type";
 import { ItemCreateDto, ItemDto } from "@/services/product/item.type";
 
-const listItems = async (catalogId: string, parentItemId: string | null | undefined): Promise<Array<ItemDto>> => {
-  const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items${parentItemId !== undefined ? `?parentItemId=${parentItemId}` : ''}`);
+const listItems = async (catalogId: string, parentItemId: string | null | undefined, options?: { itemTypeId?: Array<string>; activeAttributeFilters?: Record<string, string> }): Promise<Array<ItemDto>> => {
+  const queryParams = new URLSearchParams();
+  if (parentItemId !== undefined) {
+    queryParams.append('parentItemId', parentItemId ?? 'null');
+  }
+
+  if (options?.itemTypeId) {
+    options.itemTypeId.forEach((itemTypeId) => {
+      queryParams.append('itemTypeId', itemTypeId);
+    })
+  }
+
+  if (options?.activeAttributeFilters) {
+    Object.entries(options.activeAttributeFilters).forEach(([attributeId, attributeValue]) => {
+      queryParams.append('filter', `attribute:${attributeId}=${attributeValue}`);
+    })
+  }
+
+  const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items?${queryParams}`);
   const items = await itemResponse.json();
 
   return items;
