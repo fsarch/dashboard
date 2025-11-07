@@ -26,12 +26,21 @@ export async function fetchService(url: string, init?: RequestInit, options?: { 
 
   const fetchUrl = new URL(url, serviceConfiguration.url);
 
-  const res = await fetch(fetchUrl, {
-    ...init,
-    headers: requestHeaders,
-  });
+  try {
+    const res = await fetch(fetchUrl, {
+      ...init,
+      headers: requestHeaders,
+    });
 
-  console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`)
+    console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`)
 
-  return res;
+    return res;
+  } catch (error) {
+    console.error(`[${init?.method || 'GET'}] ${fetchUrl} - failed`, {
+      error,
+    });
+
+    throw error;
+  }
+
 }
