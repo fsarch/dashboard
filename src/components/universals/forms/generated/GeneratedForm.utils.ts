@@ -114,7 +114,7 @@ const executePostSubmitAction = async (
   };
 }
 
-const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, context }: { args?: Record<string, unknown>; context?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
+const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, context = { args } }: { args?: Record<string, unknown>; context?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
     const path = await jsonataUtils.evaluateStringValue(value.path, args);
     const dataResponse = await fetchService(path, {
