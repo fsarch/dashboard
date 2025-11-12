@@ -24,7 +24,7 @@ const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
   async function handleSubmit(data: TGeneratedFormInitialValues): Promise<TGeneratedFormSubmitResponse> {
     'use server';
 
-    return generatedFormUtils.executePostSubmitAction(definition, data, args, context);
+    return generatedFormUtils.executePostSubmitAction(definition, data, args, { ...context, args });
   }
 
   return (
