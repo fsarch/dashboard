@@ -33,7 +33,7 @@ const uploadImage = async (options: { data: Buffer; name?: string; }): Promise<v
   const imagesResponse = await fetchService(`/v1/admin/images/_actions/upload`, {
     method: 'POST',
     headers,
-    body: options.data,
+    body: new Uint8Array(options.data).buffer,
   });
   if (!imagesResponse.ok) {
     throw new Error('invalid response');

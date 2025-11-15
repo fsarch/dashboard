@@ -7,6 +7,7 @@ import {
   LocalPrinterProvider, TLocalPrinterContext
 } from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinter.context";
 import type WebUSBReceiptPrinterType from '@point-of-sale/webusb-receipt-printer';
+import WebUSBReceiptPrinter from '@point-of-sale/webusb-receipt-printer';
 import { useRouter } from "next/navigation";
 
 type LocalPrinterSettingsProps = PropsWithChildren<{
@@ -31,7 +32,7 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
 
   const handleConnectClick = useCallback(async () => {
     // @ts-ignore
-    const WebUSBReceiptPrinter = (await import('/node_modules/@point-of-sale/webusb-receipt-printer/dist/webusb-receipt-printer.esm')).default;
+    // const WebUSBReceiptPrinter = (await import('@point-of-sale/webusb-receipt-printer/dist/webusb-receipt-printer.esm')).default;
 
     const receiptPrinter: WebUSBReceiptPrinterType = new WebUSBReceiptPrinter();
 
@@ -68,7 +69,7 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
   const handleAutoPrintToggle = useCallback(() => {
     const newAutoPrint = !autoPrint;
     setAutoPrint(newAutoPrint);
-    
+
     if (printer) {
       setPrinter({
         ...printer,
@@ -88,7 +89,7 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
           >
             Drucker verbinden
           </Button>
-          
+
           {printer && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <label>
@@ -101,10 +102,10 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
                 Auto-Druck aktivieren
               </label>
               {autoPrint && (
-                <span style={{ 
-                  color: 'green', 
+                <span style={{
+                  color: 'green',
                   fontSize: '0.9rem',
-                  fontWeight: 'bold' 
+                  fontWeight: 'bold'
                 }}>
                   ● Aktiv
                 </span>

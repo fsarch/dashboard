@@ -1,5 +1,5 @@
 import 'server-only';
-import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
+import { headers } from "next/headers";
 
 export async function getServiceLocalUrl(path: string) {
   const serviceType = (await headers()).get('X-Service-Type');

@@ -1,97 +1,76 @@
-import pino, { type Logger } from "pino";
-
 export class ServerLogger {
   public static Instance = new ServerLogger();
 
-  private pino: Logger;
   private section: string;
 
   constructor(section?: string) {
     this.section = section || '';
+  }
 
-    this.pino = pino({
-      level: 'debug',
-      base: undefined,
-      timestamp: false,
-      messageKey: 'message',
-    });
+  private formatOutput(level: string, message: any, data?: any, section?: string) {
+    const output = {
+      level,
+      section: section || this.section || undefined,
+      payload: data === undefined ? null : data,
+      message,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Ausgabe als JSON für strukturierte Logs
+    try {
+      return JSON.stringify(output);
+    } catch (e) {
+      // Falls Stringify fehlschlägt, fallback auf einfachere Darstellung
+      return `${level.toUpperCase()} ${section || this.section || ''} - ${String(message)}`;
+    }
   }
 
   public log(message: any, ...args: any[]) {
-    const context = this.section ?? args.pop();
-    const data = args.shift();
+    const context = this.section || (args.length ? args.pop() : undefined);
+    const data = args.length ? args.shift() : undefined;
 
-    this.pino.info(
-      {
-        payload: data,
-        section: context,
-      },
-      message
-    );
+    console.info(this.formatOutput('info', message, data, context));
   }
 
   public error(message: any, ...args: any[]) {
-    const context = this.section ?? args.pop();
-    const data = args.shift();
+    const context = this.section || (args.length ? args.pop() : undefined);
+    const data = args.length ? args.shift() : undefined;
 
-    this.pino.error(
-      {
-        payload: data,
-        section: context,
-      },
-      message
-    );
+    console.error(this.formatOutput('error', message, data, context));
   }
 
   public warn(message: any, ...args: any[]) {
-    const context = this.section ?? args.pop();
-    const data = args.shift();
+    const context = this.section || (args.length ? args.pop() : undefined);
+    const data = args.length ? args.shift() : undefined;
 
-    this.pino.warn(
-      {
-        payload: data,
-        section: context,
-      },
-      message
-    );
+    console.warn(this.formatOutput('warn', message, data, context));
   }
 
   public debug(message: any, ...args: any[]) {
-    const context = this.section ?? args.pop();
-    const data = args.shift();
+    const context = this.section || (args.length ? args.pop() : undefined);
+    const data = args.length ? args.shift() : undefined;
 
-    this.pino.debug(
-      {
-        payload: data,
-        section: context,
-      },
-      message
-    );
+    // console.debug hat nicht überall eine eigene Farbe, aber ist semantisch passend
+    console.debug(this.formatOutput('debug', message, data, context));
   }
 
   public verbose(message: any, ...args: any[]) {
-    const context = this.section ?? args.pop();
-    const data = args.shift();
+    const context = this.section || (args.length ? args.pop() : undefined);
+    const data = args.length ? args.shift() : undefined;
 
-    this.pino.trace(
-      {
-        payload: data,
-        section: context,
-      },
-      message
-    );
+    // verbose mappt auf trace/debug
+    if ((console as any).trace) {
+      (console as any).trace(this.formatOutput('trace', message, data, context));
+    } else {
+      console.debug(this.formatOutput('trace', message, data, context));
+    }
   }
 
   public critical(message: any, ...args: any[]) {
-    const context = this.section ?? args.pop();
-    const data = args.shift();
+    const context = this.section || (args.length ? args.pop() : undefined);
+    const data = args.length ? args.shift() : undefined;
 
-    this.pino.fatal(
-      {
-        payload: data,
-        section: context,
-      },
-      message
-    );
+    // critical -> fatal/critical, verwenden wir console.error mit Kennzeichnung
+    console.error(this.formatOutput('fatal', message, data, context));
   }
 }

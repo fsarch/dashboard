@@ -1,9 +1,4 @@
 import { customerCommunicationService } from "@/services/customer-communication/customer-communication.service";
-import { renderToString } from "react-dom/server";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote } from "next-mdx-remote";
-import MdxClient
-  from "@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/mdx-client.component";
 import Mdx
   from "@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/mdx.component";
 import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
