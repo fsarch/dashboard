@@ -26,8 +26,10 @@ export async function setItemAttributes(catalogId: string, itemId: string, formD
     try {
       let value = formData.attributes[attribute.attributeId];
       if (attribute.attribute?.attributeTypeId === AttributeType.LIST) {
-        value.value = (value.value as Array<string>).map((id) => ({ id }));
+        value.value = (value.value as unknown as Array<string>).map((id) => ({ id })) as any;
       }
+
+      console.log('test124', catalogId, itemId, attribute.attributeId, value);
 
       const res = await itemAttributeService.setItemAttribute(catalogId, itemId, attribute.attributeId, value);
       results.push({

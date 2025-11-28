@@ -2,7 +2,6 @@
 
 import React, { useCallback } from 'react';
 import { Form, Formik, FormikHelpers } from "formik";
-import Button from "@/components/universals/forms/Button";
 import Input from "@/components/universals/forms/Input";
 import { AttributeCreateDto } from "@/services/product/attribute.type";
 import { createAttribute } from "@/components/apps/product/attribute/AttributeCreateForm.server-action";
@@ -12,6 +11,7 @@ import AttributeSettings from './create/AttributeSettings';
 import { useRouter } from "next/navigation";
 import Fieldset from "@/components/universals/forms/Fieldset.component";
 import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
+import FormikSubmitButton from "@/components/universals/forms/button/FormikSubmitButton";
 
 type AttributeCreateFormProps = {
   catalogId: string;
@@ -23,6 +23,7 @@ const AttributeCreateForm: React.FunctionComponent<AttributeCreateFormProps> = (
   const router = useRouter();
 
   const handleSubmit = useCallback(async (value: AttributeCreateDto, helpers: FormikHelpers<AttributeCreateDto>) => {
+    console.log('submit value', value);
     await createAttribute(catalogId, value);
 
     router.refresh();
@@ -68,14 +69,22 @@ const AttributeCreateForm: React.FunctionComponent<AttributeCreateFormProps> = (
                 }, {
                   label: 'Number',
                   value: AttributeType.NUMBER,
+                }, {
+                  label: 'Link',
+                  value: AttributeType.LINK,
+                }, {
+                  label: 'Image',
+                  value: AttributeType.IMAGE,
                 }]}
               />
             )}
           </SimpleFieldsetRow>
-          <AttributeSettings/>
-          <Button type="submit">
+          <AttributeSettings
+            catalogId={catalogId}
+          />
+          <FormikSubmitButton>
             Erstellen
-          </Button>
+          </FormikSubmitButton>
         </Fieldset>
       </Form>
     </Formik>

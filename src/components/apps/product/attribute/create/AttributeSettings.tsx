@@ -5,12 +5,16 @@ import { AttributeType } from "@/services/product/attribute.const";
 import AttributeJsonSettings from './AttributeJsonSettings';
 import AttributeTextSettings from './AttributeTextSettings';
 import AttributeNumberSettings from './AttributeNumberSettings';
+import AttributeLinkSettings from './AttributeLinkSettings';
+import AttributeImageSettings from "@/components/apps/product/attribute/create/AttributeImageSettings";
 
 type AttributeSettingsProps = {
-
+  catalogId: string;
 };
 
-const AttributeSettings: React.FunctionComponent<AttributeSettingsProps> = () => {
+const AttributeSettings: React.FunctionComponent<AttributeSettingsProps> = ({
+  catalogId,
+}) => {
   const { values } = useFormikContext<AttributeCreateDto>();
 
   if (values.attributeTypeId === AttributeType.JSON) {
@@ -28,6 +32,20 @@ const AttributeSettings: React.FunctionComponent<AttributeSettingsProps> = () =>
   if (values.attributeTypeId === AttributeType.NUMBER) {
     return (
       <AttributeNumberSettings/>
+    );
+  }
+
+  if (values.attributeTypeId === AttributeType.LINK) {
+    return (
+      <AttributeLinkSettings
+        catalogId={catalogId}
+      />
+    );
+  }
+
+  if (values.attributeTypeId === AttributeType.IMAGE) {
+    return (
+      <AttributeImageSettings/>
     );
   }
 

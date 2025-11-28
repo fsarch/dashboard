@@ -9,10 +9,12 @@ import AttributeSettings from './create/AttributeSettings';
 
 type AttributeProps = {
   attribute: AttributeDto;
+  catalogId: string;
 };
 
 const AttributeEditForm: React.FunctionComponent<AttributeProps> = ({
   attribute,
+  catalogId,
 }) => {
   const handleChange = useCallback((values: AttributeDto) => {
     console.log('values', values);
@@ -29,7 +31,9 @@ const AttributeEditForm: React.FunctionComponent<AttributeProps> = ({
           name="name"
           disabled
         />
-        <AttributeSettings/>
+        <AttributeSettings
+          catalogId={catalogId}
+        />
         <Button type="submit">Speichern</Button>
       </Form>
     </Formik>

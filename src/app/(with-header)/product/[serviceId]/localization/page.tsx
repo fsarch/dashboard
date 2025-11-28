@@ -7,8 +7,9 @@ import LocalizationCreateForm from "@/components/apps/product/localization/Local
 import Section from "@/components/universals/section/Section";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 
-export default async function Home() {
+export default async function Home({ params }: { params: Promise<{ catalogId: string }>; }) {
   const localizations = await localizationService.listLocalizations();
+  const catalogId = (await params).catalogId;
 
   return (
     <DefaultPage>
@@ -27,7 +28,9 @@ export default async function Home() {
         </List>
       </Section>
       <Section name="Lokalisierung erstellen">
-        <LocalizationCreateForm />
+        <LocalizationCreateForm
+          catalogId={catalogId}
+        />
       </Section>
     </DefaultPage>
   );

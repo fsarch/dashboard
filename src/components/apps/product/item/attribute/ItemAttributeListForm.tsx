@@ -20,8 +20,8 @@ const ItemAttributeListForm: React.FunctionComponent<ItemAttributeListFormProps>
   itemId,
 }) => {
   const handleSubmit = useCallback(async (values: ItemAttributeListFormDataType, helper: FormikHelpers<ItemAttributeListFormDataType>) => {
-    await setItemAttributes(catalogId, itemId, values);
     console.log('values', values);
+    await setItemAttributes(catalogId, itemId, values);
   }, [catalogId, itemId]);
 
   return (

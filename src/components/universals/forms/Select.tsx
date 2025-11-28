@@ -17,7 +17,8 @@ const Select: React.FunctionComponent<SelectProps> = ({
     <Field
       id={id}
       className={styles.input}
-      as="select" name={name}
+      as="select"
+      name={name}
     >
       {values.map((value) => (
         <option key={value.id ?? value.value} value={value.value}>{value.label}</option>

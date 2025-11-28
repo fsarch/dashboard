@@ -18,6 +18,7 @@ export default async function Home(props: { params: Promise<{ catalogId: string;
   return (
     <DefaultPage>
       <AttributeEditForm
+        catalogId={params.catalogId}
         attribute={attribute}
       />
       {attribute.attributeTypeId === AttributeType.LIST && (

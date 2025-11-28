@@ -14,11 +14,14 @@ import Button from "@/components/universals/forms/Button";
 import Fieldset from "@/components/universals/forms/Fieldset.component";
 import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
 import { AttributeType } from "@/services/product/attribute.const";
+import { isListItemAttribute } from "@/services/product/item-attribute.utils";
 
 type ItemAttributeListProps = {
   catalogId: string;
   itemId: string;
 };
+
+type CombinedAttribute<TAttr extends AttributeDto, TVal extends ItemAttributeDto> = { isRequired: boolean; attribute: TAttr; value: TVal };
 
 const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async ({
   catalogId,
@@ -42,11 +45,11 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
         isRequired: itemTypeAttribute.isRequired,
       };
     })
-    .filter(a => a) as Array<{ isRequired: boolean; attribute: AttributeDto; value: ItemAttributeDto }>;
+    .filter(a => a) as Array<CombinedAttribute<AttributeDto, ItemAttributeDto>>;
 
   const initialValue = itemTypeBasedAttributes.reduce((acc, value) => {
     if (value.value && value.attribute.attributeTypeId === AttributeType.LIST) {
-      value.value.value = (value.value.value as Array<{ id: string }> | undefined)?.map(({ id }) => id);
+      value.value.value = (value.value.value as Array<{ id: string }> | undefined)?.map(({ id }) => id) as any;
     }
 
     if (value.attribute.attributeTypeId === AttributeType.BOOLEAN) {
@@ -61,6 +64,8 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
 
     return acc;
   }, { attributes: {} } as ItemAttributeListFormDataType);
+
+  console.log('initialValue', initialValue);
 
   return (
     <Section name="Attribute">

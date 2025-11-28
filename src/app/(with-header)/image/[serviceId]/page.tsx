@@ -35,7 +35,7 @@ export default async function Home(props: { params: Promise<{ serviceId: string 
           >
             <div className={styles.imageListItem}>
               <div>
-                <Image
+                <img
                   src={`/image/${params.serviceId}/images/blob/${image.id}`}
                   className={styles.imageListItemPreview}
                   alt=""

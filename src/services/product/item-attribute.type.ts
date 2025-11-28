@@ -24,7 +24,17 @@ export type ItemBooleanAttributeDto = ItemAttributeBaseDto & {
 export type ItemListAttributeDto = ItemAttributeBaseDto & {
   attributeTypeId: AttributeType.LIST;
 
-  value: unknown;
+  value: Array<{
+    id: string;
+  }>;
 };
 
-export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto | ItemBooleanAttributeDto;
+export type ItemLinkAttributeDto = ItemAttributeBaseDto & {
+  attributeTypeId: AttributeType.LINK;
+
+  value: Array<{
+    itemId: string;
+  }>;
+};
+
+export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto | ItemBooleanAttributeDto | ItemLinkAttributeDto;

@@ -13,9 +13,11 @@ import { LocalizationCreateDto } from "@/services/product/localization.type";
 import { CountryCode, LanguageCode } from "@/services/product/localization.const";
 
 type LocalizationCreateFromProps = {
+  catalogId: string;
 };
 
 const LocalizationCreateForm: React.FunctionComponent<LocalizationCreateFromProps> = ({
+  catalogId,
 }) => {
   const router = useRouter();
 
@@ -58,7 +60,9 @@ const LocalizationCreateForm: React.FunctionComponent<LocalizationCreateFromProp
             value: LanguageCode.ENGLISH,
           }]}
         />
-        <AttributeSettings/>
+        <AttributeSettings
+          catalogId={catalogId}
+        />
         <Button type="submit">
           Erstellen
         </Button>
