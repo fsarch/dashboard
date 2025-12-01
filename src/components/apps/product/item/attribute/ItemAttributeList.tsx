@@ -75,7 +75,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
     if (value.attribute.attributeTypeId === AttributeType.IMAGE) {
       const imageServerUrl = (value.attribute as ImageAttributeDto).imageServerUrl;
 
-      value.value.value = await Promise.all((value.value as ItemImageAttributeDto).value.map(async (value) => {
+      value.value.value = await Promise.all((value.value as ItemImageAttributeDto)?.value?.map(async (value) => {
         const imageUrl = await proxyRequestUtils.create({
           url: `${imageServerUrl}/v1/admin/images/${(value as any).id}/raw`,
           method: 'GET',
@@ -85,9 +85,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
 
         console.log('value.value', imageUrl);
         return value;
-      })) as any;
-
-
+      })) as any ?? [];
     }
 
     acc.attributes[value.attribute.id] = value.value;
