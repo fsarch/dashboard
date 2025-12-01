@@ -5,6 +5,7 @@ FROM base AS deps
 
 WORKDIR /app
 
+COPY ./patches ./patches
 COPY package.json package-lock.json ./
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -24,6 +25,7 @@ RUN apk add --no-cache \
 RUN npm ci
 
 # Install dependencies based on the preferred package manager
+COPY ./patches ./patches
 COPY package.json package-lock.json ./
 
 # Install dependencies only when needed
@@ -35,6 +37,7 @@ WORKDIR /app
 ENV NODE_ENV production
 
 # Install dependencies based on the preferred package manager
+COPY ./patches ./patches
 COPY package.json package-lock.json ./
 
 RUN apk add --no-cache \
