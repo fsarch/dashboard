@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-const SECRET = process.env.CRYPTO_SECRET ?? (() => { throw new Error("CRYPTO_SECRET is not set"); })();
+const SECRET = process.env.CRYPTO_SECRET;
 
 function base64urlEncode(input: Buffer | string): string {
   const b = typeof input === "string" ? Buffer.from(input, "utf8") : input;
@@ -12,6 +12,10 @@ function base64urlDecode(input: string): Buffer {
 }
 
 async function sign<T>(data: T): Promise<string> {
+  if (!SECRET) {
+    throw new Error("CRYPTO_SECRET is not set");
+  }
+
   const serializedData = JSON.stringify(data);
   const payloadB64Url = base64urlEncode(serializedData);
 
@@ -22,6 +26,10 @@ async function sign<T>(data: T): Promise<string> {
 }
 
 async function verify<T>(data: string): Promise<T> {
+  if (!SECRET) {
+    throw new Error("CRYPTO_SECRET is not set");
+  }
+
   const parts = data.split(".");
   if (parts.length !== 2) throw new Error("Invalid format, expected 'payload.signature'");
 
