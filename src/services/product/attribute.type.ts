@@ -10,6 +10,18 @@ export type AttributeDto = {
   localizations: Array<AttributeLocalizationDto>;
 };
 
+export type ImageAttributeDto = {
+  id: string;
+
+  name: string;
+
+  attributeTypeId: AttributeType.IMAGE;
+
+  localizations: Array<AttributeLocalizationDto>;
+
+  imageServerUrl: string;
+};
+
 export type AttributeLocalizationDto = {
   id: string;
 

@@ -26,26 +26,13 @@ const ItemLinkAttribute: React.FunctionComponent<ItemLinkAttributeProps> = async
 
   return (
     <div>
-      {elements.map(async (element, idx) => (
-        <div key={element.id}>
-        <label>
-          <Checkbox
-            name={`attributes['${attribute.id}'].value[${idx}].id`}
-            value={element.id}
-          />
-          {element.name}
-        </label>
-        </div>
-      ))}
-      <div>
-        <SearchableSelect
-          name={`attributes['${attribute.id}'].value[${elements.length}].id`}
-          values={selectableItems.map((item) => ({
-            label: item.name,
-            value: item.id,
-          }))}
-        />
-      </div>
+      <SearchableSelect
+        name={`attributes['${attribute.id}'].value[0].id`}
+        values={selectableItems.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }))}
+      />
     </div>
   );
 };

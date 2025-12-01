@@ -3,6 +3,7 @@ import { Field, useField } from "formik";
 
 type FileInputProps = {
   name: string;
+  className?: string;
   disabled?: boolean;
   required?: boolean;
   multiple?: boolean;
@@ -10,6 +11,7 @@ type FileInputProps = {
 };
 
 const FileInput: React.FunctionComponent<FileInputProps> = ({
+  className,
   name,
   disabled,
   required,
@@ -32,6 +34,7 @@ const FileInput: React.FunctionComponent<FileInputProps> = ({
     <input
       type="file"
       name=""
+      className={className}
       disabled={disabled}
       required={required}
       onChange={handleChange}

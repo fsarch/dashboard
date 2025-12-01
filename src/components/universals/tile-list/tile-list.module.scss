@@ -8,3 +8,11 @@
 
   @include apply-custom-gap('tile-list');
 }
+
+.rootStart {
+  justify-content: flex-start;
+}
+
+.rootEnd {
+  justify-content: flex-end;
+}

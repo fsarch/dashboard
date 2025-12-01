@@ -3,8 +3,8 @@ import { itemService } from "@/services/product/item.service";
 import { attributeService } from "@/services/product/attribute.service";
 import { itemTypeService } from "@/services/product/item-type.service";
 import Section from "@/components/universals/section/Section";
-import { AttributeDto } from "@/services/product/attribute.type";
-import { ItemAttributeDto } from "@/services/product/item-attribute.type";
+import { AttributeDto, ImageAttributeDto } from "@/services/product/attribute.type";
+import { ItemAttributeDto, ItemImageAttributeDto, ItemTextAttributeDto } from "@/services/product/item-attribute.type";
 import ItemAttribute from "@/components/apps/product/item/attribute/ItemAttribute";
 import ItemAttributeListForm from "@/components/apps/product/item/attribute/ItemAttributeListForm";
 import {
@@ -15,6 +15,8 @@ import Fieldset from "@/components/universals/forms/Fieldset.component";
 import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
 import { AttributeType } from "@/services/product/attribute.const";
 import { isListItemAttribute } from "@/services/product/item-attribute.utils";
+import { proxyRequestUtils } from "@/utils/proxy-request.utils";
+import { arrayUtils } from "@/utils/array.utils";
 
 type ItemAttributeListProps = {
   catalogId: string;
@@ -37,6 +39,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
         return null;
       }
 
+      console.log('item', item);
       const itemAttribute = item.attributes?.find((ita) => ita.attribute.id === attribute.id);
 
       return {
@@ -47,9 +50,13 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
     })
     .filter(a => a) as Array<CombinedAttribute<AttributeDto, ItemAttributeDto>>;
 
-  const initialValue = itemTypeBasedAttributes.reduce((acc, value) => {
-    if (value.value && value.attribute.attributeTypeId === AttributeType.LIST) {
-      value.value.value = (value.value.value as Array<{ id: string }> | undefined)?.map(({ id }) => id) as any;
+  const initialValue = await arrayUtils.asyncReduce(itemTypeBasedAttributes, async (acc, value) => {
+    // default values
+    if (value.attribute.attributeTypeId === AttributeType.LIST
+      || value.attribute.attributeTypeId === AttributeType.IMAGE) {
+      if (!value.value) {
+        value.value = [] as any;
+      }
     }
 
     if (value.attribute.attributeTypeId === AttributeType.BOOLEAN) {
@@ -58,6 +65,29 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
           value: false,
         } as any;
       }
+    }
+
+    // special handling/mapping
+    if (value.value && value.attribute.attributeTypeId === AttributeType.LIST) {
+      value.value.value = (value.value.value as Array<{ id: string }> | undefined)?.map(({ id }) => id) as any;
+    }
+
+    if (value.attribute.attributeTypeId === AttributeType.IMAGE) {
+      const imageServerUrl = (value.attribute as ImageAttributeDto).imageServerUrl;
+
+      value.value.value = await Promise.all((value.value as ItemImageAttributeDto).value.map(async (value) => {
+        const imageUrl = await proxyRequestUtils.create({
+          url: `${imageServerUrl}/v1/admin/images/${(value as any).id}/raw`,
+          method: 'GET',
+        });
+
+        value.imageUrl = imageUrl;
+
+        console.log('value.value', imageUrl);
+        return value;
+      })) as any;
+
+
     }
 
     acc.attributes[value.attribute.id] = value.value;
@@ -70,7 +100,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
   return (
     <Section name="Attribute">
       <ItemAttributeListForm
-        initialValue={initialValue}
+        initialValue={initialValue as any}
         catalogId={catalogId}
         itemId={itemId}
       >

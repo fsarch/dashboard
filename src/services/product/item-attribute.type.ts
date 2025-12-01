@@ -36,5 +36,13 @@ export type ItemLinkAttributeDto = ItemAttributeBaseDto & {
     itemId: string;
   }>;
 };
+export type ItemImageAttributeDto = ItemAttributeBaseDto & {
+  attributeTypeId: AttributeType.IMAGE;
 
-export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto | ItemBooleanAttributeDto | ItemLinkAttributeDto;
+  value: Array<{
+    imageId: string;
+    imageUrl: string;
+  }>;
+};
+
+export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto | ItemBooleanAttributeDto | ItemLinkAttributeDto | ItemImageAttributeDto;

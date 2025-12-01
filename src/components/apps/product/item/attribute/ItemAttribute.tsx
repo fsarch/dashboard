@@ -1,8 +1,8 @@
 import React from 'react';
-import { AttributeDto } from "@/services/product/attribute.type";
+import { AttributeDto, ImageAttributeDto } from "@/services/product/attribute.type";
 import {
   ItemAttributeDto,
-  ItemBooleanAttributeDto, ItemLinkAttributeDto,
+  ItemBooleanAttributeDto, ItemImageAttributeDto, ItemLinkAttributeDto,
   ItemListAttributeDto,
   ItemTextAttributeDto
 } from "@/services/product/item-attribute.type";
@@ -11,6 +11,7 @@ import ItemTextAttribute from "@/components/apps/product/item/attribute/types/It
 import ItemListAttribute from "@/components/apps/product/item/attribute/types/ItemListAttribute";
 import ItemLinkAttribute from "@/components/apps/product/item/attribute/types/ItemLinkAttribute";
 import ItemBooleanAttribute from "@/components/apps/product/item/attribute/types/ItemBooleanAttribute";
+import { ItemImageAttribute } from "@/components/apps/product/item/attribute/types/ItemImageAttribute";
 
 type ItemAttributeProps = {
   id?: string;
@@ -61,6 +62,16 @@ const ItemAttribute: React.FunctionComponent<ItemAttributeProps> = ({
       <ItemLinkAttribute
         attribute={attribute}
         value={value as ItemLinkAttributeDto}
+        catalogId={catalogId}
+      />
+    );
+  }
+
+  if (attribute.attributeTypeId === AttributeType.IMAGE) {
+    return (
+      <ItemImageAttribute
+        attribute={attribute as ImageAttributeDto}
+        value={value as ItemImageAttributeDto}
         catalogId={catalogId}
       />
     );

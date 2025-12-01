@@ -25,6 +25,8 @@ const listItems = async (catalogId: string, parentItemId: string | null | undefi
   const itemResponse = await fetchService(`/v1/catalogs/${catalogId}/items?${queryParams}`);
   const items = await itemResponse.json();
 
+  console.log('found items', items);
+
   return items;
 };
 

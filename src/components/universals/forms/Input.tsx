@@ -5,7 +5,7 @@ import styles from './Input.module.scss';
 type InputProps = {
   id?: string;
   name: string;
-  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number' | 'time';
+  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number' | 'time' | 'url';
   disabled?: boolean;
   required?: boolean;
   min?: number;
