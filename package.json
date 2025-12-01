@@ -39,7 +39,9 @@
     "next": "16.0.3",
     "next-auth": "^4.24.13",
     "next-mdx-remote": "^5.0.0",
+    "patch-package": "^8.0.1",
     "path-to-regexp": "^8.3.0",
+    "postinstall-postinstall": "^2.1.0",
     "qr-scanner": "^1.4.2",
     "qrcode": "^1.5.4",
     "react": "^19.2.0",
@@ -64,8 +66,6 @@
     "eslint-config-next": "^16.0.3",
     "jest": "^30.2.0",
     "joi-to-json": "^5.0.0",
-    "patch-package": "^8.0.1",
-    "postinstall-postinstall": "^2.1.0",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
   }
