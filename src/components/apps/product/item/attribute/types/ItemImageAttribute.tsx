@@ -19,13 +19,11 @@ export const ItemImageAttribute: React.FunctionComponent<ItemImageAttributeProps
   value,
   catalogId,
 }) => {
-  console.log('image attribute', attribute, value);
-
   return (
     <TileList
       orientation="left"
     >
-      {value?.value.map((value, index) => (
+      {value?.value?.map((value, index) => (
         <ImageListInput
           key={index}
           name={`attributes['${attribute.id}'].value[${index}]`}
@@ -33,7 +31,7 @@ export const ItemImageAttribute: React.FunctionComponent<ItemImageAttributeProps
         />
       ))}
       <ImageListInput
-        name={`attributes['${attribute.id}'].value[${value?.value.length ?? 0}]`}
+        name={`attributes['${attribute.id}'].value[${value?.value?.length ?? 0}]`}
         imageServerUrl={attribute.imageServerUrl}
       />
     </TileList>

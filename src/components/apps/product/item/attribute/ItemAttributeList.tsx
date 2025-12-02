@@ -85,7 +85,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
 
         console.log('value.value', imageUrl);
         return value;
-      })) as any ?? [];
+      }) ?? []) as any;
     }
 
     acc.attributes[value.attribute.id] = value.value;
