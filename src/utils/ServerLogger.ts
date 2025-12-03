@@ -7,11 +7,22 @@ export class ServerLogger {
     this.section = section || '';
   }
 
+  private formatPayload(data: any) {
+    if (data?.error) {
+      data.error = {
+        message: data.error.message,
+        stack: data.error.stack,
+      };
+    }
+
+    return data;
+  }
+
   private formatOutput(level: string, message: any, data?: any, section?: string) {
     const output = {
       level,
       section: section || this.section || undefined,
-      payload: data === undefined ? null : data,
+      payload: data === undefined ? null : this.formatPayload(data),
       message,
       timestamp: new Date().toISOString(),
     };
