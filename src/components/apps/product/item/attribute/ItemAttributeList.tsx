@@ -83,7 +83,7 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
 
       value.value.value = await Promise.all((value.value as ItemImageAttributeDto)?.value?.map(async (value) => {
         const imageUrl = await proxyRequestUtils.create({
-          url: `${imageServerUrl}/v1/admin/images/${(value as any).id}/raw`,
+          url: `${imageServerUrl}/v1/admin/images/${value.imageId}/raw`,
           method: 'GET',
         });
 
