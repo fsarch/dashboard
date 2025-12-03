@@ -52,10 +52,16 @@ const ItemAttributeList: React.FunctionComponent<ItemAttributeListProps> = async
 
   const initialValue = await arrayUtils.asyncReduce(itemTypeBasedAttributes, async (acc, value) => {
     // default values
-    if (value.attribute.attributeTypeId === AttributeType.LIST
-      || value.attribute.attributeTypeId === AttributeType.IMAGE) {
+    if (value.attribute.attributeTypeId === AttributeType.IMAGE) {
       if (!value.value) {
         value.value = [] as any;
+      }
+    }
+    if (value.attribute.attributeTypeId === AttributeType.LIST) {
+      if (!value.value) {
+        value.value = {
+          value: [] as any,
+        } as any;
       }
     }
 
