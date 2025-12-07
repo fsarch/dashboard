@@ -6,7 +6,7 @@ FROM base AS deps
 WORKDIR /app
 
 COPY ./patches ./patches
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache \
@@ -26,7 +26,7 @@ RUN npm ci
 
 # Install dependencies based on the preferred package manager
 COPY ./patches ./patches
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 
 # Install dependencies only when needed
 FROM base AS deps-prod
@@ -38,7 +38,7 @@ ENV NODE_ENV production
 
 # Install dependencies based on the preferred package manager
 COPY ./patches ./patches
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 
 RUN apk add --no-cache \
         python3 \
@@ -62,7 +62,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY .eslintrc.json ./
 COPY next.config.mjs ./
 COPY tsconfig.json ./
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 
 COPY src ./src
 COPY scripts ./scripts
