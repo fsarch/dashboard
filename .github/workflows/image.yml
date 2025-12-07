@@ -48,6 +48,14 @@ jobs:
           # Use yarn if available in repo scripts, otherwise npm
           if [ -f yarn.lock ]; then yarn build; else npm run build; fi
 
+      - name: install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+      - name: login to docker hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
       - name: Build and push Docker image (using prebuilt artifacts)
         env:
           DOCKER_BUILDKIT: 1
