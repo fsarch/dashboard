@@ -11,6 +11,7 @@ import {
 import { headers } from "next/headers";
 import { PageNotFoundError } from "next/dist/shared/lib/utils";
 import { ServerLogger } from "@/utils/ServerLogger";
+import Color from "color";
 
 const YAML_CONFIG_FILENAME = 'config.yml'
 
@@ -83,4 +84,17 @@ export async function getCurrentServiceConfiguration<T extends EServiceType>(typ
   }
 
   return foundServiceType as TServiceConfiguration & { type: T };
+}
+
+export async function getThemeConfiguration() {
+  const theme = (await getConfiguration()).theme;
+
+  const primaryColor = Color(theme?.primary_color ?? '#32a852');
+
+  return {
+    primaryColor: {
+      hex: primaryColor.hex(),
+      rgbComponents: primaryColor.rgb().array().join(', '),
+    },
+  };
 }

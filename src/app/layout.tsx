@@ -10,6 +10,7 @@ import { jwtVerify } from "jose";
 import { getJwks } from "@/utils/getJwks";
 import LoadingProvider from "@/components/universals/loader/LoadingProvider";
 import { CSSProperties } from "react";
+import { getThemeConfiguration } from "@/utils/configuration.utils";
 
 const inter = Local({ src: './_fonts/inter/Inter-Regular.woff2' });
 
@@ -48,12 +49,14 @@ export default async function RootLayout({
     return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
+  const theme = await getThemeConfiguration();
+
   return (
     <html lang="en">
     <body
       className={clsx(inter.className, styles.body)}
       style={{
-        '--color-primary-rgb': '255, 105, 180',
+        '--color-primary-rgb': theme.primaryColor.rgbComponents,
       } as CSSProperties}
     >
     <LoadingProvider>

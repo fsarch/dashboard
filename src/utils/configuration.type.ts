@@ -88,4 +88,7 @@ export type TServiceConfiguration = TCustomAppConfiguration
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;
   defaults: Record<string, { id: string; }>;
+  theme?: {
+    primary_color?: string;
+  };
 };
