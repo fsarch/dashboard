@@ -8,6 +8,7 @@ import ListItem from "@/components/universals/list/ListItem";
 import styles from "@/components/universals/page/DefaultPage.module.scss";
 import DefaultPageHeader from "@/components/universals/page/DefaultPageHeader.component";
 import React from "react";
+import Section from "@/components/universals/section/Section";
 
 export default async function Home() {
   const foundServices = await getServiceConfigurations(EServiceType.IMAGE);
@@ -22,18 +23,22 @@ export default async function Home() {
         className={styles.header}
         title="Image Server"
       />
-      <List>
-        {foundServices.map((service) => (
-          <Link
-            key={service.id}
-            href={`/image/${service.id}`}
-          >
-            <ListItem>
-              {service.name || service.id}
-            </ListItem>
-          </Link>
-        ))}
-      </List>
+      <main className={styles.main}>
+        <Section name="Server">
+          <List>
+            {foundServices.map((service) => (
+              <Link
+                key={service.id}
+                href={`/image/${service.id}`}
+              >
+                <ListItem>
+                  {service.name || service.id}
+                </ListItem>
+              </Link>
+            ))}
+          </List>
+        </Section>
+      </main>
     </div>
   );
 }

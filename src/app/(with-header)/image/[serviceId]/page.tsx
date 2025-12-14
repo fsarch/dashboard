@@ -27,7 +27,6 @@ export default async function Home(props: { params: Promise<{ serviceId: string 
 
   return (
     <DefaultPage>
-      Images
       <List>
         {images.map((image) => (
           <ListItem

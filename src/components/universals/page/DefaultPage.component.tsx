@@ -79,7 +79,7 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
   }
 
   return (
-    <div className={clsx(className, styles.root)}>
+    <div className={clsx(className, styles.root, !navigations && styles.rootNoNavigation)}>
       <DefaultPageHeader
         className={styles.header}
         title={baseConfiguration.name ?? 'Unknown Service'}

@@ -35,6 +35,12 @@
     height: 100%;
   }
 
+  .rootNoNavigation {
+    grid-template-areas:
+    'header header'
+    'main main';
+  }
+
   .navigation {
     width: auto;
     overflow: initial;

@@ -16,7 +16,7 @@ const apps: Array<{ icon?: TIcon; name: string; path: string; }> = [{
   icon: 'tag',
   name: 'Product',
   path: '/product',
-}, {
+},/* {
   icon: 'table',
   name: 'DataTable',
   path: '/datatable',
@@ -24,7 +24,7 @@ const apps: Array<{ icon?: TIcon; name: string; path: string; }> = [{
   icon: 'message',
   name: 'Customer Communication',
   path: '/ccm',
-}, {
+},*/ {
   icon: 'image',
   name: 'Image Server',
   path: '/image',
