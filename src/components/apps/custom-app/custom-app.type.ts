@@ -3,8 +3,7 @@ import {
   TGeneratedFormDataSource, TGeneratedFormEndpoint, TGeneratedFormInitialValues, TGeneratedFormInput,
   TJsonataExpression
 } from "@/components/universals/forms/generated/GeneratedForm.type";
-import { TIcon } from "@/components/universals/icon/Icon.type";
-import { NavigationItem } from "@/constants/apps";
+import { AppNavigation, AppNavigationItem } from "@/constants/app.type";
 
 export type TCustomAppClickHandler = {
   $type: 'open-service-view';
@@ -93,5 +92,6 @@ export type TCustomAppConfig = {
   views: Array<TCustomAppView>;
   mainView: string;
   name: string;
-  navigation: Array<NavigationItem>;
+  navigation?: Array<AppNavigationItem>;
+  navigations?: Array<AppNavigation>;
 };

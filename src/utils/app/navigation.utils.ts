@@ -26,7 +26,7 @@ const selectNavigation = (data: { navigation?: Array<AppNavigationItem>; navigat
 }
 
 const getNavigationItems = async (
-  config: AppDefinitionType,
+  config: Pick<AppDefinitionType, 'navigations' | 'navigation' | 'routes'>,
   position: 'sidebar' | 'sidebar-bottom',
 ): Promise<Array<AutoNavigationItemType> | undefined> => {
   let navigations = selectNavigation(config, position);

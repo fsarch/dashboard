@@ -1,12 +1,12 @@
 import React from 'react';
-import { NavigationItem } from "@/constants/apps";
 import Link from "next/link";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import TileListItem from "@/components/universals/tile-list/TileListItem";
 import TileList from "@/components/universals/tile-list/TileList";
+import { AppNavigationItem } from "@/constants/app.type";
 
 type NavigationTileListProps = {
-  navigation: Array<NavigationItem>;
+  navigation: Array<AppNavigationItem>;
 };
 
 const NavigationTileList: React.FunctionComponent<NavigationTileListProps> = async ({

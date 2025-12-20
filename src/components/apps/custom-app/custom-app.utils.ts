@@ -20,7 +20,7 @@ import { fetchCustom } from "@/utils/fetchCustom";
 import { headers } from "next/headers";
 import Joi from "joi";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
-import { NavigationItem } from "@/constants/apps";
+import { AppNavigation, AppNavigationItem } from "@/constants/app.type";
 
 let configuration: TCustomAppConfig | null = null;
 
@@ -245,10 +245,16 @@ const CUSTOM_APP_VIEW_GROUP_SCHEMA = Joi.object({
   views: Joi.array().items(FORM_VIEWS_SCHEMA).required(),
 });
 
-const CUSTOM_APP_NAVIGATION_ITEM_SCHEMA = Joi.object<NavigationItem>({
+const CUSTOM_APP_NAVIGATION_ITEM_SCHEMA = Joi.object<AppNavigationItem>({
   name: Joi.string().required(),
   icon: Joi.string().required(),
   path: Joi.string().required(),
+});
+
+const CUSTOM_APP_NAVIGATION_SCHEMA = Joi.object<AppNavigation>({
+  id: Joi.string().required(),
+  position: Joi.string().required(),
+  items: Joi.array().items(CUSTOM_APP_NAVIGATION_ITEM_SCHEMA).required(),
 });
 
 export const CUSTOM_APP_SCHEMA = Joi.object<TCustomAppConfig>({
@@ -261,6 +267,7 @@ export const CUSTOM_APP_SCHEMA = Joi.object<TCustomAppConfig>({
     ]).required(),
   ).required(),
   navigation: Joi.array().items(CUSTOM_APP_NAVIGATION_ITEM_SCHEMA),
+  navigations: Joi.array().items(CUSTOM_APP_NAVIGATION_SCHEMA),
 });
 
 async function validateCustomAppConfig(config: TCustomAppConfig): Promise<boolean> {
