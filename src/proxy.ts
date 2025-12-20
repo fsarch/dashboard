@@ -4,7 +4,7 @@ import { APPS } from "@/constants/apps";
 const basePaths = Object.values(APPS).map((s) => s.basePath.substring(1));
 const SERVICE_ID_REGEX = new RegExp(`^\\/(${basePaths.join('|')})\\/([^\\/]*)(\\/.*)?`);
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
 
   const matches = request.nextUrl.pathname.match(SERVICE_ID_REGEX);
