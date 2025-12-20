@@ -3,7 +3,6 @@ import {
   TGeneratedFormDefinition,
   TGeneratedFormSelectConstantData,
   TGeneratedFormStringConstantData, TGeneratedFormSubmitResponse,
-  TJsonataExpression,
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import jsonata from "jsonata";
 import { fetchService } from "@/utils/fetchService";

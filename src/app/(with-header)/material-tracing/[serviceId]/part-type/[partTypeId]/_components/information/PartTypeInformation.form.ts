@@ -13,10 +13,14 @@ export const PART_TYPE_UPDATE_FORM: TGeneratedFormDefinition = {
     id: 'hint',
     $type: 'text',
     label: 'Hinweis',
+  }, {
+    id: 'archiveNow',
+    $type: 'checkbox',
+    label: 'Archiviert',
   }],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": args.partType.name, "externalId": args.partType.externalId, "hint": args.partType.hint }'
+    value: '{ "name": args.partType.name, "externalId": args.partType.externalId, "hint": args.partType.hint, "archiveNow": false }'
   },
   endpoint: {
     path: {

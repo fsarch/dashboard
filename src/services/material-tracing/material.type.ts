@@ -6,4 +6,5 @@ export type TMaterial = {
   externalId?: string;
   checkoutTime?: string;
   hint?: string;
+  archiveTime?: string;
 };

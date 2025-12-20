@@ -59,7 +59,12 @@ export type TGeneratedNestedForm = TGeneratedFormBaseInput & {
   inputs: Array<TGeneratedFormInput>;
 };
 
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput;
+export type TGeneratedFormCheckboxInput = TGeneratedFormBaseInput & {
+  $type: 'checkbox';
+  isEnabled?: boolean;
+};
+
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput;
 
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
 

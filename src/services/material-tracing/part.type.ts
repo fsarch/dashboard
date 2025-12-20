@@ -6,4 +6,5 @@ export type TPart = {
   amount: number;
   hint?: string;
   checkoutTime?: string;
+  archiveTime?: string;
 };

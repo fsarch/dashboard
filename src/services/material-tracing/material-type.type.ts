@@ -4,4 +4,5 @@ export type TMaterialType = {
   manufacturerId: string;
   hint?: string;
   externalId?: string;
+  archiveTime?: string;
 };

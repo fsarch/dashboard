@@ -3,4 +3,5 @@ export type TPartType = {
   name: string;
   externalId?: string;
   hint?: string;
+  archiveTime?: string;
 };

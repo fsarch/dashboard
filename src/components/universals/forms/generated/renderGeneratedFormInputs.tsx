@@ -8,6 +8,7 @@ import GeneratedNestedForm from "@/components/universals/forms/generated/inputs/
 import GeneratedFormTimeInput from "@/components/universals/forms/generated/inputs/GeneratedFormTimeInput.component";
 import GeneratedFormNumberInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormNumberInput.component";
+import GeneratedFormCheckboxInput from "@/components/universals/forms/generated/inputs/GeneratedFormCheckboxInput.component";
 
 export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'text') {
@@ -61,6 +62,15 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
         key={input.id}
         input={input}
         renderFormInputs={renderGeneratedFormInputs}
+      />
+    );
+  }
+
+  if (input.$type === 'checkbox') {
+    return (
+      <GeneratedFormCheckboxInput
+        key={input.id}
+        input={input}
       />
     );
   }
