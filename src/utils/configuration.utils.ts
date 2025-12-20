@@ -90,11 +90,16 @@ export async function getThemeConfiguration() {
   const theme = (await getConfiguration()).theme;
 
   const primaryColor = Color(theme?.primary_color ?? '#32a852');
+  const backgroundColor = Color(theme?.background_color ?? '#1b1b1b');
 
   return {
     primaryColor: {
       hex: primaryColor.hex(),
       rgbComponents: primaryColor.rgb().array().join(', '),
+    },
+    backgroundColor: {
+      hex: backgroundColor.hex(),
+      rgbComponents: backgroundColor.rgb().array().join(', '),
     },
   };
 }
