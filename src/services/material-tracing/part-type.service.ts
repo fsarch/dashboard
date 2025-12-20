@@ -1,8 +1,14 @@
 import { fetchService } from "@/utils/fetchService";
 import { TPartType } from "@/services/material-tracing/part-type.type";
 
-const listPartTypes = async (): Promise<Array<TPartType>> => {
-  const partTypesResponse = await fetchService('/v1/part-types');
+const listPartTypes = async (options?: { isArchived?: boolean }): Promise<Array<TPartType>> => {
+  const url = new URL('/v1/part-types', 'http://localhost');
+
+  if (options?.isArchived !== undefined) {
+    url.searchParams.append('isArchived', String(options.isArchived));
+  }
+
+  const partTypesResponse = await fetchService(url.pathname + url.search);
   const partTypes = await partTypesResponse.json();
 
   return partTypes;

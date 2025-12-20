@@ -2,8 +2,14 @@ import { fetchService } from "@/utils/fetchService";
 import { TMaterial } from "@/services/material-tracing/material.type";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
 
-const listMaterials = async (): Promise<Array<TMaterial>> => {
-  const materialsResponse = await fetchService('/v1/materials');
+const listMaterials = async (options?: { isArchived?: boolean }): Promise<Array<TMaterial>> => {
+  const url = new URL('/v1/materials', 'http://localhost');
+
+  if (options?.isArchived !== undefined) {
+    url.searchParams.append('isArchived', String(options.isArchived));
+  }
+
+  const materialsResponse = await fetchService(url.pathname + url.search);
   const materials = await materialsResponse.json();
 
   return materials;

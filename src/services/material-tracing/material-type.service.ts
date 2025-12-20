@@ -1,8 +1,14 @@
 import { fetchService } from "@/utils/fetchService";
 import { TMaterialType } from "@/services/material-tracing/material-type.type";
 
-const listMaterialTypes = async (): Promise<Array<TMaterialType>> => {
-  const manufacturersResponse = await fetchService('/v1/material-types');
+const listMaterialTypes = async (options?: { isArchived?: boolean }): Promise<Array<TMaterialType>> => {
+  const url = new URL('/v1/material-types', 'http://localhost');
+
+  if (options?.isArchived !== undefined) {
+    url.searchParams.append('isArchived', String(options.isArchived));
+  }
+
+  const manufacturersResponse = await fetchService(url.pathname + url.search);
   const manufacturers = await manufacturersResponse.json();
 
   return manufacturers;
