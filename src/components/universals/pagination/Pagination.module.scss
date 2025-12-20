@@ -3,9 +3,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(var(--color-primary-rgb), .5);
+  margin-top: 16px;
   gap: 1rem;
   flex-wrap: wrap;
+
+  background-color: rgba(var(--color-primary-rgb), .1)
 }
 
 .pageSize {
@@ -15,14 +18,14 @@
 
   label {
     font-size: 0.875rem;
-    color: #666;
+    color: rgba(255, 255, 255, 0.7);
     white-space: nowrap;
   }
 }
 
 .info {
   font-size: 0.875rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .navigation {
@@ -34,7 +37,7 @@
 .pageNumber {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #333;
+  color: rgba(255, 255, 255, 0.7);
   padding: 0 0.5rem;
 }
 

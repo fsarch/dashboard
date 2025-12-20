@@ -6,6 +6,10 @@ import Section from "@/components/universals/section/Section";
 import { partService } from "@/services/material-tracing/part.service";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import PartsList from "@/components/apps/material-tracing/part/PartsList.component";
+import {
+  loadArchivedPartsAction
+} from "@/app/(with-header)/material-tracing/[serviceId]/part/archive/parts.server-action";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -23,13 +27,7 @@ export default async function ArchivePage() {
     <DefaultPage>
       <Section name="Archivierte Bauteile">
         <List>
-          {partsWithUrls.map((part) => (
-            <Link href={part.url!} key={part.id}>
-              <ListItem>
-                {part.name}
-              </ListItem>
-            </Link>
-          ))}
+          <PartsList initialParts={partsWithUrls} fetchParts={loadArchivedPartsAction} />
         </List>
       </Section>
     </DefaultPage>

@@ -6,7 +6,6 @@ import ListItem from "@/components/universals/list/ListItem";
 import Link from "next/link";
 import { TPart } from "@/services/material-tracing/part.type";
 import Pagination from "@/components/universals/pagination/Pagination.component";
-import { loadPartsAction } from "@/app/(with-header)/material-tracing/[serviceId]/part/parts.server-action";
 
 type PartWithUrl = TPart & {
   url: string;
@@ -14,9 +13,10 @@ type PartWithUrl = TPart & {
 
 type PartsListProps = {
   initialParts: PartWithUrl[];
+  fetchParts: (options: { skip: number, take: number }) => Promise<PartWithUrl[]>;
 };
 
-const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts }) => {
+const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetchParts }) => {
   const [parts, setParts] = useState<PartWithUrl[]>(initialParts);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
@@ -28,16 +28,16 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts }) =>
     try {
       const skip = (page - 1) * size;
       const take = size + 1; // Request one extra to determine if there's a next page
-      
-      const loadedParts = await loadPartsAction({ skip, take });
-      
+
+      const loadedParts = await fetchParts({ skip, take });
+
       // Check if there are more pages
       const hasMore = loadedParts.length > size;
       setHasNextPage(hasMore);
-      
+
       // Remove the extra item if present
       const partsToShow = hasMore ? loadedParts.slice(0, size) : loadedParts;
-      
+
       setParts(partsToShow);
     } catch (error) {
       console.error('Failed to load parts:', error);
@@ -82,7 +82,7 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts }) =>
           </Link>
         ))}
       </List>
-      
+
       <Pagination
         currentPage={currentPage}
         pageSize={pageSize}

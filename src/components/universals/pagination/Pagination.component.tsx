@@ -64,7 +64,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
           </span>
         ) : (
           <span>
-            Showing {startItem}-{endItem}
+            Zeige Einträge {startItem}-{endItem}
             {hasNextPage && '+'}
           </span>
         )}

@@ -6,13 +6,14 @@ import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import PartsList from "@/components/apps/material-tracing/part/PartsList.component";
+import { loadPartsAction } from "@/app/(with-header)/material-tracing/[serviceId]/part/parts.server-action";
 
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
   // Load initial page of parts (page 1, 25 items)
   const initialParts = await partService.listParts({ skip: 0, take: 25 });
-  
+
   // Add URLs to each part
   const partsWithUrls = await Promise.all(
     initialParts.map(async (part) => ({
@@ -29,7 +30,7 @@ export default async function Home() {
         />
       </Section>
       <Section name="Bauteile">
-        <PartsList initialParts={partsWithUrls} />
+        <PartsList initialParts={partsWithUrls} fetchParts={loadPartsAction} />
       </Section>
     </DefaultPage>
   );
