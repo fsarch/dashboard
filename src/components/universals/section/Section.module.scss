@@ -1,8 +1,6 @@
 @use '@/app/_styles/utils' as *;
 
 .root {
-  @include apply-custom-padding('section');
-
   --color: #FFFFFF;
 
   margin: 20px 0;
@@ -10,10 +8,20 @@
   border-color: var(--color);
   background-color: #000000;
   border: none;
+}
+
+.rootWithPadding {
+  @include apply-custom-padding('section');
 
   padding: 16px;
 }
 
 .legend {
   color: var(--color);
+
+  margin-left: 15px;
+}
+
+.rootWithPadding .legend {
+  margin-left: 0;
 }

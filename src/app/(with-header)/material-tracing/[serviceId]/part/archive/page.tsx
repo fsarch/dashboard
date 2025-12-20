@@ -25,10 +25,8 @@ export default async function ArchivePage() {
 
   return (
     <DefaultPage>
-      <Section name="Archivierte Bauteile">
-        <List>
-          <PartsList initialParts={partsWithUrls} fetchParts={loadArchivedPartsAction} />
-        </List>
+      <Section name="Archivierte Bauteile" addPadding={false}>
+        <PartsList initialParts={partsWithUrls} fetchParts={loadArchivedPartsAction} />
       </Section>
     </DefaultPage>
   );

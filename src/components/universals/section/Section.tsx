@@ -6,12 +6,14 @@ type SectionProps = PropsWithChildren<{
   name: string;
   color?: string;
   className?: string;
+  addPadding?: boolean;
 }>;
 
 const Section: React.FunctionComponent<SectionProps> = ({
   name,
   color,
   children,
+  addPadding = true,
   className,
 }) => {
   return (
@@ -19,7 +21,7 @@ const Section: React.FunctionComponent<SectionProps> = ({
       style={{
         '--color': color,
       } as CSSProperties}
-      className={clsx(className, styles.root)}
+      className={clsx(className, styles.root, addPadding && styles.rootWithPadding)}
     >
       <legend className={styles.legend}>
         {name}

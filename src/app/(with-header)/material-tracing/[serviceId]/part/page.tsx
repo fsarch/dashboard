@@ -29,7 +29,7 @@ export default async function Home() {
           definition={PART_CREATE_FORM}
         />
       </Section>
-      <Section name="Bauteile">
+      <Section name="Bauteile" addPadding={false}>
         <PartsList initialParts={partsWithUrls} fetchParts={loadPartsAction} />
       </Section>
     </DefaultPage>

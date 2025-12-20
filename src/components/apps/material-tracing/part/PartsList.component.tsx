@@ -6,17 +6,19 @@ import ListItem from "@/components/universals/list/ListItem";
 import Link from "next/link";
 import { TPart } from "@/services/material-tracing/part.type";
 import Pagination from "@/components/universals/pagination/Pagination.component";
+import styles from './PartsList.module.scss';
 
 type PartWithUrl = TPart & {
   url: string;
 };
 
 type PartsListProps = {
+  className?: string;
   initialParts: PartWithUrl[];
   fetchParts: (options: { skip: number, take: number }) => Promise<PartWithUrl[]>;
 };
 
-const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetchParts }) => {
+const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetchParts, className, }) => {
   const [parts, setParts] = useState<PartWithUrl[]>(initialParts);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
@@ -65,15 +67,15 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetc
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <div className={className} style={{ padding: '2rem', textAlign: 'center' }}>
         Loading parts...
       </div>
     );
   }
 
   return (
-    <div>
-      <List>
+    <div className={className}>
+      <List className={styles.list}>
         {parts.map((part) => (
           <Link key={part.id} href={part.url}>
             <ListItem>
