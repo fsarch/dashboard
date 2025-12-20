@@ -90,5 +90,6 @@ export type TConfiguration = {
   defaults: Record<string, { id: string; }>;
   theme?: {
     primary_color?: string;
+    background_color?: string;
   };
 };
