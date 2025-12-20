@@ -16,11 +16,19 @@ export const MATERIAL_TYPE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   }, {
     id: 'archiveNow',
     $type: 'checkbox',
-    label: 'Archiv jetzt',
+    label: 'Archiviert',
   }],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": args.materialType.name, "hint": args.materialType.hint, "externalId": args.materialType.externalId, "archiveNow": false }'
+    value: `{ 
+      "name": args.materialType.name,
+      "hint": args.materialType.hint,
+      "externalId": args.materialType.externalId,
+      "archiveTime": args.materialType.archiveTime,
+      "archiveNow": $not($exists(args.materialType.archiveTime)) or args.materialType.archiveTime = null 
+        ? false 
+        : true
+    }`,
   },
   endpoint: {
     path: {
@@ -30,7 +38,16 @@ export const MATERIAL_TYPE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "hint": form.hint, "externalId": form.externalId, "archiveTime": form.archiveTime }',
+      value: `{ 
+        "name": form.name, 
+        "hint": form.hint, 
+        "externalId": form.externalId, 
+        "archiveTime": form.archiveTime and form.archiveNow 
+          ? form.archiveTime
+          : (
+            form.archiveNow ? $now() : null
+          )
+      }`,
     },
   },
   buttons: {

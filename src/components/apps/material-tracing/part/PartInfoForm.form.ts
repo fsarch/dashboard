@@ -25,11 +25,21 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   }, {
     id: 'archiveNow',
     $type: 'checkbox',
-    label: 'Archiv jetzt',
+    label: 'Archiviert',
   }],
   initialValues: {
     $type: 'jsonata',
-    value: "args.part"
+    value: `{ 
+      "name": args.part.name,
+      "amount": args.part.amount,
+      "availableAmount": args.part.availableAmount,
+      "externalId": args.part.externalId,
+      "hint": args.part.hint,
+      "archiveTime": args.part.archiveTime,
+      "archiveNow": $not($exists(args.part.archiveTime)) or args.part.archiveTime = null 
+        ? false 
+        : true
+    }`,
   },
   endpoint: {
     path: {
@@ -39,7 +49,7 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "amount": $number(form.amount), "externalId": form.externalId, "hint": form.hint, "checkoutTime": form.checkoutTime, "archiveTime": form.archiveTime }',
+      value: `{ "name": form.name, "amount": $number(form.amount), "externalId": form.externalId, "hint": form.hint, "checkoutTime": form.checkoutTime, "archiveTime": form.archiveTime and form.archiveNow ? form.archiveTime : (form.archiveNow ? $now() : null) }`,
     },
   },
   dataSources: {},

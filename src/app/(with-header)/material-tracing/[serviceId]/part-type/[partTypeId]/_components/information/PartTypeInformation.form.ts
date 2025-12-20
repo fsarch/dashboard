@@ -20,7 +20,7 @@ export const PART_TYPE_UPDATE_FORM: TGeneratedFormDefinition = {
   }],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": args.partType.name, "externalId": args.partType.externalId, "hint": args.partType.hint, "archiveNow": false }'
+    value: `{ "name": args.partType.name, "externalId": args.partType.externalId, "hint": args.partType.hint, "archiveTime": args.partType.archiveTime, "archiveNow": $not($exists(args.partType.archiveTime)) or args.partType.archiveTime = null ? false : true }`
   },
   endpoint: {
     path: {
@@ -30,7 +30,7 @@ export const PART_TYPE_UPDATE_FORM: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: 'form',
+      value: `{ "name": form.name, "externalId": form.externalId, "hint": form.hint, "archiveTime": form.archiveTime and form.archiveNow ? form.archiveTime : (form.archiveNow ? $now() : null) }`,
     },
   },
   buttons: {
