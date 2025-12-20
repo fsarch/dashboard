@@ -1,10 +1,30 @@
 .root {
   display: flex;
+
+  flex-direction: row;
+}
+
+.main, .bottom {
+  display: flex;
   list-style-type: none;
+}
+
+.spacer {
+
 }
 
 @media only screen and (min-width: 800px) {
   .root {
+    flex-direction: column;
+
+    height: 100%;
+  }
+
+  .main, .bottom {
     display: block;
+  }
+
+  .spacer {
+    flex-grow: 1;
   }
 }
