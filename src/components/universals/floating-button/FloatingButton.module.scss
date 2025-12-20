@@ -1,0 +1,24 @@
+.root {
+  position: fixed;
+
+  right: 16px;
+  bottom: 16px;
+
+  width: 64px;
+  height: 64px;
+
+  border-radius: 100%;
+  background-color: rgba(var(--color-primary-rgb), 0.6);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 5px #000000;
+
+  outline: none;
+  border: 2px solid rgba(var(--color-primary-rgb), 0.9);
+
+  color: rgba(var(--color-primary-rgb), 0.9);
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
