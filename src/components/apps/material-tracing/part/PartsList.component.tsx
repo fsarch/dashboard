@@ -2,11 +2,10 @@
 
 import React, { useState, useCallback } from 'react';
 import List from "@/components/universals/list/List";
-import ListItem from "@/components/universals/list/ListItem";
-import Link from "next/link";
 import { TPart } from "@/services/material-tracing/part.type";
 import Pagination from "@/components/universals/pagination/Pagination.component";
 import styles from './PartsList.module.scss';
+import LinkListItem from "@/components/universals/list/LinkListItem";
 
 type PartWithUrl = TPart & {
   url: string;
@@ -77,11 +76,9 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetc
     <div className={className}>
       <List className={styles.list}>
         {parts.map((part) => (
-          <Link key={part.id} href={part.url}>
-            <ListItem>
-              {part.name}
-            </ListItem>
-          </Link>
+          <LinkListItem key={part.id} href={part.url}>
+            {part.name}
+          </LinkListItem>
         ))}
       </List>
 

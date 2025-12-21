@@ -1,6 +1,5 @@
 import { shortCodeService } from "@/services/material-tracing/short-code.service";
 import List from "@/components/universals/list/List";
-import ListItem from "@/components/universals/list/ListItem";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import Link from "next/link";
 import React from "react";
@@ -12,6 +11,7 @@ import Button from "@/components/universals/forms/Button";
 import ShortCodeTypeBadge from "@/components/apps/material-tracing/short-code/badge/short-code-type-badge.component";
 import BatchCreateForm from "@/components/apps/material-tracing/short-code/batch-create/batch-create-form.component";
 import FormikSubmitButton from "@/components/universals/forms/FormikSubmitButton.component";
+import LinkListItem from "@/components/universals/list/LinkListItem";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -42,18 +42,15 @@ export default async function Home() {
       <Section name="Short Codes">
         <List>
           {shortCodes.map(async (shortCode) => (
-            <Link
+            <LinkListItem
               key={shortCode.id}
               href={await getServiceLocalUrl(`/short-code/${shortCode.code}`)}
+              right={<ShortCodeTypeBadge type={shortCode.shortCodeTypeId} />}
             >
-              <ListItem
-                right={<ShortCodeTypeBadge type={shortCode.shortCodeTypeId} />}
-              >
-                <div>
-                  {shortCode.code}
-                </div>
-              </ListItem>
-            </Link>
+              <div>
+                {shortCode.code}
+              </div>
+            </LinkListItem>
           ))}
         </List>
       </Section>
