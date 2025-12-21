@@ -1,9 +1,8 @@
 import React from 'react';
-import Link from "next/link";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import TileListItem from "@/components/universals/tile-list/TileListItem";
 import TileList from "@/components/universals/tile-list/TileList";
 import { AppNavigationItem } from "@/constants/app.type";
+import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
 
 type NavigationTileListProps = {
   navigation: Array<AppNavigationItem>;
@@ -15,15 +14,12 @@ const NavigationTileList: React.FunctionComponent<NavigationTileListProps> = asy
   return (
     <TileList>
       {navigation.map(async (navigationItem, index) => (
-        <Link
+        <LinkTileListItem
           key={index}
           href={await getServiceLocalUrl(navigationItem.path as string)}
-        >
-          <TileListItem
-            name={navigationItem.name}
-            icon={navigationItem.icon}
-          />
-        </Link>
+          name={navigationItem.name}
+          icon={navigationItem.icon}
+        />
       ))}
     </TileList>
   );

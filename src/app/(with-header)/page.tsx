@@ -1,6 +1,4 @@
 import TileList from "@/components/universals/tile-list/TileList";
-import TileListItem from "@/components/universals/tile-list/TileListItem";
-import Link from "next/link";
 import Section from "@/components/universals/section/Section";
 import { getServiceConfigurations } from "@/utils/configuration.utils";
 import { EServiceType } from "@/utils/configuration.type";
@@ -11,6 +9,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import styles from './page.module.css';
+import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
 
 const apps: Array<{ icon?: TIcon; name: string; path: string; }> = [{
   icon: 'tag',
@@ -67,15 +66,12 @@ export default async function Home() {
         <nav>
           <TileList>
             {apps.map((app) => (
-              <Link
+              <LinkTileListItem
                 key={app.path}
                 href={app.path}
-              >
-                <TileListItem
-                  name={app.name}
-                  icon={app.icon}
-                />
-              </Link>
+                name={app.name}
+                icon={app.icon}
+              />
             ))}
           </TileList>
         </nav>
@@ -84,14 +80,11 @@ export default async function Home() {
         <nav>
           <TileList>
             {customApps.map((app) => (
-              <Link
+              <LinkTileListItem
                 key={app.id}
                 href={`/custom-app/${app.id}`}
-              >
-                <TileListItem
-                  name={app.name ?? app.id}
-                />
-              </Link>
+                name={app.name ?? app.id}
+              />
             ))}
           </TileList>
         </nav>
