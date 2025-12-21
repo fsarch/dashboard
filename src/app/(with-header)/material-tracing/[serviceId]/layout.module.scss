@@ -1,4 +1,6 @@
 .root {
   // Make space for the floating button
-  padding-bottom: calc(64px + 16px);
+  --bottom-spacing: calc(64px + 16px);
+
+  height: 100%;
 }
