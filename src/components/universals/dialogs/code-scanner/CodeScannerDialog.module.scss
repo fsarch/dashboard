@@ -1,0 +1,19 @@
+.wrapper {
+  position: relative;
+  display: flex;
+
+  overflow: hidden;
+
+  min-width: 100px;
+  min-height: 100px;
+}
+
+.canvas {
+}
+
+.closeButton {
+  position: absolute;
+
+  right: 16px;
+  top: 16px;
+}

@@ -4,8 +4,10 @@ import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import Dialog from "@/components/universals/dialog/dialog.component";
 import { codeScannerDialogUtils } from "@/components/universals/dialogs/code-scanner/CodeScannerDialog.utils";
 import { BrowserDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/BrowserDecoder";
-import { QuaggaDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/QuaggaDecoder";
 import { QrDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/QrDecoder";
+import styles from './CodeScannerDialog.module.scss';
+import IconButton from "@/components/universals/forms/button/IconButton";
+import SingleIconButton from "@/components/universals/forms/button/SingleIconButton";
 
 type CodeScannerDialogType = TDialogComponent<{ enableQRCode: boolean }, { value: string }>;
 
@@ -97,10 +99,19 @@ const CodeScannerDialog: CodeScannerDialogType = ({
 
   return (
     <Dialog>
-      <canvas
-        ref={canvasRef}
-      />
-      <button onClick={() => onResult({ status: DialogResult.CANCEL })}>Abbrechen</button>
+      <div className={styles.wrapper}>
+        <canvas
+          className={styles.canvas}
+          ref={canvasRef}
+        />
+        <SingleIconButton
+          onClick={() => onResult({ status: DialogResult.CANCEL })}
+          className={styles.closeButton}
+          type="button"
+          icon="close"
+        />
+        {/*<button onClick={() => onResult({ status: DialogResult.CANCEL })}>Abbrechen</button>*/}
+      </div>
     </Dialog>
   );
 };

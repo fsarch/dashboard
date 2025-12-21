@@ -1,0 +1,12 @@
+.root {
+  --size: 32px;
+
+  border-radius: 100%;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+}
+
+.icon {
+  width: var(--size);
+}
