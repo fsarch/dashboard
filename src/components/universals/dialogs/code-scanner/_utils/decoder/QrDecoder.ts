@@ -1,5 +1,5 @@
 import { BarcodeDecodeResponse, IDecoder } from "./IDecoder";
-import QrScanner from "qr-scanner";
+import jsQR from "jsqr";
 
 export class QrDecoder implements IDecoder {
   private analyzeCanvas: HTMLCanvasElement;
@@ -24,9 +24,11 @@ export class QrDecoder implements IDecoder {
     analyzeCanvasCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
 
     try {
-      const response = await QrScanner.scanImage(this.analyzeCanvas, {
-        returnDetailedScanResult: true,
-      });
+      const response = jsQR(
+        analyzeCanvasCtx.getImageData(0, 0, this.analyzeCanvas.width, this.analyzeCanvas.height).data,
+        this.analyzeCanvas.width,
+        this.analyzeCanvas.height,
+      );
 
       if (response?.data) {
         return {
