@@ -4,12 +4,14 @@ import styles from './link-tile-list-item.module.scss';
 import Icon from "@/components/universals/icon/Icon.component";
 import { TIcon } from "@/components/universals/icon/Icon.type";
 import Link from "next/link";
+import clsx from "clsx";
 
 type LinkTileListItemProps = {
   name: string;
   backgroundImage?: string;
   icon?: TIcon;
   href: string;
+  small?: boolean;
 };
 
 const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
@@ -17,11 +19,12 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
   backgroundImage,
   icon,
   href,
+  small,
 }) => {
   return (
     <Link
       href={href}
-      className={styles.root}
+      className={clsx(styles.root, small && styles.rootSmall)}
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
       }}

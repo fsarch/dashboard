@@ -1,34 +1,45 @@
 @use '@/app/_styles/utils' as *;
 
 .root {
-    position: sticky;
+  position: sticky;
 
-    top: 0;
-    left: 0;
-    right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
 
-    display: flex;
+  display: flex;
 
-    @include apply-custom-padding('header');
-    padding-top: 0;
-    padding-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 
-    background-color: #000000;
-    box-shadow: rgb(var(--color-primary-rgb)) 0 0 8px;
+  background-color: #000000;
+  box-shadow: rgb(var(--color-primary-rgb)) 0 0 8px;
 }
 
 .iconWrapper {
-    display: flex;
+  display: flex;
 
-    align-items: center;
+  align-items: center;
+
+  padding: 0 8px;
+}
+
+.iconWrapper:hover {
+  background-color: rgba(var(--color-primary-rgb), 0.2);
+}
+
+.visibleSpacer {
+  height: 32px;
+  border-left: 1px solid #333333;
+  align-self: center;
 }
 
 .icon, .iconLogout {
-    width: 2rem;
+  width: 2rem;
 }
 
 .title {
-    @include apply-custom-padding('header');
+  @include apply-custom-padding('header');
 
-    flex-grow: 1;
+  flex-grow: 1;
 }

@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 8px;
+
+  background: none;
+  outline: none;
+  border: none;
+
+  font-size: 0.85rem;
+
+  cursor: pointer;
+}
+
+.root:hover {
+  background-color: rgba(var(--color-primary-rgb), 0.2);
+}

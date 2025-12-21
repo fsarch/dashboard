@@ -10,40 +10,7 @@ import { redirect } from "next/navigation";
 
 import styles from './page.module.css';
 import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
-
-const apps: Array<{ icon?: TIcon; name: string; path: string; }> = [{
-  icon: 'tag',
-  name: 'Product',
-  path: '/product',
-},/* {
-  icon: 'table',
-  name: 'DataTable',
-  path: '/datatable',
-}, {
-  icon: 'message',
-  name: 'Customer Communication',
-  path: '/ccm',
-},*/ {
-  icon: 'image',
-  name: 'Image Server',
-  path: '/image',
-}, {
-  icon: 'industry',
-  name: 'Material Tracing',
-  path: '/material-tracing',
-}, {
-  icon: 'file-pdf',
-  name: 'PDF Render',
-  path: '/pdf-render',
-}, {
-  icon: 'code',
-  name: 'Functions',
-  path: '/function',
-}, {
-  icon: 'print',
-  name: 'Printer',
-  path: '/printer',
-}]
+import { appUtils } from "@/utils/app/app.utils";
 
 export default async function Home() {
   const customApps = await getServiceConfigurations(EServiceType.CUSTOM_APP);
@@ -55,7 +22,7 @@ export default async function Home() {
   }
 
   const data = decodeJwt(accessToken) as { given_name?: string; preferred_username: string; };
-
+  const apps = await appUtils.getApps();
 
   return (
     <main className={styles.root}>

@@ -17,6 +17,18 @@
   transition: color .2s ease-in-out;
 }
 
+.rootSmall {
+  flex-basis: 70px;
+
+  .name {
+    font-size: 10px;
+  }
+
+  .icon {
+    font-size: 20px;
+  }
+}
+
 .root:hover {
   color: rgb(var(--color-primary-rgb));
 }
@@ -35,5 +47,10 @@
     height: var(--custom-spacing-tile-list-item-size);
 
     flex-basis: auto;
+  }
+
+  .rootSmall {
+    width: 70px;
+    height: 70px;
   }
 }
