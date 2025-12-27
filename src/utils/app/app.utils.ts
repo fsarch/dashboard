@@ -34,6 +34,10 @@ const apps: Array<AppType> = [{
   icon: 'print',
   name: 'Printer',
   path: '/printer',
+}, {
+  icon: 'floppy-disk',
+  name: 'Backup',
+  path: '/backup',
 }]
 
 const getApps = async () => {

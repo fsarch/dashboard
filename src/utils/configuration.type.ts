@@ -8,6 +8,7 @@ export enum EServiceType {
   PDF_RENDER = 'pdf-render',
   FUNCTION = 'function',
   PRINTER = 'printer',
+  BACKUP = 'backup',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -75,6 +76,13 @@ export type TPrinterConfiguration = {
   url: string;
 }
 
+export type TBackupConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.BACKUP,
+  url: string;
+}
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -83,7 +91,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TMaterialTracingConfiguration
   | TPdfRenderConfiguration
   | TFunctionConfiguration
-  | TPrinterConfiguration;
+  | TPrinterConfiguration
+  | TBackupConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

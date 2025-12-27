@@ -107,4 +107,17 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
     name: 'Printer Server',
     basePath: '/printer',
   },
+  [EServiceType.BACKUP]: {
+    name: 'Backup',
+    basePath: '/backup',
+    navigation: [{
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    }, {
+      name: 'Jobs',
+      path: '/',
+      icon: 'hdd',
+    }],
+  },
 };
