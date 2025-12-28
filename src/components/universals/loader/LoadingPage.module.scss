@@ -13,7 +13,7 @@
 
   gap: 1rem;
 
-  @include apply-custom-background-color('loading-overlay-background');
+  background-color: var(--color-contrast-light);
   @include apply-custom-padding('loading-overlay');
   @include apply-custom-border-radius('loading-overlay');
 }

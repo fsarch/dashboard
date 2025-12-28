@@ -2,7 +2,6 @@
 
 .root {
   @include apply-custom-padding('tile-list-item');
-  @include apply-custom-background-color('tile-list-item');
 
   flex-basis: calc(50% - var(--custom-gap-tile-list));
   aspect-ratio: 1 / 1;

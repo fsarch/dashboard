@@ -26,17 +26,7 @@
 @mixin color() {
   // SPACING Custom Properties
   @each $space, $value in $colors {
-    --color-#{$space}: #{$value};
-  }
-
-  // SPACING Custom Properties
-  @each $space, $value in $custom-text-color {
-    --custom-text-color-#{$space}: #{$value};
-  }
-
-  // SPACING Custom Properties
-  @each $space, $value in $custom-background-color {
-    --custom-background-color-#{$space}: #{$value};
+    --color-#{"" + $space}: #{$value};
   }
 }
 
@@ -68,14 +58,6 @@
 
 @mixin apply-custom-padding($name) {
   padding: var(--custom-padding- + $name + -top) var(--custom-padding- + $name + -right) var(--custom-padding- + $name + -bottom) var(--custom-padding- + $name + -left)
-}
-
-@mixin apply-custom-background-color($name) {
-  background-color: var(--custom-background-color- + $name)
-}
-
-@mixin apply-custom-text-color($name) {
-  color: var(--custom-text-color- + $name)
 }
 
 @mixin apply-custom-font-size($name) {

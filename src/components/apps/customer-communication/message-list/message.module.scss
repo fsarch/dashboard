@@ -3,7 +3,6 @@
 .root {
   @include apply-custom-padding('ccm-message');
   @include apply-custom-border-radius('ccm-message');
-  @include apply-custom-background-color('ccm-message');
 }
 
 .content {
@@ -11,7 +10,6 @@
 }
 
 .subline {
-  @include apply-custom-text-color('ccm-message-subline');
   @include apply-custom-font-size('ccm-message-subline');
 }
 
