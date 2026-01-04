@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { TBackupJob } from '@/types/backup';
+import { TBackupJob } from '@/services/backup/backup';
 import Button from '@/components/universals/forms/Button';
 
 type Props = {
@@ -13,7 +13,7 @@ export default function BackupList({ jobs, basePath = '' }: Props) {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>Backup Jobs</h2>
-        <Link href={`${basePath}/create`}>
+        <Link href={`${basePath}/job/create`}>
           <Button type="button">Neuer Job</Button>
         </Link>
       </div>
@@ -33,7 +33,7 @@ export default function BackupList({ jobs, basePath = '' }: Props) {
               <td>{job.status}</td>
               <td>{job.createdAt}</td>
               <td>
-                <Link href={`${basePath}/jobs/${job.id}`}>
+                <Link href={`${basePath}/job/${job.id}`}>
                   <Button type="button">Anzeigen</Button>
                 </Link>
               </td>

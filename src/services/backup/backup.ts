@@ -27,3 +27,8 @@ export type TCreateBackupJobPayload = {
   options?: Record<string, any>;
 }
 
+export type PaginatedResult<T> = {
+  data: T[];
+};
+
+

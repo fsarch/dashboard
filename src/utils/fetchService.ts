@@ -32,7 +32,16 @@ export async function fetchService(url: string, init?: RequestInit, options?: { 
       headers: requestHeaders,
     });
 
-    console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`)
+    console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`);
+    if (!res.ok) {
+      const clonedRes = res.clone();
+      const responseData = await clonedRes.text();
+      console.error(`[${init?.method || 'GET'}] ${fetchUrl} - ${res.status} ${res.statusText}`, {
+        status: clonedRes.status,
+        statusText: clonedRes.statusText,
+        body: responseData,
+      });
+    }
 
     return res;
   } catch (error) {

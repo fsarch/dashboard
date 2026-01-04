@@ -116,8 +116,16 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       icon: 'layer-group',
     }, {
       name: 'Jobs',
-      path: '/',
+      path: '/job',
+      icon: 'play',
+    }, {
+      name: 'Storage',
+      path: '/storage',
       icon: 'hdd',
+    }, {
+      name: 'Connectors',
+      path: '/connector',
+      icon: 'link',
     }],
   },
 };

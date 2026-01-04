@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@/components/universals/forms/Button';
-import { TBackupJob } from '@/types/backup';
+import { TBackupJob } from '@/services/backup/backup';
 
 type Props = {
   job: TBackupJob;
