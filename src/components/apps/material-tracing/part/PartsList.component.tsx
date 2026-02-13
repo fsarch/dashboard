@@ -14,10 +14,11 @@ type PartWithUrl = TPart & {
 type PartsListProps = {
   className?: string;
   initialParts: PartWithUrl[];
-  fetchParts: (options: { skip: number, take: number }) => Promise<PartWithUrl[]>;
+  fetchParts: (options: { skip: number, take: number, search?: string }) => Promise<PartWithUrl[]>;
+  search?: string;
 };
 
-const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetchParts, className, }) => {
+const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetchParts, className, search }) => {
   const [parts, setParts] = useState<PartWithUrl[]>(initialParts);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
@@ -30,7 +31,7 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetc
       const skip = (page - 1) * size;
       const take = size + 1; // Request one extra to determine if there's a next page
 
-      const loadedParts = await fetchParts({ skip, take });
+      const loadedParts = await fetchParts({ skip, take, search });
 
       // Check if there are more pages
       const hasMore = loadedParts.length > size;
@@ -46,7 +47,7 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetc
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [search]);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);

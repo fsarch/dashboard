@@ -1,8 +1,14 @@
 import { fetchService } from "@/utils/fetchService";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
 
-const listShortCodes = async (): Promise<Array<TShortCode>> => {
-  const shortCodesResponse = await fetchService('/v1/short-codes');
+const listShortCodes = async (options?: { search?: string }): Promise<Array<TShortCode>> => {
+  const url = new URL('/v1/short-codes', 'http://localhost');
+
+  if (options?.search) {
+    url.searchParams.append('search', options.search);
+  }
+
+  const shortCodesResponse = await fetchService(url.pathname + url.search);
   const shortCodes = await shortCodesResponse.json();
 
   return shortCodes;

@@ -8,7 +8,7 @@ type PartWithUrl = TPart & {
   url: string;
 };
 
-export async function loadPartsAction(options?: { skip?: number; take?: number }): Promise<PartWithUrl[]> {
+export async function loadPartsAction(options?: { skip?: number; take?: number; search?: string }): Promise<PartWithUrl[]> {
   const parts = await partService.listParts(options);
   
   // Add URLs to each part

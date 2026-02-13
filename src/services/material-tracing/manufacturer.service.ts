@@ -1,8 +1,14 @@
 import { fetchService } from "@/utils/fetchService";
 import { TManufacturer } from "@/services/material-tracing/manufacturer.type";
 
-const listManufacturers = async (): Promise<Array<TManufacturer>> => {
-  const manufacturersResponse = await fetchService('/v1/manufacturers');
+const listManufacturers = async (options?: { search?: string }): Promise<Array<TManufacturer>> => {
+  const url = new URL('/v1/manufacturers', 'http://localhost');
+
+  if (options?.search) {
+    url.searchParams.append('search', options.search);
+  }
+
+  const manufacturersResponse = await fetchService(url.pathname + url.search);
   const manufacturers = await manufacturersResponse.json();
 
   return manufacturers;

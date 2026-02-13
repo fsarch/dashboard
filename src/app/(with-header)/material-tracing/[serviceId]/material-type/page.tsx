@@ -9,17 +9,24 @@ import { materialTypeService } from "@/services/material-tracing/material-type.s
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import LinkListItem from "@/components/universals/list/LinkListItem";
+import SearchInput from "@/components/universals/forms/SearchInput.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home() {
+export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
+  const params = await searchParams;
+  const search = params.search;
+  
   const manufacturers = await manufacturerService.listManufacturers();
-  const materialTypes = await materialTypeService.listMaterialTypes();
+  const materialTypes = await materialTypeService.listMaterialTypes({ search });
 
   return (
     <DefaultPage>
       <Section name="MaterialType erstellen">
         <MaterialTypeCreateForm />
+      </Section>
+      <Section name="Suche">
+        <SearchInput />
       </Section>
       {manufacturers.map((manufacturer) => (
         <Section name={manufacturer.name} key={manufacturer.id}>
