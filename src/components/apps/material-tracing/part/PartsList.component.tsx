@@ -31,7 +31,8 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetc
       const skip = (page - 1) * size;
       const take = size + 1; // Request one extra to determine if there's a next page
 
-      const loadedParts = await fetchParts({ skip, take, search });
+      const options = { skip, take, ...(search && { search }) };
+      const loadedParts = await fetchParts(options);
 
       // Check if there are more pages
       const hasMore = loadedParts.length > size;

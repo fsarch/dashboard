@@ -48,6 +48,7 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = ({
       placeholder={placeholder}
       value={searchValue}
       onChange={(e) => setSearchValue(e.target.value)}
+      aria-label="Ressourcen suchen"
     />
   );
 };
