@@ -3,7 +3,7 @@ import { TPart } from "@/services/material-tracing/part.type";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
 import { TMaterial } from "@/services/material-tracing/material.type";
 
-const listParts = async (options?: { skip?: number; take?: number; isArchived?: boolean }): Promise<Array<TPart>> => {
+const listParts = async (options?: { skip?: number; take?: number; isArchived?: boolean; search?: string }): Promise<Array<TPart>> => {
   const url = new URL('/v1/parts', 'http://localhost'); // Base URL will be replaced by fetchService
 
   if (options?.skip !== undefined) {
@@ -16,6 +16,10 @@ const listParts = async (options?: { skip?: number; take?: number; isArchived?: 
 
   if (options?.isArchived !== undefined) {
     url.searchParams.append('isArchived', String(options.isArchived));
+  }
+
+  if (options?.search) {
+    url.searchParams.append('search', options.search);
   }
 
   const partsResponse = await fetchService(url.pathname + url.search);

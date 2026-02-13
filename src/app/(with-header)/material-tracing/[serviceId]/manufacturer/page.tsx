@@ -9,11 +9,15 @@ import {
 } from "@/components/apps/material-tracing/manufacturer/ManufacturerCreateForm.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import SearchInput from "@/components/universals/forms/SearchInput.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home() {
-  const manufacturers = await manufacturerService.listManufacturers();
+export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
+  const params = await searchParams;
+  const search = params.search;
+  
+  const manufacturers = await manufacturerService.listManufacturers({ search });
 
   return (
     <DefaultPage>
@@ -21,6 +25,7 @@ export default async function Home() {
         <ManufacturerCreateForm />
       </Section>
       <Section name="Hersteller">
+        <SearchInput />
         <List>
           {manufacturers.map(async (manufacturer: any) => (
             <Link

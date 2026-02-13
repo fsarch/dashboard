@@ -12,11 +12,15 @@ import ShortCodeTypeBadge from "@/components/apps/material-tracing/short-code/ba
 import BatchCreateForm from "@/components/apps/material-tracing/short-code/batch-create/batch-create-form.component";
 import FormikSubmitButton from "@/components/universals/forms/FormikSubmitButton.component";
 import LinkListItem from "@/components/universals/list/LinkListItem";
+import SearchInput from "@/components/universals/forms/SearchInput.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home() {
-  const shortCodes = await shortCodeService.listShortCodes();
+export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
+  const params = await searchParams;
+  const search = params.search;
+  
+  const shortCodes = await shortCodeService.listShortCodes({ search });
 
   return (
     <DefaultPage>
@@ -40,6 +44,7 @@ export default async function Home() {
         </Link>
       </Section>
       <Section name="Short Codes">
+        <SearchInput />
         <List>
           {shortCodes.map(async (shortCode) => (
             <LinkListItem

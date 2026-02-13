@@ -7,12 +7,16 @@ import { DefaultPage } from "@/components/universals/page/DefaultPage.component"
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import PartsList from "@/components/apps/material-tracing/part/PartsList.component";
 import { loadPartsAction } from "@/app/(with-header)/material-tracing/[serviceId]/part/parts.server-action";
+import SearchInput from "@/components/universals/forms/SearchInput.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home() {
+export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
+  const params = await searchParams;
+  const search = params.search;
+  
   // Load initial page of parts (page 1, 25 items)
-  const initialParts = await partService.listParts({ skip: 0, take: 25 });
+  const initialParts = await partService.listParts({ skip: 0, take: 25, search });
 
   // Add URLs to each part
   const partsWithUrls = await Promise.all(
@@ -30,7 +34,8 @@ export default async function Home() {
         />
       </Section>
       <Section name="Bauteile" addPadding={false}>
-        <PartsList initialParts={partsWithUrls} fetchParts={loadPartsAction} />
+        <SearchInput />
+        <PartsList initialParts={partsWithUrls} fetchParts={loadPartsAction} search={search} />
       </Section>
     </DefaultPage>
   );

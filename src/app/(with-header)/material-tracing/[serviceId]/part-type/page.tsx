@@ -7,11 +7,15 @@ import { PART_TYPE_CREATE_FORM } from "@/services/material-tracing/part-type.for
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import LinkListItem from "@/components/universals/list/LinkListItem";
+import SearchInput from "@/components/universals/forms/SearchInput.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home() {
-  const partTypes = await partTypeService.listPartTypes();
+export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
+  const params = await searchParams;
+  const search = params.search;
+  
+  const partTypes = await partTypeService.listPartTypes({ search });
 
   return (
     <DefaultPage>
@@ -21,6 +25,7 @@ export default async function Home() {
         />
       </Section>
       <Section name="Bauteil-Typen">
+        <SearchInput />
         <List>
           {partTypes.map(async (partType) => (
             <LinkListItem
