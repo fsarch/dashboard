@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useDebounce } from '@/utils/hooks/useDebounce.hook';
 import styles from './Input.module.scss';
 
 type SearchInputProps = {
@@ -19,6 +20,7 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
+  const debouncedSearchValue = useDebounce(searchValue, debounceMs);
 
   const updateSearchParam = useCallback((value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -36,12 +38,8 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = ({
   }, [pathname, router, searchParams]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      updateSearchParam(searchValue);
-    }, debounceMs);
-
-    return () => clearTimeout(timeoutId);
-  }, [searchValue, debounceMs, updateSearchParam]);
+    updateSearchParam(debouncedSearchValue);
+  }, [debouncedSearchValue, updateSearchParam]);
 
   return (
     <input
