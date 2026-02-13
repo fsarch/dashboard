@@ -7,11 +7,13 @@ import styles from './Input.module.scss';
 type SearchInputProps = {
   placeholder?: string;
   debounceMs?: number;
+  ariaLabel?: string;
 };
 
 const SearchInput: React.FunctionComponent<SearchInputProps> = ({
   placeholder = 'Suchen...',
   debounceMs = 300,
+  ariaLabel = 'Ressourcen suchen',
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -48,7 +50,7 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = ({
       placeholder={placeholder}
       value={searchValue}
       onChange={(e) => setSearchValue(e.target.value)}
-      aria-label="Ressourcen suchen"
+      aria-label={ariaLabel}
     />
   );
 };
