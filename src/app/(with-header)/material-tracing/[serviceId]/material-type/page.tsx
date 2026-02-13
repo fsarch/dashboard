@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
   const params = await searchParams;
   const search = params.search;
   
-  const manufacturers = await manufacturerService.listManufacturers();
+  const manufacturers = await manufacturerService.listManufacturers({ search });
   const materialTypes = await materialTypeService.listMaterialTypes({ search });
 
   return (
@@ -25,11 +25,9 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="MaterialType erstellen">
         <MaterialTypeCreateForm />
       </Section>
-      <Section name="Suche">
-        <SearchInput />
-      </Section>
       {manufacturers.map((manufacturer) => (
         <Section name={manufacturer.name} key={manufacturer.id}>
+          {manufacturer.id === manufacturers[0].id && <SearchInput />}
           <List>
             {materialTypes.filter(mat => mat.manufacturerId === manufacturer.id).map(async (materialType) => (
               <LinkListItem

@@ -12,10 +12,10 @@ const listMaterialTypes = async (options?: { isArchived?: boolean; search?: stri
     url.searchParams.append('search', options.search);
   }
 
-  const manufacturersResponse = await fetchService(url.pathname + url.search);
-  const manufacturers = await manufacturersResponse.json();
+  const materialTypesResponse = await fetchService(url.pathname + url.search);
+  const materialTypes = await materialTypesResponse.json();
 
-  return manufacturers;
+  return materialTypes;
 };
 const getMaterialType = async (materialTypeId: string): Promise<TMaterialType> => {
   const materialTypeRespose = await fetchService(`/v1/material-types/${materialTypeId}`);

@@ -47,7 +47,7 @@ const PartsList: React.FunctionComponent<PartsListProps> = ({ initialParts, fetc
     } finally {
       setLoading(false);
     }
-  }, [search]);
+  }, [fetchParts, search]);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
