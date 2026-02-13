@@ -25,9 +25,11 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="MaterialType erstellen">
         <MaterialTypeCreateForm />
       </Section>
+      <Section name="Material-Typen">
+        <SearchInput />
+      </Section>
       {manufacturers.map((manufacturer) => (
         <Section name={manufacturer.name} key={manufacturer.id}>
-          {manufacturer.id === manufacturers[0].id && <SearchInput />}
           <List>
             {materialTypes.filter(mat => mat.manufacturerId === manufacturer.id).map(async (materialType) => (
               <LinkListItem

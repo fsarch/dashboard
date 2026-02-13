@@ -27,7 +27,8 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = ({
       params.delete('search');
     }
     
-    const newUrl = `${pathname}?${params.toString()}`;
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
     router.replace(newUrl);
     router.refresh();
   }, [pathname, router, searchParams]);
