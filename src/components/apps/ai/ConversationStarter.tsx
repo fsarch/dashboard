@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import Section from '@/components/universals/section/Section';
+import styles from './ConversationStarter.module.scss';
 import Button from '@/components/universals/forms/Button';
 
 type Props = {
@@ -18,17 +18,20 @@ const ConversationStarter: React.FC<Props> = ({ onStart }) => {
   };
 
   return (
-    <Section name="Neue Konversation">
-      <div className="ai-start-row" style={{ display: 'flex', gap: 8 }}>
-        <input
-          className="newConvInput"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Stelle eine Frage oder gib ein Prompt ein..."
-        />
-        <Button type="button" onClick={handleStart}>Start</Button>
+    <div className={styles.center}>
+      <div className={styles.card}>
+        <h3 className={styles.title}>Starte eine neue Konversation</h3>
+        <div className={styles.inputRow}>
+          <input
+            className={styles.input}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Stelle eine Frage oder gib ein Prompt ein..."
+          />
+          <Button type="button" onClick={handleStart}>Start</Button>
+        </div>
       </div>
-    </Section>
+    </div>
   );
 }
 
