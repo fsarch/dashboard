@@ -16,6 +16,14 @@
   gap: 16px;
 }
 
+.titleWrapper {
+  text-align: center;
+}
+
+.aiIcon {
+  font-size: 100px;
+}
+
 /* apply color-mix background only when supported to avoid duplicate property warnings */
 @supports (background: color-mix(in srgb, rgb(var(--color-background-rgb)) 8%, rgb(0 0 0))) {
   .card {

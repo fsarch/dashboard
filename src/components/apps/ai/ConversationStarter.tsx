@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import styles from './ConversationStarter.module.scss';
 import Button from '@/components/universals/forms/Button';
+import AiIcon from "@/components/apps/ai/icons/AiIcon";
 
 type Props = {
   serviceId?: string;
@@ -19,7 +20,10 @@ const ConversationStarter: React.FC<Props> = ({ serviceId, onStart }) => {
     return (
       <div className={styles.center}>
         <div className={styles.card}>
-          <h3 className={styles.title}>Starte eine neue Konversation</h3>
+          <div className={styles.titleWrapper}>
+            <AiIcon className={styles.aiIcon} enableAnimation/>
+            <h3 className={styles.title}>Starte eine neue Konversation</h3>
+          </div>
           <form action={onStart as any} className={styles.inputRow}>
             <input name="initialMessage" className={styles.input} defaultValue={value} placeholder="Stelle eine Frage oder gib ein Prompt ein..." />
             <Button type="submit">Start</Button>
