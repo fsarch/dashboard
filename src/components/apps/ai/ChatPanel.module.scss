@@ -1,0 +1,112 @@
+:root {
+  --ai-primary: #32a852;
+}
+
+/* Root for AI chat — derive bubble colors from --ai-primary so theming works. We mix with black to keep a darker tone. */
+.root {
+  display: flex;
+  gap: 16px;
+
+  /* make sure there's always a primary; fall back to a green if not set */
+  --ai-primary: var(--ai-primary, #32a852);
+
+  /* Derive bubble colors from global rgb vars using color-mix. */
+  /* Note: layout.tsx sets --color-primary-rgb and --color-background-rgb as "r, g, b" strings. */
+  --ai-assistant-bg: color-mix(in srgb, rgb(var(--color-primary-rgb)) 30%, rgb(0 0 0));
+  /* user bubble: mix background with black to get a very dark gray */
+  --ai-user-bg: color-mix(in srgb, rgb(var(--color-background-rgb)) 10%, rgb(0 0 0));
+  --ai-bubble-bg: color-mix(in srgb, rgb(var(--color-background-rgb)) 8%, rgb(0 0 0));
+
+  /* general bubble bg and text defaults */
+
+  --ai-user-text: #ffffff;
+  --ai-assistant-text: #ffffff;
+  --ai-bubble-text: #ffffff;
+
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.sidebar {
+  width: 260px;
+}
+
+.chatArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* messages take available space and scroll independently */
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.message {
+  padding: 8px 12px;
+  border-radius: 6px;
+
+  /* Default dark bubble background and light text; can be overridden by inline styles or aiVars */
+  background: var(--ai-bubble-bg, rgba(0,0,0,0.5));
+  color: var(--ai-bubble-text, #ffffff);
+}
+
+.user {
+  align-self: flex-end;
+
+  /* Stronger/darker user bubble by default */
+  background: var(--ai-user-bg, rgba(0,0,0,0.65));
+  color: var(--ai-user-text, #ffffff);
+}
+
+.assistant {
+  align-self: flex-start;
+
+  /* Slightly lighter assistant bubble but still dark */
+  background: var(--ai-assistant-bg, rgba(0,0,0,0.55));
+  color: var(--ai-assistant-text, #ffffff);
+}
+
+.sendRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  /* stick to bottom of chat area so it's always visible while messages scroll */
+  position: sticky;
+  bottom: 12px;
+  z-index: 20;
+  padding: 12px;
+  /* fallback for browsers without color-mix support: light translucent panel */
+  background-color: rgba(0,0,0,0.85);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(6px);
+}
+
+.sendInput,
+.newConvInput {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03);
+  color: var(--ai-text);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2) inset;
+}
+
+.convButton {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.newConv {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
