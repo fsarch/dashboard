@@ -1,28 +1,23 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import List from '@/components/universals/list/List';
 import LinkListItem from '@/components/universals/list/LinkListItem';
 import Section from '@/components/universals/section/Section';
-
-type ChatSummary = { id: string; title: string };
-
-const mockSummaries: ChatSummary[] = [
-  { id: 'conv-1', title: 'Fragen zum Produkt-Import' },
-  { id: 'conv-2', title: 'Preisberechnung' },
-];
+import { ConversationDto } from '@/services/ai/conversations.type';
 
 type Props = {
   serviceId: string;
-}
+  conversations: Array<ConversationDto>;
+};
 
-const ConversationList: React.FC<Props> = ({ serviceId }) => {
+const ConversationList: React.FC<Props> = ({ serviceId, conversations }) => {
   return (
     <Section name="Konversationen">
       <List>
-        {mockSummaries.map((s) => (
-          <LinkListItem key={s.id} href={`/ai/${serviceId}/conversations/${s.id}`}>
-            {s.title}
+        {(conversations ?? []).map((c) => (
+          <LinkListItem key={c.id} href={`/ai/${serviceId}/conversations/${c.id}`}>
+            {c.title || c.id}
           </LinkListItem>
         ))}
       </List>
