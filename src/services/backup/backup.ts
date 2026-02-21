@@ -31,4 +31,18 @@ export type PaginatedResult<T> = {
   data: T[];
 };
 
+export type TBackup = {
+  id: string;
+  name: string;
+  connectorServiceId: string;
+  storageId: string;
+  backupJobId?: string | null;
+  externalId?: string | null;
+  startTime?: string | null;
+  lastUpdateTime?: string | null;
+  completionTime?: string | null;
+  creationTime: string;
+  deletionTime?: string | null;
+};
+
 

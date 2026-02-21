@@ -117,7 +117,11 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
     }, {
       name: 'Jobs',
       path: '/job',
-      icon: 'play',
+      icon: 'arrows-rotate',
+    }, {
+      name: 'Backups',
+      path: '/backup',
+      icon: 'box-archive',
     }, {
       name: 'Storage',
       path: '/storage',

@@ -1,5 +1,12 @@
 import { fetchService } from '@/utils/fetchService';
-import { TBackupJob, TConnector, TStorage, TCreateBackupJobPayload, PaginatedResult } from '@/services/backup/backup';
+import {
+  TBackupJob,
+  TConnector,
+  TStorage,
+  TCreateBackupJobPayload,
+  PaginatedResult,
+  TBackup
+} from '@/services/backup/backup';
 
 export async function listConnectors(serviceId: string): Promise<PaginatedResult<TConnector>> {
   const res = await fetchService('/v1/connectors', undefined, { serviceId });
@@ -71,6 +78,18 @@ export async function getBackupJob(id: string): Promise<TBackupJob> {
   return res.json();
 }
 
+export async function listBackups(): Promise<PaginatedResult<TBackup>> {
+  const res = await fetchService('/v1/backups');
+  if (!res.ok) throw new Error('failed to list backups');
+  return res.json();
+}
+
+export async function getBackup(id: string): Promise<TBackup> {
+  const res = await fetchService(`/v1/backups/${id}`);
+  if (!res.ok) throw new Error('failed to get backup');
+  return res.json();
+}
+
 export async function createBackupJob(serviceId: string, payload: TCreateBackupJobPayload): Promise<TBackupJob> {
   const res = await fetchService('/v1/backup-jobs', { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' } }, { serviceId });
   if (!res.ok) throw new Error('failed to create backup job');
@@ -86,4 +105,9 @@ export async function updateBackupJob(serviceId: string, id: string, payload: Pa
 export async function deleteBackupJob(serviceId: string, id: string): Promise<void> {
   const res = await fetchService(`/v1/backup-jobs/${id}`, { method: 'DELETE' }, { serviceId });
   if (!res.ok) throw new Error('failed to delete backup job');
+}
+
+export async function deleteBackup(serviceId: string, id: string): Promise<void> {
+  const res = await fetchService(`/v1/backups/${id}`, { method: 'DELETE' }, { serviceId });
+  if (!res.ok) throw new Error('failed to delete backup');
 }
