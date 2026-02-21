@@ -1,44 +1,37 @@
 import 'server-only';
 
 import { fetchService } from '@/utils/fetchService';
-import { MessageDto, CreateMessageDto, UpdateMessageDto } from './messages.type';
+import type { MessageDto, CreateMessageDto, UpdateMessageDto } from './messages.type';
 
-const listMessages = async (conversationId: string, options?: { serviceId?: string }): Promise<Array<MessageDto>> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/conversations/${conversationId}/messages`, undefined, opts);
-  return await res.json();
-};
+const BASE = '/v1';
 
-const createMessage = async (conversationId: string, dto: CreateMessageDto, options?: { serviceId?: string }): Promise<MessageDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/conversations/${conversationId}/messages`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, opts);
-  return await res.json();
-};
+async function listMessages(conversationId: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(conversationId)}/messages`, undefined, opts);
+  return res.json() as Promise<MessageDto[]>;
+}
 
-const getMessage = async (conversationId: string, messageId: string, options?: { serviceId?: string }): Promise<MessageDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/conversations/${conversationId}/messages/${messageId}`, undefined, opts);
-  return await res.json();
-};
+async function createMessage(conversationId: string, data: CreateMessageDto, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(conversationId)}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
+  if (res.status === 201 || res.ok) return res.json() as Promise<MessageDto>;
+  throw new Error(`Could not create message: ${res.status}`);
+}
 
-const updateMessage = async (conversationId: string, messageId: string, dto: UpdateMessageDto, options?: { serviceId?: string }): Promise<MessageDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/conversations/${conversationId}/messages/${messageId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, opts);
-  return await res.json();
-};
+async function getMessage(conversationId: string, messageId: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(messageId)}`, undefined, opts);
+  return res.json() as Promise<MessageDto>;
+}
 
-const deleteMessage = async (conversationId: string, messageId: string, options?: { serviceId?: string }): Promise<void> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  await fetchService(`/v1/conversations/${conversationId}/messages/${messageId}`, { method: 'DELETE' }, opts);
-};
+async function updateMessage(conversationId: string, messageId: string, data: UpdateMessageDto, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(messageId)}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
+  if (!res.ok) throw new Error(`Could not update message: ${res.status}`);
+  return res.json() as Promise<MessageDto>;
+}
+
+async function deleteMessage(conversationId: string, messageId: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(messageId)}`, { method: 'DELETE' }, opts);
+  if (!res.ok) throw new Error(`Could not delete message: ${res.status}`);
+  return;
+}
 
 export const messagesService = {
   listMessages,

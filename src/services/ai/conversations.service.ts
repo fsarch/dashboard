@@ -1,44 +1,43 @@
 import 'server-only';
 
 import { fetchService } from '@/utils/fetchService';
-import { ConversationDto, CreateConversationDto, UpdateConversationDto } from './conversations.type';
+import type { ConversationDto, CreateConversationDto, UpdateConversationDto, UserDto } from './conversations.type';
 
-const listConversations = async (options?: { serviceId?: string }): Promise<Array<ConversationDto>> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService('/v1/conversations', undefined, opts);
-  return await res.json();
-};
+const BASE = '/v1';
 
-const createConversation = async (dto: CreateConversationDto, options?: { serviceId?: string }): Promise<ConversationDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService('/v1/conversations', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, opts);
-  return await res.json();
-};
+async function listConversations(opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations`, undefined, opts);
+  return res.json() as Promise<ConversationDto[]>;
+}
 
-const getConversation = async (id: string, options?: { serviceId?: string }): Promise<ConversationDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/conversations/${id}`, undefined, opts);
-  return await res.json();
-};
+async function createConversation(data: CreateConversationDto, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
+  if (res.status === 201 || res.ok) return res.json() as Promise<ConversationDto>;
+  throw new Error(`Could not create conversation: ${res.status}`);
+}
 
-const updateConversation = async (id: string, dto: UpdateConversationDto, options?: { serviceId?: string }): Promise<ConversationDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/conversations/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, opts);
-  return await res.json();
-};
+async function getConversation(id: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(id)}`, undefined, opts);
+  return res.json() as Promise<ConversationDto>;
+}
 
-const deleteConversation = async (id: string, options?: { serviceId?: string }): Promise<void> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  await fetchService(`/v1/conversations/${id}`, { method: 'DELETE' }, opts);
-};
+async function updateConversation(id: string, data: UpdateConversationDto, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(id)}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
+  if (!res.ok) throw new Error(`Could not update conversation: ${res.status}`);
+  return res.json() as Promise<ConversationDto>;
+}
+
+async function deleteConversation(id: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(id)}`, { method: 'DELETE' }, opts);
+  if (!res.ok) throw new Error(`Could not delete conversation: ${res.status}`);
+  return;
+}
+
+async function getMembers(id: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(id)}/members`, undefined, opts);
+  if (res.status === 404) throw new Error('Conversation not found');
+  return res.json() as Promise<UserDto[]>;
+}
 
 export const conversationsService = {
   listConversations,
@@ -46,4 +45,5 @@ export const conversationsService = {
   getConversation,
   updateConversation,
   deleteConversation,
+  getMembers,
 };

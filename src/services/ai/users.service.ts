@@ -1,44 +1,37 @@
-'use server';
+import 'server-only';
 
 import { fetchService } from '@/utils/fetchService';
-import { UserDto, CreateUserDto, UpdateUserDto } from './users.type';
+import type { UserDto, CreateUserDto, UpdateUserDto } from './users.type';
 
-const listUsers = async (options?: { serviceId?: string }): Promise<Array<UserDto>> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService('/v1/users', undefined, opts);
-  return await res.json();
-};
+const BASE = '/v1';
 
-const createUser = async (dto: CreateUserDto, options?: { serviceId?: string }): Promise<UserDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService('/v1/users', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, opts);
-  return await res.json();
-};
+async function listUsers(opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/users`, undefined, opts);
+  return res.json() as Promise<UserDto[]>;
+}
 
-const getUser = async (id: string, options?: { serviceId?: string }): Promise<UserDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/users/${id}`, undefined, opts);
-  return await res.json();
-};
+async function createUser(data: CreateUserDto, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/users`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
+  if (res.status === 201 || res.ok) return res.json() as Promise<UserDto>;
+  throw new Error(`Could not create user: ${res.status}`);
+}
 
-const updateUser = async (id: string, dto: UpdateUserDto, options?: { serviceId?: string }): Promise<UserDto> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  const res = await fetchService(`/v1/users/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, opts);
-  return await res.json();
-};
+async function getUser(id: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/users/${encodeURIComponent(id)}`, undefined, opts);
+  return res.json() as Promise<UserDto>;
+}
 
-const deleteUser = async (id: string, options?: { serviceId?: string }): Promise<void> => {
-  const opts = options?.serviceId ? { serviceId: options.serviceId } : undefined;
-  await fetchService(`/v1/users/${id}`, { method: 'DELETE' }, opts);
-};
+async function updateUser(id: string, data: UpdateUserDto, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/users/${encodeURIComponent(id)}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
+  if (!res.ok) throw new Error(`Could not update user: ${res.status}`);
+  return res.json() as Promise<UserDto>;
+}
+
+async function deleteUser(id: string, opts?: { serviceId: string }) {
+  const res = await fetchService(`${BASE}/users/${encodeURIComponent(id)}`, { method: 'DELETE' }, opts);
+  if (!res.ok) throw new Error(`Could not delete user: ${res.status}`);
+  return;
+}
 
 export const usersService = {
   listUsers,

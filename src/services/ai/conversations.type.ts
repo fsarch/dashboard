@@ -5,16 +5,26 @@ export type CreateMessageDto = {
   [key: string]: any;
 };
 
+export type UserDto = {
+  id: string;
+  external_id?: string | null;
+  family_name: string;
+  given_name: string;
+  short_name: string;
+  is_bot: boolean;
+  creation_time: string;
+  deletion_time?: string | null;
+};
+
 export type ConversationDto = {
-  id?: string; // uuid
+  id: string;
   external_id?: string | null;
   owner_user_id?: string | null;
-  owner_user?: any | null;
+  owner_user?: UserDto | null;
   name?: string | null;
   description?: string | null;
-  creation_time?: string;
+  creation_time: string;
   deletion_time?: string | null;
-  [key: string]: any;
 };
 
 export type CreateConversationDto = {
@@ -22,8 +32,11 @@ export type CreateConversationDto = {
   owner_user_id?: string;
   name?: string;
   description?: string;
-  initial_message?: CreateMessageDto;
-  [key: string]: any;
+  initial_message?: {
+    external_id?: string;
+    author_user_id?: string;
+    content: string;
+  };
 };
 
 export type UpdateConversationDto = Partial<CreateConversationDto>;
