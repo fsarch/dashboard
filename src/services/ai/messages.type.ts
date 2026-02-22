@@ -27,3 +27,5 @@ export type CreateMessageDto = {
 };
 
 export type UpdateMessageDto = Partial<CreateMessageDto>;
+
+export type MessageWithAuthor = MessageDto & { author_user?: UserDto | null };

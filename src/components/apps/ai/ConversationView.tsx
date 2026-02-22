@@ -1,13 +1,11 @@
 'use client'
 
-import React, { useMemo, useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import Color from 'color';
 import styles from './ChatPanel.module.scss';
 import Button from '@/components/universals/forms/Button';
-import { messagesService } from '@/services/ai/messages.service';
 import { ConversationDto } from '@/services/ai/conversations.type';
-import { MessageDto } from '@/services/ai/messages.type';
-import { useRouter } from "next/navigation";
+import type { MessageWithAuthor } from '@/services/ai/messages.type';
 import { sendMessageToServer } from "@/components/apps/ai/ConversationView.server-action";
 
 type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string };
@@ -64,15 +62,23 @@ type Props = {
   conversationId: string;
   primaryColor?: string; // hex color, optional
   conversation?: ConversationDto | null;
-  messages?: MessageDto[] | null;
+  messages?: MessageWithAuthor[] | null;
 }
 
 const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryColor, conversation: conversationProp = null, messages: messagesProp = null }) => {
   const [input, setInput] = useState('');
   // no CSS variable read here — prefer primaryColor prop
 
-  const [conversation, setConversation] = useState<ConversationDto | null>(() => conversationProp ?? (mockConversations.find((c) => c.id === conversationId) as any ?? null));
-  const [messages, setMessages] = useState<MessageDto[]>(() => messagesProp ?? (conversation ? (mockConversations.find(c => c.id === conversation.id)?.messages as any as MessageDto[]) ?? [] : []));
+  const conversation = conversationProp ?? (mockConversations.find((c) => c.id === conversationId) as any ?? null);
+  const [messages, setMessages] = useState<MessageWithAuthor[]>(() => {
+    if (messagesProp) return messagesProp;
+    if (conversation) {
+      // convert mock messages to MessageWithAuthor
+      const mock = mockConversations.find((c) => c.id === conversation.id);
+      return (mock?.messages ?? []).map((m: any) => ({ ...m, author_user: null })) as MessageWithAuthor[];
+    }
+    return [];
+  });
 
   // Keep the surrounding <main> scrolled to the bottom on mount and when messages change.
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -95,11 +101,11 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
     const raf1 = requestAnimationFrame(() => {
       // assign raf2 directly to the function property to avoid an unused local var
       (scrollToLast as any)._raf2 = requestAnimationFrame(() => {
-        const ok = scrollToLast();
+        scrollToLast();
       });
     });
     const timeout = window.setTimeout(() => {
-      const ok = scrollToLast();
+      scrollToLast();
     }, 120);
 
     return () => {
@@ -110,7 +116,6 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
     };
   }, [messages.length]);
 
-  const router = useRouter();
   const sendMessage = async () => {
     if (!conversation || !input.trim()) return;
     try {
@@ -152,10 +157,12 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
         <h2>{conversation.name || conversation.id}</h2>
         <div className={styles.messages} ref={messagesRef}>
           {messages.map((m) => {
-            const roleIsUser = m.role === 'user';
+            // Determine if the author is a user (non-bot). If author_user missing assume user
+            const roleIsUser = m.author_user ? !m.author_user.is_bot : true;
+            const authorName = (m.author_user?.short_name ?? `${m.author_user?.given_name ?? ''} ${m.author_user?.family_name ?? ''}`.trim()) || 'Unbekannt';
             return (
               <div key={m.id} className={styles.message + ' ' + (roleIsUser ? styles.user : styles.assistant)}>
-                <div className={styles.role}>{m.role}</div>
+                <div className={styles.role}>{authorName}</div>
                 <div className={styles.text}>{m.content}</div>
               </div>
             );
@@ -171,4 +178,3 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
 };
 
 export default ConversationView;
-

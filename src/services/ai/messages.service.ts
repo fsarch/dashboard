@@ -1,7 +1,9 @@
 import 'server-only';
 
 import { fetchService } from '@/utils/fetchService';
-import type { MessageDto, CreateMessageDto, UpdateMessageDto } from './messages.type';
+import { conversationsService } from './conversations.service';
+import type { MessageDto, CreateMessageDto, UpdateMessageDto, MessageWithAuthor } from './messages.type';
+import type { UserDto } from './users.type';
 
 const BASE = '/v1';
 
@@ -33,10 +35,31 @@ async function deleteMessage(conversationId: string, messageId: string, opts?: {
   return;
 }
 
+// New: fetch messages and enrich with author user data
+export async function listMessagesWithAuthors(conversationId: string, opts?: { serviceId: string }): Promise<MessageWithAuthor[]> {
+  const messages = await listMessages(conversationId, opts);
+  // collect unique author ids
+  // Fetch members of the conversation in a single request (contains exactly the users involved)
+  const members: Array<UserDto> = await conversationsService.getMembers(conversationId, opts).catch(() => []);
+  if (!members || members.length === 0) {
+    // attach null author_user where none provided
+    return messages.map((m) => ({ ...m, author_user: m.author_user ?? null }));
+  }
+
+  const userMap = new Map(members.map((u) => [u.id, u]));
+
+  // attach user object to each message
+  return messages.map((m) => {
+    const author = m.author_user_id ? (userMap.get(m.author_user_id) ?? null) : m.author_user ?? null;
+    return { ...m, author_user: author } as MessageWithAuthor;
+  });
+}
+
 export const messagesService = {
   listMessages,
   createMessage,
   getMessage,
   updateMessage,
   deleteMessage,
+  listMessagesWithAuthors,
 };

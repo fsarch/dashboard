@@ -16,7 +16,7 @@ export default async function ConversationPage(props: { params: Promise<{ servic
 
   // load conversation and messages server-side
   const conversation = await conversationsService.getConversation(conversationId, { serviceId });
-  const messages = await messagesService.listMessages(conversationId, { serviceId });
+  const messages = await messagesService.listMessagesWithAuthors(conversationId, { serviceId });
 
   return (
     <DefaultPage>
