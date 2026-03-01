@@ -12,9 +12,10 @@ export default async function Home(props: { params: Promise<{ serviceId: string 
   const serviceId = params.serviceId;
 
   // server action to create a conversation from a posted FormData
-  async function handleStart(formData: FormData) {
+  async function handleStart(values: { initialMessage: string }) {
     'use server';
-    const initialMessage = String(formData.get('initialMessage') || '').trim();
+    console.log('values', values);
+    const initialMessage = values.initialMessage.trim();
     if (!initialMessage) return null;
     const created = await conversationsService.createConversation({ name: initialMessage, initial_message: { content: initialMessage } }, { serviceId });
     if (created?.id) {

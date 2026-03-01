@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import List from '@/components/universals/list/List';
 import LinkListItem from '@/components/universals/list/LinkListItem';
 import Section from '@/components/universals/section/Section';
@@ -17,7 +17,7 @@ const ConversationList: React.FC<Props> = ({ serviceId, conversations }) => {
       <List>
         {(conversations ?? []).map((c) => (
           <LinkListItem key={c.id} href={`/ai/${serviceId}/conversations/${c.id}`}>
-            {c.title || c.id}
+            {c.name || c.id}
           </LinkListItem>
         ))}
       </List>

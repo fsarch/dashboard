@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field } from "formik";
 import styles from './Input.module.scss';
+import clsx from "clsx";
 
 type InputProps = {
   id?: string;
@@ -12,6 +13,7 @@ type InputProps = {
   max?: number;
   step?: number;
   value?: string;
+  className?: string;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
@@ -23,10 +25,11 @@ const Input: React.FunctionComponent<InputProps> = ({
   min,
   max,
   step,
+  className,
 }) => {
   return (
     <Field
-      className={styles.root}
+      className={clsx(styles.root, className)}
       id={id}
       type={type}
       name={name}

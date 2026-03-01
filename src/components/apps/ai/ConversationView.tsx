@@ -2,11 +2,13 @@
 
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import Color from 'color';
-import styles from './ChatPanel.module.scss';
+import styles from './ConversationView.module.scss';
 import Button from '@/components/universals/forms/Button';
 import { ConversationDto } from '@/services/ai/conversations.type';
 import type { MessageWithAuthor } from '@/services/ai/messages.type';
 import { sendMessageToServer } from "@/components/apps/ai/ConversationView.server-action";
+import AiIcon from "@/components/apps/ai/icons/AiIcon";
+import ActionButton from "@/components/universals/forms/button/ActionButton";
 
 type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string };
 
@@ -63,9 +65,10 @@ type Props = {
   primaryColor?: string; // hex color, optional
   conversation?: ConversationDto | null;
   messages?: MessageWithAuthor[] | null;
+  children?: React.ReactNode;
 }
 
-const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryColor, conversation: conversationProp = null, messages: messagesProp = null }) => {
+const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryColor, conversation: conversationProp = null, messages: messagesProp = null, ...props }) => {
   const [input, setInput] = useState('');
   // no CSS variable read here — prefer primaryColor prop
 
@@ -83,35 +86,35 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
   // Keep the surrounding <main> scrolled to the bottom on mount and when messages change.
   const rootRef = useRef<HTMLDivElement | null>(null);
   const messagesRef = useRef<HTMLDivElement | null>(null);
-  useLayoutEffect(() => {
-    const scrollToLast = () => {
-      const last = messagesRef.current?.lastElementChild as HTMLElement | null;
-      if (last) {
-        try {
-          last.scrollIntoView({ block: 'end', behavior: 'auto' });
-          return true;
-        } catch (e) {
-          // ignore and fall back
-        }
-      }
-      return false;
-    };
 
+  const scrollToBottom = () => {
+    const last = messagesRef.current?.lastElementChild as HTMLElement | null;
+    if (last) {
+      try {
+        last.scrollIntoView({ behavior: 'smooth' });
+        return true;
+      } catch (e) {
+        // ignore
+      }
+
+      return false;
+    }
+  };
+
+  useLayoutEffect(() => {
     // Try twice with RAFs, then fallback to timeout and finally fallbackScroll
-    const raf1 = requestAnimationFrame(() => {
+    let raf = requestAnimationFrame(() => {
       // assign raf2 directly to the function property to avoid an unused local var
-      (scrollToLast as any)._raf2 = requestAnimationFrame(() => {
-        scrollToLast();
+      raf = requestAnimationFrame(() => {
+        scrollToBottom();
       });
     });
     const timeout = window.setTimeout(() => {
-      scrollToLast();
+      scrollToBottom();
     }, 120);
 
     return () => {
-      cancelAnimationFrame(raf1);
-      const raf2 = (scrollToLast as any)._raf2;
-      if (raf2) cancelAnimationFrame(raf2);
+      if (raf) cancelAnimationFrame(raf);
       clearTimeout(timeout);
     };
   }, [messages.length]);
@@ -120,12 +123,16 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
     if (!conversation || !input.trim()) return;
     try {
       // create message via service
-      const created = await sendMessageToServer({
-        conversationId: conversation.id!,
-        content: input.trim(),
-      })
-      // optionally the assistant response might be created server-side; for now append created
-      setMessages((prev) => [...prev, created]);
+      const created = await sendMessageToServer({ conversationId: conversation.id!, content: input.trim() });
+      // Server returns an array of created messages
+      if (created && created.length > 0) {
+        setMessages((prev) => {
+          const next = [...prev, ...created];
+          // scroll after DOM updates
+          requestAnimationFrame(() => scrollToBottom());
+          return next;
+        });
+      }
       setInput('');
     } catch (e) {
       console.error('failed to send message', e);
@@ -155,6 +162,15 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
     <div ref={rootRef} className={styles.root} data-service-id={serviceId} style={rootStyle}>
       <div className={styles.chatArea} style={{ width: '100%' }}>
         <h2>{conversation.name || conversation.id}</h2>
+        {/* Put description in details block on the detail page (above ConversationView) */}
+        {conversation?.description ? (
+          <details>
+            <summary>Beschreibung</summary>
+            <div>{conversation.description}</div>
+          </details>
+        ) : null}
+        {/* render optional children injected by detail page, e.g. description details */}
+        {props.children}
         <div className={styles.messages} ref={messagesRef}>
           {messages.map((m) => {
             // Determine if the author is a user (non-bot). If author_user missing assume user
@@ -170,7 +186,7 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
         </div>
         <div className={styles.sendRow}>
           <input className={styles.sendInput} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Nachricht eingeben..." />
-          <Button type="button" onClick={sendMessage}>Senden</Button>
+          <ActionButton type="button" onClick={sendMessage} className={styles.sendButton}><AiIcon/>Senden</ActionButton>
         </div>
       </div>
     </div>

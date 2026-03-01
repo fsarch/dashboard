@@ -1,10 +1,10 @@
 import React from 'react';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import ConversationView from '@/components/apps/ai/ConversationView';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 import { getThemeConfiguration } from '@/utils/configuration.utils';
 import { conversationsService } from '@/services/ai/conversations.service';
 import { messagesService } from '@/services/ai/messages.service';
+import ConversationView from '@/components/apps/ai/ConversationView';
 
 export const generateMetadata = createAutomaticMetadata();
 

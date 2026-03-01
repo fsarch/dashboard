@@ -24,6 +24,13 @@
   font-size: 100px;
 }
 
+.submitButton {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
 /* apply color-mix background only when supported to avoid duplicate property warnings */
 @supports (background: color-mix(in srgb, rgb(var(--color-background-rgb)) 8%, rgb(0 0 0))) {
   .card {
@@ -46,7 +53,7 @@
 .inputRow {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
 }
 
 .input {

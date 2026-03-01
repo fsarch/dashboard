@@ -12,9 +12,25 @@ async function listMessages(conversationId: string, opts?: { serviceId: string }
   return res.json() as Promise<MessageDto[]>;
 }
 
-async function createMessage(conversationId: string, data: CreateMessageDto, opts?: { serviceId: string }) {
+async function createMessage(conversationId: string, data: CreateMessageDto, opts?: { serviceId: string }): Promise<MessageWithAuthor[]> {
   const res = await fetchService(`${BASE}/conversations/${encodeURIComponent(conversationId)}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, opts);
-  if (res.status === 201 || res.ok) return res.json() as Promise<MessageDto>;
+  if (res.status === 201 || res.ok) {
+    const json = await res.json().catch(() => null);
+    if (!json) return [];
+    // API always returns { data: [...] }
+    const rawMessages = Array.isArray(json.data) ? json.data as MessageDto[] : [] as MessageDto[];
+
+    // enrich returned messages with author_user using members (single request)
+    const members: Array<UserDto> = await conversationsService.getMembers(conversationId, opts).catch(() => []);
+    const userMap = new Map(members.map((u) => [u.id, u]));
+
+    const enriched = rawMessages.map((m) => {
+      const author = m.author_user_id ? (userMap.get(m.author_user_id) ?? null) : m.author_user ?? null;
+      return { ...m, author_user: author } as MessageWithAuthor;
+    });
+
+    return enriched;
+  }
   throw new Error(`Could not create message: ${res.status}`);
 }
 

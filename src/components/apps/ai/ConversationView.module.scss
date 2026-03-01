@@ -1,5 +1,8 @@
 :root {
   --ai-primary: #32a852;
+  /* height of the floating send row; adjust to match .sendRow height + bottom gap */
+  --send-row-height: 64px;
+  --send-row-bottom-gap: 12px; /* matches bottom spacing used on .sendRow */
 }
 
 /* Root for AI chat — derive bubble colors from --ai-primary so theming works. We mix with black to keep a darker tone. */
@@ -53,6 +56,9 @@
   /* Default dark bubble background and light text; can be overridden by inline styles or aiVars */
   background: var(--ai-bubble-bg, rgba(0,0,0,0.5));
   color: var(--ai-bubble-text, #ffffff);
+
+  /* Ensure scrollIntoView leaves space for the floating input by adding scroll-margin-bottom */
+  scroll-margin-bottom: calc(var(--send-row-height) + var(--send-row-bottom-gap));
 }
 
 .user {
@@ -71,6 +77,14 @@
   color: var(--ai-assistant-text, #ffffff);
 }
 
+.sendButton {
+  display: inline-flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+
 .sendRow {
   display: flex;
   gap: 8px;
@@ -80,6 +94,8 @@
   bottom: 12px;
   z-index: 20;
   padding: 12px;
+  height: var(--send-row-height);
+  box-sizing: border-box;
   /* fallback for browsers without color-mix support: light translucent panel */
   background-color: rgba(0,0,0,0.85);
   border-top: 1px solid rgba(255,255,255,0.04);
