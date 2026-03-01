@@ -14,6 +14,7 @@ type InputProps = {
   step?: number;
   value?: string;
   className?: string;
+  placeholder?: string;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({
@@ -26,6 +27,7 @@ const Input: React.FunctionComponent<InputProps> = ({
   max,
   step,
   className,
+  placeholder,
 }) => {
   return (
     <Field
@@ -38,6 +40,7 @@ const Input: React.FunctionComponent<InputProps> = ({
       min={min}
       max={max}
       step={step}
+      placeholder={placeholder}
     />
   );
 };

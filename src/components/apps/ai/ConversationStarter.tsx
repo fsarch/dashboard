@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import styles from './ConversationStarter.module.scss';
 import AiIcon from "@/components/apps/ai/icons/AiIcon";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import FormikSubmitButton from "@/components/universals/forms/FormikSubmitButton.component";
 import Input from "@/components/universals/forms/Input";
 
@@ -14,8 +14,6 @@ type Props = {
 }
 
 const ConversationStarter: React.FC<Props> = ({ serviceId, onStart }) => {
-  const [value, setValue] = useState('');
-
   const handleSubmit = useCallback((values: { initialMessage: string }) => {
     onStart(values);
   }, [onStart]);
@@ -34,7 +32,7 @@ const ConversationStarter: React.FC<Props> = ({ serviceId, onStart }) => {
           onSubmit={handleSubmit}
         >
           <Form className={styles.inputRow}>
-            <Input name="initialMessage" className={styles.input} defaultValue={value} placeholder="Stelle eine Frage oder gib ein Prompt ein..." />
+            <Input type="text" name="initialMessage" className={styles.input} placeholder="Stelle eine Frage oder gib ein Prompt ein..." />
             <FormikSubmitButton buttonClassName={styles.submitButton}><AiIcon enableAnimation={false} />Start</FormikSubmitButton>
           </Form>
         </Formik>

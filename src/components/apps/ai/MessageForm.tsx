@@ -36,18 +36,16 @@ export default function MessageForm({ conversationId, onMessagesCreatedAction }:
         }
       }}
     >
-      {({ isSubmitting }) => (
-        <Form className={styles.sendRow}>
-          <Field name="content">
-            {({ field }: any) => (
-              <input {...field} className={styles.sendInput} placeholder="Nachricht eingeben..." />
-            )}
-          </Field>
-          <FormikSubmitButton type="submit" disabled={isSubmitting} buttonClassName={styles.sendButton}>
-            <AiIcon />Senden
-          </FormikSubmitButton>
-        </Form>
-      )}
+      <Form className={styles.sendRow}>
+        <Field name="content">
+          {({ field }: any) => (
+            <input {...field} className={styles.sendInput} placeholder="Nachricht eingeben..." />
+          )}
+        </Field>
+        <FormikSubmitButton buttonClassName={styles.sendButton}>
+          <AiIcon />Senden
+        </FormikSubmitButton>
+      </Form>
     </Formik>
   );
 }
