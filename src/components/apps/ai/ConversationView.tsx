@@ -3,12 +3,10 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import Color from 'color';
 import styles from './ConversationView.module.scss';
-import Button from '@/components/universals/forms/Button';
 import { ConversationDto } from '@/services/ai/conversations.type';
 import type { MessageWithAuthor } from '@/services/ai/messages.type';
 import { sendMessageToServer } from "@/components/apps/ai/ConversationView.server-action";
-import AiIcon from "@/components/apps/ai/icons/AiIcon";
-import ActionButton from "@/components/universals/forms/button/ActionButton";
+import MessageForm from './MessageForm';
 
 type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string };
 
@@ -156,8 +154,6 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
     return <div>Konversation nicht gefunden.</div>;
   }
 
-  console.log('messages', messages);
-
   return (
     <div ref={rootRef} className={styles.root} data-service-id={serviceId} style={rootStyle}>
       <div className={styles.chatArea} style={{ width: '100%' }}>
@@ -184,13 +180,21 @@ const ConversationView: React.FC<Props> = ({ serviceId, conversationId, primaryC
             );
           })}
         </div>
-        <div className={styles.sendRow}>
-          <input className={styles.sendInput} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Nachricht eingeben..." />
-          <ActionButton type="button" onClick={sendMessage} className={styles.sendButton}><AiIcon/>Senden</ActionButton>
-        </div>
-      </div>
-    </div>
-  );
-};
+        <MessageForm
+          conversationId={conversation.id!}
+          onMessagesCreatedAction={(created) => {
+            if (created && created.length) {
+              setMessages((prev) => {
+                const next = [...prev, ...created];
+                requestAnimationFrame(() => scrollToBottom());
+                return next;
+              });
+            }
+          }}
+        />
+     </div>
+   </div>
+ );
+}
 
 export default ConversationView;
