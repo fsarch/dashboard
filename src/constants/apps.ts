@@ -107,4 +107,17 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
     name: 'Printer Server',
     basePath: '/printer',
   },
+  [EServiceType.AI]: {
+    name: 'AI',
+    basePath: '/ai',
+    navigation: [{
+      name: 'Start',
+      path: '/',
+      icon: 'comment-dots',
+    }, {
+      name: 'Konversationen',
+      path: '/conversations',
+      icon: 'list',
+    }],
+  },
 };

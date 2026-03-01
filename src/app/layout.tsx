@@ -57,6 +57,7 @@ export default async function RootLayout({
       className={clsx(inter.className, styles.body)}
       style={{
         '--color-primary-rgb': theme.primaryColor.rgbComponents,
+        '--color-background-rgb': theme.backgroundColor.rgbComponents,
       } as CSSProperties}
     >
     <LoadingProvider>

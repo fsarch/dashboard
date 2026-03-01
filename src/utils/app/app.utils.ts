@@ -34,7 +34,11 @@ const apps: Array<AppType> = [{
   icon: 'print',
   name: 'Printer',
   path: '/printer',
-}]
+}, {
+  icon: 'robot',
+  name: 'AI',
+  path: '/ai',
+}];
 
 const getApps = async () => {
   return apps;
