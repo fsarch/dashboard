@@ -1,0 +1,26 @@
+diff --git a/node_modules/@monaco-editor/loader/lib/cjs/loader/index.js b/node_modules/@monaco-editor/loader/lib/cjs/loader/index.js
+index 499029b..61dd567 100644
+--- a/node_modules/@monaco-editor/loader/lib/cjs/loader/index.js
++++ b/node_modules/@monaco-editor/loader/lib/cjs/loader/index.js
+@@ -130,7 +130,7 @@ function configureLoader() {
+   var require = window.require;
+   require.config(state.config);
+   require(['vs/editor/editor.main'], function (_ref4) {
+-    var monaco = _ref4.m;
++    var monaco = _ref4.m || window.monaco;
+     storeMonacoInstance(monaco);
+     state.resolve(monaco);
+   }, function (error) {
+diff --git a/node_modules/@monaco-editor/loader/lib/es/loader/index.js b/node_modules/@monaco-editor/loader/lib/es/loader/index.js
+index 52111df..e33dfb4 100644
+--- a/node_modules/@monaco-editor/loader/lib/es/loader/index.js
++++ b/node_modules/@monaco-editor/loader/lib/es/loader/index.js
+@@ -126,7 +126,7 @@ function configureLoader() {
+   var require = window.require;
+   require.config(state.config);
+   require(['vs/editor/editor.main'], function (_ref4) {
+-    var monaco = _ref4.m;
++    var monaco = _ref4.m || window.monaco;
+     storeMonacoInstance(monaco);
+     state.resolve(monaco);
+   }, function (error) {
