@@ -9,6 +9,8 @@ import {
 import type WebUSBReceiptPrinterType from '@point-of-sale/webusb-receipt-printer';
 import WebUSBReceiptPrinter from '@point-of-sale/webusb-receipt-printer';
 import { useRouter } from "next/navigation";
+import WebBluetoothReceiptPrinter from "@point-of-sale/webbluetooth-receipt-printer";
+import type WebBluetoothReceiptPrinterType from "@point-of-sale/webbluetooth-receipt-printer";
 
 type LocalPrinterSettingsProps = PropsWithChildren<{
 
@@ -66,6 +68,42 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
     setPrinter(printerContext);
   }, [autoPrint, setAutoPrint]);
 
+  const handleBluetoothConnectClick = useCallback(async () => {
+    // @ts-ignore
+    // const WebUSBReceiptPrinter = (await import('@point-of-sale/webusb-receipt-printer/dist/webusb-receipt-printer.esm')).default;
+
+    const receiptPrinter: WebBluetoothReceiptPrinterType = new WebBluetoothReceiptPrinter();
+
+    const res = await new Promise<Omit<TLocalPrinterContext, 'autoPrint' | 'setAutoPrint'>>((resolve) => {
+      receiptPrinter.addEventListener('connected', (device) => {
+        console.log(`Connected to ${device.manufacturerName} ${device.productName} (#${device.serialNumber})`);
+
+        const printerLanguage = device.language;
+        const printerCodepageMapping = device.codepageMapping;
+
+        /* Store device for reconnecting */
+        const lastUsedDevice = device;
+
+        console.log('printerLanguage', printerLanguage);
+
+        resolve({
+          printer: receiptPrinter,
+          device,
+        });
+      });
+
+      receiptPrinter.connect();
+    });
+
+    const printerContext: TLocalPrinterContext = {
+      ...res,
+      autoPrint,
+      setAutoPrint,
+    };
+
+    setPrinter(printerContext);
+  }, [autoPrint, setAutoPrint]);
+
   const handleAutoPrintToggle = useCallback(() => {
     const newAutoPrint = !autoPrint;
     setAutoPrint(newAutoPrint);
@@ -88,6 +126,12 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
             onClick={handleConnectClick}
           >
             Drucker verbinden
+          </Button>
+          <Button
+            type="button"
+            onClick={handleBluetoothConnectClick}
+          >
+            Bluetoothdrucker verbinden
           </Button>
 
           {printer && (

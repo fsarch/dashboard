@@ -7,9 +7,25 @@ import {
 
 const DEFAULT_FONT = 'a';
 
+function escapeNonASCII(text: string): string {
+  // Normalize German umlauts before falling back to unicode escaping.
+  const normalizedText = text
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/Ä/g, 'Ae')
+    .replace(/Ö/g, 'Oe')
+    .replace(/Ü/g, 'Ue')
+    .replace(/ß/g, 'ss')
+    .replace(/°/g, '');
+
+  return normalizedText;
+}
+
 function encodeReceiptTextData(
   item: ReceiptDataDto & { $type: 'text' },
   encoder: ReceiptPrinterEncoder,
+  context: TEncodeContext,
 ) {
   // SET format styles
   if (item.format?.size) {
@@ -29,7 +45,11 @@ function encodeReceiptTextData(
   }
 
   // WRITE TEXT
-  encoder.text(item.value);
+  if (context.convertNonASCII) {
+    encoder.text(escapeNonASCII(item.value));
+  } else {
+    encoder.text(item.value);
+  }
 
   // RESET format styles
   if (item.format?.underline) {
@@ -52,13 +72,14 @@ function encodeReceiptTextData(
 function encodeReceiptLineData(
   item: ReceiptDataDto & { $type: 'line' },
   encoder: ReceiptPrinterEncoder,
+  context: TEncodeContext,
 ) {
   // SET format styles
   if (item.format?.font) {
     encoder.font(item.format.font);
   }
 
-  encodeReceiptData(item.children, encoder);
+  encodeReceiptData(item.children, encoder, context);
 
   encoder.newline();
 
@@ -67,22 +88,30 @@ function encodeReceiptLineData(
   }
 }
 
-function encodeReceiptData(data: Array<ReceiptDataDto>, encoder: ReceiptPrinterEncoder) {
+type TEncodeContext = {
+  convertNonASCII?: boolean;
+};
+
+function encodeReceiptData(
+  data: Array<ReceiptDataDto>,
+  encoder: ReceiptPrinterEncoder,
+  context: TEncodeContext,
+) {
   data.forEach((item) => {
     switch (item.$type) {
       case 'alignment':
         encoder.align(item.alignment);
         item.children.forEach((child) => {
-          encodeReceiptData([child], encoder);
+          encodeReceiptData([child], encoder, context);
         });
         encoder.newline(); // Add a newline after processing children
         encoder.align('left'); // Reset alignment to left after processing children
         break;
       case 'text':
-        encodeReceiptTextData(item, encoder);
+        encodeReceiptTextData(item, encoder, context);
         break;
       case 'line':
-        encodeReceiptLineData(item, encoder);
+        encodeReceiptLineData(item, encoder, context);
         break;
       case 'cut':
         encoder.cut();
@@ -124,14 +153,24 @@ export async function executeAutoPrintJob(
     await updateCollectionTime(job.printerId, job.id);
 
     // Step 2: Encode and print
-    const { device, printer } = localPrinter;
+    const {device, printer} = localPrinter;
+
+    console.log(device);
 
     let encoder = new ReceiptPrinterEncoder({
       language: device.language as PrinterLanguage | undefined,
       codepageCandidates: [device.codepageMapping, 'epson'],
+      printerModel: device.productName,
+      // codepageCandidates: ['epson'],
     }).initialize();
 
-    encodeReceiptData(job.data, encoder);
+    const nonAsciiPrinters = new Set<string>([]);
+
+    encodeReceiptData(job.data, encoder, {
+      convertNonASCII: device.productName
+        ? nonAsciiPrinters.has(device.productName)
+        : false,
+    });
 
     const data = encoder.encode();
 

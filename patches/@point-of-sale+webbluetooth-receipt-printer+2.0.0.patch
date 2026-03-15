@@ -1,0 +1,14 @@
+diff --git a/node_modules/@point-of-sale/webbluetooth-receipt-printer/package.json b/node_modules/@point-of-sale/webbluetooth-receipt-printer/package.json
+index 71dfb4d..4704c7f 100644
+--- a/node_modules/@point-of-sale/webbluetooth-receipt-printer/package.json
++++ b/node_modules/@point-of-sale/webbluetooth-receipt-printer/package.json
+@@ -7,7 +7,8 @@
+           "import": "./dist/webbluetooth-receipt-printer.esm.js",
+           "require": "./dist/webbluetooth-receipt-printer.umd.js",
+           "script": "./dist/webbluetooth-receipt-printer.umd.js"
+-      }
++      },
++      "import": "./dist/webbluetooth-receipt-printer.esm.js"
+   },
+   "module": "src/main.js",
+   "repository": {

@@ -26,6 +26,7 @@
     "@mdxeditor/editor": "^3.52.0",
     "@monaco-editor/react": "^4.7.0",
     "@point-of-sale/receipt-printer-encoder": "^3.0.3",
+    "@point-of-sale/webbluetooth-receipt-printer": "^2.0.0",
     "@point-of-sale/webusb-receipt-printer": "^2.0.0",
     "clsx": "^2.1.1",
     "color": "^5.0.3",
