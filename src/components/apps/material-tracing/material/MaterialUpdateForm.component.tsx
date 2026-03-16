@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 
 import React from 'react';
 import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";

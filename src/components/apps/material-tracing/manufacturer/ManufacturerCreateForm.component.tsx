@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 
 import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
 import { MANUFACTURER_CREATE_FORM } from "@/services/material-tracing/manufacturer.forms";

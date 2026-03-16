@@ -1,10 +1,9 @@
-'use server';
-
 import React from 'react';
 import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
 import {
   MATERIAL_SHORT_CODE_DELETE_FORM
 } from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteFrom.form";
+import 'server-only';
 
 type ShortCodeDeleteFormProps = {
   args: {
