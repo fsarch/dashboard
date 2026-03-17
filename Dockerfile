@@ -66,8 +66,6 @@ COPY package.json package-lock.json .npmrc ./
 
 COPY src ./src
 COPY scripts ./scripts
-RUN mkdir -p ./public/assets
-RUN cp -R ./node_modules/monaco-editor/min ./public/assets/monaco
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
