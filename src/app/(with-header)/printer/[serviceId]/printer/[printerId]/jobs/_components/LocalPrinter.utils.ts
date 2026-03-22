@@ -160,8 +160,6 @@ export async function executeAutoPrintJob(
     let encoder = new ReceiptPrinterEncoder({
       language: device.language as PrinterLanguage | undefined,
       codepageCandidates: [device.codepageMapping, 'epson'],
-      printerModel: device.productName,
-      // codepageCandidates: ['epson'],
     }).initialize();
 
     const nonAsciiPrinters = new Set<string>([]);
