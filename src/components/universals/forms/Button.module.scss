@@ -1,5 +1,5 @@
 .root {
-  padding: 8px 15px;
+  padding: 10px 16px;
 
   border: none;
   outline: none;
@@ -9,6 +9,7 @@
   transition: background-color .3s, color .3s;
 
   cursor: pointer;
+  font-size: 1rem;
 
   --color: #666666;
   --hover-color: #888888;
@@ -19,6 +20,13 @@
 
   color: var(--text-color);
   background-color: var(--color);
+
+  @media (max-width: 768px) {
+    padding: 12px 18px;
+    font-size: 1.05rem;
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 .root:hover {

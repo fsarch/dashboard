@@ -9,15 +9,36 @@
 
   white-space: nowrap;
   vertical-align: top;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .children {
   display: table-cell;
 
   width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
-.label, .children {
-  padding-top: 5px;
-  padding-bottom: 5px;
+@media (max-width: 768px) {
+  .root {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .label {
+    display: block;
+    padding-right: 0;
+    margin-bottom: 6px;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-weight: 500;
+  }
+
+  .children {
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
