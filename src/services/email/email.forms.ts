@@ -68,7 +68,7 @@ export const EMAIL_ACCOUNT_CREATE_FORM: TGeneratedFormDefinition = {
           label: 'Benutzername',
         }, {
           id: 'password',
-          $type: 'text',
+          $type: 'password',
           label: 'Passwort',
         }],
       }],
@@ -114,7 +114,7 @@ export const EMAIL_ACCOUNT_CREATE_FORM: TGeneratedFormDefinition = {
           label: 'Benutzername',
         }, {
           id: 'password',
-          $type: 'text',
+          $type: 'password',
           label: 'Passwort',
         }],
       }],
