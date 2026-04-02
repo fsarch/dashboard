@@ -1,0 +1,50 @@
+.root {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+}
+
+.colorInput {
+  width: 60px;
+  height: 44px;
+  border: 1px solid #999999;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 70px;
+    height: 50px;
+  }
+}
+
+.colorText {
+  flex-grow: 1;
+  outline: none;
+  border: 1px solid #999999;
+  border-radius: 5px;
+
+  background-color: #333333;
+  color: #ffffff;
+
+  padding: 8px 12px;
+  font-size: 16px;
+
+  @media (max-width: 768px) {
+    padding: 12px 14px;
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+

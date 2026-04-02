@@ -23,6 +23,11 @@ export type TGeneratedFormPasswordInput = TGeneratedFormBaseInput & {
   isEnabled?: boolean,
 };
 
+export type TGeneratedFormColorInput = TGeneratedFormBaseInput & {
+  $type: 'color',
+  isEnabled?: boolean,
+};
+
 export type TGeneratedFormTimeInput = TGeneratedFormBaseInput & {
   $type: 'time',
   isEnabled?: boolean,
@@ -74,7 +79,7 @@ export type TGeneratedFormCheckboxInput = TGeneratedFormBaseInput & {
   isEnabled?: boolean;
 };
 
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput;
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput;
 
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
 

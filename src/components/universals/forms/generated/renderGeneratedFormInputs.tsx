@@ -2,6 +2,7 @@ import { TGeneratedFormInput } from "@/components/universals/forms/generated/Gen
 import GeneratedFormTextInput from "@/components/universals/forms/generated/inputs/GeneratedFormTextInput.component";
 import GeneratedFormTextAreaInput from "@/components/universals/forms/generated/inputs/GeneratedFormTextAreaInput.component";
 import GeneratedFormPasswordInput from "@/components/universals/forms/generated/inputs/GeneratedFormPasswordInput.component";
+import GeneratedFormColorInput from "@/components/universals/forms/generated/inputs/GeneratedFormColorInput.component";
 import GeneratedFormSelectInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormSelectInput.component";
 import GeneratedFormImageServerUploadInput
@@ -34,6 +35,15 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'password') {
     return (
       <GeneratedFormPasswordInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'color') {
+    return (
+      <GeneratedFormColorInput
         key={input.id}
         input={input}
       />

@@ -15,8 +15,8 @@ export const EMAIL_ACCOUNT_CREATE_FORM: TGeneratedFormDefinition = {
     label: 'Meta',
     inputs: [{
       id: 'color',
-      $type: 'text',
-      label: 'Farbe (Hex)',
+      $type: 'color',
+      label: 'Farbe',
     }],
   }, {
     id: 'options',
