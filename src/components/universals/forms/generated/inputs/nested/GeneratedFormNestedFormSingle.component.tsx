@@ -4,7 +4,10 @@ import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 import Fieldset from "@/components/universals/forms/Fieldset.component";
 import type { TRenderGeneratedFormInputsFunc } from "@/components/universals/forms/generated/renderGeneratedFormInputs";
 import styles from './GeneratedFormNestedForm.module.scss';
-import { NestedFormContextProvider } from "@/components/universals/forms/generated/inputs/nested/nested-form.context";
+import {
+  NestedFormContextProvider,
+  useNestedFormContext
+} from "@/components/universals/forms/generated/inputs/nested/nested-form.context";
 
 type GeneratedNestedFormSingleProps = {
   input: TGeneratedNestedForm;
@@ -15,6 +18,8 @@ export const GeneratedNestedFormSingle: React.FunctionComponent<GeneratedNestedF
   input,
   renderFormInputs,
 }) => {
+  const nestedFormContext = useNestedFormContext();
+
   return (
     <FieldsetRow label={input.label}>
       <div className={styles.fieldsetWrapper}>
@@ -29,7 +34,7 @@ export const GeneratedNestedFormSingle: React.FunctionComponent<GeneratedNestedF
             className={styles.fieldset}
           >
             <NestedFormContextProvider
-              value={{ path: [input.id] }}
+              value={{ path: [...nestedFormContext.path, input.id] }}
             >
               {renderFormInputs(input.inputs)}
             </NestedFormContextProvider>

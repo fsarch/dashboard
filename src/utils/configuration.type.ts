@@ -9,6 +9,7 @@ export enum EServiceType {
   FUNCTION = 'function',
   PRINTER = 'printer',
   AI = 'ai',
+  EMAIL_SERVER = 'email-server',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -83,6 +84,13 @@ export type TAIConfiguration = {
   url: string;
 }
 
+export type TEmailServerConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.EMAIL_SERVER,
+  url: string;
+}
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -92,7 +100,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TPdfRenderConfiguration
   | TFunctionConfiguration
   | TPrinterConfiguration
-  | TAIConfiguration;
+  | TAIConfiguration
+  | TEmailServerConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

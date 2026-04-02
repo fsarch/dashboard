@@ -38,6 +38,10 @@ const apps: Array<AppType> = [{
   icon: 'robot',
   name: 'AI',
   path: '/ai',
+}, {
+  icon: 'message',
+  name: 'Email',
+  path: '/email',
 }];
 
 const getApps = async () => {

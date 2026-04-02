@@ -120,4 +120,13 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       icon: 'list',
     }],
   },
+  [EServiceType.EMAIL_SERVER]: {
+    name: 'Email Server',
+    basePath: '/email',
+    navigation: [{
+      name: 'Accounts',
+      path: '/',
+      icon: 'layer-group',
+    }],
+  },
 };
