@@ -29,10 +29,24 @@ const getEmail = async (accountId: string, emailId: string): Promise<EmailSingle
   return email;
 };
 
+const syncEmails = async (accountId: string): Promise<void> => {
+  const response = await fetchService(`/v1/accounts/${accountId}/sync`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to sync emails: ${response.statusText}`);
+  }
+};
+
 export const emailService = {
   listAccounts,
   getAccount,
   listEmails,
   getEmail,
+  syncEmails,
 };
 
