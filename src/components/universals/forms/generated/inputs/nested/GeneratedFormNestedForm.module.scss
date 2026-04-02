@@ -3,24 +3,34 @@
 }
 
 .itemWrapper {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+  border-radius: 8px;
 
-  padding: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
 }
 
 .fieldsetWrapper {
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: 12px;
 }
 
 .itemHeadlineWrapper {
   display: flex;
 
   justify-content: space-between;
+  align-items: center;
 }
 
 .itemHeadline {
+  font-weight: 600;
+  color: rgb(var(--color-primary-rgb));
+  font-size: 0.95rem;
+}
 
+.fieldset {
+  padding-top: 8px;
 }

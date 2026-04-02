@@ -4,12 +4,14 @@ import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 import { useFormikContext } from "formik";
 import Fieldset from "@/components/universals/forms/Fieldset.component";
 import type { TRenderGeneratedFormInputsFunc } from "@/components/universals/forms/generated/renderGeneratedFormInputs";
-import styles from './GeneratedFormNestedForm.module.scss';
+import sharedStyles from './GeneratedFormNestedForm.module.scss';
+import arrayStyles from './GeneratedFormNestedFormArray.module.scss';
 import { NestedFormContextProvider } from "@/components/universals/forms/generated/inputs/nested/nested-form.context";
 import IconButton from "@/components/universals/forms/button/IconButton";
 import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
 import ConfirmDialog from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
+import Button from "@/components/universals/forms/Button";
 
 type GeneratedNestedFormArrayProps = {
   input: TGeneratedNestedForm;
@@ -58,15 +60,15 @@ export const GeneratedNestedFormArray: React.FunctionComponent<GeneratedNestedFo
 
   return (
     <FieldsetRow label={input.label}>
-      <div className={styles.fieldsetWrapper}>
+      <div className={sharedStyles.fieldsetWrapper}>
         {elements.map((value, index) => (
           <div
             key={index}
-            className={styles.itemWrapper}
+            className={sharedStyles.itemWrapper}
           >
-            <div className={styles.itemHeadlineWrapper}>
-              <div className={styles.itemHeadline}>
-                Element {index}
+            <div className={arrayStyles.itemHeadlineWrapper}>
+              <div className={sharedStyles.itemHeadline}>
+                Element {index + 1}
               </div>
               <div>
                 <IconButton
@@ -77,7 +79,7 @@ export const GeneratedNestedFormArray: React.FunctionComponent<GeneratedNestedFo
               </div>
             </div>
             <Fieldset
-              className={styles.fieldset}
+              className={sharedStyles.fieldset}
             >
               <NestedFormContextProvider
                 value={{ path: [input.id, index] }}
@@ -87,7 +89,12 @@ export const GeneratedNestedFormArray: React.FunctionComponent<GeneratedNestedFo
             </Fieldset>
           </div>
         ))}
-        <button type="button" onClick={handleCreate}>Element hinzufügen</button>
+        <Button
+          type="button"
+          onClick={handleCreate}
+        >
+          + Element hinzufügen
+        </Button>
       </div>
     </FieldsetRow>
   );
