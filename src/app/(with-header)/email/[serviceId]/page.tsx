@@ -4,8 +4,9 @@ import List from "@/components/universals/list/List";
 import LinkListItem from "@/components/universals/list/LinkListItem";
 import { emailService } from "@/services/email/email.service";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import { EmailAccountCreateForm } from "@/components/apps/email/EmailAccountCreateForm.component";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
+import Button from "@/components/universals/forms/Button";
+import Link from "next/link";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -14,10 +15,14 @@ export default async function Home() {
 
   return (
     <DefaultPage>
-      <Section name="Account erstellen">
-        <EmailAccountCreateForm />
-      </Section>
       <Section name="Accounts">
+        <div style={{ marginBottom: '16px' }}>
+          <Link href={await getServiceLocalUrl('/account/create')}>
+            <Button type="button">
+              + Neuer Account
+            </Button>
+          </Link>
+        </div>
         <List>
           {accounts.map(async (account) => (
             <LinkListItem key={account.id} href={await getServiceLocalUrl(`/account/${account.id}`)}>
