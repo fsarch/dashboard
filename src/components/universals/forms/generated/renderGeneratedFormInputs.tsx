@@ -1,5 +1,6 @@
 import { TGeneratedFormInput } from "@/components/universals/forms/generated/GeneratedForm.type";
 import GeneratedFormTextInput from "@/components/universals/forms/generated/inputs/GeneratedFormTextInput.component";
+import GeneratedFormTextAreaInput from "@/components/universals/forms/generated/inputs/GeneratedFormTextAreaInput.component";
 import GeneratedFormPasswordInput from "@/components/universals/forms/generated/inputs/GeneratedFormPasswordInput.component";
 import GeneratedFormSelectInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormSelectInput.component";
@@ -15,6 +16,15 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'text') {
     return (
       <GeneratedFormTextInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'textarea') {
+    return (
+      <GeneratedFormTextAreaInput
         key={input.id}
         input={input}
       />

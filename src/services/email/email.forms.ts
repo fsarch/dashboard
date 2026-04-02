@@ -186,11 +186,11 @@ export const EMAIL_SEND_FORM: TGeneratedFormDefinition = {
     label: 'Inhalt',
     inputs: [{
       id: 'text',
-      $type: 'text',
+      $type: 'textarea',
       label: 'Text',
     }, {
       id: 'html',
-      $type: 'text',
+      $type: 'textarea',
       label: 'HTML',
     }],
   }],
