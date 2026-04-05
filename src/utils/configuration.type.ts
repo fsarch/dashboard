@@ -9,7 +9,7 @@ export enum EServiceType {
   FUNCTION = 'function',
   PRINTER = 'printer',
   AI = 'ai',
-  EMAIL_SERVER = 'email-server',
+  EMAIL_SERVER = 'email',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
