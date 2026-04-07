@@ -10,6 +10,7 @@ export enum EServiceType {
   PRINTER = 'printer',
   AI = 'ai',
   EMAIL_SERVER = 'email',
+  FRONTIER = 'frontier-server',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -91,6 +92,13 @@ export type TEmailServerConfiguration = {
   url: string;
 }
 
+export type TFrontierConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.FRONTIER,
+  url: string;
+}
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -101,7 +109,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TFunctionConfiguration
   | TPrinterConfiguration
   | TAIConfiguration
-  | TEmailServerConfiguration;
+  | TEmailServerConfiguration
+  | TFrontierConfiguration;
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;

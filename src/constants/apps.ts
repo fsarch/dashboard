@@ -129,4 +129,57 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       icon: 'layer-group',
     }],
   },
+  [EServiceType.FRONTIER]: {
+    name: 'Frontier',
+    basePath: '/frontier',
+    navigation: [{
+      name: 'Domain Groups',
+      path: '/',
+      icon: 'layer-group',
+    }],
+    routes: {
+      '/domain-group/:domainGroupId{/*path}': {
+        navigation: [{
+          name: 'Zu den Domain Groups',
+          path: '/',
+          icon: 'arrow-left',
+        }, {
+          name: 'Übersicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId",
+          },
+          icon: 'layer-group',
+        }, {
+          name: 'Domains',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/domain'",
+          },
+          icon: 'globe',
+        }, {
+          name: 'Cache Policies',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/cache-policy'",
+          },
+          icon: 'database',
+        }, {
+          name: 'Path Rules',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/path-rule'",
+          },
+          icon: 'route',
+        }, {
+          name: 'Upstream Groups',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/upstream-group'",
+          },
+          icon: 'server',
+        }],
+      },
+    },
+  },
 };

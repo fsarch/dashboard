@@ -42,6 +42,10 @@ const apps: Array<AppType> = [{
   icon: 'message',
   name: 'Email',
   path: '/email',
+}, {
+  icon: 'shield',
+  name: 'Frontier',
+  path: '/frontier',
 }];
 
 const getApps = async () => {
