@@ -1,5 +1,9 @@
 # AGENTS.md
 
+> **Vertiefte technische Dokumentation** liegt in `docs/` — insbesondere für Navigation, GeneratedForm und neue Apps.  
+> [`docs/README.md`](./docs/README.md) ist der Einstiegspunkt.
+> **Documentation language rule:** All files in `docs/` must be written in English.
+
 ## Überblick
 - Dieses Repository ist eine **Next.js-App mit mehreren eingebetteten Fach-Apps**; die konkreten Backends werden zur Laufzeit über `config.yml` verdrahtet.
 - Service-Typen/Config-Formen stehen in `src/utils/configuration.type.ts`, App-Definitionen (`name`, `basePath`, Navigation) in `src/constants/apps.ts`.
