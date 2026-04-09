@@ -10,7 +10,7 @@ export enum EServiceType {
   PRINTER = 'printer',
   AI = 'ai',
   EMAIL_SERVER = 'email',
-  FRONTIER = 'frontier-server',
+  FRONTIER = 'frontier',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {

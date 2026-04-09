@@ -15,7 +15,7 @@ Pages do not hardcode sidebar items in JSX. `DefaultPage` resolves and renders n
 ```
 Browser request
   -> src/proxy.ts
-     - sets X-Service-Type (example: "frontier-server")
+     - sets X-Service-Type (example: "frontier")
      - sets X-Service-Id   (example: "frontier-main")
      - sets X-Service-Path (example: "/domain-group/abc123")
         -> DefaultPage.component.tsx
