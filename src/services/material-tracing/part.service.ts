@@ -2,8 +2,16 @@ import { fetchService } from "@/utils/fetchService";
 import { TPart } from "@/services/material-tracing/part.type";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
 import { TMaterial } from "@/services/material-tracing/material.type";
+import { TPaginationResult } from "@/services/material-tracing/pagination.type";
 
-const listParts = async (options?: { skip?: number; take?: number; isArchived?: boolean; search?: string }): Promise<Array<TPart>> => {
+const listParts = async (options?: {
+  skip?: number;
+  take?: number;
+  isArchived?: boolean;
+  search?: string;
+  name?: string;
+  partTypeId?: string;
+}): Promise<TPaginationResult<TPart>> => {
   const url = new URL('/v1/parts', 'http://localhost'); // Base URL will be replaced by fetchService
 
   if (options?.skip !== undefined) {
@@ -22,10 +30,16 @@ const listParts = async (options?: { skip?: number; take?: number; isArchived?: 
     url.searchParams.append('search', options.search);
   }
 
-  const partsResponse = await fetchService(url.pathname + url.search);
-  const parts = await partsResponse.json();
+  if (options?.name) {
+    url.searchParams.append('name', options.name);
+  }
 
-  return parts;
+  if (options?.partTypeId) {
+    url.searchParams.append('partTypeId', options.partTypeId);
+  }
+
+  const partsResponse = await fetchService(url.pathname + url.search);
+  return await partsResponse.json();
 };
 
 const getPart = async (partId: string): Promise<TPart | null> => {

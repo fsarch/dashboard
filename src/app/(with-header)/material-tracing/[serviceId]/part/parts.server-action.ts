@@ -2,22 +2,31 @@
 
 import { partService } from "@/services/material-tracing/part.service";
 import { TPart } from "@/services/material-tracing/part.type";
+import { TPaginationResult } from "@/services/material-tracing/pagination.type";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 
 type PartWithUrl = TPart & {
   url: string;
 };
 
-export async function loadPartsAction(options?: { skip?: number; take?: number; search?: string }): Promise<PartWithUrl[]> {
-  const parts = await partService.listParts(options);
-  
+export async function loadPartsAction(options?: {
+  skip?: number;
+  take?: number;
+  search?: string;
+  partTypeId?: string;
+}): Promise<TPaginationResult<PartWithUrl>> {
+  const partsResult = await partService.listParts(options);
+
   // Add URLs to each part
   const partsWithUrls = await Promise.all(
-    parts.map(async (part) => ({
+    partsResult.data.map(async (part) => ({
       ...part,
       url: await getServiceLocalUrl(`/part/${part.id}`)
     }))
   );
-  
-  return partsWithUrls;
+
+  return {
+    data: partsWithUrls,
+    metadata: partsResult.metadata,
+  };
 }

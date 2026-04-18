@@ -7,20 +7,23 @@ import { DefaultPage } from "@/components/universals/page/DefaultPage.component"
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import PartsList from "@/components/apps/material-tracing/part/PartsList.component";
 import { loadPartsAction } from "@/app/(with-header)/material-tracing/[serviceId]/part/parts.server-action";
-import SearchInput from "@/components/universals/forms/SearchInput.component";
+import PartFilters from "@/components/apps/material-tracing/part/PartFilters.component";
+import { partTypeService } from "@/services/material-tracing/part-type.service";
 
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
   const params = await searchParams;
   const search = params.search;
-  
+  const partTypeId = params.partTypeId;
+  const partTypesResult = await partTypeService.listPartTypes({ skip: 0, take: 1000 });
+
   // Load initial page of parts (page 1, 25 items)
-  const initialParts = await partService.listParts({ skip: 0, take: 25, search });
+  const initialPartsResult = await partService.listParts({ skip: 0, take: 25, search, partTypeId });
 
   // Add URLs to each part
   const partsWithUrls = await Promise.all(
-    initialParts.map(async (part) => ({
+    initialPartsResult.data.map(async (part) => ({
       ...part,
       url: await getServiceLocalUrl(`/part/${part.id}`)
     }))
@@ -34,8 +37,14 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
         />
       </Section>
       <Section name="Bauteile" addPadding={false}>
-        <SearchInput />
-        <PartsList initialParts={partsWithUrls} fetchParts={loadPartsAction} search={search} />
+        <PartFilters partTypes={partTypesResult.data} />
+        <PartsList
+          initialParts={partsWithUrls}
+          initialTotalItems={initialPartsResult.metadata.totalItems}
+          fetchParts={loadPartsAction}
+          search={search}
+          partTypeId={partTypeId}
+        />
       </Section>
     </DefaultPage>
   );

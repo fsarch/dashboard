@@ -1,9 +1,23 @@
 import { fetchService } from "@/utils/fetchService";
 import { TMaterial } from "@/services/material-tracing/material.type";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
+import { TPaginationResult } from "@/services/material-tracing/pagination.type";
 
-const listMaterials = async (options?: { isArchived?: boolean; search?: string }): Promise<Array<TMaterial>> => {
+const listMaterials = async (options?: {
+  skip?: number;
+  take?: number;
+  isArchived?: boolean;
+  search?: string;
+}): Promise<TPaginationResult<TMaterial>> => {
   const url = new URL('/v1/materials', 'http://localhost');
+
+  if (options?.skip !== undefined) {
+    url.searchParams.append('skip', options.skip.toString());
+  }
+
+  if (options?.take !== undefined) {
+    url.searchParams.append('take', options.take.toString());
+  }
 
   if (options?.isArchived !== undefined) {
     url.searchParams.append('isArchived', String(options.isArchived));
@@ -14,9 +28,7 @@ const listMaterials = async (options?: { isArchived?: boolean; search?: string }
   }
 
   const materialsResponse = await fetchService(url.pathname + url.search);
-  const materials = await materialsResponse.json();
-
-  return materials;
+  return await materialsResponse.json();
 };
 
 const listShortCodes = async (materialId: string): Promise<Array<TShortCode>> => {

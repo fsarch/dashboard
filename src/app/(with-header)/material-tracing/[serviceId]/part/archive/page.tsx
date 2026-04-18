@@ -14,10 +14,10 @@ import {
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function ArchivePage() {
-  const parts = await partService.listParts({ isArchived: true, skip: 0, take: 1000 });
+  const partsResult = await partService.listParts({ isArchived: true, skip: 0, take: 25 });
 
   const partsWithUrls = await Promise.all(
-    parts.map(async (part) => ({
+    partsResult.data.map(async (part) => ({
       ...part,
       url: await getServiceLocalUrl(`/part/${part.id}`),
     }))
@@ -26,7 +26,11 @@ export default async function ArchivePage() {
   return (
     <DefaultPage>
       <Section name="Archivierte Bauteile" addPadding={false}>
-        <PartsList initialParts={partsWithUrls} fetchParts={loadArchivedPartsAction} />
+        <PartsList
+          initialParts={partsWithUrls}
+          initialTotalItems={partsResult.metadata.totalItems}
+          fetchParts={loadArchivedPartsAction}
+        />
       </Section>
     </DefaultPage>
   );

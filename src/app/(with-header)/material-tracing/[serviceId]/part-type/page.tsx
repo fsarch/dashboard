@@ -15,7 +15,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
   const params = await searchParams;
   const search = params.search;
   
-  const partTypes = await partTypeService.listPartTypes({ search });
+  const partTypesResult = await partTypeService.listPartTypes({ search, skip: 0, take: 1000 });
 
   return (
     <DefaultPage>
@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="Bauteil-Typen">
         <SearchInput />
         <List>
-          {partTypes.map(async (partType) => (
+          {partTypesResult.data.map(async (partType) => (
             <LinkListItem
               key={partType.id}
               href={await getServiceLocalUrl(`/part-type/${partType.id}`)}

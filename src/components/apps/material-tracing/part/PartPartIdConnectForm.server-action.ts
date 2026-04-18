@@ -14,7 +14,7 @@ export const connectPartPartId = async ({ value, partId }: { partId: string; val
 
 export const loadAvailableParts = async (partId: string): Promise<TPart[]> => {
   // Load a reasonable number of parts. In production, you might want pagination or search
-  const parts = await partService.listParts({ skip: 0, take: 1000 });
+  const partsResult = await partService.listParts({ skip: 0, take: 1000 });
   // Filter out the current part to prevent self-connection
-  return parts.filter(part => part.id !== partId);
+  return partsResult.data.filter(part => part.id !== partId);
 };

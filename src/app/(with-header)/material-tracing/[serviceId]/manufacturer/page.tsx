@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
   const params = await searchParams;
   const search = params.search;
   
-  const manufacturers = await manufacturerService.listManufacturers({ search });
+  const manufacturersResult = await manufacturerService.listManufacturers({ search, skip: 0, take: 1000 });
 
   return (
     <DefaultPage>
@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="Hersteller">
         <SearchInput />
         <List>
-          {manufacturers.map(async (manufacturer: any) => (
+          {manufacturersResult.data.map(async (manufacturer: any) => (
             <Link
               key={manufacturer.id}
               href={await getServiceLocalUrl(`/manufacturer/${manufacturer.id}`)}

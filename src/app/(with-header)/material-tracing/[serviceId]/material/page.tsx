@@ -14,7 +14,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
   const params = await searchParams;
   const search = params.search;
   
-  const materials = await materialService.listMaterials({ search });
+  const materialsResult = await materialService.listMaterials({ search, skip: 0, take: 25 });
 
   return (
     <DefaultPage>
@@ -24,7 +24,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="Materialien">
         <SearchInput />
         <List>
-          {materials.map(async (material) => (
+          {materialsResult.data.map(async (material) => (
             <LinkListItem href={await getServiceLocalUrl(`/material/${material.id}`)} key={material.id}>
               {material.name}
             </LinkListItem>

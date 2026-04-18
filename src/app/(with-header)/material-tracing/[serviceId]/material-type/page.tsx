@@ -16,9 +16,9 @@ export const generateMetadata = createAutomaticMetadata();
 export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
   const params = await searchParams;
   const search = params.search;
-  
-  const manufacturers = await manufacturerService.listManufacturers({ search });
-  const materialTypes = await materialTypeService.listMaterialTypes({ search });
+
+  const manufacturersResult = await manufacturerService.listManufacturers({ search, skip: 0, take: 1000 });
+  const materialTypesResult = await materialTypeService.listMaterialTypes({ search, skip: 0, take: 1000 });
 
   return (
     <DefaultPage>
@@ -28,10 +28,10 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="Material-Typen">
         <SearchInput />
       </Section>
-      {manufacturers.map((manufacturer) => (
+      {manufacturersResult.data.map((manufacturer) => (
         <Section name={manufacturer.name} key={manufacturer.id}>
           <List>
-            {materialTypes.filter(mat => mat.manufacturerId === manufacturer.id).map(async (materialType) => (
+            {materialTypesResult.data.filter(mat => mat.manufacturerId === manufacturer.id).map(async (materialType) => (
               <LinkListItem
                 key={materialType.id}
                 href={await getServiceLocalUrl(`/material-type/${materialType.id}`)}
