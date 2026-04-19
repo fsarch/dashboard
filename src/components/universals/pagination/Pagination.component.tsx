@@ -23,6 +23,10 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
   hasNextPage,
 }) => {
   const pageSizeOptions = [10, 25, 50, 100];
+  const totalPages = totalItems !== undefined
+    ? Math.max(1, Math.ceil(totalItems / pageSize))
+    : Math.max(currentPage + (hasNextPage ? 1 : 0), 1);
+  const pageOptions = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   const handlePrevious = () => {
     if (currentPage > 1) {
@@ -36,8 +40,8 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
     }
   };
 
-  const startItem = (currentPage - 1) * pageSize + 1;
-  const endItem = currentPage * pageSize;
+  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const endItem = totalItems === 0 ? 0 : currentPage * pageSize;
 
   return (
     <div className={styles.pagination}>
@@ -79,9 +83,24 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
           Zurück
         </Button>
 
-        <span className={styles.pageNumber}>
-          Seite {currentPage}
-        </span>
+        <div className={styles.pageSelector}>
+          <label htmlFor="pageNumber">Seite:</label>
+          <select
+            id="pageNumber"
+            value={currentPage}
+            onChange={(e) => onPageChange(Number(e.target.value))}
+            className={selectStyles.input}
+          >
+            {pageOptions.map((page) => (
+              <option key={page} value={page}>
+                {page}
+              </option>
+            ))}
+          </select>
+          {totalItems !== undefined && (
+            <span className={styles.pageNumber}>von {totalPages}</span>
+          )}
+        </div>
 
         <Button
           type="button"
