@@ -14,14 +14,14 @@ import FormikSubmitButton from "@/components/universals/forms/FormikSubmitButton
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function Home() {
-  const shortCodes = await shortCodeService.listShortCodes();
+  const shortCodesResult = await shortCodeService.listShortCodes({ skip: 0, take: 10000 });
 
   return (
     <DefaultPage>
       <Section name="Short Codes">
         <BatchExportForm>
           <List>
-            {shortCodes.map((shortCode) => (
+            {shortCodesResult.data.map((shortCode) => (
               <label
                 key={shortCode.id}
               >

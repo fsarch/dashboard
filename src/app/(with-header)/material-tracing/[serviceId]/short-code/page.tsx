@@ -19,8 +19,8 @@ export const generateMetadata = createAutomaticMetadata();
 export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
   const params = await searchParams;
   const search = params.search;
-  
-  const shortCodes = await shortCodeService.listShortCodes({ search });
+
+  const shortCodesResult = await shortCodeService.listShortCodes({ search, skip: 0, take: 1000 });
 
   return (
     <DefaultPage>
@@ -46,7 +46,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
       <Section name="Short Codes">
         <SearchInput />
         <List>
-          {shortCodes.map(async (shortCode) => (
+          {shortCodesResult.data.map(async (shortCode) => (
             <LinkListItem
               key={shortCode.id}
               href={await getServiceLocalUrl(`/short-code/${shortCode.code}`)}

@@ -1,17 +1,28 @@
 import { fetchService } from "@/utils/fetchService";
 import { TShortCode } from "@/services/material-tracing/short-code.type";
+import type { TPaginationResult } from "./pagination.type";
 
-const listShortCodes = async (options?: { search?: string }): Promise<Array<TShortCode>> => {
+const listShortCodes = async (options?: {
+  skip?: number;
+  take?: number;
+  search?: string;
+}): Promise<TPaginationResult<TShortCode>> => {
   const url = new URL('/v1/short-codes', 'http://localhost');
+
+  if (options?.skip !== undefined) {
+    url.searchParams.append('skip', options.skip.toString());
+  }
+
+  if (options?.take !== undefined) {
+    url.searchParams.append('take', options.take.toString());
+  }
 
   if (options?.search) {
     url.searchParams.append('search', options.search);
   }
 
   const shortCodesResponse = await fetchService(url.pathname + url.search);
-  const shortCodes = await shortCodesResponse.json();
-
-  return shortCodes;
+  return await shortCodesResponse.json();
 };
 
 const getShortCode = async (code: string): Promise<TShortCode> => {
@@ -46,14 +57,14 @@ const batchCreateShortCodes = async (amount: number): Promise<{
   const MAX_CONCURRENT = 5;
   const results: Array<TShortCode> = [];
   const errors: Array<string> = [];
-  
+
   // Create batches of requests with max 5 concurrent
   for (let i = 0; i < amount; i += MAX_CONCURRENT) {
     const batchSize = Math.min(MAX_CONCURRENT, amount - i);
     const batchPromises = Array.from({ length: batchSize }, () => createShortCode());
-    
+
     const batchResults = await Promise.allSettled(batchPromises);
-    
+
     batchResults.forEach((result, index) => {
       if (result.status === 'fulfilled') {
         results.push(result.value);
