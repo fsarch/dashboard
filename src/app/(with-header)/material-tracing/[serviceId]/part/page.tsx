@@ -6,7 +6,7 @@ import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import PartsList from "@/components/apps/material-tracing/part/PartsList.component";
-import { loadPartsAction } from "@/app/(with-header)/material-tracing/[serviceId]/part/parts.server-action";
+import { loadPaginatedPartsAction } from "@/app/(with-header)/material-tracing/[serviceId]/part/parts.server-action";
 import PartFilters from "@/components/apps/material-tracing/part/PartFilters.component";
 import { partTypeService } from "@/services/material-tracing/part-type.service";
 
@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
         <PartsList
           initialParts={partsWithUrls}
           initialTotalItems={initialPartsResult.metadata.totalItems}
-          fetchParts={loadPartsAction}
+          fetchParts={loadPaginatedPartsAction}
           search={search}
           partTypeId={partTypeId}
         />

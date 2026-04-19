@@ -9,7 +9,7 @@ type PartWithUrl = TPart & {
   url: string;
 };
 
-export async function loadPartsAction(options?: {
+export async function loadPaginatedPartsAction(options?: {
   skip?: number;
   take?: number;
   search?: string;

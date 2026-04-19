@@ -16,7 +16,7 @@ export const generateMetadata = createAutomaticMetadata();
 export default async function Home({ searchParams }: Readonly<{ searchParams: Promise<Record<string, string>> }>) {
   const params = await searchParams;
   const search = params.search;
-  
+
   const manufacturersResult = await manufacturerService.listManufacturers({ search, skip: 0, take: 1000 });
 
   return (
@@ -25,7 +25,7 @@ export default async function Home({ searchParams }: Readonly<{ searchParams: Pr
         <ManufacturerCreateForm />
       </Section>
       <Section name="Hersteller">
-        <SearchInput />
+        <SearchInput/>
         <List>
           {manufacturersResult.data.map(async (manufacturer: any) => (
             <Link
