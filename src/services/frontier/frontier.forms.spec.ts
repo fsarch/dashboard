@@ -69,5 +69,35 @@ describe('frontier forms', () => {
       value: expect.stringContaining('"domainGroupId": "group-1"'),
     });
   });
+
+  test('path rule update form uses patch endpoint and maps cors origins to nested form', () => {
+    const form = frontierForms.FRONTIER_PATH_RULE_UPDATE_FORM('group-1', 'rule-1', {
+      id: 'rule-1',
+      name: 'My rule',
+      path: '/api/*',
+      cachePolicyId: 'cp-1',
+      domainGroupId: 'group-1',
+      upstreamGroupId: 'ug-1',
+      order: 1,
+      corsEnabled: true,
+      corsAllowCredentials: false,
+      corsAllowedOrigins: ['https://example.com', 'https://foo.bar'],
+    });
+
+    expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules/rule-1');
+    expect(form.endpoint.method).toBe('PATCH');
+    expect(form.endpoint.body).toEqual({
+      $type: 'jsonata',
+      value: expect.stringContaining('"corsAllowedOrigins": $reduce(form.corsAllowedOrigins'),
+    });
+    expect(form.initialValues).toMatchObject({
+      name: 'My rule',
+      path: '/api/*',
+      corsEnabled: true,
+      corsAllowedOrigins: [{ value: 'https://example.com' }, { value: 'https://foo.bar' }],
+    });
+    expect(form.dataSources).toHaveProperty('cachePolicies');
+    expect(form.dataSources).toHaveProperty('upstreamGroups');
+  });
 });
 

@@ -99,10 +99,13 @@ export default async function DomainGroupDetailPage({
             </Link>
           </div>
           <List>
-            {pathRules.map((rule) => (
-              <ListItem key={rule.id}>
+            {pathRules.map(async (rule) => (
+              <LinkListItem
+                key={rule.id}
+                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/path-rule/${rule.id}`)}
+              >
                 {rule.name} ({rule.path})
-              </ListItem>
+              </LinkListItem>
             ))}
           </List>
         </Section>

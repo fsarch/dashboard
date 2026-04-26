@@ -2,7 +2,7 @@ import {
   TGeneratedFormDefinition,
   TGeneratedFormInput,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { CachePolicyDto } from '@/services/frontier/frontier.type';
+import { CachePolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
 
 const createStringArrayInput = (id: string, label: string, itemLabel: string): TGeneratedFormInput => ({
   id,
@@ -293,6 +293,98 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
   },
   buttons: { submitButtonText: 'Path Rule erstellen' },
 });
+
+export function FRONTIER_PATH_RULE_UPDATE_FORM(
+  domainGroupId: string,
+  pathRuleId: string,
+  pathRule: PathRuleDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: [{
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    }, {
+      id: 'path',
+      $type: 'text',
+      label: 'Pfad-Muster',
+    }, {
+      id: 'order',
+      $type: 'number',
+      label: 'Reihenfolge',
+    }, {
+      id: 'cachePolicyId',
+      $type: 'select',
+      label: 'Cache Policy',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'cachePolicies',
+      },
+    }, {
+      id: 'upstreamGroupId',
+      $type: 'select',
+      label: 'Upstream Group',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'upstreamGroups',
+      },
+    }, {
+      id: 'corsEnabled',
+      $type: 'checkbox',
+      label: 'CORS aktivieren',
+    }, {
+      id: 'corsAllowCredentials',
+      $type: 'checkbox',
+      label: 'CORS Credentials erlauben',
+    }, createStringArrayInput('corsAllowedOrigins', 'CORS Allowed Origins', 'Origin')],
+    initialValues: {
+      name: pathRule.name,
+      path: pathRule.path,
+      order: pathRule.order,
+      cachePolicyId: pathRule.cachePolicyId,
+      domainGroupId: pathRule.domainGroupId,
+      upstreamGroupId: pathRule.upstreamGroupId,
+      corsEnabled: pathRule.corsEnabled ?? false,
+      corsAllowCredentials: pathRule.corsAllowCredentials ?? false,
+      corsAllowedOrigins: mapStringArrayToNestedForm(pathRule.corsAllowedOrigins ?? []),
+    },
+    endpoint: {
+      path: `/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`,
+      method: 'PATCH',
+      body: { $type: 'jsonata', value: FRONTIER_PATH_RULE_BODY },
+    },
+    postEndpointActions: [{
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/path-rule/${pathRuleId}'`,
+      },
+    }],
+    dataSources: {
+      cachePolicies: {
+        $type: 'fetch',
+        path: `/v1/domain-groups/${domainGroupId}/cache-policies`,
+        method: 'GET',
+        transformResponse: {
+          $type: 'jsonata',
+          value: '{ "body": [body.{ "id": id, "value": id, "label": name }] }',
+        },
+      },
+      upstreamGroups: {
+        $type: 'fetch',
+        path: `/v1/domain-groups/${domainGroupId}/upstream-groups`,
+        method: 'GET',
+        transformResponse: {
+          $type: 'jsonata',
+          value: '{ "body": [body.{ "id": id, "value": id, "label": name }] }',
+        },
+      },
+    },
+    buttons: { submitButtonText: 'Path Rule aktualisieren' },
+  };
+}
 
 export const FRONTIER_UPSTREAM_GROUP_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
   inputs: [{

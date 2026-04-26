@@ -9,6 +9,7 @@ import {
   DomainGroupDto,
   PathRuleCreateDto,
   PathRuleDto,
+  PathRuleUpdateDto,
   UpstreamCreateDto,
   UpstreamDto,
   UpstreamGroupCreateDto,
@@ -112,6 +113,15 @@ const createPathRule = async (domainGroupId: string, data: PathRuleCreateDto): P
   return response.json();
 };
 
+const updatePathRule = async (domainGroupId: string, id: string, data: PathRuleUpdateDto): Promise<PathRuleDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
 // --- Upstream Groups ---
 
 const listUpstreamGroups = async (domainGroupId: string): Promise<UpstreamGroupDto[]> => {
@@ -168,6 +178,7 @@ export const frontierService = {
   listPathRules,
   getPathRule,
   createPathRule,
+  updatePathRule,
   listUpstreamGroups,
   getUpstreamGroup,
   createUpstreamGroup,

@@ -49,6 +49,8 @@ export type PathRuleCreateDto = {
   corsAllowedOrigins?: string[];
 };
 
+export type PathRuleUpdateDto = PathRuleCreateDto;
+
 export type PathRuleDto = PathRuleCreateDto & {
   id: string;
 };
