@@ -7,6 +7,8 @@ import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
+import { uacUtils } from '@/utils/uac.utils';
+import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -17,9 +19,10 @@ export default async function CachePolicyListPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [cachePolicies, createLink] = await Promise.all([
+  const [cachePolicies, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listCachePolicies(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cache-policy/create`),
+    uacUtils.hasPermission('dev'),
   ]);
 
   return (
@@ -41,6 +44,9 @@ export default async function CachePolicyListPage({
           ))}
         </List>
       </Section>
+      {canSeeDevResponse ? (
+        <DevResponseSection title="Cache Policies" response={cachePolicies} />
+      ) : null}
     </DefaultPage>
   );
 }

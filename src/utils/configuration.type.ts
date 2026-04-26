@@ -112,6 +112,20 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TEmailServerConfiguration
   | TFrontierConfiguration;
 
+export type TUacOperator = 'includes' | 'equals';
+
+export type TUacMapping = {
+  path: string;
+  value: string;
+  operator: TUacOperator;
+  permissions: string[];
+};
+
+export type TUacConfiguration = {
+  type: 'token-based';
+  mappings: TUacMapping[];
+};
+
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;
   defaults: Record<string, { id: string; }>;
@@ -119,4 +133,5 @@ export type TConfiguration = {
     primary_color?: string;
     background_color?: string;
   };
+  uac?: TUacConfiguration;
 };

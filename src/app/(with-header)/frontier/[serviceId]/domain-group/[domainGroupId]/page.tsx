@@ -8,6 +8,8 @@ import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
+import { uacUtils } from '@/utils/uac.utils';
+import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -18,12 +20,13 @@ export default async function DomainGroupDetailPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups] = await Promise.all([
+  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, canSeeDevResponse] = await Promise.all([
     frontierService.getDomainGroup(domainGroupId),
     frontierService.listDomains(domainGroupId),
     frontierService.listCachePolicies(domainGroupId),
     frontierService.listPathRules(domainGroupId),
     frontierService.listUpstreamGroups(domainGroupId),
+    uacUtils.hasPermission('dev'),
   ]);
 
   if (!domainGroup) {
@@ -130,6 +133,12 @@ export default async function DomainGroupDetailPage({
           </List>
         </Section>
       </div>
+      {canSeeDevResponse ? (
+        <DevResponseSection
+          title="Domain Group Detail"
+          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups }}
+        />
+      ) : null}
     </DefaultPage>
   );
 }

@@ -7,6 +7,8 @@ import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
+import { uacUtils } from '@/utils/uac.utils';
+import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -17,9 +19,10 @@ export default async function DomainListPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domains, createLink] = await Promise.all([
+  const [domains, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listDomains(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/domain/create`),
+    uacUtils.hasPermission('dev'),
   ]);
 
   return (
@@ -38,6 +41,9 @@ export default async function DomainListPage({
           ))}
         </List>
       </Section>
+      {canSeeDevResponse ? (
+        <DevResponseSection title="Domains" response={domains} />
+      ) : null}
     </DefaultPage>
   );
 }

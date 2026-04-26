@@ -7,6 +7,8 @@ import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
+import { uacUtils } from '@/utils/uac.utils';
+import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -17,9 +19,10 @@ export default async function UpstreamGroupListPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [upstreamGroups, createLink] = await Promise.all([
+  const [upstreamGroups, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listUpstreamGroups(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/upstream-group/create`),
+    uacUtils.hasPermission('dev'),
   ]);
 
   return (
@@ -41,6 +44,9 @@ export default async function UpstreamGroupListPage({
           ))}
         </List>
       </Section>
+      {canSeeDevResponse ? (
+        <DevResponseSection title="Upstream Groups" response={upstreamGroups} />
+      ) : null}
     </DefaultPage>
   );
 }
