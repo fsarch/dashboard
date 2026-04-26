@@ -1,7 +1,7 @@
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
+import ListItem from '@/components/universals/list/ListItem';
 import { frontierService } from '@/services/frontier/frontier.service';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
@@ -32,9 +32,9 @@ export default async function PathRuleListPage({
         </div>
         <List>
           {pathRules.map((rule) => (
-            <LinkListItem key={rule.id} href="#">
+            <ListItem key={rule.id}>
               {rule.name} ({rule.path})
-            </LinkListItem>
+            </ListItem>
           ))}
         </List>
       </Section>

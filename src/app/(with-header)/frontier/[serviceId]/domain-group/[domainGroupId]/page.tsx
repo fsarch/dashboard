@@ -2,6 +2,7 @@ import { DefaultPage } from '@/components/universals/page/DefaultPage.component'
 import Section from '@/components/universals/section/Section';
 import List from '@/components/universals/list/List';
 import LinkListItem from '@/components/universals/list/LinkListItem';
+import ListItem from '@/components/universals/list/ListItem';
 import { frontierService } from '@/services/frontier/frontier.service';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
@@ -17,12 +18,23 @@ export default async function DomainGroupDetailPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domains, cachePolicies, pathRules, upstreamGroups] = await Promise.all([
+  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups] = await Promise.all([
+    frontierService.getDomainGroup(domainGroupId),
     frontierService.listDomains(domainGroupId),
     frontierService.listCachePolicies(domainGroupId),
     frontierService.listPathRules(domainGroupId),
     frontierService.listUpstreamGroups(domainGroupId),
   ]);
+
+  if (!domainGroup) {
+    return (
+      <DefaultPage>
+        <Section name="Domain Group">
+          <p>Domain Group nicht gefunden.</p>
+        </Section>
+      </DefaultPage>
+    );
+  }
 
   const [
     domainCreateLink,
@@ -38,6 +50,9 @@ export default async function DomainGroupDetailPage({
 
   return (
     <DefaultPage>
+      <Section name={`Domain Group: ${domainGroup.name}`}>
+        <p><strong>ID:</strong> {domainGroup.id}</p>
+      </Section>
 
       <div id="domains">
         <Section name="Domains">
@@ -48,9 +63,9 @@ export default async function DomainGroupDetailPage({
           </div>
           <List>
             {domains.map((domain) => (
-              <LinkListItem key={domain.id} href={`#`}>
+              <ListItem key={domain.id}>
                 {domain.domainName}
-              </LinkListItem>
+              </ListItem>
             ))}
           </List>
         </Section>
@@ -85,9 +100,9 @@ export default async function DomainGroupDetailPage({
           </div>
           <List>
             {pathRules.map((rule) => (
-              <LinkListItem key={rule.id} href={`#`}>
+              <ListItem key={rule.id}>
                 {rule.name} ({rule.path})
-              </LinkListItem>
+              </ListItem>
             ))}
           </List>
         </Section>

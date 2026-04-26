@@ -1,7 +1,7 @@
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
+import ListItem from '@/components/universals/list/ListItem';
 import { frontierService } from '@/services/frontier/frontier.service';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
@@ -32,9 +32,9 @@ export default async function DomainListPage({
         </div>
         <List>
           {domains.map((domain) => (
-            <LinkListItem key={domain.id} href="#">
+            <ListItem key={domain.id}>
               {domain.domainName}
-            </LinkListItem>
+            </ListItem>
           ))}
         </List>
       </Section>

@@ -1,12 +1,23 @@
 import { fetchService } from '@/utils/fetchService';
 import {
+  CachePolicyCreateDto,
   CachePolicyDto,
+  CachePolicyUpdateDto,
+  DomainCreateDto,
   DomainDto,
+  DomainGroupCreateDto,
   DomainGroupDto,
+  PathRuleCreateDto,
   PathRuleDto,
+  UpstreamCreateDto,
   UpstreamDto,
+  UpstreamGroupCreateDto,
   UpstreamGroupDto,
 } from '@/services/frontier/frontier.type';
+
+const findById = <T extends { id: string }>(entries: T[], id: string): T | null => {
+  return entries.find((entry) => entry.id === id) ?? null;
+};
 
 // --- Domain Groups ---
 
@@ -15,7 +26,12 @@ const listDomainGroups = async (): Promise<DomainGroupDto[]> => {
   return response.json();
 };
 
-const createDomainGroup = async (data: { name: string }): Promise<DomainGroupDto> => {
+const getDomainGroup = async (domainGroupId: string): Promise<DomainGroupDto | null> => {
+  const domainGroups = await listDomainGroups();
+  return findById(domainGroups, domainGroupId);
+};
+
+const createDomainGroup = async (data: DomainGroupCreateDto): Promise<DomainGroupDto> => {
   const response = await fetchService('/v1/domain-groups', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -31,7 +47,12 @@ const listDomains = async (domainGroupId: string): Promise<DomainDto[]> => {
   return response.json();
 };
 
-const createDomain = async (domainGroupId: string, data: { domainName: string }): Promise<DomainDto> => {
+const getDomain = async (domainGroupId: string, domainId: string): Promise<DomainDto | null> => {
+  const domains = await listDomains(domainGroupId);
+  return findById(domains, domainId);
+};
+
+const createDomain = async (domainGroupId: string, data: DomainCreateDto): Promise<DomainDto> => {
   const response = await fetchService(`/v1/domain-groups/${domainGroupId}/domain`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -47,7 +68,12 @@ const listCachePolicies = async (domainGroupId: string): Promise<CachePolicyDto[
   return response.json();
 };
 
-const createCachePolicy = async (domainGroupId: string, data: Omit<CachePolicyDto, 'id'>): Promise<CachePolicyDto> => {
+const getCachePolicy = async (domainGroupId: string, cachePolicyId: string): Promise<CachePolicyDto | null> => {
+  const cachePolicies = await listCachePolicies(domainGroupId);
+  return findById(cachePolicies, cachePolicyId);
+};
+
+const createCachePolicy = async (domainGroupId: string, data: CachePolicyCreateDto): Promise<CachePolicyDto> => {
   const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cache-policies`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -56,7 +82,7 @@ const createCachePolicy = async (domainGroupId: string, data: Omit<CachePolicyDt
   return response.json();
 };
 
-const updateCachePolicy = async (domainGroupId: string, id: string, data: Partial<Omit<CachePolicyDto, 'id'>>): Promise<CachePolicyDto> => {
+const updateCachePolicy = async (domainGroupId: string, id: string, data: CachePolicyUpdateDto): Promise<CachePolicyDto> => {
   const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cache-policies/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -72,7 +98,12 @@ const listPathRules = async (domainGroupId: string): Promise<PathRuleDto[]> => {
   return response.json();
 };
 
-const createPathRule = async (domainGroupId: string, data: Omit<PathRuleDto, 'id'>): Promise<PathRuleDto> => {
+const getPathRule = async (domainGroupId: string, pathRuleId: string): Promise<PathRuleDto | null> => {
+  const pathRules = await listPathRules(domainGroupId);
+  return findById(pathRules, pathRuleId);
+};
+
+const createPathRule = async (domainGroupId: string, data: PathRuleCreateDto): Promise<PathRuleDto> => {
   const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -88,7 +119,12 @@ const listUpstreamGroups = async (domainGroupId: string): Promise<UpstreamGroupD
   return response.json();
 };
 
-const createUpstreamGroup = async (domainGroupId: string, data: { name: string }): Promise<UpstreamGroupDto> => {
+const getUpstreamGroup = async (domainGroupId: string, upstreamGroupId: string): Promise<UpstreamGroupDto | null> => {
+  const upstreamGroups = await listUpstreamGroups(domainGroupId);
+  return findById(upstreamGroups, upstreamGroupId);
+};
+
+const createUpstreamGroup = async (domainGroupId: string, data: UpstreamGroupCreateDto): Promise<UpstreamGroupDto> => {
   const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -104,7 +140,12 @@ const listUpstreams = async (domainGroupId: string, upstreamGroupId: string): Pr
   return response.json();
 };
 
-const createUpstream = async (domainGroupId: string, upstreamGroupId: string, data: Omit<UpstreamDto, 'id' | 'upstreamGroupId'>): Promise<UpstreamDto> => {
+const getUpstream = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string): Promise<UpstreamDto | null> => {
+  const upstreams = await listUpstreams(domainGroupId, upstreamGroupId);
+  return findById(upstreams, upstreamId);
+};
+
+const createUpstream = async (domainGroupId: string, upstreamGroupId: string, data: UpstreamCreateDto): Promise<UpstreamDto> => {
   const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -115,17 +156,23 @@ const createUpstream = async (domainGroupId: string, upstreamGroupId: string, da
 
 export const frontierService = {
   listDomainGroups,
+  getDomainGroup,
   createDomainGroup,
   listDomains,
+  getDomain,
   createDomain,
   listCachePolicies,
+  getCachePolicy,
   createCachePolicy,
   updateCachePolicy,
   listPathRules,
+  getPathRule,
   createPathRule,
   listUpstreamGroups,
+  getUpstreamGroup,
   createUpstreamGroup,
   listUpstreams,
+  getUpstream,
   createUpstream,
 };
 

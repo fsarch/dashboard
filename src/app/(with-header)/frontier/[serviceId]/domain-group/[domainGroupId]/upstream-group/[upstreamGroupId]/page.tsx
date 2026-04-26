@@ -1,7 +1,7 @@
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
+import ListItem from '@/components/universals/list/ListItem';
 import { frontierService } from '@/services/frontier/frontier.service';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
@@ -17,7 +17,20 @@ export default async function UpstreamGroupDetailPage({
 }) {
   const { domainGroupId, upstreamGroupId } = await params;
 
-  const upstreams = await frontierService.listUpstreams(domainGroupId, upstreamGroupId);
+  const [upstreamGroup, upstreams] = await Promise.all([
+    frontierService.getUpstreamGroup(domainGroupId, upstreamGroupId),
+    frontierService.listUpstreams(domainGroupId, upstreamGroupId),
+  ]);
+
+  if (!upstreamGroup) {
+    return (
+      <DefaultPage>
+        <Section name="Upstream Group">
+          <p>Upstream Group nicht gefunden.</p>
+        </Section>
+      </DefaultPage>
+    );
+  }
 
   const upstreamCreateLink = await getServiceLocalUrl(
     `/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}/upstream/create`,
@@ -25,6 +38,9 @@ export default async function UpstreamGroupDetailPage({
 
   return (
     <DefaultPage>
+      <Section name={`Upstream Group: ${upstreamGroup.name}`}>
+        <p><strong>ID:</strong> {upstreamGroup.id}</p>
+      </Section>
       <Section name="Upstreams">
         <div style={{ marginBottom: '12px' }}>
           <Link href={upstreamCreateLink}>
@@ -33,9 +49,9 @@ export default async function UpstreamGroupDetailPage({
         </div>
         <List>
           {upstreams.map((upstream) => (
-            <LinkListItem key={upstream.id} href={`#`}>
+            <ListItem key={upstream.id}>
               {upstream.name} — {upstream.host}:{upstream.port}{upstream.path}
-            </LinkListItem>
+            </ListItem>
           ))}
         </List>
       </Section>
