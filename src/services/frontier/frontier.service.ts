@@ -10,9 +10,14 @@ import {
   DomainDto,
   DomainGroupCreateDto,
   DomainGroupDto,
+  LogPolicyCreateDto,
+  LogPolicyDto,
+  LogPolicyUpdateDto,
   PathRuleCreateDto,
   PathRuleDto,
   PathRuleUpdateDto,
+  RequestLogDto,
+  RequestLogListQuery,
   UpstreamCreateDto,
   UpstreamDto,
   UpstreamGroupCreateDto,
@@ -169,6 +174,67 @@ const deleteCorsPolicy = async (domainGroupId: string, id: string): Promise<void
   });
 };
 
+// --- Log Policies ---
+
+const listLogPolicies = async (domainGroupId: string): Promise<LogPolicyDto[]> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies`);
+  return response.json();
+};
+
+const getLogPolicy = async (domainGroupId: string, logPolicyId: string): Promise<LogPolicyDto | null> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies/${logPolicyId}`);
+  if (!response.ok) return null;
+  return response.json();
+};
+
+const createLogPolicy = async (domainGroupId: string, data: LogPolicyCreateDto): Promise<LogPolicyDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const updateLogPolicy = async (domainGroupId: string, id: string, data: LogPolicyUpdateDto): Promise<LogPolicyDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteLogPolicy = async (domainGroupId: string, id: string): Promise<void> => {
+  await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+// --- Request Logs ---
+
+const listRequestLogs = async (
+  domainGroupId: string,
+  query?: RequestLogListQuery,
+): Promise<RequestLogDto[]> => {
+  const params = new URLSearchParams();
+
+  if (query?.pathRuleId) params.set('pathRuleId', query.pathRuleId);
+  if (query?.logPolicyId) params.set('logPolicyId', query.logPolicyId);
+  if (query?.from) params.set('from', query.from);
+  if (query?.to) params.set('to', query.to);
+  if (query?.limit !== undefined) params.set('limit', `${query.limit}`);
+  if (query?.offset !== undefined) params.set('offset', `${query.offset}`);
+
+  const queryString = params.toString();
+  const path = queryString
+    ? `/v1/domain-groups/${domainGroupId}/request-logs?${queryString}`
+    : `/v1/domain-groups/${domainGroupId}/request-logs`;
+
+  const response = await fetchService(path);
+  return response.json();
+};
+
 // --- Upstream Groups ---
 
 const listUpstreamGroups = async (domainGroupId: string): Promise<UpstreamGroupDto[]> => {
@@ -232,6 +298,12 @@ export const frontierService = {
   createCorsPolicy,
   updateCorsPolicy,
   deleteCorsPolicy,
+  listLogPolicies,
+  getLogPolicy,
+  createLogPolicy,
+  updateLogPolicy,
+  deleteLogPolicy,
+  listRequestLogs,
   listUpstreamGroups,
   getUpstreamGroup,
   createUpstreamGroup,

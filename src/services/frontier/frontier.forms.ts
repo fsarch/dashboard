@@ -2,7 +2,7 @@ import {
   TGeneratedFormDefinition,
   TGeneratedFormInput,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { CachePolicyDto, CorsPolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
+import { CachePolicyDto, CorsPolicyDto, LogPolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
 
 const createStringArrayInput = (id: string, label: string, itemLabel: string): TGeneratedFormInput => ({
   id,
@@ -43,7 +43,8 @@ const FRONTIER_PATH_RULE_BODY = `{
   "cachePolicyId": form.cachePolicyId,
   "upstreamGroupId": form.upstreamGroupId,
   "order": form.order,
-  "corsPolicyId": form.corsPolicyId ? form.corsPolicyId : undefined
+  "corsPolicyId": form.corsPolicyId ? form.corsPolicyId : undefined,
+  "logPolicyId": form.logPolicyId ? form.logPolicyId : undefined
 }`;
 
 const FRONTIER_CACHE_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
@@ -242,6 +243,15 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       $type: 'datasource',
       value: 'corsPolicies',
     },
+  }, {
+    id: 'logPolicyId',
+    $type: 'select',
+    label: 'Log Policy (optional)',
+    enableSearch: true,
+    data: {
+      $type: 'datasource',
+      value: 'logPolicies',
+    },
   }],
   initialValues: {
     $type: 'jsonata',
@@ -251,7 +261,8 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       "order": 0,
       "cachePolicyId": dataSource.cachePolicies[0] ? dataSource.cachePolicies[0].value : "",
       "upstreamGroupId": dataSource.upstreamGroups[0] ? dataSource.upstreamGroups[0].value : "",
-      "corsPolicyId": ""
+      "corsPolicyId": "",
+      "logPolicyId": ""
     }`,
   },
   endpoint: {
@@ -288,6 +299,15 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
     corsPolicies: {
       $type: 'fetch',
       path: `/v1/domain-groups/${domainGroupId}/cors-policies`,
+      method: 'GET',
+      transformResponse: {
+        $type: 'jsonata',
+        value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+      },
+    },
+    logPolicies: {
+      $type: 'fetch',
+      path: `/v1/domain-groups/${domainGroupId}/log-policies`,
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
@@ -343,6 +363,15 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         $type: 'datasource',
         value: 'corsPolicies',
       },
+    }, {
+      id: 'logPolicyId',
+      $type: 'select',
+      label: 'Log Policy (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'logPolicies',
+      },
     }],
     initialValues: {
       name: pathRule.name,
@@ -351,6 +380,7 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
       cachePolicyId: pathRule.cachePolicyId,
       upstreamGroupId: pathRule.upstreamGroupId,
       corsPolicyId: pathRule.corsPolicyId ?? '',
+      logPolicyId: pathRule.logPolicyId ?? '',
     },
     endpoint: {
       path: `/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`,
@@ -386,6 +416,15 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
       corsPolicies: {
         $type: 'fetch',
         path: `/v1/domain-groups/${domainGroupId}/cors-policies`,
+        method: 'GET',
+        transformResponse: {
+          $type: 'jsonata',
+          value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+        },
+      },
+      logPolicies: {
+        $type: 'fetch',
+        path: `/v1/domain-groups/${domainGroupId}/log-policies`,
         method: 'GET',
         transformResponse: {
           $type: 'jsonata',
@@ -525,3 +564,74 @@ export function FRONTIER_CORS_POLICY_UPDATE_FORM(
     buttons: { submitButtonText: 'CORS Policy aktualisieren' },
   };
 }
+
+const FRONTIER_LOG_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
+  id: 'name',
+  $type: 'text',
+  label: 'Name',
+}, {
+  id: 'enabled',
+  $type: 'checkbox',
+  label: 'Logging aktivieren',
+}, {
+  id: 'retentionTimeSeconds',
+  $type: 'number',
+  label: 'Retention (Sekunden)',
+}];
+
+const FRONTIER_LOG_POLICY_BODY = `{
+  "name": form.name,
+  "enabled": form.enabled,
+  "retentionTimeSeconds": form.retentionTimeSeconds
+}`;
+
+export const FRONTIER_LOG_POLICY_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
+  inputs: FRONTIER_LOG_POLICY_INPUTS,
+  initialValues: {
+    name: '',
+    enabled: true,
+    retentionTimeSeconds: 604800,
+  },
+  endpoint: {
+    path: `/v1/domain-groups/${domainGroupId}/log-policies`,
+    method: 'POST',
+    body: { $type: 'jsonata', value: FRONTIER_LOG_POLICY_BODY },
+  },
+  postEndpointActions: [{
+    $type: 'redirect',
+    url: {
+      $type: 'jsonata',
+      value: `service.localPath & '/domain-group/${domainGroupId}/log-policy/' & response.body.id`,
+    },
+  }],
+  buttons: { submitButtonText: 'Log Policy erstellen' },
+});
+
+export function FRONTIER_LOG_POLICY_UPDATE_FORM(
+  domainGroupId: string,
+  logPolicyId: string,
+  logPolicy: LogPolicyDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: FRONTIER_LOG_POLICY_INPUTS,
+    initialValues: {
+      name: logPolicy.name,
+      enabled: logPolicy.enabled ?? true,
+      retentionTimeSeconds: logPolicy.retentionTimeSeconds ?? 604800,
+    },
+    endpoint: {
+      path: `/v1/domain-groups/${domainGroupId}/log-policies/${logPolicyId}`,
+      method: 'PATCH',
+      body: { $type: 'jsonata', value: FRONTIER_LOG_POLICY_BODY },
+    },
+    postEndpointActions: [{
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/log-policy/${logPolicyId}'`,
+      },
+    }],
+    buttons: { submitButtonText: 'Log Policy aktualisieren' },
+  };
+}
+

@@ -20,13 +20,14 @@ export default async function DomainGroupDetailPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, canSeeDevResponse] = await Promise.all([
+  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies, canSeeDevResponse] = await Promise.all([
     frontierService.getDomainGroup(domainGroupId),
     frontierService.listDomains(domainGroupId),
     frontierService.listCachePolicies(domainGroupId),
     frontierService.listPathRules(domainGroupId),
     frontierService.listUpstreamGroups(domainGroupId),
     frontierService.listCorsPolicies(domainGroupId),
+    frontierService.listLogPolicies(domainGroupId),
     uacUtils.hasPermission('dev'),
   ]);
 
@@ -46,12 +47,16 @@ export default async function DomainGroupDetailPage({
     pathRuleCreateLink,
     upstreamGroupCreateLink,
     corsPolicyCreateLink,
+    logPolicyCreateLink,
+    requestLogListLink,
   ] = await Promise.all([
     getServiceLocalUrl(`/domain-group/${domainGroupId}/domain/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cache-policy/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/path-rule/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/upstream-group/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cors-policy/create`),
+    getServiceLocalUrl(`/domain-group/${domainGroupId}/log-policy/create`),
+    getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log`),
   ]);
 
   return (
@@ -157,10 +162,38 @@ export default async function DomainGroupDetailPage({
         </Section>
       </div>
 
+      <div id="log-policies">
+        <Section name="Log Policies">
+          <div style={{ marginBottom: '12px' }}>
+            <Link href={logPolicyCreateLink}>
+              <Button type="button">+ Log Policy erstellen</Button>
+            </Link>
+          </div>
+          <List>
+            {logPolicies.map(async (policy) => (
+              <LinkListItem
+                key={policy.id}
+                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/log-policy/${policy.id}`)}
+              >
+                {policy.name}
+              </LinkListItem>
+            ))}
+          </List>
+        </Section>
+      </div>
+
+      <div id="request-logs">
+        <Section name="Request Logs">
+          <Link href={requestLogListLink}>
+            <Button type="button">Request Logs ansehen</Button>
+          </Link>
+        </Section>
+      </div>
+
       {canSeeDevResponse ? (
         <DevResponseSection
           title="Domain Group Detail"
-          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies }}
+          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies }}
         />
       ) : null}
     </DefaultPage>

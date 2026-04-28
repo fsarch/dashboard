@@ -179,6 +179,20 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
           },
           icon: 'shield-halved',
         }, {
+          name: 'Log Policies',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/log-policy'",
+          },
+          icon: 'file-lines',
+        }, {
+          name: 'Request Logs',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/request-log'",
+          },
+          icon: 'list-check',
+        }, {
           name: 'Upstream Groups',
           path: {
             $type: 'jsonata',

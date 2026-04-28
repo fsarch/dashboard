@@ -50,13 +50,14 @@ describe('frontier forms', () => {
     });
   });
 
-  test('path rule create form exposes cors policy select and keeps service scoped defaults', () => {
+  test('path rule create form exposes cors/log policy selects and keeps service scoped defaults', () => {
     const form = frontierForms.FRONTIER_PATH_RULE_CREATE_FORM('group-1');
 
     expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules');
     expect(form.endpoint.method).toBe('POST');
     expect(form.inputs.map((input) => input.id)).toEqual(expect.arrayContaining([
       'corsPolicyId',
+      'logPolicyId',
     ]));
     expect(form.inputs.map((input) => input.id)).not.toContain('corsEnabled');
     expect(form.inputs.map((input) => input.id)).not.toContain('corsAllowedOrigins');
@@ -76,6 +77,7 @@ describe('frontier forms', () => {
       upstreamGroupId: 'ug-1',
       order: 1,
       corsPolicyId: 'cors-1',
+      logPolicyId: 'log-1',
     });
 
     expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules/rule-1');
@@ -84,10 +86,41 @@ describe('frontier forms', () => {
       name: 'My rule',
       path: '/api/*',
       corsPolicyId: 'cors-1',
+      logPolicyId: 'log-1',
     });
     expect(form.dataSources).toHaveProperty('cachePolicies');
     expect(form.dataSources).toHaveProperty('upstreamGroups');
     expect(form.dataSources).toHaveProperty('corsPolicies');
+    expect(form.dataSources).toHaveProperty('logPolicies');
+  });
+
+  test('log policy create form posts to log-policies endpoint', () => {
+    const form = frontierForms.FRONTIER_LOG_POLICY_CREATE_FORM('group-1');
+
+    expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/log-policies');
+    expect(form.endpoint.method).toBe('POST');
+    expect(form.inputs.map((input) => input.id)).toEqual(expect.arrayContaining([
+      'name',
+      'enabled',
+      'retentionTimeSeconds',
+    ]));
+  });
+
+  test('log policy update form maps initial values and uses patch endpoint', () => {
+    const form = frontierForms.FRONTIER_LOG_POLICY_UPDATE_FORM('group-1', 'log-1', {
+      id: 'log-1',
+      name: 'Default log policy',
+      enabled: true,
+      retentionTimeSeconds: 3600,
+    });
+
+    expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/log-policies/log-1');
+    expect(form.endpoint.method).toBe('PATCH');
+    expect(form.initialValues).toMatchObject({
+      name: 'Default log policy',
+      enabled: true,
+      retentionTimeSeconds: 3600,
+    });
   });
 });
 

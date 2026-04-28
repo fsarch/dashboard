@@ -59,6 +59,50 @@ export type CorsPolicyDto = {
   allowedOrigins?: string[];
 };
 
+export type LogPolicyCreateDto = {
+  name: string;
+  enabled?: boolean;
+  retentionTimeSeconds?: number;
+};
+
+export type LogPolicyUpdateDto = {
+  name?: string;
+  enabled?: boolean;
+  retentionTimeSeconds?: number;
+};
+
+export type LogPolicyDto = {
+  id: string;
+  name: string;
+  enabled?: boolean;
+  retentionTimeSeconds?: number;
+};
+
+export type RequestLogListQuery = {
+  pathRuleId?: string;
+  logPolicyId?: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export type RequestLogDto = {
+  id?: string;
+  domainGroupId?: string;
+  pathRuleId?: string;
+  logPolicyId?: string;
+  incomingMethod?: string;
+  incomingUrl?: string;
+  incomingHeaders?: Record<string, unknown>;
+  upstreamMethod?: string;
+  upstreamUrl?: string;
+  upstreamHeaders?: Record<string, unknown>;
+  responseStatusCode?: number;
+  requestTimeMs?: number;
+  createdAt?: string;
+};
+
 export type PathRuleCreateDto = {
   name: string;
   path: string;
@@ -66,6 +110,7 @@ export type PathRuleCreateDto = {
   upstreamGroupId: string;
   order: number;
   corsPolicyId?: string;
+  logPolicyId?: string;
 };
 
 export type PathRuleUpdateDto = {
@@ -75,6 +120,7 @@ export type PathRuleUpdateDto = {
   upstreamGroupId?: string;
   order?: number;
   corsPolicyId?: string;
+  logPolicyId?: string;
 };
 
 export type PathRuleDto = {
@@ -85,6 +131,7 @@ export type PathRuleDto = {
   upstreamGroupId: string;
   order: number;
   corsPolicyId?: string;
+  logPolicyId?: string;
 };
 
 export type UpstreamGroupCreateDto = {
