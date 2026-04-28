@@ -1,4 +1,5 @@
 import { TIcon } from "@/components/universals/icon/Icon.type";
+import { uacUtils } from "@/utils/uac.utils";
 
 export type AppType = { icon?: TIcon; name: string; path: string; };
 
@@ -49,7 +50,17 @@ const apps: Array<AppType> = [{
 }];
 
 const getApps = async () => {
-  return apps;
+  const availableApps = [...apps];
+
+  if (await uacUtils.hasPermission('dev')) {
+    availableApps.push({
+      icon: 'wrench',
+      name: 'Development',
+      path: '/development',
+    });
+  }
+
+  return availableApps;
 };
 
 export const appUtils = {
