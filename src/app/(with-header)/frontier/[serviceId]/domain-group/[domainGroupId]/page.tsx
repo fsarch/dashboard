@@ -20,12 +20,13 @@ export default async function DomainGroupDetailPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, canSeeDevResponse] = await Promise.all([
+  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, canSeeDevResponse] = await Promise.all([
     frontierService.getDomainGroup(domainGroupId),
     frontierService.listDomains(domainGroupId),
     frontierService.listCachePolicies(domainGroupId),
     frontierService.listPathRules(domainGroupId),
     frontierService.listUpstreamGroups(domainGroupId),
+    frontierService.listCorsPolicies(domainGroupId),
     uacUtils.hasPermission('dev'),
   ]);
 
@@ -44,11 +45,13 @@ export default async function DomainGroupDetailPage({
     cachePolicyCreateLink,
     pathRuleCreateLink,
     upstreamGroupCreateLink,
+    corsPolicyCreateLink,
   ] = await Promise.all([
     getServiceLocalUrl(`/domain-group/${domainGroupId}/domain/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cache-policy/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/path-rule/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/upstream-group/create`),
+    getServiceLocalUrl(`/domain-group/${domainGroupId}/cors-policy/create`),
   ]);
 
   return (
@@ -133,10 +136,31 @@ export default async function DomainGroupDetailPage({
           </List>
         </Section>
       </div>
+
+      <div id="cors-policies">
+        <Section name="CORS Policies">
+          <div style={{ marginBottom: '12px' }}>
+            <Link href={corsPolicyCreateLink}>
+              <Button type="button">+ CORS Policy erstellen</Button>
+            </Link>
+          </div>
+          <List>
+            {corsPolicies.map(async (policy) => (
+              <LinkListItem
+                key={policy.id}
+                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/cors-policy/${policy.id}`)}
+              >
+                {policy.name}
+              </LinkListItem>
+            ))}
+          </List>
+        </Section>
+      </div>
+
       {canSeeDevResponse ? (
         <DevResponseSection
           title="Domain Group Detail"
-          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups }}
+          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies }}
         />
       ) : null}
     </DefaultPage>

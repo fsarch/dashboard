@@ -172,6 +172,13 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
           },
           icon: 'route',
         }, {
+          name: 'CORS Policies',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/cors-policy'",
+          },
+          icon: 'shield-halved',
+        }, {
           name: 'Upstream Groups',
           path: {
             $type: 'jsonata',

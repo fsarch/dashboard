@@ -3,6 +3,9 @@ import {
   CachePolicyCreateDto,
   CachePolicyDto,
   CachePolicyUpdateDto,
+  CorsPolicyCreateDto,
+  CorsPolicyDto,
+  CorsPolicyUpdateDto,
   DomainCreateDto,
   DomainDto,
   DomainGroupCreateDto,
@@ -100,8 +103,9 @@ const listPathRules = async (domainGroupId: string): Promise<PathRuleDto[]> => {
 };
 
 const getPathRule = async (domainGroupId: string, pathRuleId: string): Promise<PathRuleDto | null> => {
-  const pathRules = await listPathRules(domainGroupId);
-  return findById(pathRules, pathRuleId);
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`);
+  if (!response.ok) return null;
+  return response.json();
 };
 
 const createPathRule = async (domainGroupId: string, data: PathRuleCreateDto): Promise<PathRuleDto> => {
@@ -120,6 +124,49 @@ const updatePathRule = async (domainGroupId: string, id: string, data: PathRuleU
     body: JSON.stringify(data),
   });
   return response.json();
+};
+
+const deletePathRule = async (domainGroupId: string, id: string): Promise<void> => {
+  await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+// --- CORS Policies ---
+
+const listCorsPolicies = async (domainGroupId: string): Promise<CorsPolicyDto[]> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies`);
+  return response.json();
+};
+
+const getCorsPolicy = async (domainGroupId: string, corsPolicyId: string): Promise<CorsPolicyDto | null> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies/${corsPolicyId}`);
+  if (!response.ok) return null;
+  return response.json();
+};
+
+const createCorsPolicy = async (domainGroupId: string, data: CorsPolicyCreateDto): Promise<CorsPolicyDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const updateCorsPolicy = async (domainGroupId: string, id: string, data: CorsPolicyUpdateDto): Promise<CorsPolicyDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteCorsPolicy = async (domainGroupId: string, id: string): Promise<void> => {
+  await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies/${id}`, {
+    method: 'DELETE',
+  });
 };
 
 // --- Upstream Groups ---
@@ -179,6 +226,12 @@ export const frontierService = {
   getPathRule,
   createPathRule,
   updatePathRule,
+  deletePathRule,
+  listCorsPolicies,
+  getCorsPolicy,
+  createCorsPolicy,
+  updateCorsPolicy,
+  deleteCorsPolicy,
   listUpstreamGroups,
   getUpstreamGroup,
   createUpstreamGroup,

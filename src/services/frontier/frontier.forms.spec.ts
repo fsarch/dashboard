@@ -50,54 +50,44 @@ describe('frontier forms', () => {
     });
   });
 
-  test('path rule create form exposes cors fields and keeps service scoped defaults', () => {
+  test('path rule create form exposes cors policy select and keeps service scoped defaults', () => {
     const form = frontierForms.FRONTIER_PATH_RULE_CREATE_FORM('group-1');
 
     expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules');
     expect(form.endpoint.method).toBe('POST');
-    expect(form.endpoint.body).toEqual({
-      $type: 'jsonata',
-      value: expect.stringContaining('"corsAllowedOrigins": $reduce(form.corsAllowedOrigins'),
-    });
     expect(form.inputs.map((input) => input.id)).toEqual(expect.arrayContaining([
-      'corsEnabled',
-      'corsAllowCredentials',
-      'corsAllowedOrigins',
+      'corsPolicyId',
     ]));
+    expect(form.inputs.map((input) => input.id)).not.toContain('corsEnabled');
+    expect(form.inputs.map((input) => input.id)).not.toContain('corsAllowedOrigins');
     expect(form.initialValues).toEqual({
       $type: 'jsonata',
-      value: expect.stringContaining('"domainGroupId": "group-1"'),
+      value: expect.stringContaining('"upstreamGroupId"'),
     });
+    expect(form.dataSources).toHaveProperty('corsPolicies');
   });
 
-  test('path rule update form uses patch endpoint and maps cors origins to nested form', () => {
+  test('path rule update form uses patch endpoint and maps corsPolicyId', () => {
     const form = frontierForms.FRONTIER_PATH_RULE_UPDATE_FORM('group-1', 'rule-1', {
       id: 'rule-1',
       name: 'My rule',
       path: '/api/*',
       cachePolicyId: 'cp-1',
-      domainGroupId: 'group-1',
       upstreamGroupId: 'ug-1',
       order: 1,
-      corsEnabled: true,
-      corsAllowCredentials: false,
-      corsAllowedOrigins: ['https://example.com', 'https://foo.bar'],
+      corsPolicyId: 'cors-1',
     });
 
     expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules/rule-1');
     expect(form.endpoint.method).toBe('PATCH');
-    expect(form.endpoint.body).toEqual({
-      $type: 'jsonata',
-      value: expect.stringContaining('"corsAllowedOrigins": $reduce(form.corsAllowedOrigins'),
-    });
     expect(form.initialValues).toMatchObject({
       name: 'My rule',
       path: '/api/*',
-      corsEnabled: true,
-      corsAllowedOrigins: [{ value: 'https://example.com' }, { value: 'https://foo.bar' }],
+      corsPolicyId: 'cors-1',
     });
     expect(form.dataSources).toHaveProperty('cachePolicies');
     expect(form.dataSources).toHaveProperty('upstreamGroups');
+    expect(form.dataSources).toHaveProperty('corsPolicies');
   });
 });
 

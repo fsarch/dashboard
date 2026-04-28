@@ -37,22 +37,54 @@ export type CachePolicyDto = CachePolicyCreateDto & {
   id: string;
 };
 
+export type CorsPolicyCreateDto = {
+  name: string;
+  enabled?: boolean;
+  allowCredentials?: boolean;
+  allowedOrigins?: string[];
+};
+
+export type CorsPolicyUpdateDto = {
+  name?: string;
+  enabled?: boolean;
+  allowCredentials?: boolean;
+  allowedOrigins?: string[];
+};
+
+export type CorsPolicyDto = {
+  id: string;
+  name: string;
+  enabled?: boolean;
+  allowCredentials?: boolean;
+  allowedOrigins?: string[];
+};
+
 export type PathRuleCreateDto = {
   name: string;
   path: string;
   cachePolicyId: string;
-  domainGroupId: string;
   upstreamGroupId: string;
   order: number;
-  corsEnabled?: boolean;
-  corsAllowCredentials?: boolean;
-  corsAllowedOrigins?: string[];
+  corsPolicyId?: string;
 };
 
-export type PathRuleUpdateDto = PathRuleCreateDto;
+export type PathRuleUpdateDto = {
+  name?: string;
+  path?: string;
+  cachePolicyId?: string;
+  upstreamGroupId?: string;
+  order?: number;
+  corsPolicyId?: string;
+};
 
-export type PathRuleDto = PathRuleCreateDto & {
+export type PathRuleDto = {
   id: string;
+  name: string;
+  path: string;
+  cachePolicyId: string;
+  upstreamGroupId: string;
+  order: number;
+  corsPolicyId?: string;
 };
 
 export type UpstreamGroupCreateDto = {
@@ -75,4 +107,3 @@ export type UpstreamDto = UpstreamCreateDto & {
   id: string;
   upstreamGroupId: string;
 };
-

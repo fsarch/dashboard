@@ -2,7 +2,7 @@ import {
   TGeneratedFormDefinition,
   TGeneratedFormInput,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { CachePolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
+import { CachePolicyDto, CorsPolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
 
 const createStringArrayInput = (id: string, label: string, itemLabel: string): TGeneratedFormInput => ({
   id,
@@ -41,12 +41,9 @@ const FRONTIER_PATH_RULE_BODY = `{
   "name": form.name,
   "path": form.path,
   "cachePolicyId": form.cachePolicyId,
-  "domainGroupId": form.domainGroupId,
   "upstreamGroupId": form.upstreamGroupId,
   "order": form.order,
-  "corsEnabled": form.corsEnabled,
-  "corsAllowCredentials": form.corsAllowCredentials,
-  "corsAllowedOrigins": $reduce(form.corsAllowedOrigins, function($acc, $item) { $append($acc, $item.value) }, [])
+  "corsPolicyId": form.corsPolicyId ? form.corsPolicyId : undefined
 }`;
 
 const FRONTIER_CACHE_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
@@ -237,14 +234,15 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       value: 'upstreamGroups',
     },
   }, {
-    id: 'corsEnabled',
-    $type: 'checkbox',
-    label: 'CORS aktivieren',
-  }, {
-    id: 'corsAllowCredentials',
-    $type: 'checkbox',
-    label: 'CORS Credentials erlauben',
-  }, createStringArrayInput('corsAllowedOrigins', 'CORS Allowed Origins', 'Origin')],
+    id: 'corsPolicyId',
+    $type: 'select',
+    label: 'CORS Policy (optional)',
+    enableSearch: true,
+    data: {
+      $type: 'datasource',
+      value: 'corsPolicies',
+    },
+  }],
   initialValues: {
     $type: 'jsonata',
     value: `{
@@ -252,11 +250,8 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       "path": "/*",
       "order": 0,
       "cachePolicyId": dataSource.cachePolicies[0] ? dataSource.cachePolicies[0].value : "",
-      "domainGroupId": "${domainGroupId}",
       "upstreamGroupId": dataSource.upstreamGroups[0] ? dataSource.upstreamGroups[0].value : "",
-      "corsEnabled": false,
-      "corsAllowCredentials": false,
-      "corsAllowedOrigins": []
+      "corsPolicyId": ""
     }`,
   },
   endpoint: {
@@ -288,6 +283,15 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       transformResponse: {
         $type: 'jsonata',
         value: '{ "body": [body.{ "id": id, "value": id, "label": name }] }',
+      },
+    },
+    corsPolicies: {
+      $type: 'fetch',
+      path: `/v1/domain-groups/${domainGroupId}/cors-policies`,
+      method: 'GET',
+      transformResponse: {
+        $type: 'jsonata',
+        value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
       },
     },
   },
@@ -331,24 +335,22 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         value: 'upstreamGroups',
       },
     }, {
-      id: 'corsEnabled',
-      $type: 'checkbox',
-      label: 'CORS aktivieren',
-    }, {
-      id: 'corsAllowCredentials',
-      $type: 'checkbox',
-      label: 'CORS Credentials erlauben',
-    }, createStringArrayInput('corsAllowedOrigins', 'CORS Allowed Origins', 'Origin')],
+      id: 'corsPolicyId',
+      $type: 'select',
+      label: 'CORS Policy (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'corsPolicies',
+      },
+    }],
     initialValues: {
       name: pathRule.name,
       path: pathRule.path,
       order: pathRule.order,
       cachePolicyId: pathRule.cachePolicyId,
-      domainGroupId: pathRule.domainGroupId,
       upstreamGroupId: pathRule.upstreamGroupId,
-      corsEnabled: pathRule.corsEnabled ?? false,
-      corsAllowCredentials: pathRule.corsAllowCredentials ?? false,
-      corsAllowedOrigins: mapStringArrayToNestedForm(pathRule.corsAllowedOrigins ?? []),
+      corsPolicyId: pathRule.corsPolicyId ?? '',
     },
     endpoint: {
       path: `/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`,
@@ -379,6 +381,15 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         transformResponse: {
           $type: 'jsonata',
           value: '{ "body": [body.{ "id": id, "value": id, "label": name }] }',
+        },
+      },
+      corsPolicies: {
+        $type: 'fetch',
+        path: `/v1/domain-groups/${domainGroupId}/cors-policies`,
+        method: 'GET',
+        transformResponse: {
+          $type: 'jsonata',
+          value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
         },
       },
     },
@@ -441,3 +452,76 @@ export const FRONTIER_UPSTREAM_CREATE_FORM = (domainGroupId: string, upstreamGro
   }],
   buttons: { submitButtonText: 'Upstream erstellen' },
 });
+
+const FRONTIER_CORS_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
+  id: 'name',
+  $type: 'text',
+  label: 'Name',
+}, {
+  id: 'enabled',
+  $type: 'checkbox',
+  label: 'CORS aktivieren',
+}, {
+  id: 'allowCredentials',
+  $type: 'checkbox',
+  label: 'Credentials erlauben',
+}, createStringArrayInput('allowedOrigins', 'Erlaubte Origins', 'Origin')];
+
+const FRONTIER_CORS_POLICY_BODY = `{
+  "name": form.name,
+  "enabled": form.enabled,
+  "allowCredentials": form.allowCredentials,
+  "allowedOrigins": $reduce(form.allowedOrigins, function($acc, $item) { $append($acc, $item.value) }, [])
+}`;
+
+export const FRONTIER_CORS_POLICY_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
+  inputs: FRONTIER_CORS_POLICY_INPUTS,
+  initialValues: {
+    name: '',
+    enabled: true,
+    allowCredentials: false,
+    allowedOrigins: [],
+  },
+  endpoint: {
+    path: `/v1/domain-groups/${domainGroupId}/cors-policies`,
+    method: 'POST',
+    body: { $type: 'jsonata', value: FRONTIER_CORS_POLICY_BODY },
+  },
+  postEndpointActions: [{
+    $type: 'redirect',
+    url: {
+      $type: 'jsonata',
+      value: `service.localPath & '/domain-group/${domainGroupId}/cors-policy/' & response.body.id`,
+    },
+  }],
+  buttons: { submitButtonText: 'CORS Policy erstellen' },
+});
+
+export function FRONTIER_CORS_POLICY_UPDATE_FORM(
+  domainGroupId: string,
+  corsPolicyId: string,
+  corsPolicy: CorsPolicyDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: FRONTIER_CORS_POLICY_INPUTS,
+    initialValues: {
+      name: corsPolicy.name,
+      enabled: corsPolicy.enabled ?? true,
+      allowCredentials: corsPolicy.allowCredentials ?? false,
+      allowedOrigins: mapStringArrayToNestedForm(corsPolicy.allowedOrigins ?? []),
+    },
+    endpoint: {
+      path: `/v1/domain-groups/${domainGroupId}/cors-policies/${corsPolicyId}`,
+      method: 'PATCH',
+      body: { $type: 'jsonata', value: FRONTIER_CORS_POLICY_BODY },
+    },
+    postEndpointActions: [{
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/cors-policy/${corsPolicyId}'`,
+      },
+    }],
+    buttons: { submitButtonText: 'CORS Policy aktualisieren' },
+  };
+}
