@@ -13,6 +13,24 @@ import { appUtils } from "@/utils/app/app.utils";
 import { uacUtils } from "@/utils/uac.utils";
 import SignOutButton from "@/components/navigation/SignOutButton";
 
+function getGreetingByHour(date: Date = new Date()): string {
+  const hour = date.getHours();
+
+  if (hour < 5) {
+    return 'Gute Nacht';
+  }
+
+  if (hour < 11) {
+    return 'Guten Morgen';
+  }
+
+  if (hour < 18) {
+    return 'Guten Tag';
+  }
+
+  return 'Guten Abend';
+}
+
 export default async function Home() {
   const customApps = await getServiceConfigurations(EServiceType.CUSTOM_APP);
 
@@ -24,6 +42,7 @@ export default async function Home() {
 
   const data = decodeJwt(accessToken) as { given_name?: string; preferred_username: string; };
   const apps = await appUtils.getApps();
+  const greeting = getGreetingByHour();
   const availableCustomApps = (await Promise.all(
     customApps.map(async (app) => ({
       app,
@@ -36,7 +55,7 @@ export default async function Home() {
   return (
     <main className={styles.root}>
       <h1 className={styles.pageTitle}>
-        Hallo <span className={styles.pageTitlePerson}>{data.given_name || data.preferred_username || ''}</span>!
+        {greeting} <span className={styles.pageTitlePerson}>{data.given_name || data.preferred_username || ''}</span>!
       </h1>
       <div className={styles.actions}>
         <SignOutButton />
