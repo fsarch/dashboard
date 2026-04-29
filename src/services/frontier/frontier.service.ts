@@ -235,6 +235,28 @@ const listRequestLogs = async (
   return response.json();
 };
 
+const getRequestLog = async (
+  domainGroupId: string,
+  requestLogId: string,
+  query?: RequestLogListQuery,
+): Promise<RequestLogDto | null> => {
+  const requestLogs = await listRequestLogs(domainGroupId, {
+    limit: 100,
+    offset: 0,
+    ...query,
+  });
+
+  const requestLogIndexPrefix = '__index-';
+
+  return requestLogs.find((requestLog, index) => {
+    if (requestLog.id) {
+      return requestLog.id === requestLogId;
+    }
+
+    return `${requestLogIndexPrefix}${index}` === requestLogId;
+  }) ?? null;
+};
+
 // --- Upstream Groups ---
 
 const listUpstreamGroups = async (domainGroupId: string): Promise<UpstreamGroupDto[]> => {
@@ -304,6 +326,7 @@ export const frontierService = {
   updateLogPolicy,
   deleteLogPolicy,
   listRequestLogs,
+  getRequestLog,
   listUpstreamGroups,
   getUpstreamGroup,
   createUpstreamGroup,
