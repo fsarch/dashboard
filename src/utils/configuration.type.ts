@@ -112,14 +112,35 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TEmailServerConfiguration
   | TFrontierConfiguration;
 
-export type TUacOperator = 'includes' | 'equals';
+export type TUacComparisonOperator = 'includes' | 'equals';
 
-export type TUacMapping = {
+export type TUacAppPermission = {
+  type: 'app';
+  value: {
+    type: EServiceType | '*';
+    id: string | '*';
+  };
+};
+
+export type TUacPermission = string | TUacAppPermission;
+
+export type TUacMapMapping = {
+  path: string;
+  operator: 'map';
+  mappings: Array<{
+    key: string;
+    permissions: TUacPermission[];
+  }>;
+};
+
+export type TUacComparisonMapping = {
   path: string;
   value: string;
-  operator: TUacOperator;
-  permissions: string[];
+  operator: TUacComparisonOperator;
+  permissions: TUacPermission[];
 };
+
+export type TUacMapping = TUacComparisonMapping | TUacMapMapping;
 
 export type TUacConfiguration = {
   type: 'token-based';

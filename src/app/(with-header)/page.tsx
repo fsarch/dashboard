@@ -2,7 +2,6 @@ import TileList from "@/components/universals/tile-list/TileList";
 import Section from "@/components/universals/section/Section";
 import { getServiceConfigurations } from "@/utils/configuration.utils";
 import { EServiceType } from "@/utils/configuration.type";
-import { TIcon } from "@/components/universals/icon/Icon.type";
 import { getAccessToken } from "@/utils/getAccessToken";
 import { decodeJwt } from "jose";
 import { headers } from "next/headers";
@@ -11,6 +10,7 @@ import { redirect } from "next/navigation";
 import styles from './page.module.css';
 import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
 import { appUtils } from "@/utils/app/app.utils";
+import { uacUtils } from "@/utils/uac.utils";
 
 export default async function Home() {
   const customApps = await getServiceConfigurations(EServiceType.CUSTOM_APP);
@@ -23,6 +23,14 @@ export default async function Home() {
 
   const data = decodeJwt(accessToken) as { given_name?: string; preferred_username: string; };
   const apps = await appUtils.getApps();
+  const availableCustomApps = (await Promise.all(
+    customApps.map(async (app) => ({
+      app,
+      isAllowed: await uacUtils.hasAppPermission(EServiceType.CUSTOM_APP, app.id, accessToken),
+    })),
+  ))
+    .filter(({ isAllowed }) => isAllowed)
+    .map(({ app }) => app);
 
   return (
     <main className={styles.root}>
@@ -46,7 +54,7 @@ export default async function Home() {
       <Section name="Custom Apps">
         <nav>
           <TileList>
-            {customApps.map((app) => (
+            {availableCustomApps.map((app) => (
               <LinkTileListItem
                 key={app.id}
                 href={`/custom-app/${app.id}`}
