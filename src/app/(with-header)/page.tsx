@@ -11,6 +11,7 @@ import styles from './page.module.css';
 import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
 import { appUtils } from "@/utils/app/app.utils";
 import { uacUtils } from "@/utils/uac.utils";
+import SignOutButton from "@/components/navigation/SignOutButton";
 
 export default async function Home() {
   const customApps = await getServiceConfigurations(EServiceType.CUSTOM_APP);
@@ -37,6 +38,9 @@ export default async function Home() {
       <h1 className={styles.pageTitle}>
         Hallo <span className={styles.pageTitlePerson}>{data.given_name || data.preferred_username || ''}</span>!
       </h1>
+      <div className={styles.actions}>
+        <SignOutButton />
+      </div>
       <Section name="Apps">
         <nav>
           <TileList>

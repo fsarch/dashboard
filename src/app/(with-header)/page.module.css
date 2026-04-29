@@ -17,3 +17,11 @@
     color: rgb(var(--color-primary-rgb));
     font-weight: bold;
 }
+
+.actions {
+    display: flex;
+    justify-content: center;
+
+    margin-bottom: 24px;
+}
+
