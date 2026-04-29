@@ -32,14 +32,26 @@ function renderHeaderObject(title: string, value: RequestLogDto['incomingHeaders
 
 export default async function RequestLogDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ domainGroupId: string; requestLogId: string }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const { domainGroupId, requestLogId } = await params;
+  const resolvedSearchParams = await searchParams;
+  const page = Math.max(parseInt(resolvedSearchParams.page ?? '1', 10) || 1, 1);
+  const pageSizeRaw = parseInt(resolvedSearchParams.pageSize ?? '25', 10) || 25;
+  const pageSize = Math.min(Math.max(pageSizeRaw, 1), 100);
+  const offset = (page - 1) * pageSize;
 
-  const [requestLog, backLink, canSeeDevResponse] = await Promise.all([
-    frontierService.getRequestLog(domainGroupId, requestLogId),
-    getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log`),
+  const backBaseLink = await getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log`);
+  const backLink = `${backBaseLink}?${new URLSearchParams({
+    page: `${page}`,
+    pageSize: `${pageSize}`,
+  }).toString()}`;
+
+  const [requestLog, canSeeDevResponse] = await Promise.all([
+    frontierService.getRequestLog(domainGroupId, requestLogId, { limit: pageSize, offset }),
     uacUtils.hasPermission('dev'),
   ]);
 

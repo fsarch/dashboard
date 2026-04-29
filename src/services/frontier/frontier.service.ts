@@ -240,20 +240,36 @@ const getRequestLog = async (
   requestLogId: string,
   query?: RequestLogListQuery,
 ): Promise<RequestLogDto | null> => {
-  const requestLogs = await listRequestLogs(domainGroupId, {
-    limit: 100,
-    offset: 0,
-    ...query,
-  });
+  const requestLogAbsoluteIndexPrefix = '__absolute-';
+  const isAbsoluteIndexReference = requestLogId.startsWith(requestLogAbsoluteIndexPrefix);
 
-  const requestLogIndexPrefix = '__index-';
+  if (isAbsoluteIndexReference) {
+    const absoluteIndex = Number.parseInt(requestLogId.replace(requestLogAbsoluteIndexPrefix, ''), 10);
+    if (Number.isNaN(absoluteIndex) || absoluteIndex < 0) {
+      return null;
+    }
+
+    const absoluteIndexedRequestLogs = await listRequestLogs(domainGroupId, {
+      ...query,
+      limit: 1,
+      offset: absoluteIndex,
+    });
+
+    return absoluteIndexedRequestLogs[0] ?? null;
+  }
+
+  const requestLogs = await listRequestLogs(domainGroupId, {
+    ...query,
+    limit: query?.limit ?? 100,
+    offset: query?.offset ?? 0,
+  });
 
   return requestLogs.find((requestLog, index) => {
     if (requestLog.id) {
       return requestLog.id === requestLogId;
     }
 
-    return `${requestLogIndexPrefix}${index}` === requestLogId;
+    return `${requestLogAbsoluteIndexPrefix}${index + (query?.offset ?? 0)}` === requestLogId;
   }) ?? null;
 };
 
