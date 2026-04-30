@@ -41,7 +41,7 @@ export const PART_CREATE_FORM: TGeneratedFormDefinition = {
   dataSources: {
     partTypes: {
       $type: 'fetch',
-      path: '/v1/part-types',
+      path: '/v1/part-types?take=2000',
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
