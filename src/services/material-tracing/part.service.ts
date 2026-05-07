@@ -43,7 +43,7 @@ const listParts = async (options?: {
 };
 
 const getPart = async (partId: string): Promise<TPart | null> => {
-  const partResponse = await fetchService(`/v1/parts/${partId}?include=availableAmount`);
+  const partResponse = await fetchService(`/v1/parts/${partId}?embed=availableAmount`);
   if (!partResponse.ok) {
     return null;
   }
