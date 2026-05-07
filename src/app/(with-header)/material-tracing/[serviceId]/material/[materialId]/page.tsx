@@ -17,6 +17,7 @@ import MaterialShortCodeDeleteForm
 import React from "react";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 import MaterialUpdateForm from "@/components/apps/material-tracing/material/MaterialUpdateForm.component";
+import MaterialImage from "@/components/apps/material-tracing/material/MaterialImage.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -39,6 +40,9 @@ export default async function Home(props: { params: Promise<{ materialId: string
         <div style={{ marginTop: '1rem' }}>
           Material: {materialType.name}<br />
           Hersteller: {manufacturer.name}<br />
+          {material.imageRef && (
+            <MaterialImage imageRef={material.imageRef} />
+          )}
         </div>
       </Section>
       <Actions

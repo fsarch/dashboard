@@ -61,10 +61,20 @@ const deleteMaterial = async (materialId: string): Promise<void> => {
   }
 };
 
+const getImageServerAdminUrl = async (): Promise<string | null> => {
+  const response = await fetchService('/v1/.meta/user-interface');
+  if (!response.ok) {
+    return null;
+  }
+  const data = await response.json();
+  return data?.imageServer?.adminUrl ?? null;
+};
+
 export const materialService = {
   listMaterials,
   getMaterial,
   listShortCodes,
   listMaterialsByShortCode,
   deleteMaterial,
+  getImageServerAdminUrl,
 };
