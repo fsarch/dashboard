@@ -11,7 +11,9 @@ import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 import ShortCodeUpdateForm from "@/components/apps/material-tracing/short-code/ShortCodeUpdateForm.component";
+import ShortCodeCopyButton from "@/components/apps/material-tracing/short-code/ShortCodeCopyButton.component";
 import QRCode from "qrcode";
+import styles from './page.module.scss';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -20,59 +22,66 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ shor
   const shortCode = await shortCodeService.getShortCode(shortCodeCode);
   const qrCodeDataUrl = await QRCode.toDataURL(shortCodeCode, {
     margin: 1,
-    width: 360,
+    width: 720,
   });
 
   return (
     <DefaultPage>
-      <h1>{shortCode.code}</h1>
+      <div className={styles.headerRow}>
+        <h1 className={styles.title}>{shortCode.code}</h1>
+        <ShortCodeCopyButton value={shortCodeCode} />
+      </div>
 
-      <Section name="Informationen">
-        <ShortCodeUpdateForm
-          args={{
-            shortCode
-          }}
-        />
-      </Section>
+      <Section name="ShortCode">
+        <div className={styles.topSectionContent}>
+          <div className={styles.preview}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={qrCodeDataUrl}
+              alt={`QR-Code fuer ${shortCodeCode}`}
+              className={styles.previewImage}
+            />
+            <div className={styles.previewCode}>{shortCodeCode}</div>
+          </div>
 
-      {shortCode.shortCodeTypeId === EShortCodeType.MATERIAL ? (
-        <MaterialShortCodeInfoComponent
-          code={shortCodeCode}
-        />
-      ) : null}
-      {shortCode.shortCodeTypeId === EShortCodeType.PART ? (
-        <PartShortCodeInfoComponent
-          code={shortCodeCode}
-        />
-      ) : null}
+          <div className={styles.updateFormWrapper}>
+            <ShortCodeUpdateForm
+              args={{
+                shortCode
+              }}
+            />
+          </div>
 
-      <Section name="QR-Code Vorschau">
-        <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={qrCodeDataUrl}
-            alt={`QR-Code fuer ${shortCodeCode}`}
-            style={{ width: 'min(320px, 100%)', height: 'auto', backgroundColor: '#ffffff', borderRadius: '8px', padding: '8px' }}
-          />
-          <div style={{ fontSize: '0.95rem', opacity: 0.9, wordBreak: 'break-all' }}>{shortCodeCode}</div>
+          <div className={styles.downloadActions}>
+            <QrCodeDownloadButton
+              type={QRCodeType.ROUND}
+              value={shortCodeCode}
+              open={false}
+            >
+              Als PDF herunterladen
+            </QrCodeDownloadButton>
+            <QrCodeDownloadButton
+              type={QRCodeType.ROUND}
+              value={shortCodeCode}
+              open={true}
+            >
+              Als PDF anzeigen
+            </QrCodeDownloadButton>
+          </div>
         </div>
       </Section>
 
-      <Section name="QR-Code herunterladen">
-        <QrCodeDownloadButton
-          type={QRCodeType.ROUND}
-          value={shortCodeCode}
-          open={false}
-        >
-          Download as PDF
-        </QrCodeDownloadButton>
-        <QrCodeDownloadButton
-          type={QRCodeType.ROUND}
-          value={shortCodeCode}
-          open={true}
-        >
-          Show as PDF
-        </QrCodeDownloadButton>
+      <Section name="Verbundene Informationen">
+        {shortCode.shortCodeTypeId === EShortCodeType.MATERIAL ? (
+          <MaterialShortCodeInfoComponent
+            code={shortCodeCode}
+          />
+        ) : null}
+        {shortCode.shortCodeTypeId === EShortCodeType.PART ? (
+          <PartShortCodeInfoComponent
+            code={shortCodeCode}
+          />
+        ) : null}
       </Section>
       <Actions
         type="short_code"

@@ -1,0 +1,16 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feedback {
+  font-size: 0.9rem;
+  color: #7ad67a;
+}
+
+.feedbackError {
+  font-size: 0.9rem;
+  color: #ff7c7c;
+}
+

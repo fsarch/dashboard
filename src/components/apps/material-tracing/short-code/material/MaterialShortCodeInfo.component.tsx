@@ -1,13 +1,11 @@
 import React from 'react';
+import Link from "next/link";
 import { materialService } from "@/services/material-tracing/material.service";
-import { materialTypeService } from "@/services/material-tracing/material-type.service";
-import { manufacturerService } from "@/services/material-tracing/manufacturer.service";
-import Section from "@/components/universals/section/Section";
 import MaterialShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteForm.component";
 import MaterialInfo from "@/components/apps/material-tracing/material/MaterialInfo.component";
-import QrCodeDownloadButton from "@/components/universals/qr-code/QRCodeDownloadButton.component";
-import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
+import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import styles from './MaterialShortCodeInfo.module.scss';
 
 type MaterialShortCodeInfoComponentProps = {
   code: string;
@@ -18,30 +16,30 @@ const MaterialShortCodeInfoComponent: React.FunctionComponent<MaterialShortCodeI
 }) => {
   const materials = await materialService.listMaterialsByShortCode(code);
   const material = materials[0];
+  const materialUrl = material ? await getServiceLocalUrl(`/material/${material.id}`) : null;
 
   return (
-    <>
+    <div className={styles.root}>
       {material ? (
-        <Section name="Informationen">
+        <Link href={materialUrl!} className={styles.itemCard}>
+          <div className={styles.itemLabel}>Verbundenes Material</div>
           <MaterialInfo
             material={material}
           />
-        </Section>
-      ) : undefined}
-      <Section name="Material auschecken">
-        {/* TODO */}
-      </Section>
+        </Link>
+      ) : <div className={styles.empty}>Kein verbundenes Material gefunden.</div>}
       {material ? (
-        <Section name="Verbindung aufheben">
+        <div className={styles.actions}>
+          <div className={styles.actionsLabel}>Verbindung aufheben</div>
           <MaterialShortCodeDeleteForm
             args={{
               materialId: material.id,
               shortCode: code,
             }}
           />
-        </Section>
+        </div>
       ) : undefined}
-    </>
+    </div>
   );
 };
 

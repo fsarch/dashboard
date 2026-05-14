@@ -1,0 +1,83 @@
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+}
+
+.topSectionContent {
+  display: grid;
+  gap: 18px;
+}
+
+.updateFormWrapper :global(form) {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.updateFormWrapper {
+  padding: 12px;
+  border: 1px solid rgba(var(--color-primary-rgb), 0.35);
+  border-radius: 8px;
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+}
+
+.updateFormWrapper :global(form > button[type='submit']) {
+  align-self: flex-end;
+}
+
+.preview {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.previewImage {
+  width: min(460px, 100%);
+  height: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.previewCode {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  word-break: break-all;
+}
+
+.downloadActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .downloadActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 992px) {
+  .topSectionContent {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .previewImage {
+    width: 320px;
+  }
+
+  .downloadActions {
+    grid-column: 1 / -1;
+  }
+}
+
