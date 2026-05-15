@@ -18,6 +18,7 @@ import React from "react";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 import MaterialUpdateForm from "@/components/apps/material-tracing/material/MaterialUpdateForm.component";
 import MaterialImage from "@/components/apps/material-tracing/material/MaterialImage.component";
+import ShortCodeLinkedCard from "@/components/apps/material-tracing/short-code/ShortCodeLinkedCard.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -65,7 +66,7 @@ export default async function Home(props: { params: Promise<{ materialId: string
       </Section>
       {hasShortCode ? (
         <Section name="ShortCode">
-          ShortCode: {shortCodes[0].code}
+          <ShortCodeLinkedCard code={shortCodes[0].code} label="Verknüpfter ShortCode" />
 
           <MaterialShortCodeDeleteForm
             args={{

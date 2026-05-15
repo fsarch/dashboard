@@ -24,6 +24,7 @@ import { DefaultPage } from "@/components/universals/page/DefaultPage.component"
 import PartShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
+import ShortCodeLinkedCard from "@/components/apps/material-tracing/short-code/ShortCodeLinkedCard.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -47,7 +48,7 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
       </Section>
       {hasShortCode ? (
         <Section name="ShortCode">
-          ShortCode: {shortCodes[0].code}
+          <ShortCodeLinkedCard code={shortCodes[0].code} label="Verknüpfter ShortCode" />
 
           <PartShortCodeDeleteForm
             args={{
