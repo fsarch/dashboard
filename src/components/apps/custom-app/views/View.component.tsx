@@ -97,6 +97,10 @@ export const View: React.FunctionComponent<CustomAppViewComponentProps> = async 
     />
   }
 
+  if (view.$type === 'paragraph') {
+    return <p>{typeof view.text === 'string' ? view.text : view.text.value}</p>;
+  }
+
   return (
     <div>
       Unknown type

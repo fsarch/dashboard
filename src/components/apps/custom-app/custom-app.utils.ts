@@ -10,6 +10,7 @@ import {
 } from "@/components/apps/custom-app/custom-app.type";
 import {
   TGeneratedFormDataSource,
+  TGeneratedFormLinkCardInput,
   TGeneratedFormSelectInput,
   TGeneratedFormTextInput,
   TGeneratedNestedForm,
@@ -147,6 +148,16 @@ const FORM_TIME_INPUT_VIEW_SCHEMA = Joi.object({
   $type: Joi.string().allow('time').required(),
 });
 
+const FORM_LINK_CARD_INPUT_SCHEMA = Joi.object<TGeneratedFormLinkCardInput>({
+  ...FORM_BASE_INPUT_PROPERTIES,
+  $type: Joi.string().allow('link-card').required(),
+  href: Joi.alternatives(
+    Joi.string(),
+    CUSTOM_APP_JSONATA_EXPRESSION_SCHEMA,
+  ),
+  views: Joi.array().items(Joi.link('#form-views')).required(),
+});
+
 const FORM_TEXT_INPUT_SCHEMA = Joi.object<TGeneratedFormTextInput>({
   ...FORM_BASE_INPUT_PROPERTIES,
   $type: Joi.string().allow('text').required(),
@@ -180,6 +191,7 @@ const FORM_INPUTS_SCHEMA = Joi.alternatives(
   FORM_SELECT_INPUT_SCHEMA,
   FORM_NESTED_FORM_VIEW_SCHEMA,
   FORM_TIME_INPUT_VIEW_SCHEMA,
+  FORM_LINK_CARD_INPUT_SCHEMA,
 ).id('form-inputs');
 
 const FORM_FORM_VIEW_SCHEMA = Joi.object<TFormView>({
@@ -218,6 +230,14 @@ const SECTION_COMPONENT_SCHEMA = Joi.object<TSectionView>({
   views: Joi.array().items(Joi.link('#form-views')).required(),
 });
 
+const PARAGRAPH_COMPONENT_SCHEMA = Joi.object({
+  $type: Joi.string().allow('paragraph').required(),
+  text: Joi.alternatives(
+    Joi.string().required(),
+    CUSTOM_APP_JSONATA_EXPRESSION_SCHEMA.required(),
+  ).required(),
+});
+
 const FORM_VIEW_GROUP_SCHEMA = Joi.object(FORM_VIEW_GROUP_VIEW_PROPERTIES);
 
 const FORM_VIEWS_SCHEMA = Joi.alternatives(
@@ -227,6 +247,7 @@ const FORM_VIEWS_SCHEMA = Joi.alternatives(
   FORM_IFRAME_VIEW_SCHEMA,
   FORM_FORM_VIEW_SCHEMA,
   SECTION_COMPONENT_SCHEMA,
+  PARAGRAPH_COMPONENT_SCHEMA,
 ).id('form-views');
 
 const CUSTOM_APP_BASE_VIEW_PROPERTIES = {

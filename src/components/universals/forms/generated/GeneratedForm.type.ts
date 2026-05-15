@@ -1,3 +1,5 @@
+import type { TView } from "@/components/apps/custom-app/custom-app.type";
+
 export type TGeneratedFormBaseInput = {
   id: string;
   label: string;
@@ -79,7 +81,13 @@ export type TGeneratedFormCheckboxInput = TGeneratedFormBaseInput & {
   isEnabled?: boolean;
 };
 
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput;
+export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {
+  $type: 'link-card';
+  href?: string | TJsonataExpression;
+  views: Array<TView>;
+};
+
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput | TGeneratedFormLinkCardInput;
 
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
 

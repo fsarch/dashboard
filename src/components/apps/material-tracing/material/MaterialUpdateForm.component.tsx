@@ -11,7 +11,16 @@ type MaterialUpdateFormProps = {
       name: string;
       hint?: string;
       externalId?: string;
+      archiveTime?: string | null;
     },
+    materialType: {
+      name: string;
+      path: string;
+    };
+    manufacturer: {
+      name: string;
+      path: string;
+    };
   };
 };
 

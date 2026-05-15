@@ -12,6 +12,7 @@ import GeneratedFormTimeInput from "@/components/universals/forms/generated/inpu
 import GeneratedFormNumberInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormNumberInput.component";
 import GeneratedFormCheckboxInput from "@/components/universals/forms/generated/inputs/GeneratedFormCheckboxInput.component";
+import GeneratedFormLinkCardInput from "@/components/universals/forms/generated/inputs/GeneratedFormLinkCardInput.component";
 
 export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'text') {
@@ -99,6 +100,15 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'checkbox') {
     return (
       <GeneratedFormCheckboxInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'link-card') {
+    return (
+      <GeneratedFormLinkCardInput
         key={input.id}
         input={input}
       />

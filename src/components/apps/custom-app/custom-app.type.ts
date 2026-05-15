@@ -1,9 +1,9 @@
-import {
+import type {
   TGeneratedFormAction,
   TGeneratedFormDataSource, TGeneratedFormEndpoint, TGeneratedFormInitialValues, TGeneratedFormInput,
   TJsonataExpression
 } from "@/components/universals/forms/generated/GeneratedForm.type";
-import { AppNavigation, AppNavigationItem } from "@/constants/app.type";
+import type { AppNavigation, AppNavigationItem } from "@/constants/app.type";
 
 export type TCustomAppClickHandler = {
   $type: 'open-service-view';
@@ -80,7 +80,12 @@ export type TSectionView = {
   label: string;
 };
 
-export type TView = TViewGroupView | TListView | TFormView | TButtonView | TIframeView | TSectionView;
+export type TParagraphView = {
+  $type: 'paragraph';
+  text: string | TJsonataExpression;
+};
+
+export type TView = TViewGroupView | TListView | TFormView | TButtonView | TIframeView | TSectionView | TParagraphView;
 
 export type TCustomAppListView = TListView & TCustomAppBaseView;
 

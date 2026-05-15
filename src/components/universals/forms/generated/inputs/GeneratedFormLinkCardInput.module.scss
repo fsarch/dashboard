@@ -1,0 +1,25 @@
+.content {
+  display: grid;
+  gap: 8px;
+}
+
+.group,
+.sectionContent {
+  display: grid;
+  gap: 8px;
+}
+
+.section {
+  display: grid;
+  gap: 6px;
+}
+
+.sectionLabel {
+  font-weight: 600;
+}
+
+.paragraph {
+  margin: 0;
+  line-height: 1.5;
+}
+

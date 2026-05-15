@@ -1,9 +1,11 @@
 import {
   TGeneratedFormAction,
   TGeneratedFormDefinition,
+  TGeneratedFormLinkCardInput,
   TGeneratedFormSelectConstantData,
   TGeneratedFormStringConstantData, TGeneratedFormSubmitResponse,
 } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TView } from "@/components/apps/custom-app/custom-app.type";
 import jsonata from "jsonata";
 import { fetchService } from "@/utils/fetchService";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
@@ -137,7 +139,34 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
     ...context,
   });
 
-  const mappedInputs = definition.inputs.map((input) => {
+  async function evaluateViews(views: Array<TView>): Promise<Array<TView>> {
+    return Promise.all(views.map(async (view) => {
+      if (view.$type === 'paragraph' && typeof view.text !== 'string') {
+        return {
+          ...view,
+          text: await jsonataUtils.evaluateStringValue(view.text, mergedContext),
+        };
+      }
+
+      if (view.$type === 'section') {
+        return {
+          ...view,
+          views: await evaluateViews(view.views),
+        };
+      }
+
+      if (view.$type === 'view-group') {
+        return {
+          ...view,
+          views: await evaluateViews(view.views),
+        };
+      }
+
+      return view;
+    }));
+  }
+
+  const mappedInputs = await Promise.all(definition.inputs.map(async (input) => {
     if (input.$type === 'select' && input.data.$type === 'datasource') {
       return {
         ...input,
@@ -158,8 +187,20 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
       };
     }
 
+    if (input.$type === 'link-card') {
+      const linkCardInput = input as TGeneratedFormLinkCardInput;
+
+      return {
+        ...linkCardInput,
+        href: linkCardInput.href
+          ? await jsonataUtils.evaluateStringValue(linkCardInput.href, mergedContext)
+          : undefined,
+        views: await evaluateViews(linkCardInput.views),
+      };
+    }
+
     return input;
-  });
+  }));
 
   const mappedInitialValues = definition.initialValues.$type === 'jsonata'
     ? await jsonata(definition.initialValues.value as string).evaluate(

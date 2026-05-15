@@ -14,7 +14,12 @@ type PartUpdateFormProps = {
       availableAmount?: string;
       hint?: string;
       checkoutTime?: string;
+      archiveTime?: string | null;
     },
+    partType: {
+      name: string;
+      path?: string;
+    };
   };
 };
 

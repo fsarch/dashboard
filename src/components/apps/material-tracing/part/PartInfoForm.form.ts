@@ -26,6 +26,21 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     id: 'archiveNow',
     $type: 'checkbox',
     label: 'Archiviert',
+  }, {
+    id: 'partTypeLink',
+    $type: 'link-card',
+    label: 'Parttype',
+    href: {
+      $type: 'jsonata',
+      value: 'args.partType.path',
+    },
+    views: [{
+      $type: 'paragraph',
+      text: {
+        $type: 'jsonata',
+        value: 'args.partType.name',
+      },
+    }],
   }],
   initialValues: {
     $type: 'jsonata',

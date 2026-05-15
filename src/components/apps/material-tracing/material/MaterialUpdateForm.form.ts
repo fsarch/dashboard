@@ -17,6 +17,36 @@ export const MATERIAL_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     id: 'archiveNow',
     $type: 'checkbox',
     label: 'Archiviert',
+  }, {
+    id: 'materialTypeLink',
+    $type: 'link-card',
+    label: 'Materialtyp',
+    href: {
+      $type: 'jsonata',
+      value: 'args.materialType.path',
+    },
+    views: [{
+      $type: 'paragraph',
+      text: {
+        $type: 'jsonata',
+        value: 'args.materialType.name',
+      },
+    }],
+  }, {
+    id: 'manufacturerLink',
+    $type: 'link-card',
+    label: 'Hersteller',
+    href: {
+      $type: 'jsonata',
+      value: 'args.manufacturer.path',
+    },
+    views: [{
+      $type: 'paragraph',
+      text: {
+        $type: 'jsonata',
+        value: 'args.manufacturer.name',
+      },
+    }],
   }],
   initialValues: {
     $type: 'jsonata',
