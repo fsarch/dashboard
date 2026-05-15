@@ -25,6 +25,10 @@ import PartShortCodeDeleteForm
   from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
 import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
 import ShortCodeLinkedCard from "@/components/apps/material-tracing/short-code/ShortCodeLinkedCard.component";
+import { partTypeService } from "@/services/material-tracing/part-type.service";
+import TypeLinkedCard from "@/components/apps/material-tracing/TypeLinkedCard.component";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -36,6 +40,7 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
 
   const shortCodes = await partService.listShortCodes((await params).partId);
   const hasShortCode = shortCodes.length > 0;
+  const partType = await partTypeService.getPartType(part.partTypeId);
 
   return (
     <DefaultPage>
@@ -45,6 +50,20 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
             part
           }}
         />
+        <div style={{ marginTop: '1rem' }}>
+          <Fieldset>
+            <FieldsetRow label="Parttype">
+              {partType ? (
+                <TypeLinkedCard
+                  name={partType.name}
+                  path={`/part-type/${partType.id}`}
+                />
+              ) : (
+                <div>Parttyp-ID: {part.partTypeId}</div>
+              )}
+            </FieldsetRow>
+          </Fieldset>
+        </div>
       </Section>
       {hasShortCode ? (
         <Section name="ShortCode">

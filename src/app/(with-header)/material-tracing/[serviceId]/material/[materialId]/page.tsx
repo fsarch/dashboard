@@ -19,6 +19,9 @@ import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_component
 import MaterialUpdateForm from "@/components/apps/material-tracing/material/MaterialUpdateForm.component";
 import MaterialImage from "@/components/apps/material-tracing/material/MaterialImage.component";
 import ShortCodeLinkedCard from "@/components/apps/material-tracing/short-code/ShortCodeLinkedCard.component";
+import TypeLinkedCard from "@/components/apps/material-tracing/TypeLinkedCard.component";
+import Fieldset from "@/components/universals/forms/Fieldset.component";
+import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -33,18 +36,31 @@ export default async function Home(props: { params: Promise<{ materialId: string
   return (
     <DefaultPage>
       <Section name="Informationen">
+        <div style={{ marginTop: '1rem' }}>
+          <Fieldset>
+            <FieldsetRow label="Materialtyp">
+              <TypeLinkedCard
+                name={materialType.name}
+                path={`/material-type/${materialType.id}`}
+              />
+            </FieldsetRow>
+            <FieldsetRow label="Hersteller">
+              <TypeLinkedCard
+                name={manufacturer.name}
+                path={`/manufacturer/${manufacturer.id}`}
+              />
+            </FieldsetRow>
+          </Fieldset>
+
+          {material.imageRef && (
+            <MaterialImage imageRef={material.imageRef} />
+          )}
+        </div>
         <MaterialUpdateForm
           args={{
             material
           }}
         />
-        <div style={{ marginTop: '1rem' }}>
-          Material: {materialType.name}<br />
-          Hersteller: {manufacturer.name}<br />
-          {material.imageRef && (
-            <MaterialImage imageRef={material.imageRef} />
-          )}
-        </div>
       </Section>
       <Actions
         type="material"

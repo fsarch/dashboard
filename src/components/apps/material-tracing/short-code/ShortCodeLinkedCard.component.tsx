@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import LinkCard from '@/components/universals/link-card/LinkCard.component';
 import styles from './ShortCodeLinkedCard.module.scss';
 
 type ShortCodeLinkedCardProps = {
@@ -15,10 +15,10 @@ const ShortCodeLinkedCard: React.FunctionComponent<ShortCodeLinkedCardProps> = a
   const shortCodeUrl = await getServiceLocalUrl(`/short-code/${code}`);
 
   return (
-    <Link href={shortCodeUrl} className={styles.card}>
+    <LinkCard href={shortCodeUrl} className={styles.root}>
       <div className={styles.label}>{label}</div>
       <div className={styles.code}>{code}</div>
-    </Link>
+    </LinkCard>
   );
 };
 
