@@ -50,7 +50,7 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
   dataSources: {
     materialTypes: {
       $type: 'fetch',
-      path: '/v1/material-types',
+      path: '/v1/material-types?take=1000',
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
