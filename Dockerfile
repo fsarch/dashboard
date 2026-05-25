@@ -66,6 +66,7 @@ COPY package.json package-lock.json .npmrc ./
 
 COPY src ./src
 COPY scripts ./scripts
+COPY public ./public
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -100,6 +101,7 @@ RUN mkdir -p /app/.next/cache
 RUN chown -R nextjs:nodejs /app/.next/cache
 COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/public ./public
 COPY --from=deps-prod --chown=nextjs:nodejs --chmod=555 /app/node_modules ./node_modules
 
 USER nextjs

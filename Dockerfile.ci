@@ -22,6 +22,7 @@ RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app/.next/cache
 # These should be produced by the CI pipeline before invoking docker build
 COPY --chown=nextjs:nodejs .next/standalone ./
 COPY --chown=nextjs:nodejs .next/static ./.next/static
+COPY --chown=nextjs:nodejs public ./public
 COPY --chown=nextjs:nodejs node_modules ./node_modules
 
 USER nextjs
