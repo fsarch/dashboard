@@ -73,10 +73,7 @@ COPY public ./public
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn build
-
-# If using npm comment out above and use below instead
-# RUN npm run build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -101,7 +98,6 @@ RUN mkdir -p /app/.next/cache
 RUN chown -R nextjs:nodejs /app/.next/cache
 COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/public ./public
 COPY --from=deps-prod --chown=nextjs:nodejs --chmod=555 /app/node_modules ./node_modules
 
 USER nextjs
