@@ -2,7 +2,8 @@
 
 import React, { useCallback, useRef, KeyboardEvent } from 'react';
 import MonacoEditor, { Monaco } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import type { editor } from 'monaco-editor';
+import * as monaco from 'monaco-editor';
 import dynamic from "next/dynamic";
 import loader from '@monaco-editor/loader';
 import {
@@ -24,16 +25,8 @@ import {
 } from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/editor-types/definitions.generated";
 
 loader.config({
-  paths: {
-    vs: `${(typeof window !== 'undefined' ? window.location.origin : '')}/assets/monaco/vs`,
-  },
-  "vs/nls": {
-    availableLanguages: {
-      "*": "de" // on the editor, press right click to see the German words
-    }
-  },
+  monaco,
 });
-
 
 type EditorProps = {
   value: string;
@@ -188,6 +181,4 @@ const Editor: React.FunctionComponent<EditorProps> = ({
   );
 };
 
-export default dynamic(() => Promise.resolve(Editor), {
-  ssr: false,
-});
+export default Editor;

@@ -1,6 +1,6 @@
 import { functionService } from "@/services/function/function.service";
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import Editor from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/Editor.component";
+import Editor from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/EditorDynamic.component";
 import styles from './page.module.scss';
 import {
   customApiUtils
