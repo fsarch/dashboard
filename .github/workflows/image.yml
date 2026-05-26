@@ -36,10 +36,11 @@ jobs:
           if $apk; then sudo apk add --no-cache python3 make g++ git build-base cairo-dev pango-dev giflib-dev jpeg-dev libpng-dev; fi
           npm ci
 
-      - name: Prepare public assets
-        run: |
-          mkdir -p ./public/assets
-          cp -R ./node_modules/monaco-editor/min ./public/assets/monaco
+       - name: Prepare public assets
+         run: |
+           rm -rf ./public/assets/monaco
+           cp -R ./node_modules/monaco-editor/min ./public/assets/monaco
+           find ./public/assets/monaco -name '*.js.js' -type f -exec sh -c 'mv "$1" "${1%.js}"' _ {} \;
 
       - name: Build Next.js app
         run: |
