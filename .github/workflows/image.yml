@@ -38,9 +38,7 @@ jobs:
 
       - name: Prepare public assets
         run: |
-          rm -rf ./public/assets/monaco
-          cp -R ./node_modules/monaco-editor/min ./public/assets/monaco
-          find ./public/assets/monaco -name '*.js.js' -type f -exec sh -c 'mv "$1" "${1%.js}"' _ {} \;
+          npm run copy
 
       - name: Build Next.js app
         run: |
