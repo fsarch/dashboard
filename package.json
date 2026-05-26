@@ -12,7 +12,7 @@
     "test": "jest",
     "test:run": "jest --runInBand",
     "copy": "npm run copy:editor-files && npm run copy:editor-files:rename && npm run copy:editor-definitions",
-    "copy:editor-files": "rm -rf ./public/assets/monaco && cp -R ./node_modules/monaco-editor/min ./public/assets/monaco",
+    "copy:editor-files": "mkdir -p ./public/assets && rm -rf ./public/assets/monaco && cp -R ./node_modules/monaco-editor/min ./public/assets/monaco",
     "copy:editor-files:rename": "find ./public/assets/monaco -name '*.js.js' -type f -exec sh -c 'mv \"$1\" \"${1%.js}\"' _ {} \\;",
     "copy:editor-definitions": "node ./scripts/combine-editor-types.mjs",
     "postinstall": "patch-package"
