@@ -38,7 +38,7 @@
   - `npm run copy` kopiert Monaco-Dateien nach `public/assets/monaco` und regeneriert Editor-Definitionen via `scripts/combine-editor-types.mjs`.
   - `npm test` / `npm run test:run` nutzen Jest mit `ts-jest`; erkannt werden nur `*.test.ts` und `*.spec.ts`.
 - Wenn du Typdefinitionen oder Monaco-bezogene Dateien für den Function-Editor änderst, danach `npm run copy` erneut ausführen.
-- Docker läuft auf Node 22 Alpine; die Container installieren zusätzliche native Grafikbibliotheken (`cairo`, `pango`, `jpeg`, `libpng`, ...). `Dockerfile.ci` erwartet vorgebaute Artefakte (`.next/standalone`, `.next/static`, `node_modules`).
+- Docker läuft auf Node Alpine; die Container installieren zusätzliche native Grafikbibliotheken (`cairo`, `pango`, `jpeg`, `libpng`, ...). Lokaler Docker-Build und CI verwenden denselben Pfad im `Dockerfile` mit vorgebauten Artefakten (`.next/standalone`, `.next/static`, `node_modules`).
 ## Neue App hinzufügen
 - Ergänze den neuen Service-Typ in `src/utils/configuration.type.ts`.
 - Registriere die App in `src/constants/apps.ts` (Name, `basePath`, ggf. Navigation/Routen-Metadaten).

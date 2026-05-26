@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
+        with:
+          # Build the exact commit that passed the upstream test workflow.
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -28,39 +31,35 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install build dependencies
-        run: |
-          # install system deps needed for optional native builds (if any)
-          apk=false
-          if [ -f /etc/alpine-release ]; then apk=true; fi
-          if $apk; then sudo apk add --no-cache python3 make g++ git build-base cairo-dev pango-dev giflib-dev jpeg-dev libpng-dev; fi
-          npm ci
-
-      - name: Prepare public assets
-        run: |
-          npm run copy
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build Next.js app
         run: |
-          # Ensure Next telemetry is disabled in CI
-          export NEXT_TELEMETRY_DISABLED=1
-          # Use yarn if available in repo scripts, otherwise npm
-          if [ -f yarn.lock ]; then yarn build; else npm run build; fi
+          NEXT_TELEMETRY_DISABLED=1 npm run build
+
+      - name: Verify Docker build artifacts
+        run: |
+          test -d .next/standalone
+          test -d .next/static
+          test -d node_modules
+          test -f .next/standalone/server.js
 
       - name: install buildx
-        id: buildx
-        uses: crazy-max/ghaction-docker-buildx@v1
-        with:
-          version: latest
+        uses: docker/setup-buildx-action@v3
+
       - name: login to docker hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image (using prebuilt artifacts)
         env:
           DOCKER_BUILDKIT: 1
         run: |
           docker buildx build \
-            --file Dockerfile.ci \
+            --file Dockerfile \
             --tag fsarch/dashboard:latest \
             --platform linux/amd64,linux/arm64 \
             --push .

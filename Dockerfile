@@ -1,87 +1,7 @@
-FROM node:24-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
-
+FROM node:24-alpine AS runner
 WORKDIR /app
 
-COPY ./patches ./patches
-COPY package.json package-lock.json .npmrc ./
-
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache \
-        python3 \
-        make \
-        g++ \
-        libc6-compat \
-        git \
-        build-base \
-        cairo-dev \
-        pango-dev \
-        giflib-dev \
-        jpeg-dev \
-        libpng-dev
-
-RUN npm ci
-
-# Install dependencies based on the preferred package manager
-COPY ./patches ./patches
-COPY package.json package-lock.json .npmrc ./
-
-# Install dependencies only when needed
-FROM base AS deps-prod
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-ENV NODE_ENV production
-
-# Install dependencies based on the preferred package manager
-COPY ./patches ./patches
-COPY package.json package-lock.json .npmrc ./
-
-RUN apk add --no-cache \
-        python3 \
-        make \
-        g++ \
-        libc6-compat \
-        git \
-        build-base \
-        cairo-dev \
-        pango-dev \
-        giflib-dev \
-        jpeg-dev \
-        libpng-dev
-RUN npm ci
-
-# Rebuild the source code only when needed
-FROM deps-prod AS builder
-
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY .eslintrc.json ./
-COPY next.config.mjs ./
-COPY tsconfig.json ./
-COPY package.json package-lock.json .npmrc ./
-
-COPY src ./src
-COPY scripts ./scripts
-COPY public ./public
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN npm run build
-
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
 
 RUN apk add --no-cache cairo \
                        pango \
@@ -91,19 +11,21 @@ RUN apk add --no-cache cairo \
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app/.next/cache
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-RUN mkdir -p /app/.next/cache
-RUN chown -R nextjs:nodejs /app/.next/cache
-COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs --chmod=555 /app/.next/static ./.next/static
-COPY --from=deps-prod --chown=nextjs:nodejs --chmod=555 /app/node_modules ./node_modules
+# Expects prebuilt artifacts in build context:
+# - .next/standalone
+# - .next/static
+# - node_modules
+COPY --chown=nextjs:nodejs .next/standalone ./
+COPY --chown=nextjs:nodejs .next/static ./.next/static
+COPY --chown=nextjs:nodejs node_modules ./node_modules
 
 USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 CMD ["node", "server.js"]
+
