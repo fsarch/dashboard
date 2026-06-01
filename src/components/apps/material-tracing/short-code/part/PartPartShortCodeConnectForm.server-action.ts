@@ -1,6 +1,7 @@
 'use server';
 
 import { partService } from "@/services/material-tracing/part.service";
+import { revalidateServicePath } from "@/utils/revalidateServicePath";
 
 export type ConnectPartPartShortCode = {
   shortCode: string;
@@ -13,4 +14,6 @@ export const connectPartPartShortCode = async ({ value, partId }: { partId: stri
   await Promise.all(parts.map(async (part) => {
     await partService.getOrCreatePartPart(partId, part.id, value.amount);
   }));
+
+  await revalidateServicePath(`/part/${partId}`);
 };

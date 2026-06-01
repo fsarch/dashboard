@@ -39,7 +39,6 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
     const response = await withLoader(() => onSubmit(data));
 
     router.refresh();
-    helper.resetForm();
 
     if (response.actions) {
       response.actions.forEach((action) => {
@@ -52,10 +51,11 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
         }
       });
     }
-  }, [onSubmit, router]);
+  }, [onSubmit, router, withLoader]);
 
   return (
     <Formik
+      enableReinitialize
       initialValues={initialValues}
       onSubmit={handleSubmit}
     >
