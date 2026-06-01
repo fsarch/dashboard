@@ -1,18 +1,8 @@
-import { getServiceConfiguration } from "@/utils/configuration.utils";
 import { EServiceType } from "@/utils/configuration.type";
-import { redirect } from "next/navigation";
-import { APPS } from "@/constants/apps";
+import ServiceSelectionPage from "@/components/universals/page/ServiceSelectionPage.component";
 
-export default async function Home() {
-  const foundService = await getServiceConfiguration(EServiceType.FUNCTION);
-
-  if (foundService) {
-    return redirect(`${APPS[EServiceType.FUNCTION].basePath}/${foundService.id}`)
-  }
-
+export default function Home() {
   return (
-    <main>
-      CCMs
-    </main>
+    <ServiceSelectionPage serviceType={EServiceType.FUNCTION} />
   );
 }

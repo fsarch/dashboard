@@ -1,18 +1,8 @@
-import { getServiceConfiguration } from "@/utils/configuration.utils";
 import { EServiceType } from "@/utils/configuration.type";
-import { redirect } from "next/navigation";
-import { APPS } from "@/constants/apps";
+import ServiceSelectionPage from "@/components/universals/page/ServiceSelectionPage.component";
 
-export default async function Home() {
-  const foundService = await getServiceConfiguration(EServiceType.MATERIAL_TRACING);
-
-  if (foundService) {
-    return redirect(`${APPS[EServiceType.MATERIAL_TRACING].basePath}/${foundService.id}`)
-  }
-
+export default function Home() {
   return (
-    <main>
-      PIMs
-    </main>
+    <ServiceSelectionPage serviceType={EServiceType.MATERIAL_TRACING} />
   );
 }

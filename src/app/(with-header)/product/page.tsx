@@ -1,18 +1,8 @@
-import { getServiceConfiguration } from "@/utils/configuration.utils";
 import { EServiceType } from "@/utils/configuration.type";
-import { redirect } from "next/navigation";
-import { APPS } from "@/constants/apps";
+import ServiceSelectionPage from "@/components/universals/page/ServiceSelectionPage.component";
 
-export default async function Home() {
-  const foundService = await getServiceConfiguration(EServiceType.PIM);
-
-  if (foundService) {
-    return redirect(`${APPS[EServiceType.PIM].basePath}/${foundService.id}`)
-  }
-
+export default function Home() {
   return (
-    <main>
-      PIMs
-    </main>
+    <ServiceSelectionPage serviceType={EServiceType.PIM} />
   );
 }
