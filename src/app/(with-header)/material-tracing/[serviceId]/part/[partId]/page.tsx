@@ -11,9 +11,6 @@ import PartMaterialList from "@/components/apps/material-tracing/short-code/part
 import {
   PartPartShortCodeConnectForm
 } from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component";
-import {
-  PartPartIdConnectForm
-} from "@/components/apps/material-tracing/part/PartPartIdConnectForm.component";
 import PartChildrenList from "@/components/apps/material-tracing/short-code/part/part-children/PartChildrenList.component";
 import PartUpdateForm from "@/components/apps/material-tracing/part/PartInfoForm.component";
 import PartRemove
@@ -73,18 +70,13 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
           />
         </Section>
       )}
-      <Section name="Materials">
-        <PartMaterialList
-          partId={part.id}
-        />
-      </Section>
       <Section name="Material per ShortCode verbinden">
         <PartMaterialShortCodeConnectForm
           partId={part.id}
         />
       </Section>
-      <Section name="Parts">
-        <PartChildrenList
+      <Section name="Materials">
+        <PartMaterialList
           partId={part.id}
         />
       </Section>
@@ -93,8 +85,8 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
           partId={part.id}
         />
       </Section>
-      <Section name="Part per ID verbinden">
-        <PartPartIdConnectForm
+      <Section name="Parts">
+        <PartChildrenList
           partId={part.id}
         />
       </Section>
