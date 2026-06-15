@@ -1,20 +1,27 @@
 import { Metadata } from 'next';
-import Section from '@/components/universals/section/Section';
 import { getAccessToken } from '@/utils/getAccessToken';
-import { uacUtils } from '@/utils/uac.utils';
-import AccessTokenPanel from '@/app/(with-header)/development/_components/AccessTokenPanel.component';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
+import { uacUtils } from '@/utils/uac.utils';
+import { getServiceConfigurationById, getThemeConfiguration } from '@/utils/configuration.utils';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
 import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import SwaggerUIClient from './_components/SwaggerUIClient.component';
+import Color from 'color';
 
 export const metadata: Metadata = {
-  title: 'Development',
+  title: 'Development – Swagger UI',
 };
 
-export default async function DevelopmentPage() {
+type SwaggerPageProps = {
+  params: Promise<{ serviceId: string }>;
+};
+
+export default async function SwaggerPage({ params }: SwaggerPageProps) {
+  const { serviceId } = await params;
+
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
@@ -27,17 +34,35 @@ export default async function DevelopmentPage() {
     return notFound();
   }
 
+  const service = await getServiceConfigurationById(serviceId);
+  if (!service) {
+    return notFound();
+  }
+
+  const theme = await getThemeConfiguration();
+  const themeMode: 'light' | 'dark' = Color(theme.backgroundColor.hex).isDark() ? 'dark' : 'light';
+
   return (
     <div className={styles.root}>
-      <DefaultPageHeader className={styles.header} title="Development" />
+      <DefaultPageHeader
+        className={styles.header}
+        title={`Swagger UI – ${service.name ?? service.id}`}
+      />
       <nav className={styles.navigation}>
         <div className={autoNavigationStyles.root}>
           <ul className={autoNavigationStyles.main}>
-            <AutoNavigationItem href="/development" isSelected icon="wrench">
+            <AutoNavigationItem href="/development" icon="wrench">
               Access Token
             </AutoNavigationItem>
             <AutoNavigationItem href="/development/services" icon="server">
               Services
+            </AutoNavigationItem>
+            <AutoNavigationItem
+              href={`/development/services/${serviceId}/swagger`}
+              isSelected
+              icon="file-code"
+            >
+              Swagger UI
             </AutoNavigationItem>
           </ul>
           <div className={autoNavigationStyles.spacer} />
@@ -45,10 +70,13 @@ export default async function DevelopmentPage() {
         </div>
       </nav>
       <main className={styles.main}>
-        <Section name="Development">
-          <AccessTokenPanel accessToken={accessToken} />
-        </Section>
+        <SwaggerUIClient
+          serviceId={serviceId}
+          specUrl={`/api/v1/development/service-docs/${serviceId}`}
+          themeMode={themeMode}
+        />
       </main>
     </div>
   );
 }
+

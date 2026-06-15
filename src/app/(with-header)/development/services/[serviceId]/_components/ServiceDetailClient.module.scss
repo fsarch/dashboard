@@ -1,0 +1,38 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 6px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  th {
+    width: 160px;
+    opacity: 0.6;
+    font-weight: 500;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.raw {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 0.85em;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+

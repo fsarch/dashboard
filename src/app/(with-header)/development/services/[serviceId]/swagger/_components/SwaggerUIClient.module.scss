@@ -1,0 +1,116 @@
+.root {
+  :global(.swagger-ui) {
+    color: inherit;
+  }
+
+  &[data-theme-mode='dark'] {
+    :global(.swagger-ui) {
+      color: #e6edf3;
+    }
+
+    :global(.swagger-ui .wrapper),
+    :global(.swagger-ui .scheme-container),
+    :global(.swagger-ui .information-container),
+    :global(.swagger-ui .opblock-tag),
+    :global(.swagger-ui .opblock),
+    :global(.swagger-ui .responses-inner),
+    :global(.swagger-ui .model-box),
+    :global(.swagger-ui .model),
+    :global(.swagger-ui .tab li),
+    :global(.swagger-ui .response-col_status),
+    :global(.swagger-ui .response-col_links),
+    :global(.swagger-ui .response-col_description),
+    :global(.swagger-ui table thead tr th),
+    :global(.swagger-ui table tbody tr td),
+    :global(.swagger-ui .highlight-code),
+    :global(.swagger-ui .microlight),
+    :global(.swagger-ui .opblock-description-wrapper),
+    :global(.swagger-ui .parameters-col_description),
+    :global(.swagger-ui .parameter__name),
+    :global(.swagger-ui .parameter__type),
+    :global(.swagger-ui .response-col_description__inner) {
+      color: #e6edf3;
+    }
+
+    :global(.swagger-ui .scheme-container),
+    :global(.swagger-ui .information-container),
+    :global(.swagger-ui .opblock),
+    :global(.swagger-ui .responses-inner),
+    :global(.swagger-ui .model-box),
+    :global(.swagger-ui .tab li),
+    :global(.swagger-ui .response-col_status),
+    :global(.swagger-ui .response-col_links),
+    :global(.swagger-ui .response-col_description),
+    :global(.swagger-ui table thead tr th),
+    :global(.swagger-ui table tbody tr td),
+    :global(.swagger-ui .model-box),
+    :global(.swagger-ui .highlight-code),
+    :global(.swagger-ui .microlight) {
+      background-color: #1c2128;
+      color: #e6edf3;
+    }
+
+    :global(.swagger-ui .opblock-tag),
+    :global(.swagger-ui .tab li),
+    :global(.swagger-ui .model-container),
+    :global(.swagger-ui .errors-wrapper),
+    :global(.swagger-ui .responses-table),
+    :global(.swagger-ui .opblock-section-header) {
+      background-color: #161b22;
+      border-color: #30363d;
+    }
+
+    :global(.swagger-ui input[type='text']),
+    :global(.swagger-ui input[type='password']),
+    :global(.swagger-ui input[type='search']),
+    :global(.swagger-ui textarea),
+    :global(.swagger-ui select) {
+      background-color: #0d1117;
+      border-color: #30363d;
+      color: #e6edf3;
+      box-shadow: none;
+    }
+
+    :global(.swagger-ui input::placeholder),
+    :global(.swagger-ui textarea::placeholder) {
+      color: #8b949e;
+    }
+
+    :global(.swagger-ui a),
+    :global(.swagger-ui .link) {
+      color: #58a6ff;
+    }
+
+    :global(.swagger-ui .btn),
+    :global(.swagger-ui .btn.authorize),
+    :global(.swagger-ui .opblock-summary-control) {
+      color: #e6edf3;
+      border-color: #30363d;
+      background-color: #21262d;
+    }
+
+    :global(.swagger-ui .btn:hover),
+    :global(.swagger-ui .btn.authorize:hover) {
+      background-color: #30363d;
+    }
+
+    :global(.swagger-ui .opblock.opblock-get),
+    :global(.swagger-ui .opblock.opblock-post),
+    :global(.swagger-ui .opblock.opblock-put),
+    :global(.swagger-ui .opblock.opblock-delete),
+    :global(.swagger-ui .opblock.opblock-patch) {
+      border-color: #30363d;
+    }
+  }
+}
+
+.loading {
+  padding: 24px;
+  opacity: 0.6;
+}
+
+.error {
+  padding: 24px;
+  color: #e74c3c;
+}
+

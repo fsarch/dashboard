@@ -1,20 +1,27 @@
 import { Metadata } from 'next';
-import Section from '@/components/universals/section/Section';
 import { getAccessToken } from '@/utils/getAccessToken';
-import { uacUtils } from '@/utils/uac.utils';
-import AccessTokenPanel from '@/app/(with-header)/development/_components/AccessTokenPanel.component';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
+import { uacUtils } from '@/utils/uac.utils';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
 import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import Section from '@/components/universals/section/Section';
+import ServiceDetailClient from './_components/ServiceDetailClient.component';
 
 export const metadata: Metadata = {
-  title: 'Development',
+  title: 'Development – Service Details',
 };
 
-export default async function DevelopmentPage() {
+type ServiceDetailPageProps = {
+  params: Promise<{ serviceId: string }>;
+};
+
+export default async function ServiceDetailPage({ params }: ServiceDetailPageProps) {
+  const { serviceId } = await params;
+
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
@@ -27,16 +34,21 @@ export default async function DevelopmentPage() {
     return notFound();
   }
 
+  const service = await getServiceConfigurationById(serviceId);
+  if (!service) {
+    return notFound();
+  }
+
   return (
     <div className={styles.root}>
       <DefaultPageHeader className={styles.header} title="Development" />
       <nav className={styles.navigation}>
         <div className={autoNavigationStyles.root}>
           <ul className={autoNavigationStyles.main}>
-            <AutoNavigationItem href="/development" isSelected icon="wrench">
+            <AutoNavigationItem href="/development" icon="wrench">
               Access Token
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/services" icon="server">
+            <AutoNavigationItem href="/development/services" isSelected icon="server">
               Services
             </AutoNavigationItem>
           </ul>
@@ -45,10 +57,11 @@ export default async function DevelopmentPage() {
         </div>
       </nav>
       <main className={styles.main}>
-        <Section name="Development">
-          <AccessTokenPanel accessToken={accessToken} />
+        <Section name={`Service: ${service.name ?? service.id}`}>
+          <ServiceDetailClient service={service} />
         </Section>
       </main>
     </div>
   );
 }
+

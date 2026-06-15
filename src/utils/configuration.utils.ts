@@ -93,6 +93,7 @@ export async function getThemeConfiguration() {
   const backgroundColor = Color(theme?.background_color ?? '#1b1b1b');
 
   return {
+    mode: backgroundColor.isDark() ? 'dark' : 'light',
     primaryColor: {
       hex: primaryColor.hex(),
       rgbComponents: primaryColor.rgb().array().join(', '),
