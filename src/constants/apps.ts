@@ -203,4 +203,29 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       },
     },
   },
+  [EServiceType.CREDENCE]: {
+    name: 'Credence',
+    basePath: '/credence',
+    navigation: [{
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    }, {
+      name: 'Scope Types',
+      path: '/scope-type',
+      icon: 'tag',
+    }, {
+      name: 'Event Types',
+      path: '/event-type',
+      icon: 'bell',
+    }, {
+      name: 'Events',
+      path: '/event',
+      icon: 'list',
+    }, {
+      name: 'IP-ASN Daten',
+      path: '/ip-asn',
+      icon: 'server',
+    }],
+  },
 };

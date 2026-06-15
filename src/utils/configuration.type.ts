@@ -11,6 +11,7 @@ export enum EServiceType {
   AI = 'ai',
   EMAIL_SERVER = 'email',
   FRONTIER = 'frontier',
+  CREDENCE = 'credence',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -99,6 +100,13 @@ export type TFrontierConfiguration = {
   url: string;
 }
 
+export type TCredenceConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.CREDENCE,
+  url: string;
+}
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -110,7 +118,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TPrinterConfiguration
   | TAIConfiguration
   | TEmailServerConfiguration
-  | TFrontierConfiguration;
+  | TFrontierConfiguration
+  | TCredenceConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 

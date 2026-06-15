@@ -63,6 +63,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Frontier',
   path: '/frontier',
   serviceType: EServiceType.FRONTIER,
+}, {
+  icon: 'gavel',
+  name: 'Credence',
+  path: '/credence',
+  serviceType: EServiceType.CREDENCE,
 }];
 
 const getApps = async () => {

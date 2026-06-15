@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    background: var(--background-secondary);
+
+    &.sectionHeader {
+      background: var(--background-tertiary);
+      font-weight: 600;
+    }
+  }
+
+  td {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+}
