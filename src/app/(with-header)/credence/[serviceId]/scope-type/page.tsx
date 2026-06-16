@@ -9,7 +9,8 @@ import { DefaultPage } from '@/components/universals/page/DefaultPage.component'
 import Section from '@/components/universals/section/Section';
 import { credenceService } from '@/services/credence/credence.service';
 import ScopeTypesList from './_components/ScopeTypesList.component';
-import CreateScopeTypeForm from './_components/CreateScopeTypeForm.component';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import { SCOPE_TYPE_CREATE_FORM } from './_forms/scope-type-create.form';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -54,7 +55,7 @@ export default async function ScopeTypesPage({
   return (
     <DefaultPage>
       <Section name="Scope Type erstellen">
-        <CreateScopeTypeForm serviceId={serviceId} />
+        <GeneratedForm definition={SCOPE_TYPE_CREATE_FORM} />
       </Section>
       <Section name="Scope Types">
         <ScopeTypesList

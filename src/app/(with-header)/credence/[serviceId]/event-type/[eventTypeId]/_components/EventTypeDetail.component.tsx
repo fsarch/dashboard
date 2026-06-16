@@ -30,11 +30,22 @@ const EventTypeDetail: React.FunctionComponent<EventTypeDetailProps> = ({ eventT
             <th>Default TTL (Seconds)</th>
             <td>{eventType.defaultTtlSeconds}</td>
           </tr>
+          {eventType.aggregationModeId && (
+            <tr>
+              <th>Aggregation Mode ID</th>
+              <td><code>{eventType.aggregationModeId}</code></td>
+            </tr>
+          )}
         </tbody>
       </table>
       <p className={styles.hint}>
         Events mit diesem Typ werden mit dem Score Factor <code>{eventType.defaultScoreFactor}</code>
         bewertet und bleiben für <code>{eventType.defaultTtlSeconds}</code> Sekunden aktiv.
+        {eventType.aggregationModeId && (
+          <>
+            {' Die Ereignisse werden mit Aggregation Mode <code>{eventType.aggregationModeId}</code> aggregiert.'}
+          </>
+        )}
       </p>
     </div>
   );

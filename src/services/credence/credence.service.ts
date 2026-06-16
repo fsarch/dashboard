@@ -13,6 +13,11 @@ import {
   TEventTypeCreateDto,
   TEventDto,
   TEventCreateDto,
+  TAggregationModeDto,
+  TAggregationModeTypeDto,
+  TAggregationModeReadDto,
+  TAggregationModeCreateDto,
+  TAggregationModeUpdateDto,
   TPaginationResultDto,
   TPaginationParams,
 } from "./credence.type";
@@ -212,6 +217,77 @@ const createEvent = async (
   return response.json();
 };
 
+// Aggregation Mode Types
+const listAggregationModeTypes = async (
+  params: TPaginationParams,
+  serviceId: string
+): Promise<TPaginationResultDto<TAggregationModeTypeDto>> => {
+  const response = await fetchService(
+    `/v1/aggregation-mode-types?page=${params.page}&pageSize=${params.pageSize}`,
+    undefined,
+    { serviceId }
+  );
+  return response.json();
+};
+
+const getAggregationModeTypeById = async (
+  id: string,
+  serviceId: string
+): Promise<TAggregationModeTypeDto> => {
+  const response = await fetchService(`/v1/aggregation-mode-types/${id}`, undefined, {
+    serviceId,
+  });
+  return response.json();
+};
+
+// Aggregation Modes
+const listAggregationModes = async (
+  params: TPaginationParams,
+  serviceId: string
+): Promise<TPaginationResultDto<TAggregationModeDto>> => {
+  const response = await fetchService(
+    `/v1/aggregation-modes?page=${params.page}&pageSize=${params.pageSize}`,
+    undefined,
+    { serviceId }
+  );
+  return response.json();
+};
+
+const getAggregationModeById = async (
+  id: string,
+  serviceId: string
+): Promise<TAggregationModeReadDto> => {
+  const response = await fetchService(`/v1/aggregation-modes/${id}`, undefined, {
+    serviceId,
+  });
+  return response.json();
+};
+
+const createAggregationMode = async (
+  dto: TAggregationModeCreateDto,
+  serviceId: string
+): Promise<TAggregationModeDto> => {
+  const response = await fetchService(`/v1/aggregation-modes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dto),
+  }, { serviceId });
+  return response.json();
+};
+
+const updateAggregationMode = async (
+  id: string,
+  dto: TAggregationModeUpdateDto,
+  serviceId: string
+): Promise<TAggregationModeDto> => {
+  const response = await fetchService(`/v1/aggregation-modes/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dto),
+  }, { serviceId });
+  return response.json();
+};
+
 export const credenceService = {
   // Scope Data Types
   listScopeDataTypes,
@@ -235,4 +311,12 @@ export const credenceService = {
   createEventType,
   // Events
   createEvent,
+  // Aggregation Mode Types
+  listAggregationModeTypes,
+  getAggregationModeTypeById,
+  // Aggregation Modes
+  listAggregationModes,
+  getAggregationModeById,
+  createAggregationMode,
+  updateAggregationMode,
 };

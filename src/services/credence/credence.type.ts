@@ -78,12 +78,50 @@ export type TEventTypeDto = {
   name: string;
   defaultScoreFactor: string;
   defaultTtlSeconds: number;
+  aggregationModeId?: string | null;
 };
 
 export type TEventTypeCreateDto = {
   name: string;
   defaultScoreFactor: string;
   defaultTtlSeconds: number;
+  aggregationModeId?: string | null;
+};
+
+// Aggregation Mode Types
+export type TAggregationModeTypeDto = {
+  id: string;
+  name: string;
+  externalId?: string | null;
+};
+
+// Aggregation Modes
+export type TAggregationModeDto = {
+  id: string;
+  name: string;
+  aggregationModeTypeId: string;
+  maxFactor?: string | null;
+  externalId?: string | null;
+  creationTime: string;
+  deletionTime?: string | null;
+};
+
+export type TAggregationModeReadDto = TAggregationModeDto & {
+  aggregationModeType: TAggregationModeTypeDto;
+};
+
+export type TAggregationModeCreateDto = {
+  name: string;
+  aggregationModeTypeId: string;
+  maxFactor?: string | null;
+  externalId?: string | null;
+};
+
+export type TAggregationModeUpdateDto = {
+  name?: string;
+  aggregationModeTypeId?: string;
+  maxFactor?: string | null;
+  externalId?: string | null;
 };
 
 // Scope Values

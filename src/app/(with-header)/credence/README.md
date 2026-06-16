@@ -86,3 +86,5 @@ Positive scores indicate trustworthy identifiers, negative scores indicate poten
 - Prefer `GeneratedForm` for create/update/delete flows when possible.
 - Use Formik + server action + service layer when `GeneratedForm` is not a fit.
 - Use `useOpenDialog` with `AlertDialog` for alerts and confirmations.
+
+**See:** [GeneratedForm Documentation](../../../components/universals/forms/generated/README.md) for detailed usage.

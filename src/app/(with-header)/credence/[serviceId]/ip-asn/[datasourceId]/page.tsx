@@ -9,7 +9,8 @@ import { DefaultPage } from '@/components/universals/page/DefaultPage.component'
 import Section from '@/components/universals/section/Section';
 import { credenceService } from '@/services/credence/credence.service';
 import IpAsnDatasourceDetail from './_components/IpAsnDatasourceDetail.component';
-import CreateIpAsnDataForm from './_components/CreateIpAsnDataForm.component';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import { IP_ASN_DATA_CREATE_FORM } from './_forms/ip-asn-data-create.form';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -69,10 +70,7 @@ export default async function IpAsnDatasourceDetailPage({
           />
         </Section>
         <Section name="IP-ASN Daten erstellen">
-          <CreateIpAsnDataForm
-            datasourceId={datasourceId}
-            serviceId={serviceId}
-          />
+          <GeneratedForm definition={IP_ASN_DATA_CREATE_FORM(datasourceId)} />
         </Section>
       </DefaultPage>
     );

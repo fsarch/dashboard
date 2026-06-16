@@ -1,35 +1,35 @@
 'use client';
 
 import React from 'react';
-import { TPaginationResultDto, TScopeTypeDto } from '@/services/credence/credence.type';
+import { TPaginationResultDto, TAggregationModeDto } from '@/services/credence/credence.type';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-type ScopeTypesListProps = {
-  scopeTypes: TPaginationResultDto<TScopeTypeDto>;
+type AggregationModesListProps = {
+  aggregationModes: TPaginationResultDto<TAggregationModeDto>;
   serviceId: string;
   page: number;
   pageSize: number;
 };
 
-const ScopeTypesList: React.FunctionComponent<ScopeTypesListProps> = ({
-  scopeTypes,
+const AggregationModesList: React.FunctionComponent<AggregationModesListProps> = ({
+  aggregationModes,
   serviceId,
   page,
   pageSize,
 }) => {
-  const { data, metadata } = scopeTypes;
+  const { data, metadata } = aggregationModes;
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/credence/${serviceId}/scope-type?page=${newPage}&pageSize=${pageSize}`);
+    router.push(`/credence/${serviceId}/aggregation-mode?page=${newPage}&pageSize=${pageSize}`);
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/credence/${serviceId}/scope-type?page=1&pageSize=${newPageSize}`);
+    router.push(`/credence/${serviceId}/aggregation-mode?page=1&pageSize=${newPageSize}`);
   };
 
   return (
@@ -37,13 +37,15 @@ const ScopeTypesList: React.FunctionComponent<ScopeTypesListProps> = ({
       {data.length > 0 ? (
         <>
           <List>
-            {data.map((scopeType) => (
+            {data.map((aggregationMode) => (
               <Link
-                key={scopeType.id}
-                href={`/credence/${serviceId}/scope-type/${scopeType.id}`}
+                key={aggregationMode.id}
+                href={`/credence/${serviceId}/aggregation-mode/${aggregationMode.id}`}
               >
                 <ListItem>
-                  <strong>{scopeType.name}</strong> ({scopeType.key}) - Score Factor: {scopeType.scoreFactor}
+                  <strong>{aggregationMode.name}</strong> - Aggregation Mode Type: {aggregationMode.aggregationModeTypeId}
+                  {aggregationMode.maxFactor && <> - Max Factor: {aggregationMode.maxFactor}</>}
+                  {aggregationMode.externalId && <> - External ID: <code>{aggregationMode.externalId}</code></>}
                 </ListItem>
               </Link>
             ))}
@@ -58,10 +60,10 @@ const ScopeTypesList: React.FunctionComponent<ScopeTypesListProps> = ({
           />
         </>
       ) : (
-        <p>Keine Scope Types gefunden.</p>
+        <p>Keine Aggregation Modes gefunden.</p>
       )}
     </div>
   );
 };
 
-export default ScopeTypesList;
+export default AggregationModesList;

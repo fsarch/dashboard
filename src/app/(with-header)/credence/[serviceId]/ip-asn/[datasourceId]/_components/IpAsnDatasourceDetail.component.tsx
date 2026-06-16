@@ -6,6 +6,7 @@ import styles from './IpAsnDatasourceDetail.module.scss';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
+import { useRouter } from 'next/navigation';
 
 type IpAsnDatasourceDetailProps = {
   datasource: TIpAsnDatasourceDto;
@@ -25,6 +26,15 @@ const IpAsnDatasourceDetail: React.FunctionComponent<IpAsnDatasourceDetailProps>
   pageSize,
 }) => {
   const { data, metadata } = ipAsnData;
+  const router = useRouter();
+
+  const handlePageChange = (newPage: number) => {
+    router.push(`/credence/${serviceId}/ip-asn/${datasourceId}?page=${newPage}&pageSize=${pageSize}`);
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    router.push(`/credence/${serviceId}/ip-asn/${datasourceId}?page=1&pageSize=${newPageSize}`);
+  };
 
   return (
     <div className={styles.root}>
@@ -71,7 +81,9 @@ const IpAsnDatasourceDetail: React.FunctionComponent<IpAsnDatasourceDetailProps>
               currentPage={page}
               pageSize={pageSize}
               totalItems={metadata.totalItems}
-              basePath={`/credence/${serviceId}/ip-asn/${datasourceId}`}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+              hasNextPage={page < metadata.totalPages}
             />
           </>
         ) : (

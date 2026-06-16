@@ -7,17 +7,24 @@ import { getServiceConfigurationById } from '@/utils/configuration.utils';
 import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
+import { credenceService } from '@/services/credence/credence.service';
+import AggregationModeTypesList from './_components/AggregationModeTypesList.component';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import { EVENT_CREATE_FORM } from './_forms/event-create.form';
+import { AGGREGATION_MODE_TYPE_CREATE_FORM } from './_forms/aggregation-mode-type-create.form';
 
 export const generateMetadata = createAutomaticMetadata();
 
-type EventsPageProps = {
+type AggregationModeTypesPageProps = {
   params: Promise<{ serviceId: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
 
-export default async function EventsPage({ params }: EventsPageProps) {
+export default async function AggregationModeTypesPage({
+  params,
+  searchParams,
+}: AggregationModeTypesPageProps) {
   const { serviceId } = await params;
+  const { page = '1', pageSize = '25' } = await searchParams;
 
   const accessToken = await getAccessToken();
 
@@ -27,7 +34,7 @@ export default async function EventsPage({ params }: EventsPageProps) {
   }
 
   const service = await getServiceConfigurationById(serviceId);
-   
+
   if (service) {
     const canAccessService = await uacUtils.hasAppPermission(
       EServiceType.CREDENCE,
@@ -42,12 +49,31 @@ export default async function EventsPage({ params }: EventsPageProps) {
     return notFound();
   }
 
-  return (
-    <DefaultPage>
-      <Section name="Event erstellen">
-        <p>Hier können Sie neue Events erstellen, um Scores für Identifikatoren zu generieren.</p>
-        <GeneratedForm definition={EVENT_CREATE_FORM} />
-      </Section>
-    </DefaultPage>
-  );
+  try {
+    const aggregationModeTypes = await credenceService.listAggregationModeTypes(
+      {
+        page: parseInt(page),
+        pageSize: parseInt(pageSize),
+      },
+      serviceId
+    );
+
+    return (
+      <DefaultPage>
+        <Section name="Aggregation Mode Type erstellen">
+          <GeneratedForm definition={AGGREGATION_MODE_TYPE_CREATE_FORM} />
+        </Section>
+        <Section name="Aggregation Mode Types">
+          <AggregationModeTypesList
+            aggregationModeTypes={aggregationModeTypes}
+            serviceId={serviceId}
+            page={parseInt(page)}
+            pageSize={parseInt(pageSize)}
+          />
+        </Section>
+      </DefaultPage>
+    );
+  } catch (error) {
+    return notFound();
+  }
 }

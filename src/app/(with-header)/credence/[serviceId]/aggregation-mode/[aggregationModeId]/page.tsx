@@ -7,17 +7,17 @@ import { getServiceConfigurationById } from '@/utils/configuration.utils';
 import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import { EVENT_CREATE_FORM } from './_forms/event-create.form';
+import { credenceService } from '@/services/credence/credence.service';
+import AggregationModeDetail from './_components/AggregationModeDetail.component';
 
 export const generateMetadata = createAutomaticMetadata();
 
-type EventsPageProps = {
-  params: Promise<{ serviceId: string }>;
+type AggregationModeDetailPageProps = {
+  params: Promise<{ serviceId: string; aggregationModeId: string }>;
 };
 
-export default async function EventsPage({ params }: EventsPageProps) {
-  const { serviceId } = await params;
+export default async function AggregationModeDetailPage({ params }: AggregationModeDetailPageProps) {
+  const { serviceId, aggregationModeId } = await params;
 
   const accessToken = await getAccessToken();
 
@@ -27,7 +27,7 @@ export default async function EventsPage({ params }: EventsPageProps) {
   }
 
   const service = await getServiceConfigurationById(serviceId);
-   
+
   if (service) {
     const canAccessService = await uacUtils.hasAppPermission(
       EServiceType.CREDENCE,
@@ -42,12 +42,23 @@ export default async function EventsPage({ params }: EventsPageProps) {
     return notFound();
   }
 
-  return (
-    <DefaultPage>
-      <Section name="Event erstellen">
-        <p>Hier können Sie neue Events erstellen, um Scores für Identifikatoren zu generieren.</p>
-        <GeneratedForm definition={EVENT_CREATE_FORM} />
-      </Section>
-    </DefaultPage>
-  );
+  try {
+    const aggregationMode = await credenceService.getAggregationModeById(
+      aggregationModeId,
+      serviceId
+    );
+
+    return (
+      <DefaultPage>
+        <Section name="Aggregation Mode Details">
+          <AggregationModeDetail
+            aggregationMode={aggregationMode}
+            serviceId={serviceId}
+          />
+        </Section>
+      </DefaultPage>
+    );
+  } catch (error) {
+    return notFound();
+  }
 }

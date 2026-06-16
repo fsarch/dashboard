@@ -8,15 +8,15 @@ import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import { EVENT_CREATE_FORM } from './_forms/event-create.form';
+import { AGGREGATION_MODE_TYPE_CREATE_FORM } from '../_forms/aggregation-mode-type-create.form';
 
 export const generateMetadata = createAutomaticMetadata();
 
-type EventsPageProps = {
+type AggregationModeTypeCreatePageProps = {
   params: Promise<{ serviceId: string }>;
 };
 
-export default async function EventsPage({ params }: EventsPageProps) {
+export default async function AggregationModeTypeCreatePage({ params }: AggregationModeTypeCreatePageProps) {
   const { serviceId } = await params;
 
   const accessToken = await getAccessToken();
@@ -27,7 +27,7 @@ export default async function EventsPage({ params }: EventsPageProps) {
   }
 
   const service = await getServiceConfigurationById(serviceId);
-   
+
   if (service) {
     const canAccessService = await uacUtils.hasAppPermission(
       EServiceType.CREDENCE,
@@ -44,9 +44,8 @@ export default async function EventsPage({ params }: EventsPageProps) {
 
   return (
     <DefaultPage>
-      <Section name="Event erstellen">
-        <p>Hier können Sie neue Events erstellen, um Scores für Identifikatoren zu generieren.</p>
-        <GeneratedForm definition={EVENT_CREATE_FORM} />
+      <Section name="Create Aggregation Mode Type">
+        <GeneratedForm definition={AGGREGATION_MODE_TYPE_CREATE_FORM} />
       </Section>
     </DefaultPage>
   );

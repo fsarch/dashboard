@@ -9,7 +9,8 @@ import { DefaultPage } from '@/components/universals/page/DefaultPage.component'
 import Section from '@/components/universals/section/Section';
 import { credenceService } from '@/services/credence/credence.service';
 import EventTypesList from './_components/EventTypesList.component';
-import CreateEventTypeForm from './_components/CreateEventTypeForm.component';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import { EVENT_TYPE_CREATE_FORM } from './_forms/event-type-create.form';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -56,7 +57,7 @@ export default async function EventTypesPage({
   return (
     <DefaultPage>
       <Section name="Event Type erstellen">
-        <CreateEventTypeForm serviceId={serviceId} />
+        <GeneratedForm definition={EVENT_TYPE_CREATE_FORM} />
       </Section>
       <Section name="Event Types">
         <EventTypesList
