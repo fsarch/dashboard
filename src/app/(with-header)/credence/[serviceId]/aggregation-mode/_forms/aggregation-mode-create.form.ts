@@ -41,7 +41,7 @@ export const AGGREGATION_MODE_CREATE_FORM: TGeneratedFormDefinition = {
   },
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "aggregationModeTypeId": "", "maxFactor": null, "externalId": null }',
+    value: '{ "name": "", "aggregationModeTypeId": dataSource.aggregationModeTypes[0].id, "maxFactor": null, "externalId": null }',
   },
   endpoint: {
     path: '/v1/aggregation-modes',

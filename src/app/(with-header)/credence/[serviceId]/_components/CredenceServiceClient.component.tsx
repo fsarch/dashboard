@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { TServiceConfiguration } from '@/utils/configuration.type';
 import Button from '@/components/universals/forms/Button';
-import Link from 'next/link';
 import styles from './CredenceServiceClient.module.scss';
 
 type CredenceServiceClientProps = {

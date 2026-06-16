@@ -219,6 +219,10 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       path: '/event-type',
       icon: 'bell',
     }, {
+      name: 'Aggregation Modes',
+      path: '/aggregation-mode',
+      icon: 'cogs',
+    }, {
       name: 'Events',
       path: '/event',
       icon: 'list',

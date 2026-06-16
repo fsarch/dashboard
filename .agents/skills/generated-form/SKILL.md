@@ -1,11 +1,10 @@
 ---
 name: generated-form
-description: A skill that helps with creating TGeneratedFormDefinition forms for the dashboard project.
+description: Assists in creating TGeneratedFormDefinition forms for the dashboard project. Use when creating or updating GeneratedForm-based pages, form definitions, or when working with form-related server components.
+version: 1.0
+type: skill
+license: Proprietary
 ---
-
-# GeneratedForm Skill
-
-**Purpose:** Assists in creating `TGeneratedFormDefinition` forms for the dashboard project.
 
 ## Overview
 
@@ -16,6 +15,8 @@ description: A skill that helps with creating TGeneratedFormDefinition forms for
 - **Automatic API calls**: Communicates directly with service APIs via `fetchService`
 - **Automatic refresh**: Automatically reloads the page (`router.refresh()`) after successful submit
 - **Type-safe**: Definitions are validated via TypeScript types
+
+---
 
 ## Basic Structure
 
@@ -52,8 +53,6 @@ export const ENTITY_ACTION_FORM: TGeneratedFormDefinition = {
 
 ## Select Inputs
 
-Select fields can get their options from **DataSources** or **constants**.
-
 ### With DataSource (API query)
 
 ```typescript
@@ -65,7 +64,7 @@ Select fields can get their options from **DataSources** or **constants**.
     $type: 'datasource',
     value: 'categories'  // Reference to dataSources.categories
   },
-  enableSearch: true  // Optional: Enable search functionality
+  enableSearch: true
 }
 ```
 
@@ -86,7 +85,7 @@ Select fields can get their options from **DataSources** or **constants**.
 }
 ```
 
-**⚠️ Important:** `value` in select options **MUST be a string**. For numeric IDs, use `value: id + ""`
+**Important:** `value` in select options **MUST be a string**. For numeric IDs, use `value: id + ""`
 
 ---
 
@@ -97,11 +96,8 @@ Select fields can get their options from **DataSources** or **constants**.
   id: 'tags',
   $type: 'nested-form',
   label: 'Tags',
-  isArray: true,           // Treat as array
-  addInitialValues: {     // Default values for new entries
-    name: '',
-    color: '#000000'
-  },
+  isArray: true,
+  addInitialValues: { name: '', color: '#000000' },
   inputs: [
     { id: 'name', $type: 'text', label: 'Name' },
     { id: 'color', $type: 'color', label: 'Color' }
@@ -113,57 +109,33 @@ Select fields can get their options from **DataSources** or **constants**.
 
 ## DataSources
 
-DataSources load data from API endpoints and provide it for select inputs.
-
-### Structure
-
 ```typescript
 dataSources: {
-  // Key = reference name (e.g., 'categories')
   categories: {
     $type: 'fetch',
-    path: '/v1/categories',      // Relative path to service
+    path: '/v1/categories',
     method: 'GET',
     transformResponse: {
       $type: 'jsonata',
-      // ⚠️ IMPORTANT: transformResponse MUST return an object with { body: ... }!
       value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
     }
   }
 }
 ```
 
-### Key Rule for `transformResponse`
-
-> **⚠️ `transformResponse` MUST return an object with a `body` property!**
-> 
-> The `GeneratedForm.utils` expects `responseData.body`.
-> Your JSONata expression should wrap the result in `{ "body": ... }`.
-
-```typescript
-// ❌ WRONG (returns array directly)
-value: 'data.{ "id": id, "value": id, "label": name }'
-
-// ✅ CORRECT (wraps result in { body: ... })
-value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
-```
+**Critical:** `transformResponse` MUST return object with `{ body: ... }`!
 
 ---
 
 ## Endpoint
 
-Defines where the form data is sent:
-
 ```typescript
 endpoint: {
-  path: '/v1/entities',     // Relative path to service
-  method: 'POST',          // HTTP method (POST, PUT, PATCH, DELETE)
+  path: '/v1/entities',
+  method: 'POST',
   body: {
     $type: 'jsonata',
     value: '{ "name": form.name, "description": form.description }'
-  },
-  headers: {               // Optional: Additional headers
-    'Content-Type': 'application/json'
   }
 }
 ```
@@ -172,107 +144,35 @@ endpoint: {
 
 ## Post-Submit Actions
 
-Actions executed after successful submission:
-
 ```typescript
 postEndpointActions: [
   {
     $type: 'redirect',
     url: {
       $type: 'jsonata',
-      value: '`/my-service/${entityId}/edit`'  // JSONata expression
+      value: '`/my-service/${entityId}/edit`'
     }
   }
 ]
 ```
 
-**Note:** By default, `router.refresh()` is called to reload the page. A redirect is only needed if you want to navigate to a different page.
+Note: `router.refresh()` is called by default.
 
 ---
 
 ## JSONata Crash Course
 
-JSONata is used for dynamic values in `body`, `transformResponse`, and `url`.
-
-### Basics
-
 | Syntax | Description | Example |
 |--------|-------------|---------|
 | `$` | Current element | `data.$` |
 | `.field` | Field access | `data.name` |
-| `~>` | Deep descent (all elements recursively) | `data ~> | $ | name |` |
+| `~>` | Deep descent | `data ~> | $ | name |` |
 | `{...}` | Object literal | `{ "id": id, "name": name }` |
-| `+` | String concatenation | `name + " (" + id + ")"` |
-| Ternary | Conditional logic | `active ? "Active" : "Inactive"` |
-
-### Common Patterns
-
-#### Transform array of objects
-```jsonata
-data.{ "id": id, "value": id + "", "label": name }
-```
-
-#### Filter array
-```jsonata
-data.[active = true].{ "id": id, "value": id, "label": name }
-```
-
-#### Nested objects
-```jsonata
-data.{
-  "id": id,
-  "label": name + " (" + category.name + ")"
-}
-```
-
-#### Process form data
-```jsonata
-{
-  "name": form.name,
-  "active": form.active != "" ? form.active : null
-}
-```
+| `+` | String concat | `name + " (" + id + ")"` |
 
 ---
 
-## Complete Examples
-
-### Simple Form (AggregationModeType)
-
-```typescript
-// src/app/(with-header)/credence/[serviceId]/aggregation-mode-type/_forms/aggregation-mode-type-create.form.ts
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
-
-export const AGGREGATION_MODE_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [
-    { id: 'name', $type: 'text', label: 'Name' },
-    { id: 'externalId', $type: 'text', label: 'External ID' },
-  ],
-  initialValues: {
-    $type: 'jsonata',
-    value: '{ "name": "", "externalId": null }',
-  },
-  endpoint: {
-    path: '/v1/aggregation-mode-types',
-    method: 'POST',
-    body: {
-      $type: 'jsonata',
-      value: '{ "name": form.name, "externalId": form.externalId }',
-    },
-  },
-  postEndpointActions: [
-    {
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: '`/credence/${serviceId}/aggregation-mode-type`',
-      },
-    },
-  ],
-};
-```
-
-### Form with Select (AggregationMode)
+## Complete Example
 
 ```typescript
 // src/app/(with-header)/credence/[serviceId]/aggregation-mode/_forms/aggregation-mode-create.form.ts
@@ -326,119 +226,28 @@ export const AGGREGATION_MODE_CREATE_FORM: TGeneratedFormDefinition = {
 };
 ```
 
-### Form with Nested Fields (Event Create)
-
-```typescript
-// src/app/(with-header)/credence/[serviceId]/event/_forms/event-create.form.ts
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
-
-export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [
-    {
-      id: 'eventTypeId',
-      $type: 'select',
-      label: 'Event Type',
-      data: { $type: 'datasource', value: 'eventTypes' },
-    },
-    {
-      id: 'scopes',
-      $type: 'nested-form',
-      label: 'Scopes',
-      isArray: true,
-      addInitialValues: { type: 'ip', value: '' },
-      inputs: [
-        {
-          id: 'type',
-          $type: 'select',
-          label: 'Type',
-          data: {
-            $type: 'constant',
-            value: [
-              { id: 'ip', value: 'ip', label: 'IP' },
-              { id: 'asn', value: 'asn', label: 'ASN' },
-              { id: 'subnet', value: 'subnet', label: 'Subnet' },
-            ],
-          },
-        },
-        { id: 'value', $type: 'text', label: 'Value' },
-      ],
-    },
-    { id: 'externalId', $type: 'text', label: 'External ID (optional)' },
-  ],
-  dataSources: {
-    eventTypes: {
-      $type: 'fetch',
-      path: '/v1/event-types?page=1&pageSize=100',
-      method: 'GET',
-      transformResponse: {
-        $type: 'jsonata',
-        value: '{ "body": data.{ "id": id, "value": id, "label": name + " (Score: " + defaultScoreFactor + ")" } }',
-      },
-    },
-  },
-  initialValues: {
-    $type: 'jsonata',
-    value: '{ "eventTypeId": "", "scopes": [], "externalId": "" }',
-  },
-  endpoint: {
-    path: '/v1/events',
-    method: 'POST',
-    body: {
-      $type: 'jsonata',
-      value: `{
-        "eventTypeId": form.eventTypeId,
-        "scopes": form.scopes ~> | $ | { "type": type, "value": value } |,
-        "externalId": form.externalId != "" ? form.externalId : null
-      }`,
-    },
-  },
-};
-```
-
 ---
 
 ## Best Practices
 
-1. ✅ **Always wrap `transformResponse` in `{ "body": ... }`**
-2. ✅ **Select `value` must be string** (use `id + ""` for numeric IDs)
-3. ✅ **Use relative paths** (e.g., `/v1/entities`)
-4. ✅ **Service context is set automatically** - No manual `serviceId` needed!
-5. ✅ **Store forms in `_forms/` directory** (convention)
-6. ✅ **Name: `{ENTITY}_{ACTION}_FORM`** (e.g., `AGGREGATION_MODE_CREATE_FORM`)
-7. ✅ **Test JSONata expressions** before deployment (Online tester: https://try.jsonata.org)
+1. Always wrap `transformResponse` in `{ "body": ... }`
+2. Select `value` must be string (use `id + ""` for numeric IDs)
+3. Use relative paths (e.g., `/v1/entities`)
+4. Service context is set automatically - no manual `serviceId` needed
+5. Store forms in `_forms/` directory
+6. Name: `{ENTITY}_{ACTION}_FORM` (e.g., `AGGREGATION_MODE_CREATE_FORM`)
+7. Test JSONata expressions at https://try.jsonata.org
 
 ---
 
-## Common Errors & Solutions
+## Common Errors
 
-### 1. `Cannot read properties of undefined (reading 'body')`
-
-**Cause:** `transformResponse` does not return an object with `body` property.
-
-**Solution:**
-```typescript
-// ❌ WRONG
-value: 'data.{ "id": id, "value": id, "label": name }'
-
-// ✅ CORRECT
-value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
-```
-
-### 2. Select Shows No Options
-
-| Symptom | Cause | Solution |
-|---------|-------|----------|
-| Dropdown is empty | `value` is number, select expects string | Use `"value": id + ""` |
-| API call failed | Path is incorrect | Verify path (relative to service!) |
-| DataSource not referenced | Wrong key in `data` | Verify key matches dataSources |
-
-### 3. Submit Not Working
-
-| Symptom | Cause | Solution |
-|---------|-------|----------|
-| 404 Error | Path in `endpoint` is wrong | Verify path |
-| 400 Bad Request | `body` structure doesn't match API | Check API documentation |
-| No redirect/refresh | No postEndpointActions defined | `router.refresh()` is called by default |
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `Cannot read properties of undefined (reading 'body')` | `transformResponse` missing `{ body: ... }` | Wrap in `{ "body": ... }` |
+| Select shows no options | `value` is number | Use `value: id + ""` |
+| 404 Error | Wrong path in endpoint | Verify API path |
+| 400 Bad Request | Body structure mismatch | Check API documentation |
 
 ---
 
@@ -447,31 +256,11 @@ value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
 ```
 src/app/(with-header)/<service>/[serviceId]/<entity>/
 ├── _forms/
-│   ├── <entity>-create.form.ts      # Create form
-│   ├── <entity>-update.form.ts      # Update form (optional)
+│   ├── <entity>-create.form.ts
+│   ├── <entity>-update.form.ts
 │   └── ...
-├── _components/
-│   ├── <Entity>List.component.tsx  # List component
-│   └── ...
-├── page.tsx                        # List/create page
-├── [id]/
-│   ├── page.tsx                    # Detail page
-│   └── _components/
-│       └── <Entity>Detail.component.tsx
-└── create/
-    └── page.tsx                    # Create page (optional)
+└── page.tsx
 ```
-
----
-
-## Generation Workflow
-
-1. **Identify API endpoint** (e.g., `/v1/aggregation-modes`)
-2. **Analyze schema** (which fields, types, required/optional)
-3. **Create form definition** in `_forms/` directory
-4. **Create page** that uses the form
-5. **Verify TypeScript compilation** (`npm run build`)
-6. **Test form**
 
 ---
 
@@ -479,5 +268,4 @@ src/app/(with-header)/<service>/[serviceId]/<entity>/
 
 - [GeneratedForm Type Definition](src/components/universals/forms/generated/GeneratedForm.type.ts)
 - [GeneratedForm Component](src/components/universals/forms/generated/GeneratedForm.component.tsx)
-- [GeneratedForm Utils](src/components/universals/forms/generated/GeneratedForm.utils.ts)
 - [JSONata Online Tester](https://try.jsonata.org)

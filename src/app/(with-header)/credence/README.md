@@ -5,10 +5,11 @@ The Credence app provides fraud prevention and attack detection capabilities. It
 
 ## Key Features
 - **Scope Types Management**: Define different types of identifiers (IP, ASN, Subnet, Browser Fingerprint, Custom Fingerprint)
-- **Event Types Management**: Define event types with score factors and TTL values
+- **Event Types Management**: Define event types with score factors, TTL values, and aggregation mode references
+- **Aggregation Modes Management**: Configure how events are aggregated for scoring with max factors
 - **Event Creation**: Create events for specific scopes to generate scores
 - **IP-ASN Data Management**: Manage IP to ASN mappings and organization data
-- **Score Calculation**: Automatically calculate scores for identifiers based on events
+- **Score Calculation**: Automatically calculate scores for identifiers based on events and aggregation modes
 
 ## Routes
 - Base route: `/credence`
@@ -18,6 +19,7 @@ The Credence app provides fraud prevention and attack detection capabilities. It
 - Event Types: `/credence/[serviceId]/event-type`
 - Events: `/credence/[serviceId]/event`
 - IP-ASN Data: `/credence/[serviceId]/ip-asn`
+- Aggregation Modes: `/credence/[serviceId]/aggregation-mode`
 
 ## Backend and Data Access
 - Service layer: `src/services/credence/`
@@ -39,6 +41,10 @@ The Credence app provides fraud prevention and attack detection capabilities. It
 - `POST /v1/ip-asn/datasources` - Create IP-ASN datasource
 - `GET /v1/ip-asn/datasources/{datasourceId}/data` - List IP-ASN data for datasource
 - `POST /v1/ip-asn/datasources/{datasourceId}/data` - Create IP-ASN data entry
+- `GET /v1/aggregation-modes` - List aggregation modes
+- `POST /v1/aggregation-modes` - Create aggregation mode
+- `GET /v1/aggregation-modes/{id}` - Get aggregation mode by ID
+- `PATCH /v1/aggregation-modes/{id}` - Update aggregation mode
 
 ## UI Structure
 - App-specific reusable components: `src/components/apps/credence/`
