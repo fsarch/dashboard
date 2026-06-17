@@ -119,7 +119,17 @@ const executePostSubmitAction = async (
   };
 }
 
-const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, context = { args } }: { args?: Record<string, unknown>; context?: Record<string, unknown> }): Promise<TEvaluationResult> => {
+const evaluateDefinition = async (
+  definition: TGeneratedFormDefinition,
+  {
+    args,
+    context = { args },
+    collectDebugInfo = false,
+  }: {
+    args?: Record<string, unknown>;
+    context?: Record<string, unknown>;
+    collectDebugInfo?: boolean;
+  }): Promise<TEvaluationResult> => {
   const dataSourceDebugData: TEvaluationDebugInfo['dataSourceResponses'] = {};
 
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
@@ -135,38 +145,44 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
       body: rawData,
     };
 
-    // debug info for devs to see the raw and transformed data from datasources
-    dataSourceDebugData[key] = {
-      url: path,
-      method: value.method,
-      status: dataResponse.status,
-      statusText: dataResponse.statusText,
-      body: {
-        rawJson: rawData,
-      },
-    };
+    if (collectDebugInfo) {
+      // debug info for devs to see the raw and transformed data from datasources
+      dataSourceDebugData[key] = {
+        url: path,
+        method: value.method,
+        status: dataResponse.status,
+        statusText: dataResponse.statusText,
+        body: {
+          rawJson: rawData,
+        },
+      };
+    }
 
     if (value.transformResponse?.value) {
       try {
         const modifiedData = await (jsonata(value.transformResponse.value).evaluate(responseData));
 
-        // add transformed data to debug info
-        dataSourceDebugData[key].transformation = {
-          isError: false,
-          expression: value.transformResponse.value,
-          input: responseData,
-          output: modifiedData,
-        };
+        if (collectDebugInfo) {
+          // add transformed data to debug info
+          dataSourceDebugData[key].transformation = {
+            isError: false,
+            expression: value.transformResponse.value,
+            input: responseData,
+            output: modifiedData,
+          };
+        }
 
         responseData = modifiedData;
       } catch (error) {
         const serializedError = serializeError(error);
 
-        dataSourceDebugData[key].transformation = {
-          isError: true,
-          expression: value.transformResponse.value,
-          input: responseData,
-          error: serializedError,
+        if (collectDebugInfo) {
+          dataSourceDebugData[key].transformation = {
+            isError: true,
+            expression: value.transformResponse.value,
+            input: responseData,
+            error: serializedError,
+          }
         }
 
         responseData = {
@@ -263,9 +279,9 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
       postEndpointActions: definition.postEndpointActions,
       buttons: definition.buttons,
     },
-    debugInfo: {
+    debugInfo: collectDebugInfo ? {
       dataSourceResponses: dataSourceDebugData,
-    },
+    } : undefined,
   };
 };
 

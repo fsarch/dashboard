@@ -66,7 +66,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
       onSubmit={handleSubmit}
     >
       <Form>
-        {isDev && (
+        {isDev && debugInfo && (
           <DevDataSourcesSection definition={definition} debugInfo={debugInfo} initialValues={initialValues} />
         )}
         <Fieldset>

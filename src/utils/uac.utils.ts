@@ -189,6 +189,10 @@ async function hasPermission(permission: string, accessToken?: string): Promise<
   return (await getPermissions(accessToken)).includes(permission);
 }
 
+async function isDeveloper(accessToken?: string): Promise<boolean> {
+  return hasPermission('dev', accessToken);
+}
+
 async function hasAppPermission(serviceType: EServiceType, serviceId: string, accessToken?: string): Promise<boolean> {
   const { getConfiguration } = await import('./configuration.utils');
 
@@ -214,5 +218,6 @@ export const uacUtils = {
   getAppPermissions,
   hasPermission,
   hasAppPermission,
+  isDeveloper,
 };
 
