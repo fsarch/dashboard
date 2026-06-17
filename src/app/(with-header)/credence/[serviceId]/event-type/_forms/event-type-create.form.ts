@@ -35,13 +35,13 @@ export const EVENT_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": data.data.{ "id": id, "value": id + "", "label": name } }',
+        value: '{ "body": body.data.{ "id": id, "value": id, "label": name } }',
       },
     },
   },
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "defaultScoreFactor": "", "defaultTtlSeconds": 3600, "aggregationModeId": null }',
+    value: '{ "name": "", "defaultScoreFactor": "", "defaultTtlSeconds": 3600, "aggregationModeId": dataSource.aggregationModes[0].id }',
   },
   endpoint: {
     path: '/v1/event-types',

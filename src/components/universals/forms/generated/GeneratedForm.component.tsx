@@ -7,6 +7,7 @@ import {
 } from "@/components/universals/forms/generated/GeneratedForm.type";
 import GeneratedClientForm from "@/components/universals/forms/generated/GeneratedClientForm.component";
 import { generatedFormUtils } from "@/components/universals/forms/generated/GeneratedForm.utils";
+import { uacUtils } from '@/utils/uac.utils';
 
 type GeneratedFormProps = {
   definition: TGeneratedFormDefinition;
@@ -19,7 +20,12 @@ const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
   args,
   context,
 }) => {
-  const evaluatedDefinition = await generatedFormUtils.evaluateDefinition(definition, { args, context: { ...context, args } });
+  const {
+    definition: evaluatedDefinition,
+    debugInfo,
+  } = await generatedFormUtils.evaluateDefinition(definition, { args, context: { ...context, args } });
+
+  const isDev = await uacUtils.hasPermission('dev');
 
   async function handleSubmit(data: TGeneratedFormInitialValues): Promise<TGeneratedFormSubmitResponse> {
     'use server';
@@ -33,6 +39,8 @@ const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
       buttons={evaluatedDefinition.buttons}
       initialValues={evaluatedDefinition.initialValues}
       onSubmit={handleSubmit}
+      isDev={isDev}
+      debugInfo={debugInfo}
     />
   );
 };

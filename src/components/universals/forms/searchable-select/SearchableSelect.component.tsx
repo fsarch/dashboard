@@ -51,7 +51,7 @@ const SearchableSelect: React.FunctionComponent<SearchableSelectProps> = ({
   }, [setIsFocused]);
 
   const selectedItem = useMemo(
-    () => values.find((val) => val.id ? inputProps.value === val.id : inputProps.value === val.value),
+    () => values?.find((val) => val.id ? inputProps.value === val.id : inputProps.value === val.value),
     [inputProps.value],
   );
 

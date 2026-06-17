@@ -222,3 +222,39 @@ export type TGeneratedFormSubmitResponse = {
   /** Actions to execute after submission (e.g., redirect) */
   actions: Array<TGeneratedFormAction>;
 };
+
+export type TDataSourceJsonataResponse = {
+  status: number;
+  statusText: string;
+  body: unknown;
+};
+
+type TDataSourceResponseDebugInfo = {
+  url: string;
+  method: string;
+  status: number;
+  statusText: string;
+  body: {
+    rawJson: unknown;
+  };
+  transformation?: {
+    isError: false;
+    expression: string;
+    input: TDataSourceJsonataResponse;
+    output: TDataSourceJsonataResponse;
+  } | {
+    isError: true;
+    expression: string;
+    input: TDataSourceJsonataResponse;
+    error: unknown;
+  };
+}
+
+export type TEvaluationDebugInfo = {
+  dataSourceResponses: Record<string, TDataSourceResponseDebugInfo>;
+};
+
+export type TEvaluationResult = {
+  definition: TGeneratedFormDefinition;
+  debugInfo?: TEvaluationDebugInfo;
+};

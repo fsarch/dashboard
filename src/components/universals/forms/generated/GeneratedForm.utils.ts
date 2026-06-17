@@ -1,4 +1,7 @@
 import {
+  TDataSourceJsonataResponse,
+  TEvaluationDebugInfo,
+  TEvaluationResult,
   TGeneratedFormAction,
   TGeneratedFormDefinition,
   TGeneratedFormLinkCardInput,
@@ -11,6 +14,7 @@ import { fetchService } from "@/utils/fetchService";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
 import { contextUtils } from "@/components/universals/forms/generated/context.utils";
+import { serializeError } from "serialize-error";
 
 const executePostSubmitAction = async (
   definition: TGeneratedFormDefinition,
@@ -18,7 +22,7 @@ const executePostSubmitAction = async (
   args: Record<string, unknown> | undefined,
   context?: Record<string, unknown>,
 ): Promise<TGeneratedFormSubmitResponse> => {
-  const evaluatedDefinition = await evaluateDefinition(definition, { args });
+  const { definition: evaluatedDefinition } = await evaluateDefinition(definition, { args });
 
   await Promise.all(evaluatedDefinition.inputs.map(async (input) => {
     if (input.$type === 'image-server-upload') {
@@ -115,7 +119,9 @@ const executePostSubmitAction = async (
   };
 }
 
-const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, context = { args } }: { args?: Record<string, unknown>; context?: Record<string, unknown> }): Promise<TGeneratedFormDefinition> => {
+const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, context = { args } }: { args?: Record<string, unknown>; context?: Record<string, unknown> }): Promise<TEvaluationResult> => {
+  const dataSourceDebugData: TEvaluationDebugInfo['dataSourceResponses'] = {};
+
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
     const path = await jsonataUtils.evaluateStringValue(value.path, args);
     const dataResponse = await fetchService(path, {
@@ -123,12 +129,52 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
     });
     const rawData = await dataResponse.json();
 
-    let responseData = {
+    let responseData: TDataSourceJsonataResponse = {
+      status: dataResponse.status,
+      statusText: dataResponse.statusText,
       body: rawData,
     };
 
+    // debug info for devs to see the raw and transformed data from datasources
+    dataSourceDebugData[key] = {
+      url: path,
+      method: value.method,
+      status: dataResponse.status,
+      statusText: dataResponse.statusText,
+      body: {
+        rawJson: rawData,
+      },
+    };
+
     if (value.transformResponse?.value) {
-      responseData = await (jsonata(value.transformResponse.value).evaluate(responseData));
+      try {
+        const modifiedData = await (jsonata(value.transformResponse.value).evaluate(responseData));
+
+        // add transformed data to debug info
+        dataSourceDebugData[key].transformation = {
+          isError: false,
+          expression: value.transformResponse.value,
+          input: responseData,
+          output: modifiedData,
+        };
+
+        responseData = modifiedData;
+      } catch (error) {
+        const serializedError = serializeError(error);
+
+        dataSourceDebugData[key].transformation = {
+          isError: true,
+          expression: value.transformResponse.value,
+          input: responseData,
+          error: serializedError,
+        }
+
+        responseData = {
+          status: 500,
+          statusText: 'Error evaluating transformResponse expression',
+          body: null,
+        };
+      }
     }
 
     return [key, responseData.body];
@@ -209,12 +255,17 @@ const evaluateDefinition = async (definition: TGeneratedFormDefinition, { args, 
     : definition.initialValues;
 
   return {
-    inputs: mappedInputs,
-    dataSources: definition.dataSources,
-    initialValues: mappedInitialValues,
-    endpoint: definition.endpoint,
-    postEndpointActions: definition.postEndpointActions,
-    buttons: definition.buttons,
+    definition: {
+      inputs: mappedInputs,
+      dataSources: definition.dataSources,
+      initialValues: mappedInitialValues,
+      endpoint: definition.endpoint,
+      postEndpointActions: definition.postEndpointActions,
+      buttons: definition.buttons,
+    },
+    debugInfo: {
+      dataSourceResponses: dataSourceDebugData,
+    },
   };
 };
 
