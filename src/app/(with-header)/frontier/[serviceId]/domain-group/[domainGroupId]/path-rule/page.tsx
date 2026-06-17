@@ -22,7 +22,7 @@ export default async function PathRuleListPage({
   const [pathRules, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listPathRules(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/path-rule/create`),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

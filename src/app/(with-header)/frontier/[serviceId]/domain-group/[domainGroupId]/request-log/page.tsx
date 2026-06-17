@@ -39,7 +39,7 @@ export default async function RequestLogListPage({
 
   const [requestLogsWithSentinel, canSeeDevResponse] = await Promise.all([
     frontierService.listRequestLogs(domainGroupId, { limit: pageSize + 1, offset }),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   const hasNextPage = requestLogsWithSentinel.length > pageSize;

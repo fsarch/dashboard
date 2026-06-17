@@ -22,7 +22,7 @@ export default async function CorsPolicyListPage({
   const [corsPolicies, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listCorsPolicies(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cors-policy/create`),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

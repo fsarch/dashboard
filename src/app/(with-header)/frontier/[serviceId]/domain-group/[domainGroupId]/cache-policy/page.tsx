@@ -22,7 +22,7 @@ export default async function CachePolicyListPage({
   const [cachePolicies, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listCachePolicies(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cache-policy/create`),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

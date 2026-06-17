@@ -5,6 +5,7 @@ import type {
   TUacMapping,
   TUacPermission,
 } from './configuration.type';
+import { cookies } from "next/headers";
 
 type TDecodedJwtPayload = Record<string, unknown>;
 
@@ -190,7 +191,13 @@ async function hasPermission(permission: string, accessToken?: string): Promise<
 }
 
 async function isDeveloper(accessToken?: string): Promise<boolean> {
-  return hasPermission('dev', accessToken);
+  if (!await hasPermission('dev', accessToken)) {
+    return false;
+  }
+
+  const cookieStore = await cookies();
+  const devModeCookie = cookieStore.get('dev-mode');
+  return devModeCookie?.value === 'true';
 }
 
 async function hasAppPermission(serviceType: EServiceType, serviceId: string, accessToken?: string): Promise<boolean> {

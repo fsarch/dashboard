@@ -18,7 +18,7 @@ export default async function LogPolicyDetailPage({
 
   const [logPolicy, canSeeDevResponse] = await Promise.all([
     frontierService.getLogPolicy(domainGroupId, logPolicyId),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!logPolicy) {

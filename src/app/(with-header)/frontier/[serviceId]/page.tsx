@@ -16,7 +16,7 @@ export default async function FrontierServicePage() {
   const [domainGroups, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listDomainGroups(),
     getServiceLocalUrl('/domain-group/create'),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

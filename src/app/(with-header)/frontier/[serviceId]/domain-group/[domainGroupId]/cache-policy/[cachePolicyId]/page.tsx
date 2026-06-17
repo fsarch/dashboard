@@ -18,7 +18,7 @@ export default async function CachePolicyDetailPage({
 
   const [policy, canSeeDevResponse] = await Promise.all([
     frontierService.getCachePolicy(domainGroupId, cachePolicyId),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!policy) {

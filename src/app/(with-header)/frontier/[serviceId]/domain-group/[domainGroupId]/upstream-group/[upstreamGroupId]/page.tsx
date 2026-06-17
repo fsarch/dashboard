@@ -22,7 +22,7 @@ export default async function UpstreamGroupDetailPage({
   const [upstreamGroup, upstreams, canSeeDevResponse] = await Promise.all([
     frontierService.getUpstreamGroup(domainGroupId, upstreamGroupId),
     frontierService.listUpstreams(domainGroupId, upstreamGroupId),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!upstreamGroup) {

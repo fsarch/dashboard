@@ -52,7 +52,7 @@ export default async function RequestLogDetailPage({
 
   const [requestLog, canSeeDevResponse] = await Promise.all([
     frontierService.getRequestLog(domainGroupId, requestLogId, { limit: pageSize, offset }),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!requestLog) {

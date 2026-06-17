@@ -18,7 +18,7 @@ export default async function PathRuleDetailPage({
 
   const [pathRule, canSeeDevResponse] = await Promise.all([
     frontierService.getPathRule(domainGroupId, pathRuleId),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!pathRule) {

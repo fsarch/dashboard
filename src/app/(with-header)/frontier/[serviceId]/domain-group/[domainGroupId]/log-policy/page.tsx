@@ -22,7 +22,7 @@ export default async function LogPolicyListPage({
   const [logPolicies, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listLogPolicies(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/log-policy/create`),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

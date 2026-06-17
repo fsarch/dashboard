@@ -22,7 +22,7 @@ export default async function DomainListPage({
   const [domains, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listDomains(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/domain/create`),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

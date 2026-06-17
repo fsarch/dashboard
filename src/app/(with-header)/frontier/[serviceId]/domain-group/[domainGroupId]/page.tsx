@@ -28,7 +28,7 @@ export default async function DomainGroupDetailPage({
     frontierService.listUpstreamGroups(domainGroupId),
     frontierService.listCorsPolicies(domainGroupId),
     frontierService.listLogPolicies(domainGroupId),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!domainGroup) {

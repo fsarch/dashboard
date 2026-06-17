@@ -22,7 +22,7 @@ export default async function UpstreamGroupListPage({
   const [upstreamGroups, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listUpstreamGroups(domainGroupId),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/upstream-group/create`),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   return (

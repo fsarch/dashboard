@@ -18,7 +18,7 @@ export default async function CorsPolicyDetailPage({
 
   const [corsPolicy, canSeeDevResponse] = await Promise.all([
     frontierService.getCorsPolicy(domainGroupId, corsPolicyId),
-    uacUtils.hasPermission('dev'),
+    uacUtils.isDeveloper(),
   ]);
 
   if (!corsPolicy) {
