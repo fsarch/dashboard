@@ -5,6 +5,7 @@ import {
   TEvaluationDebugInfo, TGeneratedFormInitialValues,
   TGeneratedFormInput
 } from '@/components/universals/forms/generated/GeneratedForm.type';
+import { useFormikContext } from "formik";
 
 type DevDataSourcesSectionProps = {
   definition: Array<TGeneratedFormInput>;
@@ -19,15 +20,19 @@ const DevDataSourcesSection: React.FunctionComponent<DevDataSourcesSectionProps>
 }) => {
   const [copyState, setCopyState] = React.useState<'idle' | 'success' | 'error'>('idle');
 
+  const { values } = useFormikContext();
+
   const dataAsJson = React.useMemo(() => JSON.stringify({
     definition,
     debugInfo,
     initialValues,
   }, null, 2), [definition, debugInfo, initialValues]);
 
+  const formStateAsJson = React.useMemo(() => JSON.stringify(values, null, 2), [values]);
+
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(dataAsJson);
+      await navigator.clipboard.writeText(formStateAsJson);
       setCopyState('success');
     } catch {
       setCopyState('error');
@@ -37,19 +42,29 @@ const DevDataSourcesSection: React.FunctionComponent<DevDataSourcesSectionProps>
   }
 
   return (
-    <details style={{ marginBottom: '16px', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}>
-      <summary style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-        <span><strong>Dev: DataSources anzeigen</strong></span>
-        <button type="button" onClick={(e) => { e.preventDefault(); handleCopy(); }}>
-          DataSources kopieren
-        </button>
-        {copyState === 'success' ? <span>Kopiert</span> : null}
-        {copyState === 'error' ? <span>Kopieren fehlgeschlagen</span> : null}
-      </summary>
-      <pre style={{ whiteSpace: 'pre-wrap', overflowX: 'auto', marginTop: '8px' }}>
-        {dataAsJson}
+    <>
+      <details style={{ marginBottom: '16px', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}>
+        <summary style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+          <span><strong>Dev: FormDefinition anzeigen</strong></span>
+        </summary>
+        <pre style={{ whiteSpace: 'pre-wrap', overflowX: 'auto', marginTop: '8px' }}>
+          {dataAsJson}
+        </pre>
+      </details>
+      <details style={{ marginBottom: '16px', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}>
+        <summary style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+          <span><strong>Dev: FormState anzeigen</strong></span>
+          <button type="button" onClick={(e) => { e.preventDefault(); handleCopy(); }}>
+            FormState kopieren
+          </button>
+          {copyState === 'success' ? <span>Kopiert</span> : null}
+          {copyState === 'error' ? <span>Kopieren fehlgeschlagen</span> : null}
+        </summary>
+        <pre style={{ whiteSpace: 'pre-wrap', overflowX: 'auto', marginTop: '8px' }}>
+        {formStateAsJson}
       </pre>
-    </details>
+      </details>
+    </>
   );
 };
 

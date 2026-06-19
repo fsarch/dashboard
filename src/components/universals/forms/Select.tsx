@@ -26,7 +26,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
       name={name}
       disabled={disabled}
     >
-      {values.map((value) => (
+      {values?.map((value) => (
         <option key={value.id ?? value.value} value={value.value}>{value.label}</option>
       ))}
     </Field>

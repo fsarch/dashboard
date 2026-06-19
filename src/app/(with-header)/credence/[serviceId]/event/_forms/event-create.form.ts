@@ -72,7 +72,7 @@ export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": data.{"id": id, "value": id, "label": name + " (Score: " + defaultScoreFactor + ", TTL: " + defaultTtlSeconds + "s)"} }',
+        value: '{ "body": [body.data.{"id": id, "value": id, "label": name & " (Score: " & defaultScoreFactor & ", TTL: " & defaultTtlSeconds & "s)"}] }',
       },
     },
   },
