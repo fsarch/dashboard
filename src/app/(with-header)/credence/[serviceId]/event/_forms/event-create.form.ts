@@ -51,7 +51,7 @@ export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
   ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "eventTypeId": "", "scopes": [], "externalId": "" }',
+    value: '{ "eventTypeId": dataSource.eventTypes[0].id, "scopes": [], "externalId": "" }',
   },
   endpoint: {
     path: '/v1/events',
