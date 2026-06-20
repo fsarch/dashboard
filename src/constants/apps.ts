@@ -230,6 +230,10 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       name: 'IP-ASN Daten',
       path: '/ip-asn',
       icon: 'server',
+    }, {
+      name: 'Scopes',
+      path: '/scope',
+      icon: 'crosshairs',
     }],
   },
 };

@@ -162,6 +162,34 @@ export type TPaginationResultDto<T> = {
   metadata: TPaginationResultMetaDto;
 };
 
+// Scope DTOs
+export type TIpScopeDto = {
+  id: string;
+  address: string;
+};
+
+export type TAsnScopeDto = {
+  id: string;
+  asn: number;
+  asnOrganization?: string | null;
+};
+
+export type TSubnetScopeDto = {
+  id: string;
+  address: string;
+};
+
+export type TScopeDto = {
+  id: string;
+  scopeTypeId: string;
+  creationTime: string;
+  externalId?: string | null;
+  scopeType: TScopeTypeDto;
+  ipScope?: TIpScopeDto | null;
+  asnScope?: TAsnScopeDto | null;
+  subnetScope?: TSubnetScopeDto | null;
+};
+
 // Pagination query params
 export type TPaginationParams = {
   page: number;

@@ -18,6 +18,7 @@ import {
   TAggregationModeReadDto,
   TAggregationModeCreateDto,
   TAggregationModeUpdateDto,
+  TScopeDto,
   TPaginationResultDto,
   TPaginationParams,
 } from "./credence.type";
@@ -288,6 +289,29 @@ const updateAggregationMode = async (
   return response.json();
 };
 
+// Scopes
+const listScopes = async (
+  params: TPaginationParams,
+  serviceId: string
+): Promise<TPaginationResultDto<TScopeDto>> => {
+  const response = await fetchService(
+    `/v1/scopes?page=${params.page}&pageSize=${params.pageSize}`,
+    undefined,
+    { serviceId }
+  );
+  return response.json();
+};
+
+const getScopeById = async (
+  id: string,
+  serviceId: string
+): Promise<TScopeDto> => {
+  const response = await fetchService(`/v1/scopes/${id}`, undefined, {
+    serviceId,
+  });
+  return response.json();
+};
+
 export const credenceService = {
   // Scope Data Types
   listScopeDataTypes,
@@ -319,4 +343,7 @@ export const credenceService = {
   getAggregationModeById,
   createAggregationMode,
   updateAggregationMode,
+  // Scopes
+  listScopes,
+  getScopeById,
 };
