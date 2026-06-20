@@ -33,9 +33,9 @@ The dashboard uses an automatic navigation system that generates sidebar navigat
 
 ```typescript
 // src/constants/apps.ts
-[EServiceType.CREDENCE]: {
-  name: 'Credence',
-  basePath: '/credence',
+[EServiceType.WATCHTOWER]: {
+  name: 'Watchtower',
+  basePath: '/watchtower',
   navigation: [
     { name: 'Übersicht', path: '/', icon: 'layer-group' },
     { name: 'Aggregation Modes', path: '/aggregation-mode', icon: 'cogs' }
@@ -62,7 +62,7 @@ The dashboard uses an automatic navigation system that generates sidebar navigat
 ```typescript
 {
   name: string;              // Service display name
-  basePath: string;          // Base URL path (e.g., '/credence')
+  basePath: string;          // Base URL path (e.g., '/watchtower')
   navigation?: Array<NavigationItem>;    // Main sidebar items
   bottomNavigation?: Array<NavigationItem>; // Bottom sidebar items
   routes?: {                // Route-specific navigation

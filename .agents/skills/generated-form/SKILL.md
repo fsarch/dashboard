@@ -175,7 +175,7 @@ Note: `router.refresh()` is called by default.
 ## Complete Example
 
 ```typescript
-// src/app/(with-header)/credence/[serviceId]/aggregation-mode/_forms/aggregation-mode-create.form.ts
+// src/app/(with-header)/watchtower/[serviceId]/aggregation-mode/_forms/aggregation-mode-create.form.ts
 import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const AGGREGATION_MODE_CREATE_FORM: TGeneratedFormDefinition = {
@@ -219,7 +219,7 @@ export const AGGREGATION_MODE_CREATE_FORM: TGeneratedFormDefinition = {
       $type: 'redirect',
       url: {
         $type: 'jsonata',
-        value: '`/credence/${serviceId}/aggregation-mode`',
+        value: '`/watchtower/${serviceId}/aggregation-mode`',
       },
     },
   ],

@@ -321,18 +321,18 @@ value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
 
 ## 📚 Examples from the Project
 
-| Entity | File | Features |
-|--------|------|----------|
-| Function | `function/_forms/create-function.form.ts` | Simple text field |
-| Part Type | `material-tracing/part-type.forms.ts` | Text + externalId |
-| Domain Group | `frontier/domain-group/_forms/` | Complex nested structures |
-| Credence Event | `credence/event/_forms/event-create.form.ts` | Nested array (scopes) + DataSource |
-| Aggregation Mode | `credence/aggregation-mode/_forms/` | Select (aggregationModeTypeId) + maxFactor |
-| Aggregation Mode Type | `credence/aggregation-mode-type/_forms/` | Simple text fields |
+| Entity                | File                                           | Features |
+|-----------------------|------------------------------------------------|----------|
+| Function              | `function/_forms/create-function.form.ts`      | Simple text field |
+| Part Type             | `material-tracing/part-type.forms.ts`          | Text + externalId |
+| Domain Group          | `frontier/domain-group/_forms/`                | Complex nested structures |
+| Watchtower Event      | `watchtower/event/_forms/event-create.form.ts` | Nested array (scopes) + DataSource |
+| Aggregation Mode      | `watchtower/aggregation-mode/_forms/`          | Select (aggregationModeTypeId) + maxFactor |
+| Aggregation Mode Type | `watchtower/aggregation-mode-type/_forms/`     | Simple text fields |
 
 ### Aggregation Mode & Aggregation Mode Type
 
-The Credence service supports **Aggregation Modes** and **Aggregation Mode Types** for advanced score calculation:
+The Watchtower service supports **Aggregation Modes** and **Aggregation Mode Types** for advanced score calculation:
 
 - **Aggregation Mode Type**: Defines the type of aggregation (e.g., "SUM", "MAX", "AVG")
   - Fields: `name`, `externalId`

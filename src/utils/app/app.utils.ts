@@ -64,10 +64,10 @@ const apps: Array<TConfiguredApp> = [{
   path: '/frontier',
   serviceType: EServiceType.FRONTIER,
 }, {
-  icon: 'gavel',
-  name: 'Credence',
-  path: '/credence',
-  serviceType: EServiceType.CREDENCE,
+  icon: 'tower-observation',
+  name: 'Watchtower',
+  path: '/watchtower',
+  serviceType: EServiceType.WATCHTOWER,
 }, {
   icon: 'shield-halved',
   name: 'Bot Protection',

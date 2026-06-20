@@ -203,9 +203,9 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       },
     },
   },
-  [EServiceType.CREDENCE]: {
-    name: 'Credence',
-    basePath: '/credence',
+  [EServiceType.WATCHTOWER]: {
+    name: 'Watchtower',
+    basePath: '/watchtower',
     navigation: [{
       name: 'Übersicht',
       path: '/',

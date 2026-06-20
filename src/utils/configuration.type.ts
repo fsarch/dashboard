@@ -11,7 +11,7 @@ export enum EServiceType {
   AI = 'ai',
   EMAIL_SERVER = 'email',
   FRONTIER = 'frontier',
-  CREDENCE = 'credence',
+  WATCHTOWER = 'watchtower',
   BOT_PROTECTION = 'bot-protection',
 }
 
@@ -101,10 +101,10 @@ export type TFrontierConfiguration = {
   url: string;
 };
 
-export type TCredenceConfiguration = {
+export type TWatchtowerConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.CREDENCE,
+  type: EServiceType.WATCHTOWER,
   url: string;
 };
 
@@ -127,7 +127,7 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TAIConfiguration
   | TEmailServerConfiguration
   | TFrontierConfiguration
-  | TCredenceConfiguration
+  | TWatchtowerConfiguration
   | TBotProtectionConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
