@@ -12,6 +12,7 @@ export enum EServiceType {
   EMAIL_SERVER = 'email',
   FRONTIER = 'frontier',
   CREDENCE = 'credence',
+  BOT_PROTECTION = 'bot-protection',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -19,42 +20,42 @@ export type TCustomerCommunicationServiceConfiguration = {
   name?: string;
   type: EServiceType.CUSTOMER_COMMUNICATION,
   url: string;
-}
+};
 
 export type TDatatableServiceConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.DATATABLE,
   url: string;
-}
+};
 
 export type TProductServiceConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.PIM,
   url: string;
-}
+};
 
 export type TImageServiceConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.IMAGE,
   url: string;
-}
+};
 
 export type TMaterialTracingConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.MATERIAL_TRACING,
   url: string;
-}
+};
 
 export type TPdfRenderConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.PDF_RENDER,
   url: string;
-}
+};
 
 export type TFunctionConfiguration = {
   id: string;
@@ -62,7 +63,7 @@ export type TFunctionConfiguration = {
   type: EServiceType.FUNCTION,
   url: string;
   worker_url?: string;
-}
+};
 
 export type TCustomAppConfiguration = {
   id: string;
@@ -77,35 +78,42 @@ export type TPrinterConfiguration = {
   name?: string;
   type: EServiceType.PRINTER,
   url: string;
-}
+};
 
 export type TAIConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.AI,
   url: string;
-}
+};
 
 export type TEmailServerConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.EMAIL_SERVER,
   url: string;
-}
+};
 
 export type TFrontierConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.FRONTIER,
   url: string;
-}
+};
 
 export type TCredenceConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.CREDENCE,
   url: string;
-}
+};
+
+export type TBotProtectionConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.BOT_PROTECTION,
+  url: string;
+};
 
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
@@ -119,7 +127,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TAIConfiguration
   | TEmailServerConfiguration
   | TFrontierConfiguration
-  | TCredenceConfiguration;
+  | TCredenceConfiguration
+  | TBotProtectionConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 

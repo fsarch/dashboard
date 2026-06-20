@@ -68,6 +68,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Credence',
   path: '/credence',
   serviceType: EServiceType.CREDENCE,
+}, {
+  icon: 'shield-halved',
+  name: 'Bot Protection',
+  path: '/bot-protection',
+  serviceType: EServiceType.BOT_PROTECTION,
 }];
 
 const getApps = async () => {

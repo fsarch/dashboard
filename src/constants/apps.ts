@@ -236,4 +236,17 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       icon: 'crosshairs',
     }],
   },
+  [EServiceType.BOT_PROTECTION]: {
+    name: 'Bot Protection',
+    basePath: '/bot-protection',
+    navigation: [{
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    }, {
+      name: 'Claims',
+      path: '/claim',
+      icon: 'shield-halved',
+    }],
+  },
 };
