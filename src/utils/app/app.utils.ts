@@ -81,12 +81,14 @@ const getApps = async () => {
   for (const app of apps) {
     const services = await getServiceConfigurations(app.serviceType);
 
-    const hasServiceAccess = services.length === 0
-      ? true
-      : (await Promise.all(
+    const hasInstalledService = services.length > 0;
+    if (!hasInstalledService) {
+      continue;
+    }
+
+    const hasServiceAccess = (await Promise.all(
         services.map((service) => uacUtils.hasAppPermission(app.serviceType, service.id)),
       )).some(Boolean);
-
     if (hasServiceAccess) {
       availableApps.push(app);
     }
