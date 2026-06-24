@@ -73,6 +73,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Bot Protection',
   path: '/bot-protection',
   serviceType: EServiceType.BOT_PROTECTION,
+}, {
+  icon: 'chart-line',
+  name: 'Metrics',
+  path: '/metric-server',
+  serviceType: EServiceType.METRIC_SERVER,
 }];
 
 const getApps = async () => {

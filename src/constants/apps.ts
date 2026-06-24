@@ -249,4 +249,21 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       icon: 'shield-halved',
     }],
   },
+  [EServiceType.METRIC_SERVER]: {
+    name: 'Metrics',
+    basePath: '/metric-server',
+    navigation: [{
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    }, {
+      name: 'Metric Types',
+      path: '/metric-type',
+      icon: 'tag',
+    }, {
+      name: 'Metrics',
+      path: '/metric',
+      icon: 'chart-line',
+    }],
+  },
 };
