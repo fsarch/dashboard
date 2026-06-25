@@ -76,8 +76,8 @@ const apps: Array<TConfiguredApp> = [{
 }, {
   icon: 'chart-line',
   name: 'Metrics',
-  path: '/metric-server',
-  serviceType: EServiceType.METRIC_SERVER,
+  path: '/metric',
+  serviceType: EServiceType.METRIC,
 }];
 
 const getApps = async () => {
