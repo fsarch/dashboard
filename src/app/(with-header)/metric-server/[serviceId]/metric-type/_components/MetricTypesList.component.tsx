@@ -7,6 +7,7 @@ import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/universals/forms/Button';
 
 type MetricTypesListProps = {
   metricTypes: TPaginationResultDto<TMetricTypeDto>;
@@ -33,24 +34,33 @@ const MetricTypesList: React.FunctionComponent<MetricTypesListProps> = ({
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Link href={`/metric-server/${serviceId}/metric-type/create`} passHref>
+          <Button type="button">
+            Create Metric Type
+          </Button>
+        </Link>
+      </div>
       {data.length > 0 ? (
         <>
-          <List>
-            {data.map((metricType) => (
-              <Link
-                key={metricType.id}
-                href={`/metric-server/${serviceId}/metric?metricTypeId=${metricType.id}`}
-              >
-                <ListItem>
-                  <strong>{metricType.name}</strong> - ID: {metricType.id}
-                  {metricType.externalId && <span> - Ext-ID: {metricType.externalId}</span>}
-                  <br />
-                  <small>Created: {new Date(metricType.creationTime).toLocaleString()}</small>
-                </ListItem>
-              </Link>
-            ))}
-          </List>
+          <div style={{ border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1rem' }}>
+            <List>
+              {data.map((metricType) => (
+                <Link
+                  key={metricType.id}
+                  href={`/metric-server/${serviceId}/metric?metricTypeId=${metricType.id}`}
+                >
+                  <ListItem>
+                    <strong>{metricType.name}</strong> - ID: {metricType.id}
+                    {metricType.externalId && <span> - Ext-ID: {metricType.externalId}</span>}
+                    <br />
+                    <small>Created: {new Date(metricType.creationTime).toLocaleString()}</small>
+                  </ListItem>
+                </Link>
+              ))}
+            </List>
+          </div>
           <Pagination
             currentPage={page}
             pageSize={pageSize}
