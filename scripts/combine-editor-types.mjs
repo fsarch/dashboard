@@ -40,6 +40,7 @@ for (let file of files) {
 
 await writeFile(path.resolve(baseDir, 'definitions.generated.ts'), `/*
  * AUTO-GENERATED FILE, DO NOT EDIT
+ * see: combine-editor-types.mjs
  */
 export const API_EXTRA_LIBS = ${JSON.stringify(items)};
 export const API_SERVICES = ${JSON.stringify(serviceMap)};
