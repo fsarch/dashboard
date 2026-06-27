@@ -44,6 +44,11 @@ const apps: Array<TConfiguredApp> = [{
   path: '/function',
   serviceType: EServiceType.FUNCTION,
 }, {
+  icon: 'server',
+  name: 'Function Gateway',
+  path: '/function-gateway',
+  serviceType: EServiceType.FUNCTION_GATEWAY,
+}, {
   icon: 'print',
   name: 'Printer',
   path: '/printer',

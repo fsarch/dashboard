@@ -103,6 +103,15 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       icon: 'layer-group',
     }],
   },
+  [EServiceType.FUNCTION_GATEWAY]: {
+    name: 'Function Gateway',
+    basePath: '/function-gateway',
+    navigation: [{
+      name: 'Funktionen',
+      path: '/',
+      icon: 'layer-group',
+    }],
+  },
   [EServiceType.PRINTER]: {
     name: 'Printer Server',
     basePath: '/printer',

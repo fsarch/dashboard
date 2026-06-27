@@ -7,6 +7,7 @@ export enum EServiceType {
   CUSTOM_APP = 'custom-app',
   PDF_RENDER = 'pdf-render',
   FUNCTION = 'function',
+  FUNCTION_GATEWAY = 'function-gateway',
   PRINTER = 'printer',
   AI = 'ai',
   EMAIL_SERVER = 'email',
@@ -61,7 +62,15 @@ export type TPdfRenderConfiguration = {
 export type TFunctionConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.FUNCTION,
+  type: EServiceType.FUNCTION;
+  url: string;
+  worker_url?: string;
+};
+
+export type TFunctionGatewayConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.FUNCTION_GATEWAY;
   url: string;
   worker_url?: string;
 };
@@ -131,6 +140,7 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TMaterialTracingConfiguration
   | TPdfRenderConfiguration
   | TFunctionConfiguration
+  | TFunctionGatewayConfiguration
   | TPrinterConfiguration
   | TAIConfiguration
   | TEmailServerConfiguration
