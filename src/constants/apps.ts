@@ -102,6 +102,36 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       path: '/',
       icon: 'layer-group',
     }],
+    routes: {
+      '/function/:functionId{/*path}': {
+        navigation: [{
+          name: 'Funktionen',
+          path: '/',
+          icon: 'layer-group',
+        }, {
+          name: 'Code',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId",
+          },
+          icon: 'code',
+        }, {
+          name: 'Einstellungen',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId & '/settings'",
+          },
+          icon: 'gear',
+        }, {
+          name: 'Executions',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId & '/executions'",
+          },
+          icon: 'play',
+        }],
+      },
+    },
   },
   [EServiceType.FUNCTION_GATEWAY]: {
     name: 'Function Gateway',

@@ -8,8 +8,6 @@ import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import ExecutionsList from '../_components/ExecutionsList.component';
-import Link from 'next/link';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { functionService } from '@/services/function/function.service';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -46,14 +44,6 @@ export default async function FunctionExecutionsPage({ params }: FunctionExecuti
 
   return (
     <DefaultPage>
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-        <Link
-          href={await getServiceLocalUrl(`/function/${functionId}`)}
-          style={{ padding: '0.5rem 1rem', textDecoration: 'none', background: 'var(--color-background)', borderRadius: '4px' }}
-        >
-          Zurück
-        </Link>
-      </div>
       <Section name="Executions">
         <ExecutionsList 
           executions={executions} 

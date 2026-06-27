@@ -7,8 +7,6 @@ import { getServiceConfigurationById } from '@/utils/configuration.utils';
 import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import FunctionSettingsForm from '../_components/FunctionSettingsForm.component';
-import Link from 'next/link';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { functionService } from '@/services/function/function.service';
 import { FunctionDto } from '@/services/function/function.type';
 
@@ -51,14 +49,6 @@ export default async function FunctionSettingsPage({ params }: FunctionSettingsP
 
   return (
     <DefaultPage>
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-        <Link
-          href={await getServiceLocalUrl(`/function/${functionId}`)}
-          style={{ padding: '0.5rem 1rem', textDecoration: 'none', background: 'var(--color-background)', borderRadius: '4px' }}
-        >
-          Zurück
-        </Link>
-      </div>
       <FunctionSettingsForm function={functionDetail} serviceId={serviceId} />
     </DefaultPage>
   );
