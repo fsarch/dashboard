@@ -1,5 +1,14 @@
 import { fetchService } from "@/utils/fetchService";
-import { FunctionDto, FunctionVersionDto, WorkerMetaDto } from "@/services/function/function.type";
+import { 
+  FunctionDto, 
+  FunctionPatchDto, 
+  FunctionVersionDto, 
+  WorkerMetaDto,
+  ExecutionDto,
+  ExecutionListDto,
+  ExecutionCreateDto,
+  LogDto
+} from "@/services/function/function.type";
 
 const listFunctions = async (): Promise<Array<FunctionDto>> => {
   const functionsResponse = await fetchService('/v1/functions');
@@ -46,10 +55,59 @@ const publishFunctionCode = async (functionId: string): Promise<void> => {
   return functionVersions;
 };
 
+// Function Settings
+const patchFunction = async (functionId: string, dto: FunctionPatchDto): Promise<FunctionDto> => {
+  const response = await fetchService(`/v1/functions/${functionId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dto),
+  });
+  const result = await response.json();
+  return result;
+};
+
+// Executions
+const listExecutions = async (functionId?: string): Promise<ExecutionListDto[]> => {
+  const url = functionId 
+    ? `/v1/executions/function/${functionId}`
+    : '/v1/executions';
+  const response = await fetchService(url);
+  return response.json();
+};
+
+const getExecution = async (executionId: string): Promise<ExecutionDto> => {
+  const response = await fetchService(`/v1/executions/${executionId}`);
+  return response.json();
+};
+
+const createExecution = async (dto: ExecutionCreateDto): Promise<{ id: string }> => {
+  const response = await fetchService('/v1/executions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dto),
+  });
+  return response.json();
+};
+
+// Logs
+const listExecutionLogs = async (executionId: string): Promise<LogDto[]> => {
+  const response = await fetchService(`/v1/executions/${executionId}/logs`);
+  return response.json();
+};
+
 export const functionService = {
   listFunctions,
   getFunctionVersions,
   setFunctionVersionCode,
   publishFunctionCode,
   getWorkerMeta,
+  patchFunction,
+  listExecutions,
+  getExecution,
+  createExecution,
+  listExecutionLogs,
 };
