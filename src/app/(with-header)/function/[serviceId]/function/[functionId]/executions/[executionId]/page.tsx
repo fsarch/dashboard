@@ -73,7 +73,7 @@ export default async function ExecutionDetailPage({ params }: ExecutionDetailPag
           {execution.arguments && (
             <div style={{ marginTop: '1rem' }}>
               <strong>Arguments:</strong>
-              <pre style={{ background: '#f8f9fa', padding: '0.5rem', borderRadius: '4px' }}>
+              <pre style={{ background: 'var(--color-background)', padding: '0.5rem', borderRadius: '4px', marginTop: '0.5rem' }}>
                 {JSON.stringify(execution.arguments, null, 2)}
               </pre>
             </div>
@@ -82,7 +82,7 @@ export default async function ExecutionDetailPage({ params }: ExecutionDetailPag
           {execution.response && (
             <div style={{ marginTop: '1rem' }}>
               <strong>Response:</strong>
-              <pre style={{ background: '#f8f9fa', padding: '0.5rem', borderRadius: '4px' }}>
+              <pre style={{ background: 'var(--color-background)', padding: '0.5rem', borderRadius: '4px', marginTop: '0.5rem' }}>
                 {JSON.stringify(execution.response, null, 2)}
               </pre>
             </div>
@@ -113,7 +113,7 @@ export default async function ExecutionDetailPage({ params }: ExecutionDetailPag
                 <div style={{ marginLeft: '2rem', marginTop: '0.25rem' }}>
                   <p>{log.message}</p>
                   {log.data && (
-                    <pre style={{ background: '#f8f9fa', padding: '0.5rem', borderRadius: '4px', fontSize: '0.875rem' }}>
+                    <pre style={{ background: 'var(--color-background)', padding: '0.5rem', borderRadius: '4px', fontSize: '0.875rem', marginTop: '0.5rem' }}>
                       {JSON.stringify(log.data, null, 2)}
                     </pre>
                   )}
