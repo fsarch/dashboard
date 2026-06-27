@@ -27,7 +27,7 @@ export const METRIC_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
     $type: 'redirect',
     url: {
       $type: 'jsonata',
-      value: "service.localPath & '/metric/' & service.id & '/metric-type/' & response.body.id",
+      value: "service.localPath & '/metric-type/' & response.body.id",
     },
   }],
   buttons: {

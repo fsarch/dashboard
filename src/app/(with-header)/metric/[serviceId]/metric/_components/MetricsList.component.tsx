@@ -12,7 +12,7 @@ import Button from '@/components/universals/forms/Button';
 type MetricsListProps = {
   metrics: TPaginationResultDto<TMetricDto>;
   serviceId: string;
-  metricTypeId: string;
+  metricTypeId?: string;
   page: number;
   pageSize: number;
 };
@@ -27,18 +27,20 @@ const MetricsList: React.FunctionComponent<MetricsListProps> = ({
   const { data, metadata } = metrics;
   const router = useRouter();
 
+  const metricTypeIdParam = metricTypeId ? `&metricTypeId=${metricTypeId}` : '';
+
   const handlePageChange = (newPage: number) => {
-    router.push(`/metric/${serviceId}/metric?metricTypeId=${metricTypeId}&page=${newPage}&pageSize=${pageSize}`);
+    router.push(`/metric/${serviceId}/metric?page=${newPage}&pageSize=${pageSize}${metricTypeIdParam}`);
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/metric/${serviceId}/metric?metricTypeId=${metricTypeId}&page=1&pageSize=${newPageSize}`);
+    router.push(`/metric/${serviceId}/metric?page=1&pageSize=${newPageSize}${metricTypeIdParam}`);
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Link href={`/metric/${serviceId}/metric/create?metricTypeId=${metricTypeId}`} passHref>
+        <Link href={`/metric/${serviceId}/metric/create${metricTypeId ? `?metricTypeId=${metricTypeId}` : ''}`} passHref>
           <Button type="button">
             Create Metric
           </Button>
@@ -76,7 +78,7 @@ const MetricsList: React.FunctionComponent<MetricsListProps> = ({
           />
         </>
       ) : (
-        <p>Keine Metrics gefunden für diesen Metric Type.</p>
+        <p>Keine Metrics gefunden.</p>
       )}
     </div>
   );

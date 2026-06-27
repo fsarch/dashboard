@@ -90,7 +90,7 @@ export type TPaginationParams = {
 
 // Query params for metrics list
 export type TMetricsQueryParams = {
-  metricTypeId: string;
+  metricTypeId?: string;
   page: number;
   pageSize: number;
 };

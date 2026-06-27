@@ -59,8 +59,9 @@ export const listMetrics = async (
   params: TMetricsQueryParams,
   serviceId: string
 ): Promise<TPaginationResultDto<TMetricDto>> => {
+  const metricTypeIdParam = params.metricTypeId ? `&metricTypeId=${params.metricTypeId}` : '';
   const response = await fetchService(
-    `/metrics?metricTypeId=${params.metricTypeId}&page=${params.page}&pageSize=${params.pageSize}`,
+    `/metrics?page=${params.page}&pageSize=${params.pageSize}${metricTypeIdParam}`,
     undefined,
     { serviceId }
   );

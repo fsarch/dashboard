@@ -22,7 +22,7 @@ export default async function MetricsPage({
   searchParams,
 }: MetricsPageProps) {
   const { serviceId } = await params;
-  const { metricTypeId = '', page = '1', pageSize = '25' } = await searchParams;
+  const { metricTypeId, page = '1', pageSize = '25' } = await searchParams;
 
   const accessToken = await getAccessToken();
 
@@ -43,29 +43,6 @@ export default async function MetricsPage({
   );
   if (!canAccessService) {
     return notFound();
-  }
-
-  // If no metricTypeId is provided, we need to get all metrics
-  // But the API requires metricTypeId, so we'll show an error or get first metric type
-  if (!metricTypeId) {
-    // Get first metric type to show some metrics
-    const metricTypes = await metricService.listMetricTypes(
-      { page: 1, pageSize: 1 },
-      serviceId
-    );
-
-    if (metricTypes.data.length === 0) {
-      return (
-        <DefaultPage>
-          <Section name="Metrics">
-            <p>Bitte wählen Sie einen Metric Type aus, um Metrics anzuzeigen.</p>
-          </Section>
-        </DefaultPage>
-      );
-    }
-
-    // Redirect to first metric type
-    return redirect(`/metric/${serviceId}/metric?metricTypeId=${metricTypes.data[0].id}&page=1&pageSize=25`);
   }
 
   const metrics = await metricService.listMetrics(
