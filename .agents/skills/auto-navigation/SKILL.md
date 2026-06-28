@@ -64,10 +64,20 @@ The dashboard uses an automatic navigation system that generates sidebar navigat
   name: string;              // Service display name
   basePath: string;          // Base URL path (e.g., '/watchtower')
   navigation?: Array<NavigationItem>;    // Main sidebar items
-  bottomNavigation?: Array<NavigationItem>; // Bottom sidebar items
+  bottomNavigation?: Array<NavigationItem>; // Bottom sidebar items (legacy)
+  navigations?: Array<{       // Explicit navigation groups (recommended)
+    id: string;
+    position: 'sidebar' | 'sidebar-bottom';
+    items: Array<NavigationItem>;
+  }>;
   routes?: {                // Route-specific navigation
     [routePattern: string]: {
-      navigation: Array<NavigationItem>;
+      navigation?: Array<NavigationItem>;  // Legacy simple format
+      navigations?: Array<{      // Recommended format with positions
+        id: string;
+        position: 'sidebar' | 'sidebar-bottom';
+        items: Array<NavigationItem>;
+      }>;
     }
   };
 }
@@ -112,6 +122,28 @@ Simply delete it from the array.
 
 Change the order in the array - the order determines display order.
 
+### Add sidebar-bottom navigation for specific routes
+
+To show archive/trash buttons only on specific sub-routes (like material-tracing):
+
+```typescript
+routes: {
+  '/part': {
+    navigations: [{
+      id: 'bottom',
+      position: 'sidebar-bottom',
+      items: [{
+        name: 'Archiv',
+        path: '/part/archive',
+        icon: 'archive',
+      }],
+    }],
+  },
+}
+```
+
+This pattern is used by material-tracing for archive functionality.
+
 ---
 
 ## Route Patterns
@@ -132,7 +164,8 @@ Uses `path-to-regexp` syntax:
 |----------|-------|
 | General | `layer-group`, `cog`, `cogs`, `server`, `database`, `puzzle-piece` |
 | Lists & Tables | `list`, `table`, `th-list`, `th` |
-| Forms | `wpforms`, `edit`, `pencil`, `trash`, `plus`, `minus` |
+| Forms | `wpforms`, `edit`, `pencil`, `plus`, `minus` |
+| Actions | `trash`, `archive` |
 | Navigation | `arrow-left`, `arrow-right`, `chevron-left`, `chevron-right` |
 | Content | `file`, `file-lines`, `book`, `copy`, `paste` |
 | Data | `hashtag`, `tag`, `tags`, `barcode`, `qrcode` |
@@ -208,6 +241,98 @@ Uses `path-to-regexp` syntax:
     { name: 'Settings', path: '/settings', icon: 'gear' },
     { name: 'Logs', path: '/logs', icon: 'file-lines' }
   ]
+}
+```
+
+### With Explicit Navigation Groups (Recommended)
+
+Use `navigations` array with explicit `id` and `position` for more control:
+
+```typescript
+[EServiceType.SERVICE]: {
+  name: 'Service',
+  basePath: '/service',
+  navigations: [{
+    id: 'main',
+    position: 'sidebar',
+    items: [
+      { name: 'Dashboard', path: '/', icon: 'layer-group' },
+      { name: 'Items', path: '/item', icon: 'list' }
+    ]
+  }, {
+    id: 'bottom',
+    position: 'sidebar-bottom',
+    items: [
+      { name: 'Archive', path: '/archive', icon: 'archive' },
+      { name: 'Trash', path: '/trash', icon: 'trash' }
+    ]
+  }]
+}
+```
+
+### With Route-Specific Navigation Groups
+
+Most flexible approach - different navigation for different routes:
+
+```typescript
+[EServiceType.SERVICE]: {
+  name: 'Service',
+  basePath: '/service',
+  navigations: [{
+    id: 'main',
+    position: 'sidebar',
+    items: [
+      { name: 'Dashboard', path: '/', icon: 'layer-group' }
+    ]
+  }],
+  routes: {
+    '/item': {
+      navigations: [{
+        id: 'bottom',
+        position: 'sidebar-bottom',
+        items: [
+          { name: 'Archive', path: '/item/archive', icon: 'archive' }
+        ]
+      }]
+    }
+  }
+}
+```
+
+### Real-World Example: Metrics with Trash
+
+Based on the material-tracing archive pattern, here's a complete metrics configuration:
+
+```typescript
+[EServiceType.METRIC]: {
+  name: 'Metrics',
+  basePath: '/metric',
+  navigation: [{
+    name: 'Übersicht',
+    path: '/',
+    icon: 'layer-group',
+  }, {
+    name: 'Metric Types',
+    path: '/metric-type',
+    icon: 'tag',
+  }, {
+    name: 'Metrics',
+    path: '/metric',
+    icon: 'chart-line',
+  }],
+  routes: {
+    '/metric': {
+      navigations: [{
+        id: 'bottom',
+        position: 'sidebar-bottom',
+        items: [{
+          name: 'Papierkorb',
+          path: '/metric/trash',
+          icon: 'trash',
+        }],
+      }],
+    },
+  },
 }
 ```
 
