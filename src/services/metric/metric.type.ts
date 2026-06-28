@@ -26,6 +26,7 @@ export type TMetricDto = {
   metricTypeId: string;
   externalId: string | null;
   creationTime: string;
+  deletionTime: string | null;
 };
 
 // Measurements
@@ -93,6 +94,7 @@ export type TMetricsQueryParams = {
   metricTypeId?: string;
   page: number;
   pageSize: number;
+  isDeleted?: boolean;
 };
 
 // Query params for measurements list

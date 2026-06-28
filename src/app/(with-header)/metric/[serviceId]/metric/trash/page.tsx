@@ -8,21 +8,18 @@ import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { metricService } from '@/services/metric/metric.service';
-import MetricsList from './_components/MetricsList.component';
+import MetricsList from '../_components/MetricsList.component';
 
 export const generateMetadata = createAutomaticMetadata();
 
-type MetricsPageProps = {
+type TrashPageProps = {
   params: Promise<{ serviceId: string }>;
-  searchParams: Promise<{ metricTypeId?: string; page?: string; pageSize?: string; isDeleted?: string }>;
+  searchParams: Promise<{ metricTypeId?: string; page?: string; pageSize?: string }>;
 };
 
-export default async function MetricsPage({
-  params,
-  searchParams,
-}: MetricsPageProps) {
+export default async function TrashPage({ params, searchParams }: TrashPageProps) {
   const { serviceId } = await params;
-  const { metricTypeId, page = '1', pageSize = '25', isDeleted } = await searchParams;
+  const { metricTypeId, page = '1', pageSize = '25' } = await searchParams;
 
   const accessToken = await getAccessToken();
 
@@ -46,20 +43,20 @@ export default async function MetricsPage({
   }
 
   const metrics = await metricService.listMetrics(
-    { metricTypeId, page: parseInt(page), pageSize: parseInt(pageSize), isDeleted: false },
+    { metricTypeId, page: parseInt(page), pageSize: parseInt(pageSize), isDeleted: true },
     serviceId
   );
 
   return (
     <DefaultPage>
-      <Section name="Metrics">
+      <Section name="Papierkorb - Metriken">
         <MetricsList
           metrics={metrics}
           serviceId={serviceId}
           metricTypeId={metricTypeId}
           page={parseInt(page)}
           pageSize={parseInt(pageSize)}
-          isDeleted={false}
+          isDeleted={true}
         />
       </Section>
     </DefaultPage>

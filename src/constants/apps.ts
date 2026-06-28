@@ -304,5 +304,18 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       path: '/metric',
       icon: 'chart-line',
     }],
+    routes: {
+      '/metric': {
+        navigations: [{
+          id: 'bottom',
+          position: 'sidebar-bottom',
+          items: [{
+            name: 'Papierkorb',
+            path: '/metric/trash',
+            icon: 'trash',
+          }],
+        }],
+      },
+    },
   },
 };

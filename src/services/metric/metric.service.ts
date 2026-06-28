@@ -60,8 +60,9 @@ export const listMetrics = async (
   serviceId: string
 ): Promise<TPaginationResultDto<TMetricDto>> => {
   const metricTypeIdParam = params.metricTypeId ? `&metricTypeId=${params.metricTypeId}` : '';
+  const isDeletedParam = params.isDeleted !== undefined ? `&isDeleted=${params.isDeleted}` : '';
   const response = await fetchService(
-    `/metrics?page=${params.page}&pageSize=${params.pageSize}${metricTypeIdParam}`,
+    `/metrics?page=${params.page}&pageSize=${params.pageSize}${metricTypeIdParam}${isDeletedParam}`,
     undefined,
     { serviceId }
   );
@@ -92,6 +93,32 @@ export const createMetric = async (
     { serviceId }
   );
   return response.json();
+};
+
+export const deleteMetric = async (
+  id: string,
+  serviceId: string
+): Promise<void> => {
+  await fetchService(
+    `/metrics/${id}`,
+    {
+      method: 'DELETE',
+    },
+    { serviceId }
+  );
+};
+
+export const restoreMetric = async (
+  id: string,
+  serviceId: string
+): Promise<void> => {
+  await fetchService(
+    `/metrics/${id}/_actions/restore`,
+    {
+      method: 'POST',
+    },
+    { serviceId }
+  );
 };
 
 // Measurements
@@ -151,6 +178,9 @@ export const metricService = {
   // Metrics
   listMetrics,
   getMetricById,
+  createMetric,
+  deleteMetric,
+  restoreMetric,
   // Measurements
   listMeasurements,
   getMeasurementById,
