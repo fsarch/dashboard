@@ -2,6 +2,7 @@ import { fetchService } from "@/utils/fetchService";
 import {
   TMetricTypeDto,
   TMetricDto,
+  TMetricStatusDto,
   TMeasurementDto,
   TAggregateMeasurementsDto,
   TAggregateResult,
@@ -74,6 +75,16 @@ export const getMetricById = async (
   serviceId: string
 ): Promise<TMetricDto> => {
   const response = await fetchService(`/metrics/${id}`, undefined, {
+    serviceId,
+  });
+  return response.json();
+};
+
+export const getMetricStatus = async (
+  id: string,
+  serviceId: string
+): Promise<TMetricStatusDto> => {
+  const response = await fetchService(`/metrics/${id}/status`, undefined, {
     serviceId,
   });
   return response.json();
@@ -178,6 +189,7 @@ export const metricService = {
   // Metrics
   listMetrics,
   getMetricById,
+  getMetricStatus,
   createMetric,
   deleteMetric,
   restoreMetric,

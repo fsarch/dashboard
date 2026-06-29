@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { TMetricDto } from '@/services/metric/metric.type';
+import { TMetricDto, TMetricStatusDto } from '@/services/metric/metric.type';
 import Link from 'next/link';
 import Button from '@/components/universals/forms/Button';
 import { deleteMetricAction, restoreMetricAction } from '@/app/(with-header)/metric/[serviceId]/metric/_components/MetricActions.server-action';
@@ -13,9 +13,10 @@ import { useRouter } from 'next/navigation';
 type MetricDetailProps = {
   metric: TMetricDto;
   serviceId: string;
+  metricStatus: TMetricStatusDto | null;
 };
 
-const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serviceId }) => {
+const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serviceId, metricStatus }) => {
   const router = useRouter();
   const openDialog = useOpenDialog();
   const isDeleted = metric.deletionTime !== null;
@@ -114,6 +115,34 @@ const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serv
                 {new Date(metric.deletionTime).toLocaleString()}
               </td>
             </tr>
+          )}
+          {metricStatus && (
+            <>
+              <tr>
+                <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+                  Total Measurements
+                </th>
+                <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+                  {metricStatus.totalMeasurements}
+                </td>
+              </tr>
+              <tr>
+                <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+                  First Measurement
+                </th>
+                <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+                  {metricStatus.firstMeasurementAt ? new Date(metricStatus.firstMeasurementAt).toLocaleString() : 'N/A'}
+                </td>
+              </tr>
+              <tr>
+                <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+                  Last Measurement
+                </th>
+                <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+                  {metricStatus.lastMeasurementAt ? new Date(metricStatus.lastMeasurementAt).toLocaleString() : 'N/A'}
+                </td>
+              </tr>
+            </>
           )}
         </tbody>
       </table>

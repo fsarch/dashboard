@@ -29,6 +29,12 @@ export type TMetricDto = {
   deletionTime: string | null;
 };
 
+export type TMetricStatusDto = {
+  totalMeasurements: number;
+  firstMeasurementAt: string | null;
+  lastMeasurementAt: string | null;
+};
+
 // Measurements
 
 export type TCreateMeasurementDto = {

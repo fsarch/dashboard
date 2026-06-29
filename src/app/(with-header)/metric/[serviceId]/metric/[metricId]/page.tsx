@@ -8,6 +8,7 @@ import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { metricService } from '@/services/metric/metric.service';
+import { TMetricDto, TMetricStatusDto } from '@/services/metric/metric.type';
 import MetricDetail from './_components/MetricDetail.component';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -45,10 +46,18 @@ export default async function MetricDetailPage({ params }: MetricDetailPageProps
     return notFound();
   }
 
+  let metricStatus: TMetricStatusDto | null = null;
+  try {
+    metricStatus = await metricService.getMetricStatus(metricId, serviceId);
+  } catch (error) {
+    // Status endpoint may not be available, continue without status info
+    metricStatus = null;
+  }
+
   return (
     <DefaultPage>
       <Section name={`Metric: ${metric.name}`}>
-        <MetricDetail metric={metric} serviceId={serviceId} />
+        <MetricDetail metric={metric} serviceId={serviceId} metricStatus={metricStatus} />
       </Section>
     </DefaultPage>
   );
