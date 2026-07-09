@@ -2,7 +2,7 @@ import {
   TGeneratedFormDefinition,
   TGeneratedFormInput,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { CachePolicyDto, CorsPolicyDto, LogPolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
+import { CachePolicyDto, CorsPolicyDto, HookDto, LogPolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
 
 const createStringArrayInput = (id: string, label: string, itemLabel: string): TGeneratedFormInput => ({
   id,
@@ -44,7 +44,9 @@ const FRONTIER_PATH_RULE_BODY = `{
   "upstreamGroupId": form.upstreamGroupId,
   "order": form.order,
   "corsPolicyId": form.corsPolicyId ? form.corsPolicyId : undefined,
-  "logPolicyId": form.logPolicyId ? form.logPolicyId : undefined
+  "logPolicyId": form.logPolicyId ? form.logPolicyId : undefined,
+  "preHookId": form.preHookId ? form.preHookId : undefined,
+  "postHookId": form.postHookId ? form.postHookId : undefined
 }`;
 
 const FRONTIER_CACHE_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
@@ -252,6 +254,24 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       $type: 'datasource',
       value: 'logPolicies',
     },
+  }, {
+    id: 'preHookId',
+    $type: 'select',
+    label: 'Pre Hook (optional)',
+    enableSearch: true,
+    data: {
+      $type: 'datasource',
+      value: 'hooks',
+    },
+  }, {
+    id: 'postHookId',
+    $type: 'select',
+    label: 'Post Hook (optional)',
+    enableSearch: true,
+    data: {
+      $type: 'datasource',
+      value: 'hooks',
+    },
   }],
   initialValues: {
     $type: 'jsonata',
@@ -262,7 +282,9 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       "cachePolicyId": dataSource.cachePolicies[0] ? dataSource.cachePolicies[0].value : "",
       "upstreamGroupId": dataSource.upstreamGroups[0] ? dataSource.upstreamGroups[0].value : "",
       "corsPolicyId": "",
-      "logPolicyId": ""
+      "logPolicyId": "",
+      "preHookId": "",
+      "postHookId": ""
     }`,
   },
   endpoint: {
@@ -308,6 +330,15 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
     logPolicies: {
       $type: 'fetch',
       path: `/v1/domain-groups/${domainGroupId}/log-policies`,
+      method: 'GET',
+      transformResponse: {
+        $type: 'jsonata',
+        value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+      },
+    },
+    hooks: {
+      $type: 'fetch',
+      path: '/v1/hooks',
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
@@ -372,6 +403,24 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         $type: 'datasource',
         value: 'logPolicies',
       },
+    }, {
+      id: 'preHookId',
+      $type: 'select',
+      label: 'Pre Hook (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'hooks',
+      },
+    }, {
+      id: 'postHookId',
+      $type: 'select',
+      label: 'Post Hook (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'hooks',
+      },
     }],
     initialValues: {
       name: pathRule.name,
@@ -381,6 +430,8 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
       upstreamGroupId: pathRule.upstreamGroupId,
       corsPolicyId: pathRule.corsPolicyId ?? '',
       logPolicyId: pathRule.logPolicyId ?? '',
+      preHookId: pathRule.preHookId ?? '',
+      postHookId: pathRule.postHookId ?? '',
     },
     endpoint: {
       path: `/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`,
@@ -425,6 +476,15 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
       logPolicies: {
         $type: 'fetch',
         path: `/v1/domain-groups/${domainGroupId}/log-policies`,
+        method: 'GET',
+        transformResponse: {
+          $type: 'jsonata',
+          value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+        },
+      },
+      hooks: {
+        $type: 'fetch',
+        path: '/v1/hooks',
         method: 'GET',
         transformResponse: {
           $type: 'jsonata',
@@ -632,6 +692,67 @@ export function FRONTIER_LOG_POLICY_UPDATE_FORM(
       },
     }],
     buttons: { submitButtonText: 'Log Policy aktualisieren' },
+  };
+}
+
+// --- Hooks ---
+
+const FRONTIER_HOOK_BODY = `{
+  "name": form.name,
+  "functionId": form.functionId
+}`;
+
+const FRONTIER_HOOK_INPUTS: TGeneratedFormDefinition['inputs'] = [{
+  id: 'name',
+  $type: 'text',
+  label: 'Name',
+}, {
+  id: 'functionId',
+  $type: 'text',
+  label: 'Function ID',
+}];
+
+export const FRONTIER_HOOK_CREATE_FORM: TGeneratedFormDefinition = {
+  inputs: FRONTIER_HOOK_INPUTS,
+  initialValues: { name: '', functionId: '' },
+  endpoint: {
+    path: '/v1/hooks',
+    method: 'POST',
+    body: { $type: 'jsonata', value: FRONTIER_HOOK_BODY },
+  },
+  postEndpointActions: [{
+    $type: 'redirect',
+    url: {
+      $type: 'jsonata',
+      value: "service.localPath & '/hook/' & response.body.id",
+    },
+  }],
+  buttons: { submitButtonText: 'Hook erstellen' },
+};
+
+export function FRONTIER_HOOK_UPDATE_FORM(
+  hookId: string,
+  hook: HookDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: FRONTIER_HOOK_INPUTS,
+    initialValues: {
+      name: hook.name,
+      functionId: hook.functionId,
+    },
+    endpoint: {
+      path: `/v1/hooks/${hookId}`,
+      method: 'PATCH',
+      body: { $type: 'jsonata', value: FRONTIER_HOOK_BODY },
+    },
+    postEndpointActions: [{
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/hook/${hookId}'`,
+      },
+    }],
+    buttons: { submitButtonText: 'Hook aktualisieren' },
   };
 }
 

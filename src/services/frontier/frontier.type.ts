@@ -121,6 +121,8 @@ export type PathRuleUpdateDto = {
   order?: number;
   corsPolicyId?: string;
   logPolicyId?: string;
+  preHookId?: string | null;
+  postHookId?: string | null;
 };
 
 export type PathRuleDto = {
@@ -132,6 +134,8 @@ export type PathRuleDto = {
   order: number;
   corsPolicyId?: string;
   logPolicyId?: string;
+  preHookId?: string | null;
+  postHookId?: string | null;
 };
 
 export type UpstreamGroupCreateDto = {
@@ -153,4 +157,22 @@ export type UpstreamCreateDto = {
 export type UpstreamDto = UpstreamCreateDto & {
   id: string;
   upstreamGroupId: string;
+};
+
+// --- Hooks ---
+
+export type HookCreateDto = {
+  name: string;
+  functionId: string;
+};
+
+export type HookUpdateDto = {
+  name?: string;
+  functionId?: string;
+};
+
+export type HookDto = {
+  id: string;
+  name: string;
+  functionId: string;
 };

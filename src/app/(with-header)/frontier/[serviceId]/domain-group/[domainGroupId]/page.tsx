@@ -20,7 +20,7 @@ export default async function DomainGroupDetailPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies, canSeeDevResponse] = await Promise.all([
+  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies, hooks, canSeeDevResponse] = await Promise.all([
     frontierService.getDomainGroup(domainGroupId),
     frontierService.listDomains(domainGroupId),
     frontierService.listCachePolicies(domainGroupId),
@@ -28,6 +28,7 @@ export default async function DomainGroupDetailPage({
     frontierService.listUpstreamGroups(domainGroupId),
     frontierService.listCorsPolicies(domainGroupId),
     frontierService.listLogPolicies(domainGroupId),
+    frontierService.listHooks(),
     uacUtils.isDeveloper(),
   ]);
 
@@ -49,6 +50,7 @@ export default async function DomainGroupDetailPage({
     corsPolicyCreateLink,
     logPolicyCreateLink,
     requestLogListLink,
+    hookListLink,
   ] = await Promise.all([
     getServiceLocalUrl(`/domain-group/${domainGroupId}/domain/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cache-policy/create`),
@@ -57,6 +59,7 @@ export default async function DomainGroupDetailPage({
     getServiceLocalUrl(`/domain-group/${domainGroupId}/cors-policy/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/log-policy/create`),
     getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log`),
+    getServiceLocalUrl('/hook'),
   ]);
 
   return (
@@ -190,10 +193,31 @@ export default async function DomainGroupDetailPage({
         </Section>
       </div>
 
+      <div id="hooks">
+        <Section name="Hooks">
+          <Link href={hookListLink}>
+            <Button type="button">Hooks verwalten</Button>
+          </Link>
+          <p style={{ marginTop: '12px', fontSize: '0.9em', color: '#666' }}>
+            Hooks können in Path Rules als Pre- oder Post-Hooks verwendet werden.
+          </p>
+          <List>
+            {hooks.map(async (hook) => (
+              <LinkListItem
+                key={hook.id}
+                href={await getServiceLocalUrl(`/hook/${hook.id}`)}
+              >
+                {hook.name} ({hook.functionId})
+              </LinkListItem>
+            ))}
+          </List>
+        </Section>
+      </div>
+
       {canSeeDevResponse ? (
         <DevResponseSection
           title="Domain Group Detail"
-          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies }}
+          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies, hooks }}
         />
       ) : null}
     </DefaultPage>

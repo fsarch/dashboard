@@ -175,6 +175,10 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       name: 'Domain Groups',
       path: '/',
       icon: 'layer-group',
+    }, {
+      name: 'Hooks',
+      path: '/hook',
+      icon: 'code',
     }],
     routes: {
       '/domain-group/:domainGroupId{/*path}': {
@@ -238,6 +242,10 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
             value: "'/domain-group/' & params.domainGroupId & '/upstream-group'",
           },
           icon: 'server',
+        }, {
+          name: 'Hooks',
+          path: '/hook',
+          icon: 'code',
         }],
       },
     },

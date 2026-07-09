@@ -12,39 +12,19 @@ import DevResponseSection from '@/components/universals/section/DevResponseSecti
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function FrontierServicePage() {
-  const [domainGroups, hooks, domainGroupCreateLink, hookCreateLink, canSeeDevResponse] = await Promise.all([
-    frontierService.listDomainGroups(),
+export default async function HookListPage() {
+  const [hooks, createLink, canSeeDevResponse] = await Promise.all([
     frontierService.listHooks(),
-    getServiceLocalUrl('/domain-group/create'),
     getServiceLocalUrl('/hook/create'),
     uacUtils.isDeveloper(),
   ]);
 
   return (
     <DefaultPage>
-      <Section name="Domain Groups">
-        <div style={{ marginBottom: '16px' }}>
-          <Link href={domainGroupCreateLink}>
-            <Button type="button">+ Neue Domain Group</Button>
-          </Link>
-        </div>
-        <List>
-          {domainGroups.map(async (group) => (
-            <LinkListItem
-              key={group.id}
-              href={await getServiceLocalUrl(`/domain-group/${group.id}`)}
-            >
-              {group.name}
-            </LinkListItem>
-          ))}
-        </List>
-      </Section>
-      
       <Section name="Hooks">
-        <div style={{ marginBottom: '16px' }}>
-          <Link href={hookCreateLink}>
-            <Button type="button">+ Neuen Hook erstellen</Button>
+        <div style={{ marginBottom: '12px' }}>
+          <Link href={createLink}>
+            <Button type="button">+ Hook erstellen</Button>
           </Link>
         </div>
         <List>
@@ -58,14 +38,9 @@ export default async function FrontierServicePage() {
           ))}
         </List>
       </Section>
-      
       {canSeeDevResponse ? (
-        <>
-          <DevResponseSection title="Domain Groups" response={domainGroups} />
-          <DevResponseSection title="Hooks" response={hooks} />
-        </>
+        <DevResponseSection title="Hooks" response={hooks} />
       ) : null}
     </DefaultPage>
   );
 }
-

@@ -10,6 +10,9 @@ import {
   DomainDto,
   DomainGroupCreateDto,
   DomainGroupDto,
+  HookCreateDto,
+  HookDto,
+  HookUpdateDto,
   LogPolicyCreateDto,
   LogPolicyDto,
   LogPolicyUpdateDto,
@@ -315,6 +318,44 @@ const createUpstream = async (domainGroupId: string, upstreamGroupId: string, da
   return response.json();
 };
 
+// --- Hooks ---
+
+const listHooks = async (): Promise<HookDto[]> => {
+  const response = await fetchService('/v1/hooks');
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+};
+
+const getHook = async (hookId: string): Promise<HookDto | null> => {
+  const response = await fetchService(`/v1/hooks/${hookId}`);
+  if (!response.ok) return null;
+  return response.json();
+};
+
+const createHook = async (data: HookCreateDto): Promise<HookDto> => {
+  const response = await fetchService('/v1/hooks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const updateHook = async (id: string, data: HookUpdateDto): Promise<HookDto> => {
+  const response = await fetchService(`/v1/hooks/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteHook = async (id: string): Promise<void> => {
+  await fetchService(`/v1/hooks/${id}`, {
+    method: 'DELETE',
+  });
+};
+
 export const frontierService = {
   listDomainGroups,
   getDomainGroup,
@@ -349,5 +390,10 @@ export const frontierService = {
   listUpstreams,
   getUpstream,
   createUpstream,
+  listHooks,
+  getHook,
+  createHook,
+  updateHook,
+  deleteHook,
 };
 

@@ -105,6 +105,7 @@ const executePostSubmitAction = async (
             service: {
               localPath: await getServiceLocalUrl(''),
             },
+            args,
           }),
         }
       }
@@ -133,7 +134,7 @@ const evaluateDefinition = async (
   const dataSourceDebugData: TEvaluationDebugInfo['dataSourceResponses'] = {};
 
   const dataSourceData = Object.fromEntries(await Promise.all(Object.entries(definition.dataSources ?? {}).map(async ([key, value]) => {
-    const path = await jsonataUtils.evaluateStringValue(value.path, args);
+    const path = await jsonataUtils.evaluateStringValue(value.path, { args });
     const dataResponse = await fetchService(path, {
       method: value.method,
     });
