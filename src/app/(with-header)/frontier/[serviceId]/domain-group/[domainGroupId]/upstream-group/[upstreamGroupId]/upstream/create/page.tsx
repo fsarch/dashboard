@@ -8,7 +8,7 @@ export const generateMetadata = createAutomaticMetadata();
 export default async function CreateUpstreamPage({
   params,
 }: {
-  params: Promise<{ domainGroupId: string; upstreamGroupId: string }>;
+  params: Promise<{ serviceId: string; domainGroupId: string; upstreamGroupId: string }>;
 }) {
   const { domainGroupId, upstreamGroupId } = await params;
 

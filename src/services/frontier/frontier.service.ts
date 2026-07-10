@@ -25,6 +25,8 @@ import {
   UpstreamDto,
   UpstreamGroupCreateDto,
   UpstreamGroupDto,
+  UpstreamGroupUpdateDto,
+  UpstreamUpdateDto,
 } from '@/services/frontier/frontier.type';
 
 const findById = <T extends { id: string }>(entries: T[], id: string): T | null => {
@@ -297,6 +299,27 @@ const createUpstreamGroup = async (domainGroupId: string, data: UpstreamGroupCre
   return response.json();
 };
 
+const getUpstreamGroupById = async (domainGroupId: string, upstreamGroupId: string): Promise<UpstreamGroupDto | null> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`);
+  if (!response.ok) return null;
+  return response.json();
+};
+
+const updateUpstreamGroup = async (domainGroupId: string, upstreamGroupId: string, data: UpstreamGroupUpdateDto): Promise<UpstreamGroupDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteUpstreamGroup = async (domainGroupId: string, upstreamGroupId: string): Promise<void> => {
+  await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`, {
+    method: 'DELETE',
+  });
+};
+
 // --- Upstreams ---
 
 const listUpstreams = async (domainGroupId: string, upstreamGroupId: string): Promise<UpstreamDto[]> => {
@@ -316,6 +339,27 @@ const createUpstream = async (domainGroupId: string, upstreamGroupId: string, da
     body: JSON.stringify(data),
   });
   return response.json();
+};
+
+const getUpstreamById = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string): Promise<UpstreamDto | null> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`);
+  if (!response.ok) return null;
+  return response.json();
+};
+
+const updateUpstream = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string, data: UpstreamUpdateDto): Promise<UpstreamDto> => {
+  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteUpstream = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string): Promise<void> => {
+  await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`, {
+    method: 'DELETE',
+  });
 };
 
 // --- Hooks ---
@@ -386,10 +430,16 @@ export const frontierService = {
   getRequestLog,
   listUpstreamGroups,
   getUpstreamGroup,
+  getUpstreamGroupById,
   createUpstreamGroup,
+  updateUpstreamGroup,
+  deleteUpstreamGroup,
   listUpstreams,
   getUpstream,
+  getUpstreamById,
   createUpstream,
+  updateUpstream,
+  deleteUpstream,
   listHooks,
   getHook,
   createHook,

@@ -142,9 +142,17 @@ export type UpstreamGroupCreateDto = {
   name: string;
 };
 
+export type UpstreamGroupUpdateDto = {
+  name?: string;
+};
+
 export type UpstreamGroupDto = UpstreamGroupCreateDto & {
   id: string;
   domainGroupId: string;
+};
+
+export type UpstreamSslOptionsDto = {
+  sslVerify?: boolean;
 };
 
 export type UpstreamCreateDto = {
@@ -152,6 +160,17 @@ export type UpstreamCreateDto = {
   host: string;
   port: number;
   path: string;
+  protocol?: 'http' | 'https';
+  sslOptions?: UpstreamSslOptionsDto;
+};
+
+export type UpstreamUpdateDto = {
+  name?: string;
+  host?: string;
+  port?: number;
+  path?: string;
+  protocol?: 'http' | 'https';
+  sslOptions?: UpstreamSslOptionsDto;
 };
 
 export type UpstreamDto = UpstreamCreateDto & {

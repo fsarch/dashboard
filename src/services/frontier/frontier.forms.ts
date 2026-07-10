@@ -2,7 +2,7 @@ import {
   TGeneratedFormDefinition,
   TGeneratedFormInput,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { CachePolicyDto, CorsPolicyDto, HookDto, LogPolicyDto, PathRuleDto } from '@/services/frontier/frontier.type';
+import { CachePolicyDto, CorsPolicyDto, HookDto, LogPolicyDto, PathRuleDto, UpstreamDto, UpstreamGroupDto } from '@/services/frontier/frontier.type';
 
 const createStringArrayInput = (id: string, label: string, itemLabel: string): TGeneratedFormInput => ({
   id,
@@ -518,6 +518,36 @@ export const FRONTIER_UPSTREAM_GROUP_CREATE_FORM = (domainGroupId: string): TGen
   buttons: { submitButtonText: 'Upstream Group erstellen' },
 });
 
+export function FRONTIER_UPSTREAM_GROUP_UPDATE_FORM(
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamGroup: UpstreamGroupDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: [{
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    }],
+    initialValues: {
+      name: upstreamGroup.name,
+    },
+    endpoint: {
+      path: `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`,
+      method: 'PATCH',
+      body: { $type: 'jsonata', value: 'form' },
+    },
+    postEndpointActions: [{
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+      },
+    }],
+    buttons: { submitButtonText: 'Upstream Group aktualisieren' },
+  };
+}
+
 export const FRONTIER_UPSTREAM_CREATE_FORM = (domainGroupId: string, upstreamGroupId: string): TGeneratedFormDefinition => ({
   inputs: [{
     id: 'name',
@@ -535,8 +565,28 @@ export const FRONTIER_UPSTREAM_CREATE_FORM = (domainGroupId: string, upstreamGro
     id: 'path',
     $type: 'text',
     label: 'Pfad',
+  }, {
+    id: 'protocol',
+    $type: 'select',
+    label: 'Protokoll',
+    data: {
+      $type: 'constant',
+      value: [
+        { id: 'http', value: 'http', label: 'HTTP' },
+        { id: 'https', value: 'https', label: 'HTTPS' },
+      ],
+    },
+  }, {
+    id: 'sslOptions',
+    $type: 'nested-form',
+    label: 'SSL-Optionen',
+    inputs: [{
+      id: 'sslVerify',
+      $type: 'checkbox',
+      label: 'SSL-Zertifikat prüfen',
+    }],
   }],
-  initialValues: { name: '', host: '', port: 80, path: '/' },
+  initialValues: { name: '', host: '', port: 80, path: '/', protocol: 'http', sslOptions: { sslVerify: true } },
   endpoint: {
     path: `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`,
     method: 'POST',
@@ -551,6 +601,74 @@ export const FRONTIER_UPSTREAM_CREATE_FORM = (domainGroupId: string, upstreamGro
   }],
   buttons: { submitButtonText: 'Upstream erstellen' },
 });
+
+export function FRONTIER_UPSTREAM_UPDATE_FORM(
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamId: string,
+  upstream: UpstreamDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: [{
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    }, {
+      id: 'host',
+      $type: 'text',
+      label: 'Host',
+    }, {
+      id: 'port',
+      $type: 'number',
+      label: 'Port',
+    }, {
+      id: 'path',
+      $type: 'text',
+      label: 'Pfad',
+    }, {
+      id: 'protocol',
+      $type: 'select',
+      label: 'Protokoll',
+      data: {
+        $type: 'constant',
+        value: [
+          { id: 'http', value: 'http', label: 'HTTP' },
+          { id: 'https', value: 'https', label: 'HTTPS' },
+        ],
+      },
+    }, {
+      id: 'sslOptions',
+      $type: 'nested-form',
+      label: 'SSL-Optionen',
+      inputs: [{
+        id: 'sslVerify',
+        $type: 'checkbox',
+        label: 'SSL-Zertifikat prüfen',
+      }],
+    }],
+    initialValues: {
+      name: upstream.name,
+      host: upstream.host,
+      port: upstream.port,
+      path: upstream.path,
+      protocol: upstream.protocol ?? 'http',
+      sslOptions: upstream.sslOptions ? { sslVerify: upstream.sslOptions.sslVerify ?? true } : { sslVerify: true },
+    },
+    endpoint: {
+      path: `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`,
+      method: 'PATCH',
+      body: { $type: 'jsonata', value: 'form' },
+    },
+    postEndpointActions: [{
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+      },
+    }],
+    buttons: { submitButtonText: 'Upstream aktualisieren' },
+  };
+}
 
 const FRONTIER_CORS_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
   id: 'name',
