@@ -1,0 +1,88 @@
+.backLink {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.imageInfo {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.imagePreview {
+  flex-shrink: 0;
+
+  img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+}
+
+.imageDetails {
+  flex-grow: 1;
+
+  dl {
+    display: grid;
+    grid-template-columns: fit-content(33%) auto;
+    gap: 8px 16px;
+
+    dt {
+      grid-column: 1;
+      font-weight: 600;
+      color: #666;
+    }
+
+    dd {
+      grid-column: 2;
+      margin: 0;
+    }
+  }
+}
+
+.tagsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tagItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 4px;
+
+  .tagBadge {
+    flex-grow: 1;
+  }
+
+  .deleteForm {
+    margin: 0;
+  }
+}
+
+.noTags {
+  color: #666;
+  font-style: italic;
+  margin: 16px 0;
+}
+
+.spacer {
+  height: 24px;
+}
+
+.slugsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

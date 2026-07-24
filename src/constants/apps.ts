@@ -83,6 +83,10 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       name: 'Bilder',
       path: '/',
       icon: 'images',
+    }, {
+      name: 'Tag-Definitionen',
+      path: '/tags',
+      icon: 'tags',
     }],
   },
   [EServiceType.MATERIAL_TRACING]: MaterialTracingAppDefinition,

@@ -43,4 +43,82 @@
 
 .imageListItemSlugsList {
   list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.imageListItemLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.imageListItemTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+// Pagination uses the standard component styles from @/components/universals/pagination/Pagination.module.scss
+// No custom styles needed here as we're using the ImagePaginationClient wrapper
+
+.filters {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  border-radius: 5px;
+  border: 1px solid rgba(var(--color-primary-rgb), 0.5);
+  box-sizing: border-box;
+
+  select {
+    padding: 8px 12px;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    font-size: 14px;
+    min-width: 180px;
+    background-color: #333333;
+    color: #ffffff;
+    transition: border-color 0.15s;
+
+    &:focus {
+      outline: none;
+      border-color: rgb(var(--color-primary-rgb));
+    }
+  }
+
+  button {
+    padding: 10px 16px;
+    background-color: rgb(var(--color-primary-rgb));
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  }
 }

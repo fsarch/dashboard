@@ -1,12 +1,15 @@
 import React, { CSSProperties, PropsWithChildren, useMemo } from 'react';
 import styles from './badge.module.scss';
 import Color from "color";
+import clsx from "clsx";
 
 type BadgeProps = PropsWithChildren<{
   color?: string;
+  className?: string;
 }>;
 
 const Badge: React.FunctionComponent<BadgeProps> = ({
+  className,
   children,
   color,
 }) => {
@@ -25,7 +28,7 @@ const Badge: React.FunctionComponent<BadgeProps> = ({
 
   return (
     <div
-      className={styles.root}
+      className={clsx(styles.root, className)}
       style={style}
     >
       {children}

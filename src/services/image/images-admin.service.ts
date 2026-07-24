@@ -1,15 +1,101 @@
 import { fetchService } from "@/utils/fetchService";
-import { ImageDto } from "@/services/image/images-admin.type";
+import {
+  ImageDto,
+  TagDefinitionDto,
+  PaginationResultDto,
+  ListImagesOptions,
+} from "@/services/image/images-admin.type";
 import { ServerLogger } from "@/utils/ServerLogger";
 import { fetchCustom } from "@/utils/fetchCustom";
 
 const serverLogger = new ServerLogger('ImageServerAdminService');
 
-const listImages = async (): Promise<Array<ImageDto>> => {
-  const imagesResponse = await fetchService('/v1/admin/images?embed=slugs');
-  const images = await imagesResponse.json();
+const listImages = async (
+  options?: ListImagesOptions
+): Promise<PaginationResultDto<ImageDto>> => {
+  const queryParams = new URLSearchParams();
 
-  return images;
+  if (options?.embed) {
+    queryParams.set('embed', options.embed.join(','));
+  }
+  if (options?.isPublic !== undefined) {
+    queryParams.set('isPublic', options.isPublic.toString());
+  }
+  if (options?.tag?.length) {
+    queryParams.set('tag', options.tag.join(','));
+  }
+  if (options?.page) {
+    queryParams.set('page', options.page.toString());
+  }
+  if (options?.limit) {
+    queryParams.set('limit', options.limit.toString());
+  }
+
+  const imagesResponse = await fetchService(
+    `/v1/admin/images?${queryParams.toString()}`
+  );
+  const result = await imagesResponse.json();
+
+  return result;
+};
+
+const getImageById = async (imageId: string): Promise<ImageDto> => {
+  const response = await fetchService(`/v1/admin/images/${imageId}?embed=tags`);
+  return response.json();
+};
+
+// Tag-Definitionen
+const listTagDefinitions = async (): Promise<TagDefinitionDto[]> => {
+  const response = await fetchService('/v1/admin/images/tags/definitions');
+  return response.json();
+};
+
+const createTagDefinition = async (data: {
+  key: string;
+  description?: string;
+}): Promise<TagDefinitionDto> => {
+  const response = await fetchService('/v1/admin/images/tags/definitions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteTagDefinition = async (tagDefinitionId: string): Promise<void> => {
+  await fetchService(
+    `/v1/admin/images/tags/definitions/${tagDefinitionId}`,
+    {
+      method: 'DELETE',
+    }
+  );
+};
+
+// Bild-Tags
+const listImageTags = async (imageId: string): Promise<string[]> => {
+  const response = await fetchService(`/v1/admin/images/${imageId}/tags`);
+  return response.json();
+};
+
+const addImageTag = async (
+  imageId: string,
+  data: { key: string; value: string }
+): Promise<string> => {
+  const response = await fetchService(`/v1/admin/images/${imageId}/tags`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+const deleteImageTag = async (imageId: string, tagValue: string): Promise<void> => {
+  await fetchService(
+    `/v1/admin/images/${imageId}/tags/${encodeURIComponent(tagValue)}`,
+    {
+      method: 'DELETE',
+    }
+  );
 };
 
 const getRawById = async (imageId: string, options: { size?: number; } = {}): Promise<ArrayBuffer> => {
@@ -73,6 +159,15 @@ const uploadImageByUrl = async (options: { imageServerUrl: string; data: Buffer;
 export const imagesAdminService = {
   listImages,
   getRawById,
+  getImageById,
   uploadImage,
   uploadImageByUrl,
+  // Tag-Definitionen
+  listTagDefinitions,
+  createTagDefinition,
+  deleteTagDefinition,
+  // Bild-Tags
+  listImageTags,
+  addImageTag,
+  deleteImageTag,
 };

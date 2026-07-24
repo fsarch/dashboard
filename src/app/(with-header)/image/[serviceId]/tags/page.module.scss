@@ -1,0 +1,87 @@
+.backLink {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.tagDefinitionsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+
+  th,
+  td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #666;
+  }
+
+  tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+}
+
+.tableCellKey {
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.tableCellDescription {
+  color: #666;
+}
+
+.tableCellDate {
+  color: #888;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.tableCellActions {
+  white-space: nowrap;
+
+  .deleteForm {
+    margin: 0;
+  }
+}
+
+.noDescription {
+  color: #999;
+  font-style: italic;
+}
+
+.noDefinitions {
+  color: #666;
+  font-style: italic;
+  padding: 24px;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.formContainer {
+  max-width: 600px;
+}
+
+.spacer {
+  height: 24px;
+}
+
+.deleteForm {
+  display: inline;
+}
