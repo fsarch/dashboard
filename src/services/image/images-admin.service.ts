@@ -114,10 +114,13 @@ const getRawById = async (imageId: string, options: { size?: number; } = {}): Pr
   return image;
 };
 
-const uploadImage = async (options: { data: Buffer; name?: string; }): Promise<void> => {
+const uploadImage = async (options: { data: Buffer; name?: string; isPublic?: boolean; }): Promise<void> => {
   const headers: Record<string, string> = {};
   if (options.name) {
     headers['x-path'] = options.name;
+  }
+  if (options.isPublic !== undefined) {
+    headers['x-visibility'] = options.isPublic ? 'public' : 'private';
   }
 
   const imagesResponse = await fetchService(`/v1/admin/images/_actions/upload`, {
@@ -130,10 +133,13 @@ const uploadImage = async (options: { data: Buffer; name?: string; }): Promise<v
   }
 };
 
-const uploadImageByUrl = async (options: { imageServerUrl: string; data: Buffer; name?: string; }): Promise<{ id: string }> => {
+const uploadImageByUrl = async (options: { imageServerUrl: string; data: Buffer; name?: string; isPublic?: boolean; }): Promise<{ id: string }> => {
   const headers: Record<string, string> = {};
   if (options.name) {
     headers['x-path'] = options.name;
+  }
+  if (options.isPublic !== undefined) {
+    headers['x-visibility'] = options.isPublic ? 'public' : 'private';
   }
 
   const imagesResponse = await fetchCustom(`${options.imageServerUrl}/v1/admin/images/_actions/upload`, {

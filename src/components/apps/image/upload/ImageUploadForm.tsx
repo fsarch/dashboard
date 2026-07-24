@@ -6,6 +6,7 @@ import { Form, Formik, FormikHelpers } from "formik";
 import Input from "@/components/universals/forms/Input";
 import Button from "@/components/universals/forms/Button";
 import FileInput from "@/components/universals/forms/FileInput";
+import Select from "@/components/universals/forms/Select";
 import { uploadImage } from "@/components/apps/image/upload/ImageUploadForm.server-action";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +21,7 @@ const toBase64 = (file: File) => new Promise<string>((resolve, reject) => {
   reader.onerror = reject;
 });
 
-type ImageUploadFormDataType = { name: string; file: File | null };
+type ImageUploadFormDataType = { name: string; file: File | null; visibility: string; };
 
 const ImageUploadForm: React.FunctionComponent<ImageUploadFormProps> = ({
   serviceId,
@@ -35,6 +36,7 @@ const ImageUploadForm: React.FunctionComponent<ImageUploadFormProps> = ({
     await uploadImage({
       name: data.name,
       base64: (await toBase64(data.file)).split(',').pop() as string,
+      isPublic: data.visibility === 'public',
     });
 
     router.refresh();
@@ -49,6 +51,7 @@ const ImageUploadForm: React.FunctionComponent<ImageUploadFormProps> = ({
         initialValues={{
           name: '',
           file: null as File | null,
+          visibility: 'public',
         }}
         onSubmit={handleUpload}
       >
@@ -57,6 +60,13 @@ const ImageUploadForm: React.FunctionComponent<ImageUploadFormProps> = ({
           <FileInput
             name="file"
             capture="environment"
+          />
+          <Select
+            name="visibility"
+            values={[
+              { value: 'public', label: 'Öffentlich' },
+              { value: 'private', label: 'Privat' },
+            ]}
           />
           <Button type="submit">
             Hochladen
