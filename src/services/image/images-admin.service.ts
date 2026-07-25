@@ -44,6 +44,15 @@ const getImageById = async (imageId: string): Promise<ImageDto> => {
   return response.json();
 };
 
+const patchImage = async (imageId: string, data: { isPublic?: boolean; }): Promise<ImageDto> => {
+  const response = await fetchService(`/v1/admin/images/${imageId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
 // Tag-Definitionen
 const listTagDefinitions = async (): Promise<TagDefinitionDto[]> => {
   const response = await fetchService('/v1/admin/images/tags/definitions');
@@ -168,6 +177,7 @@ export const imagesAdminService = {
   getImageById,
   uploadImage,
   uploadImageByUrl,
+  patchImage,
   // Tag-Definitionen
   listTagDefinitions,
   createTagDefinition,

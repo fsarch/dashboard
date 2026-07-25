@@ -9,6 +9,7 @@ import { colors } from '@/app/_styles/colors';
 import Link from 'next/link';
 import styles from './page.module.scss';
 import Button from '@/components/universals/forms/Button';
+import PatchImageVisibilityForm from '@/components/apps/image/patch/PatchImageVisibilityForm';
 
 export default async function ImageDetailPage(props: {
   params: Promise<{ serviceId: string; imageId: string }>;
@@ -134,6 +135,14 @@ export default async function ImageDetailPage(props: {
         <GeneratedForm
           definition={IMAGE_TAG_CREATE_FORM(imageId)}
           args={{ imageId }}
+        />
+      </Section>
+
+      <Section name="Visibility ändern">
+        <PatchImageVisibilityForm
+          imageId={imageId}
+          currentVisibility={image.isPublic}
+          serviceId={serviceId}
         />
       </Section>
 

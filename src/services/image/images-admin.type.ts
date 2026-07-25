@@ -43,3 +43,13 @@ export type ListImagesOptions = {
   page?: number;
   limit?: number;
 };
+
+export type ImageTagInputDto = {
+  key: string;
+  value: string;
+};
+
+export type PatchImageDto = {
+  isPublic?: boolean;
+  tags?: ImageTagInputDto[];
+};
