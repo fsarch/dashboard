@@ -5,8 +5,7 @@ export const CREATE_PROJECT_FORM: TGeneratedFormDefinition = {
     {
       id: 'name',
       $type: 'text',
-      label: 'Projektname',
-      required: true
+      label: 'Projektname'
     },
   ],
   initialValues: {
