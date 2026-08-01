@@ -8,6 +8,7 @@ type FileInputProps = {
   required?: boolean;
   multiple?: boolean;
   capture?: 'user' | 'environment';
+  accept?: string;
 };
 
 const FileInput: React.FunctionComponent<FileInputProps> = ({
@@ -17,6 +18,7 @@ const FileInput: React.FunctionComponent<FileInputProps> = ({
   required,
   multiple,
   capture,
+  accept,
 }) => {
   const [field, meta, helpers] = useField(name);
 
@@ -34,6 +36,7 @@ const FileInput: React.FunctionComponent<FileInputProps> = ({
     <input
       type="file"
       name=""
+      accept={accept}
       className={className}
       disabled={disabled}
       required={required}

@@ -107,6 +107,17 @@ export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
   preferCapture?: 'environment' | 'user';
 };
 
+export type TGeneratedFormFileUploadInput = TGeneratedFormBaseInput & {
+  /** Input type identifier - always 'file-upload' for generic file upload inputs */
+  $type: 'file-upload';
+  /** Accept attribute for file types (e.g., '.zip,application/zip') */
+  accept?: string;
+  /** Allow multiple file selection */
+  multiple?: boolean;
+  /** Preferred capture method: 'environment' or 'user' */
+  capture?: 'environment' | 'user';
+};
+
 /**
  * Nested form for arrays or objects.
  * - `isArray: true` for array fields (e.g., Tags, Scopes)
@@ -141,7 +152,7 @@ export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {
 };
 
 /** Union type of all supported input types */
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput | TGeneratedFormLinkCardInput;
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedFormFileUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput | TGeneratedFormLinkCardInput;
 
 /** Initial values for the form - can be a JSONata expression or a static object */
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;

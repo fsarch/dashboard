@@ -7,6 +7,7 @@ import GeneratedFormSelectInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormSelectInput.component";
 import GeneratedFormImageServerUploadInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormImageServerUploadInput.component";
+import GeneratedFormFileUploadInput from "@/components/universals/forms/generated/inputs/GeneratedFormFileUploadInput.component";
 import GeneratedNestedForm from "@/components/universals/forms/generated/inputs/nested/GeneratedFormNestedForm.component";
 import GeneratedFormTimeInput from "@/components/universals/forms/generated/inputs/GeneratedFormTimeInput.component";
 import GeneratedFormNumberInput
@@ -81,6 +82,15 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'image-server-upload') {
     return (
       <GeneratedFormImageServerUploadInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'file-upload') {
+    return (
+      <GeneratedFormFileUploadInput
         key={input.id}
         input={input}
       />

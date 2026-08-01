@@ -83,6 +83,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Metrics',
   path: '/metric',
   serviceType: EServiceType.METRIC,
+}, {
+  icon: 'code',
+  name: 'Frontend',
+  path: '/frontend',
+  serviceType: EServiceType.FRONTEND,
 }];
 
 const getApps = async () => {

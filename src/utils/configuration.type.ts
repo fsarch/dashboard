@@ -15,6 +15,7 @@ export enum EServiceType {
   WATCHTOWER = 'watchtower',
   BOT_PROTECTION = 'bot-protection',
   METRIC = 'metric',
+  FRONTEND = 'frontend',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -132,6 +133,13 @@ export type TMetricConfiguration = {
   url: string;
 };
 
+export type TFrontendConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.FRONTEND,
+  url: string;
+};
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -147,7 +155,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TFrontierConfiguration
   | TWatchtowerConfiguration
   | TBotProtectionConfiguration
-  | TMetricConfiguration;
+  | TMetricConfiguration
+  | TFrontendConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 

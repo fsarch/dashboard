@@ -69,6 +69,21 @@ const executePostSubmitAction = async (
 
       formData[input.id] = response.body;
     }
+
+    if (input.$type === 'file-upload') {
+      const dataToUpload = formData[input.id] as { 
+        $type: 'files'; 
+        files: Array<{ name: string; type: string; base64: string; size: number }>; 
+      };
+
+      if (!dataToUpload?.files?.length) {
+        formData[input.id] = null;
+        return;
+      }
+
+      // Store files as array in form data for JSON submission
+      formData[input.id] = dataToUpload.files;
+    }
   }));
 
   const requestContext = {
