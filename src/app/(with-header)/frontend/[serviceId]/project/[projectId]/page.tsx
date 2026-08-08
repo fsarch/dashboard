@@ -9,12 +9,12 @@ type ProjectDto = { id: string; name: string; creationTime: string };
 type ProjectVersionDto = { id: string; name?: string; creationTime: string };
 
 const getProject = async (projectId: string): Promise<ProjectDto> => {
-  const response = await fetchService(`/v1/api/projects/${projectId}`);
+  const response = await fetchService(`/v1/projects/${projectId}`);
   return response.json();
 };
 
 const listProjectVersions = async (projectId: string): Promise<ProjectVersionDto[]> => {
-  const response = await fetchService(`/v1/api/projects/${projectId}/versions`);
+  const response = await fetchService(`/v1/projects/${projectId}/versions`);
   return response.json();
 };
 

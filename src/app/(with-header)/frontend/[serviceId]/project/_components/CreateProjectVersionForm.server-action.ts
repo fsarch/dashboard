@@ -22,7 +22,7 @@ export const createProjectVersion = async (formData: FormData) => {
 
   // An die API senden
   const response = await fetchService(
-    `/v1/api/projects/${projectId}/versions`,
+    `/v1/projects/${projectId}/versions`,
     {
       method: 'POST',
       body: file,

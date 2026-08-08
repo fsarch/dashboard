@@ -11,7 +11,7 @@ import { CREATE_PROJECT_FORM } from './_forms/create-project.form';
 type ProjectDto = { id: string; name: string; creationTime: string };
 
 const listProjects = async (): Promise<ProjectDto[]> => {
-  const response = await fetchService('/v1/api/projects');
+  const response = await fetchService('/v1/projects');
   return response.json();
 };
 

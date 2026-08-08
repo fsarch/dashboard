@@ -13,7 +13,7 @@ export const CREATE_PROJECT_FORM: TGeneratedFormDefinition = {
     value: '{ "name": "" }'
   },
   endpoint: {
-    path: '/v1/api/projects',
+    path: '/v1/projects',
     method: 'POST',
     body: {
       $type: 'jsonata',
