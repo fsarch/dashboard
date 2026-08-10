@@ -6,7 +6,7 @@ import clsx from "clsx";
 type InputProps = {
   id?: string;
   name: string;
-  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number' | 'time' | 'url';
+  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number' | 'time' | 'url' | 'datetime-local';
   disabled?: boolean;
   required?: boolean;
   min?: number;

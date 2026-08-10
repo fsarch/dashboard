@@ -368,4 +368,64 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
       },
     },
   },
+  [EServiceType.CALENDAR]: {
+    name: 'Calendar',
+    basePath: '/calendar',
+    navigation: [{
+      name: 'Kalender',
+      path: '/',
+      icon: 'calendar-days',
+    }],
+    routes: {
+      '/calendar/:calendarId{/*path}': {
+        navigation: [{
+          name: 'Zurück zu Kalendern',
+          path: '/',
+          icon: 'arrow-left',
+        }, {
+          name: 'Events',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId",
+          },
+          icon: 'list',
+        }, {
+          name: 'Termine',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/instances'",
+          },
+          icon: 'calendar-week',
+        }, {
+          name: 'Kalenderansicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/month'",
+          },
+          icon: 'table-cells',
+        }],
+      },
+      '/calendar/:calendarId/event/:eventId{/*path}': {
+        navigation: [{
+          name: 'Zurück zu Kalendern',
+          path: '/',
+          icon: 'arrow-left',
+        }, {
+          name: 'Events',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId",
+          },
+          icon: 'list',
+        }, {
+          name: 'Event',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/event/' & params.eventId",
+          },
+          icon: 'calendar-day',
+        }],
+      },
+    },
+  },
 };

@@ -88,6 +88,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Frontend',
   path: '/frontend',
   serviceType: EServiceType.FRONTEND,
+}, {
+  icon: 'calendar-days',
+  name: 'Calendar',
+  path: '/calendar',
+  serviceType: EServiceType.CALENDAR,
 }];
 
 const getApps = async () => {

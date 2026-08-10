@@ -16,6 +16,7 @@ export enum EServiceType {
   BOT_PROTECTION = 'bot-protection',
   METRIC = 'metric',
   FRONTEND = 'frontend',
+  CALENDAR = 'calendar',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -140,6 +141,13 @@ export type TFrontendConfiguration = {
   url: string;
 };
 
+export type TCalendarConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.CALENDAR,
+  url: string;
+};
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -156,7 +164,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TWatchtowerConfiguration
   | TBotProtectionConfiguration
   | TMetricConfiguration
-  | TFrontendConfiguration;
+  | TFrontendConfiguration
+  | TCalendarConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 
