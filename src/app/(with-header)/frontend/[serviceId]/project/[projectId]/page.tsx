@@ -18,8 +18,8 @@ const listProjectVersions = async (projectId: string): Promise<ProjectVersionDto
   return response.json();
 };
 
-export default async function ProjectDetailPage({ params }: { params: Promise<{ projectId: string }> }) {
-  const { projectId } = await params;
+export default async function ProjectDetailPage({ params }: { params: Promise<{ serviceId: string; projectId: string }> }) {
+  const { serviceId, projectId } = await params;
   const [project, versions] = await Promise.all([
     getProject(projectId),
     listProjectVersions(projectId),
@@ -42,7 +42,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </List>
       </Section>
 
-      <CreateProjectVersionForm projectId={projectId} />
+      <CreateProjectVersionForm serviceId={serviceId} projectId={projectId} />
     </DefaultPage>
   );
 }
