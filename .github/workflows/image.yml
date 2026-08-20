@@ -9,8 +9,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Run only when the upstream workflow succeeded AND the head branch is one of the allowed branches
-    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(fromJson('["main","release"]'), github.event.workflow_run.head_branch) }}
+    # Run only when the upstream workflow succeeded AND the trigger was one of the allowed
+    # branches or a version tag. Note: for workflow_run events triggered by a tag push,
+    # github.event.workflow_run.head_branch holds the tag name (e.g. "v1.2.3"), not a branch.
+    if: >-
+      ${{
+        github.event.workflow_run.conclusion == 'success' &&
+        (
+          contains(fromJson('["main","release"]'), github.event.workflow_run.head_branch) ||
+          startsWith(github.event.workflow_run.head_branch, 'v')
+        )
+      }}
     steps:
       - name: checkout code
         uses: actions/checkout@v4
@@ -56,10 +65,17 @@ jobs:
 
       - name: determine image tags
         id: image
+        env:
+          # For workflow_run events, GITHUB_REF always reflects this workflow file's own
+          # ref (the default branch), not the ref that triggered the upstream "CI - Tests"
+          # run - so it can't be used to detect a tag push here. Use the workflow_run
+          # payload instead, which holds the tag name (without the "refs/tags/" prefix)
+          # in head_branch when the trigger was a tag push.
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
           IMAGE=fsarch/dashboard
-          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            VERSION="${GITHUB_REF#refs/tags/v}"
+          if [[ "${HEAD_BRANCH}" == v* ]]; then
+            VERSION="${HEAD_BRANCH#v}"
             TAGS="${IMAGE}:${VERSION}"
             # only mark proper releases (no prerelease suffix, e.g. -beta.0) as stable
             if [[ "${VERSION}" != *-* ]]; then
