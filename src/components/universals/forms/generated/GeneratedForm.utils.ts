@@ -14,7 +14,17 @@ import { fetchService } from "@/utils/fetchService";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
 import { contextUtils } from "@/components/universals/forms/generated/context.utils";
-import { serializeError } from "serialize-error";
+import { serializeError, type ErrorObject } from "serialize-error";
+
+// jsonata's object-constructor expressions (e.g. `{ "name": "" }`) build their
+// result via `Object.create(null)`, which yields plain-looking objects with a
+// *null* prototype. React Server Components refuse to serialize those (and
+// class instances, like the Error produced by `serializeError`) across the
+// server/client boundary ("Only plain objects... can be passed to Client
+// Components"). Anything derived from a jsonata evaluation that ends up as a
+// prop on <GeneratedClientForm> must be normalized back to plain
+// Object.prototype-based values first.
+const toPlainJson = <T>(value: T): T => (value === undefined ? value : JSON.parse(JSON.stringify(value)));
 
 const executePostSubmitAction = async (
   definition: TGeneratedFormDefinition,
@@ -176,7 +186,7 @@ const evaluateDefinition = async (
 
     if (value.transformResponse?.value) {
       try {
-        const modifiedData = await (jsonata(value.transformResponse.value).evaluate(responseData));
+        const modifiedData = toPlainJson(await (jsonata(value.transformResponse.value).evaluate(responseData)));
 
         if (collectDebugInfo) {
           // add transformed data to debug info
@@ -190,14 +200,17 @@ const evaluateDefinition = async (
 
         responseData = modifiedData;
       } catch (error) {
-        const serializedError = serializeError(error);
+        const serializedError = serializeError(error) as ErrorObject;
 
         if (collectDebugInfo) {
           dataSourceDebugData[key].transformation = {
             isError: true,
             expression: value.transformResponse.value,
             input: responseData,
-            error: serializedError,
+            // serializeError() returns an Error *instance* (a class), which
+            // is just as unserializable across the RSC boundary as a
+            // null-prototype object - flatten it to a plain object.
+            error: { name: serializedError.name, message: serializedError.message, stack: serializedError.stack },
           }
         }
 
@@ -281,9 +294,9 @@ const evaluateDefinition = async (
   }));
 
   const mappedInitialValues = definition.initialValues.$type === 'jsonata'
-    ? await jsonata(definition.initialValues.value as string).evaluate(
+    ? toPlainJson(await jsonata(definition.initialValues.value as string).evaluate(
       mergedContext
-    )
+    ))
     : definition.initialValues;
 
   return {
