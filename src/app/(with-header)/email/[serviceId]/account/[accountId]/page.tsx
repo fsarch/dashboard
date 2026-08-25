@@ -1,26 +1,41 @@
 import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
 import Section from "@/components/universals/section/Section";
-import List from "@/components/universals/list/List";
-import LinkListItem from "@/components/universals/list/LinkListItem";
-import Badge from "@/components/universals/badge/badge.component";
-import { datetimeUtils } from "@/utils/datetime.utils";
 import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
 import { emailService } from "@/services/email/email.service";
 import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
 import EmailSyncButton from "@/components/apps/email/EmailSyncButton.component";
+import EmailsList from "@/components/apps/email/EmailsList.component";
+import EmailFilters from "@/components/apps/email/EmailFilters.component";
 import Link from "next/link";
 import Button from "@/components/universals/forms/Button";
+import { loadPaginatedEmailsAction } from "./emails.server-action";
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home({ params }: { params: Promise<{ accountId: string }> }) {
+const PAGE_SIZE = 25;
+
+export default async function Home({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ accountId: string }>;
+  searchParams: Promise<Record<string, string>>;
+}) {
   const accountId = (await params).accountId;
+  const { search, sort } = await searchParams;
   const composeLink = await getServiceLocalUrl(`/account/${accountId}/email/create`);
 
-  const [account, emails] = await Promise.all([
+  const [account, initialEmailsResult] = await Promise.all([
     emailService.getAccount(accountId),
-    emailService.listEmails(accountId),
+    emailService.listEmails(accountId, { page: 1, limit: PAGE_SIZE, search, sort }),
   ]);
+
+  const emailsWithUrls = await Promise.all(
+    initialEmailsResult.data.map(async (email) => ({
+      ...email,
+      url: await getServiceLocalUrl(`/account/${accountId}/email/${email.id}`),
+    })),
+  );
 
   return (
     <DefaultPage>
@@ -40,17 +55,14 @@ export default async function Home({ params }: { params: Promise<{ accountId: st
         </Link>
       </Section>
       <Section name="E-Mails">
-        <List>
-          {emails.map(async (email) => (
-            <LinkListItem
-              key={email.id}
-              href={await getServiceLocalUrl(`/account/${accountId}/email/${email.id}`)}
-              right={email.creationTime ? <Badge>{datetimeUtils.formatDate(email.creationTime)}</Badge> : null}
-            >
-              {email.subject}
-            </LinkListItem>
-          ))}
-        </List>
+        <EmailFilters />
+        <EmailsList
+          initialEmails={emailsWithUrls}
+          initialTotalItems={initialEmailsResult.metadata.totalItems}
+          fetchEmails={loadPaginatedEmailsAction.bind(null, accountId)}
+          search={search}
+          sort={sort}
+        />
       </Section>
     </DefaultPage>
   );

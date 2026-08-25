@@ -64,3 +64,33 @@ export type EmailSingleDto = EmailListDto & {
   content: EmailContentDto;
 };
 
+export type EmailListMetaDto = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export type EmailListResponseDto = {
+  items: Array<EmailListDto>;
+  meta: EmailListMetaDto;
+};
+
+export type TPaginationResultMetaDto = {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type TPaginationResultDto<T> = {
+  data: Array<T>;
+  metadata: TPaginationResultMetaDto;
+};
+
+export type EmailListParams = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sort?: string;
+};
+
