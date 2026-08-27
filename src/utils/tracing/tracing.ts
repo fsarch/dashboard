@@ -1,7 +1,11 @@
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import {
+  AlwaysOffSampler,
+  AlwaysOnSampler,
   ConsoleSpanExporter,
+  ParentBasedSampler,
   TraceIdRatioBasedSampler,
+  type Sampler,
   type SpanExporter,
 } from "@opentelemetry/sdk-trace-base";
 import { OTLPTraceExporter as OTLPTraceExporterHttp } from "@opentelemetry/exporter-trace-otlp-http";
@@ -21,7 +25,7 @@ import {
   ATTR_SERVICE_VERSION,
 } from "@opentelemetry/semantic-conventions";
 import { getConfiguration } from "@/utils/configuration.utils";
-import { TTracingExporterConfiguration } from "@/utils/configuration.type";
+import { TTracingExporterConfiguration, TTracingSamplerType } from "@/utils/configuration.type";
 import { ServerLogger } from "@/utils/ServerLogger";
 import { TRACING_CONFIG_VALIDATOR } from "./tracing-config.validator";
 import packageJson from "../../../package.json";
@@ -54,6 +58,44 @@ function createExporter(exporterConfig: TTracingExporterConfiguration): SpanExpo
       throw new Error(
         `Tracing exporter type unknown: ${(exporterConfig as { type: string }).type}`,
       );
+  }
+}
+
+/**
+ * Builds the sampler for `tracingConfig.sampler` (defaults to
+ * `parentbased_traceidratio` - same default as `fsarch/server`).
+ *
+ * `traceidratio` makes its own ratio-based decision for *every* span, purely
+ * from the trace ID - regardless of whether the caller (e.g. another fsarch
+ * service) already decided to sample the trace. If sibling services don't
+ * use the exact same ratio, that can make a trace show up as sampled on one
+ * side and dropped on the other, i.e. as seemingly "unlinked".
+ *
+ * The `parentbased_*` variants fix that: they always respect an incoming
+ * (valid) parent's sampled flag, and only fall back to their own decision -
+ * `always_on`/`always_off`/`traceidratio` respectively - for root spans (no
+ * parent, e.g. the first service hit by a request). Defaulting to
+ * `parentbased_traceidratio` keeps a sampling ratio for root traces while
+ * guaranteeing every downstream service stays part of the same trace.
+ */
+function buildSampler(samplerType: TTracingSamplerType | undefined, sampleRatio: number | undefined): Sampler {
+  const ratio = sampleRatio ?? 1;
+
+  switch (samplerType ?? 'parentbased_traceidratio') {
+    case 'always_on':
+      return new AlwaysOnSampler();
+    case 'always_off':
+      return new AlwaysOffSampler();
+    case 'traceidratio':
+      return new TraceIdRatioBasedSampler(ratio);
+    case 'parentbased_always_on':
+      return new ParentBasedSampler({ root: new AlwaysOnSampler() });
+    case 'parentbased_always_off':
+      return new ParentBasedSampler({ root: new AlwaysOffSampler() });
+    case 'parentbased_traceidratio':
+      return new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(ratio) });
+    default:
+      throw new Error(`Tracing sampler type unknown: ${samplerType}`);
   }
 }
 
@@ -98,7 +140,7 @@ export async function initializeTracing(): Promise<boolean> {
       [ATTR_SERVICE_VERSION]: packageJson.version,
     }),
     traceExporter: createExporter(tracingConfig.exporter as TTracingExporterConfiguration),
-    sampler: new TraceIdRatioBasedSampler(tracingConfig.sampleRatio ?? 1),
+    sampler: buildSampler(tracingConfig.sampler, tracingConfig.sampleRatio),
     instrumentations: [
       // Traces incoming requests handled by the Next.js node server.
       new HttpInstrumentation(),

@@ -202,9 +202,18 @@ export type TUacConfiguration = {
   mappings: TUacMapping[];
 };
 
+export type TTracingSamplerType =
+  | 'always_on'
+  | 'always_off'
+  | 'traceidratio'
+  | 'parentbased_always_on'
+  | 'parentbased_always_off'
+  | 'parentbased_traceidratio';
+
 export type TTracingConfiguration = {
   enabled: boolean;
   serviceName?: string;
+  sampler?: TTracingSamplerType;
   sampleRatio?: number;
   exporter?: TTracingExporterConfiguration;
 };

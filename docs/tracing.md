@@ -24,6 +24,7 @@ the Edge runtime (proxy/middleware) is unaffected.
 tracing:
   enabled: true
   serviceName: dashboard # defaults to the `name` field in package.json
+  sampler: parentbased_traceidratio # optional, this is the default - see "Sampler" below
   sampleRatio: 1.0 # 0.0 - 1.0, defaults to 1.0 (trace everything)
   exporter:
     type: otlp-http
@@ -44,6 +45,36 @@ Supported exporters (`exporter.type`):
 - `otlp-grpc` — sends spans to an OTLP/gRPC collector
 
 `otlp-http`/`otlp-grpc` require `url`; `headers` is optional on both.
+
+### Sampler
+
+`sampler` (`TTracingSamplerType`) selects the sampling strategy, following
+the standard OpenTelemetry `OTEL_TRACES_SAMPLER` values:
+
+- `always_on` — sample every span.
+- `always_off` — sample no spans (SDK stays initialized, but nothing is
+  exported).
+- `traceidratio` — makes an independent, deterministic decision per trace ID
+  using `sampleRatio`, *regardless of what an incoming `traceparent` header
+  says*.
+- `parentbased_always_on` / `parentbased_always_off` / `parentbased_traceidratio`
+  — **`parentbased_traceidratio` is the default.** These respect an incoming
+  (valid) parent span's sampled flag; only fall back to
+  `always_on`/`always_off`/`traceidratio` respectively when there is no
+  parent (i.e. for the request that starts a new trace).
+
+**Why this matters across services:** with plain `traceidratio`, each fsarch
+service in a call chain samples the same trace ID independently. If the
+dashboard and a backend service (e.g. `frontier`) don't run the exact same
+`sampleRatio`, a trace can end up sampled (and exported) on one side but
+dropped on the other — which looks like the backend's request was never
+linked to the dashboard's trace, when really the dashboard just correctly
+sent a `traceparent` header the backend chose not to sample. The default,
+`parentbased_traceidratio`, avoids that by making the dashboard's own
+sampling decisions follow an incoming parent trace — `fsarch/server` uses
+the exact same option (name, values, and default), so as long as both sides
+leave `sampler` on its default, spans stay linked end-to-end regardless of
+`sampleRatio` differences between services.
 
 ## Implementation
 
