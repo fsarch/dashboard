@@ -35,6 +35,25 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## Distributed Tracing (OpenTelemetry)
+
+Distributed tracing is off by default. Enable it via the `tracing` section of `config.yml` — no code changes required (this mirrors the `tracing` config used by [`fsarch/server`](https://github.com/fsarch/server), so the dashboard and the backend services it talks to can export to the same collector):
+
+```yaml
+tracing:
+  enabled: true
+  serviceName: dashboard # optional, defaults to the `name` in package.json
+  sampleRatio: 1.0 # optional, 0.0 - 1.0, defaults to 1.0
+  exporter:
+    type: otlp-http # console | otlp-http | otlp-grpc
+    url: http://localhost:4318/v1/traces
+    headers:
+      Authorization: Bearer secret
+```
+
+It traces incoming requests to the Next.js server as well as outgoing `fetch()` calls to backend services (e.g. every `fetchService` call), so a request and the backend calls it triggers show up correlated in the same trace. See [docs/tracing.md](docs/tracing.md) for exporter options and how to add custom spans.
+
 ## Project Documentation
 
 - [GeneratedForm Documentation](src/components/universals/forms/generated/README.md) - Complete guide to using the declarative form component
+- [Distributed Tracing](docs/tracing.md) - Enabling OpenTelemetry tracing via `config.yml`, custom spans

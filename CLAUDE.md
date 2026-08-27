@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > **Read `AGENTS.md` first** — it contains a dense architecture summary (in German) and is kept up to date.
-> **Deeper docs live in `docs/`** (English-only, entry point `docs/README.md`): `navigation.md`, `new-app.md`, `generated-form.md`, `service-layer.md`, `image-app.md`.
+> **Deeper docs live in `docs/`** (English-only, entry point `docs/README.md`): `navigation.md`, `new-app.md`, `generated-form.md`, `service-layer.md`, `image-app.md`, `tracing.md`.
 > Skill files under `.agents/skills/` (`auto-navigation`, `generated-form`) contain the same conventions in skill format.
 
 ## Commands

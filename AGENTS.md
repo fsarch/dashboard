@@ -19,6 +19,7 @@
 ## Konfiguration
 - `config.yml` ist die zentrale Laufzeitquelle für `services`, `defaults` und Theme-Farben. Service-Einträge enthalten mindestens `type`, `id`, `url`; manche Typen nutzen zusätzliche Felder wie `worker_url` oder bei Custom-Apps `path`.
 - `src/utils/configuration.utils.ts` cached die eingelesene YAML-Konfiguration pro Prozess. Änderungen an `config.yml` erfordern daher typischerweise einen Neustart des Dev-Servers.
+- Optionaler `tracing`-Abschnitt in `config.yml` (analog zu `fsarch/server`) aktiviert OpenTelemetry-Distributed-Tracing für HTTP-Requests und ausgehende `fetch`/`fetchService`-Aufrufe; siehe `docs/tracing.md`. Startpunkt ist `src/instrumentation.ts` (Next.js-Instrumentation-Hook), Kernlogik in `src/utils/tracing/`.
 ## UI- und Formular-Konventionen
 - Für Create/Update/Delete-Flows zuerst prüfen, ob `GeneratedForm` passt (`src/components/universals/forms/generated/GeneratedForm.component.tsx`). Beispiel: `src/app/(with-header)/function/[serviceId]/page.tsx` verwendet ein definitionsbasiertes Formular zum Erstellen.
 - Wenn `GeneratedForm` nicht passt, ist das Standardmuster: **Client-Komponente mit Formik** + **Server Action** + **Service-Layer**; Beispiel: `src/components/apps/pdf-render/PdfRenderForm.tsx` + `PdfRenderForm.server-action.ts`.

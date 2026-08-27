@@ -202,6 +202,34 @@ export type TUacConfiguration = {
   mappings: TUacMapping[];
 };
 
+export type TTracingConfiguration = {
+  enabled: boolean;
+  serviceName?: string;
+  sampleRatio?: number;
+  exporter?: TTracingExporterConfiguration;
+};
+
+export type TTracingExporterConfiguration =
+  | TTracingConsoleExporterConfiguration
+  | TTracingOtlpHttpExporterConfiguration
+  | TTracingOtlpGrpcExporterConfiguration;
+
+export type TTracingConsoleExporterConfiguration = {
+  type: 'console';
+};
+
+export type TTracingOtlpHttpExporterConfiguration = {
+  type: 'otlp-http';
+  url: string;
+  headers?: Record<string, string>;
+};
+
+export type TTracingOtlpGrpcExporterConfiguration = {
+  type: 'otlp-grpc';
+  url: string;
+  headers?: Record<string, string>;
+};
+
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;
   defaults: Record<string, { id: string; }>;
@@ -210,4 +238,5 @@ export type TConfiguration = {
     background_color?: string;
   };
   uac?: TUacConfiguration;
+  tracing?: TTracingConfiguration;
 };

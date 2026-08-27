@@ -18,6 +18,7 @@ All documentation in `docs/` should be written in English.
 | [Add a New App](./new-app.md) | Step-by-step guide to add a new embedded app |
 | [GeneratedForm](./generated-form.md) | Form system: inputs, datasources, endpoints, redirects |
 | [Service Layer](./service-layer.md) | `fetchService`, config mapping, auth and service conventions |
+| [Distributed Tracing](./tracing.md) | Enabling OpenTelemetry tracing via `config.yml`, custom spans |
 
 ---
 
