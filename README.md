@@ -43,7 +43,7 @@ Distributed tracing is off by default. Enable it via the `tracing` section of `c
 tracing:
   enabled: true
   serviceName: dashboard # optional, defaults to the `name` in package.json
-  sampler: parentbased_traceidratio # optional, defaults to traceidratio
+  sampler: parentbased_traceidratio # optional, this is the default
   sampleRatio: 1.0 # optional, 0.0 - 1.0, defaults to 1.0
   exporter:
     type: otlp-http # console | otlp-http | otlp-grpc
@@ -52,7 +52,7 @@ tracing:
       Authorization: Bearer secret
 ```
 
-It traces incoming requests to the Next.js server as well as outgoing `fetch()` calls to backend services (e.g. every `fetchService` call), so a request and the backend calls it triggers show up correlated in the same trace. Prefer `sampler: parentbased_traceidratio` over the default `traceidratio` if backend services may run a different `sampleRatio` — otherwise a trace can be sampled here but dropped downstream (or vice versa), making linked requests look unrelated. See [docs/tracing.md](docs/tracing.md) for exporter options, the full sampler list and how to add custom spans.
+It traces incoming requests to the Next.js server as well as outgoing `fetch()` calls to backend services (e.g. every `fetchService` call), so a request and the backend calls it triggers show up correlated in the same trace. The default sampler, `parentbased_traceidratio`, always follows an incoming parent trace's sampling decision — matching `fsarch/server`'s default — so a trace stays linked end-to-end even if the dashboard and a backend service run different `sampleRatio` values. See [docs/tracing.md](docs/tracing.md) for exporter options, the full sampler list and how to add custom spans.
 
 ## Project Documentation
 
