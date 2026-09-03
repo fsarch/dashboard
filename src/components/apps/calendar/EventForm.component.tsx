@@ -15,6 +15,9 @@ export type TEventFormValues = {
   timezone: string;
   startAt: string;
   endAt: string;
+  // Raw JSON text as typed/displayed in the metadata textarea - see
+  // calendar.utils.ts#parseMetadataJson/toMetadataJsonValue for the (de)serialization.
+  metadata: string;
 };
 
 type EventFormProps = {
@@ -76,6 +79,13 @@ const EventForm: React.FunctionComponent<EventFormProps> = ({
         <div>
           <label htmlFor="event-endAt">Ende</label>
           <Input id="event-endAt" name="endAt" type="datetime-local" />
+        </div>
+        <div>
+          <label htmlFor="event-metadata">Metadaten (JSON)</label>
+          <TextArea name="metadata" />
+          <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+            Optional, z.B. {'{ "source": "import" }'}
+          </div>
         </div>
         {error ? <div style={{ color: '#BB0000' }}>{error}</div> : null}
         <div>

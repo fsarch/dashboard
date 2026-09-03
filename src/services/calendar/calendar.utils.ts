@@ -83,12 +83,55 @@ export const toIsoString = (value: string): string | undefined => {
 };
 
 // Converts an ISO 8601 string (or null/undefined) to a value usable by <input type="datetime-local">.
+// datetime-local values are interpreted by the browser as local time (this mirrors toIsoString's
+// `new Date(value)` interpretation), so the ISO string - which is UTC - must be converted to local
+// time here rather than just truncated, or the displayed value drifts by the UTC offset.
 export const toDatetimeLocalValue = (value: string | null | undefined): string => {
   if (!value) {
     return '';
   }
 
-  return value.slice(0, 16);
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+// Converts an event's metadata object (or null/undefined) to the pretty-printed JSON text shown
+// in the metadata textarea. Returns '' for no metadata, mirroring toDatetimeLocalValue's '' for
+// no date.
+export const toMetadataJsonValue = (metadata: Record<string, unknown> | null | undefined): string => {
+  if (!metadata) {
+    return '';
+  }
+
+  return JSON.stringify(metadata, null, 2);
+};
+
+// Parses the metadata textarea's raw text back into an object for the API request. Returns
+// undefined for empty/whitespace-only input (mirrors toIsoString's undefined for ''), which -
+// like the other optional TCreateEventDto fields - omits the key from the request body rather
+// than clearing existing metadata on update. Throws a user-facing error for invalid JSON or a
+// non-object value (arrays/strings/numbers), matching the backend's @IsObject() validation.
+export const parseMetadataJson = (value: string): Record<string, unknown> | undefined => {
+  if (!value.trim()) {
+    return undefined;
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    throw new Error('Metadaten müssen gültiges JSON sein');
+  }
+
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error('Metadaten müssen ein JSON-Objekt sein (z.B. { "key": "value" })');
+  }
+
+  return parsed as Record<string, unknown>;
 };
 
 // Month helpers (all in the server's local time - same simplification the rest of the calendar
@@ -141,5 +184,37 @@ export const endOfWeekSunday = (date: Date): Date => {
   return new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6, 23, 59, 59, 999);
 };
 
-// "YYYY-MM-DD" key for grouping events by day.
+// "YYYY-MM-DD" key for grouping events by day. Also usable as an <input type="date"> value.
 export const dayKey = (date: Date): string => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+// Parses an <input type="date"> value ("2026-08-08") into a local Date at midnight.
+// Returns null for an invalid/empty string.
+export const parseDateInputValue = (value: string | undefined | null): Date | null => {
+  if (!value) {
+    return null;
+  }
+
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) {
+    return null;
+  }
+
+  const year = parseInt(match[1], 10);
+  const monthIndex = parseInt(match[2], 10) - 1;
+  const day = parseInt(match[3], 10);
+
+  const date = new Date(year, monthIndex, day, 0, 0, 0, 0);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+// First/last instant of the day containing `date`.
+export const dayRange = (date: Date): { from: Date; to: Date } => ({
+  from: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0),
+  to: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999),
+});
+
+// Adds `delta` days to a "YYYY-MM-DD" string, e.g. shiftDate('2026-08-08', -1) -> '2026-08-07'.
+export const shiftDate = (date: string, delta: number): string => {
+  const parsed = parseDateInputValue(date) ?? new Date();
+  return dayKey(new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate() + delta));
+};

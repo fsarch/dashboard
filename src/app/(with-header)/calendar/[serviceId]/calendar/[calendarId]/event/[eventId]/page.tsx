@@ -8,7 +8,13 @@ import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { calendarService } from '@/services/calendar/calendar.service';
-import { toIsoString, toDatetimeLocalValue, loadOrNotFound } from '@/services/calendar/calendar.utils';
+import {
+  toIsoString,
+  toDatetimeLocalValue,
+  toMetadataJsonValue,
+  parseMetadataJson,
+  loadOrNotFound,
+} from '@/services/calendar/calendar.utils';
 import { TEventDto, TEventSeriesDto } from '@/services/calendar/calendar.type';
 import EventForm, { TEventFormValues } from '@/components/apps/calendar/EventForm.component';
 import SeriesForm, { TSeriesFormValues } from '@/components/apps/calendar/SeriesForm.component';
@@ -73,6 +79,7 @@ export default async function EventDetailPage({
       timezone: values.timezone || undefined,
       startAt: toIsoString(values.startAt) as string,
       endAt: toIsoString(values.endAt),
+      metadata: parseMetadataJson(values.metadata),
     }, serviceId);
   }
 
@@ -105,6 +112,7 @@ export default async function EventDetailPage({
     timezone: event.timezone ?? '',
     startAt: toDatetimeLocalValue(event.startAt),
     endAt: toDatetimeLocalValue(event.endAt),
+    metadata: toMetadataJsonValue(event.metadata),
   };
 
   return (

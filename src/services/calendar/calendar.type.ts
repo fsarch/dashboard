@@ -45,6 +45,7 @@ export type TEventDto = {
   timezone: string | null;
   startAt: string;
   endAt: string | null;
+  metadata: Record<string, unknown> | null;
   creationTime: string;
   deletionTime: string | null;
 };
@@ -56,6 +57,7 @@ export type TCreateEventDto = {
   timezone?: string;
   startAt: string;
   endAt?: string;
+  metadata?: Record<string, unknown>;
 };
 
 // Expanded event instances (single events + expanded recurring series occurrences,
@@ -69,6 +71,7 @@ export type TExpandedEventDto = {
   timezone: string | null;
   startAt: string;
   endAt: string | null;
+  metadata: Record<string, unknown> | null;
   isRecurring: boolean;
   recurringInstanceOf: string | null;
   isException: boolean;

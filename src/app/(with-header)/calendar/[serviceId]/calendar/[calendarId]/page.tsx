@@ -10,7 +10,7 @@ import Section from '@/components/universals/section/Section';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { calendarService } from '@/services/calendar/calendar.service';
 import { CALENDAR_EDIT_FORM } from '@/services/calendar/calendar.forms';
-import { toIsoString, loadOrNotFound } from '@/services/calendar/calendar.utils';
+import { toIsoString, parseMetadataJson, loadOrNotFound } from '@/services/calendar/calendar.utils';
 import { TEventDto } from '@/services/calendar/calendar.type';
 import EventForm, { TEventFormValues } from '@/components/apps/calendar/EventForm.component';
 import DangerZoneDelete from '@/components/apps/calendar/DangerZoneDelete.component';
@@ -79,6 +79,7 @@ export default async function CalendarDetailPage({
       timezone: values.timezone || undefined,
       startAt: toIsoString(values.startAt) as string,
       endAt: toIsoString(values.endAt),
+      metadata: parseMetadataJson(values.metadata),
     }, serviceId);
   }
 
@@ -107,6 +108,7 @@ export default async function CalendarDetailPage({
             timezone: '',
             startAt: '',
             endAt: '',
+            metadata: '',
           }}
           onSubmit={handleCreateEvent}
           submitLabel="Event erstellen"
