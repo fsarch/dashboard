@@ -1,0 +1,88 @@
+.scale {
+  display: flex;
+  flex-direction: column;
+  width: 3.5rem;
+  flex-shrink: 0;
+}
+
+.scaleLabel {
+  box-sizing: border-box;
+  // One 24th of .scale's own height (set inline to match the row's TimeGridColumn heightPx), so
+  // labels stay aligned with the hour gridlines regardless of how tall the grid actually renders.
+  height: calc(100% / 24);
+  font-size: 0.7rem;
+  opacity: 0.6;
+  text-align: right;
+  padding-right: 0.5rem;
+  // Shift the label up so its baseline sits on the hour gridline instead of the cell's center.
+  transform: translateY(-0.6em);
+}
+
+.column {
+  position: relative;
+  flex: 1;
+  min-width: 5rem;
+  // Day separator (vertical): full --color-border strength. Hour gridlines (horizontal, drawn via
+  // the repeating-linear-gradient background set in TimeGridColumn) are intentionally weaker, so
+  // the day structure reads more strongly than the hour subdivisions.
+  border-left: 1px solid var(--color-border);
+  --hour-line-color: rgba(var(--foreground-rgb), 0.08);
+}
+
+.nowLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #e53935;
+  z-index: 2;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e53935;
+  }
+}
+
+.block {
+  position: absolute;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+  // Floor so very short instances (or a heavily compressed grid) still render a legible, clickable
+  // sliver instead of shrinking to nothing - topPercent/heightPercent stay purely proportional, CSS
+  // enforces the floor.
+  min-height: 18px;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background-color: rgba(var(--color-primary-rgb), 0.85);
+  color: #ffffff;
+  z-index: 1;
+
+  &:hover {
+    background-color: rgba(var(--color-primary-rgb), 1);
+    z-index: 3;
+  }
+}
+
+.blockCancelled {
+  background-color: rgba(128, 128, 128, 0.5);
+  text-decoration: line-through;
+
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.7);
+  }
+}
+
+.blockTime {
+  font-weight: 600;
+}

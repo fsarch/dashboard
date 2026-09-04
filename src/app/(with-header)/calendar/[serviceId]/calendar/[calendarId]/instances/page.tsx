@@ -85,9 +85,15 @@ export default async function EventInstancesPage({
   return (
     <DefaultPage>
       <Section name={`Termine: ${calendar.name}`}>
-        <div style={{ marginBottom: '1rem' }}>
+        <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
+          <Link href={`/calendar/${serviceId}/calendar/${calendarId}/day`}>
+            Tagesansicht
+          </Link>
+          <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week`}>
+            Wochenansicht
+          </Link>
           <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${activeMonth || toMonthInputValue(from)}`}>
-            Kalenderansicht anzeigen
+            Monatsansicht
           </Link>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>

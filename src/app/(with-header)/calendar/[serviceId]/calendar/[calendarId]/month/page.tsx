@@ -101,7 +101,7 @@ export default async function MonthViewPage({
 
   return (
     <DefaultPage>
-      <Section name={`Kalenderansicht: ${calendar.name}`}>
+      <Section name={`Monatsansicht: ${calendar.name}`}>
         <div className={styles.header}>
           <div className={styles.nav}>
             <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${shiftMonth(month, -1)}`}>
@@ -115,9 +115,14 @@ export default async function MonthViewPage({
             </Link>
           </div>
           <div className={styles.title}>{monthLabel}</div>
-          <Link href={`/calendar/${serviceId}/calendar/${calendarId}/instances?month=${month}`}>
-            Listenansicht
-          </Link>
+          <div className={styles.nav}>
+            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${toMonthInputValue(monthRange.from)}-01`}>
+              Wochenansicht
+            </Link>
+            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/instances?month=${month}`}>
+              Listenansicht
+            </Link>
+          </div>
         </div>
 
         <div className={styles.weekdays}>
@@ -143,13 +148,16 @@ export default async function MonthViewPage({
                 key={key}
                 className={clsx(styles.day, !isCurrentMonth && styles.dayOutside, isToday && styles.dayToday)}
               >
-                <div className={styles.dayNumber}>
+                <Link
+                  href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${key}`}
+                  className={styles.dayNumber}
+                >
                   {isToday ? (
                     <span className={styles.dayTodayNumber}>{day.getDate()}</span>
                   ) : (
                     day.getDate()
                   )}
-                </div>
+                </Link>
                 <div className={styles.events}>
                   {visibleInstances.map((instance) => (
                     <Link

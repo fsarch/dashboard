@@ -397,7 +397,21 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
           },
           icon: 'calendar-week',
         }, {
-          name: 'Kalenderansicht',
+          name: 'Tagesansicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/day'",
+          },
+          icon: 'calendar-day',
+        }, {
+          name: 'Wochenansicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/week'",
+          },
+          icon: 'calendar-week',
+        }, {
+          name: 'Monatsansicht',
           path: {
             $type: 'jsonata',
             value: "'/calendar/' & params.calendarId & '/month'",

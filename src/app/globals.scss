@@ -10,6 +10,11 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  // Referenced throughout the app (lists, tables, panels, the calendar time grid, ...) but was
+  // never actually defined, so every "border: ... var(--color-border)" silently rendered as no
+  // border at all. Derived from --foreground-rgb so it flips with the dark-mode media query below
+  // without needing its own override.
+  --color-border: rgba(var(--foreground-rgb), 0.15);
 
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,
