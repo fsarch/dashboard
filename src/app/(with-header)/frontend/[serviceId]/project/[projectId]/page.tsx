@@ -2,7 +2,9 @@ import { DefaultPage } from '@/components/universals/page/DefaultPage.component'
 import Section from '@/components/universals/section/Section';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
+import Link from 'next/link';
 import { fetchService } from '@/utils/fetchService';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import CreateProjectVersionForm from '../_components/CreateProjectVersionForm';
 import UpdateProjectForm from './_components/UpdateProjectForm.component';
 
@@ -52,13 +54,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <Section name="Versionen">
         <List>
-          {versions.map((version) => (
-            <ListItem key={version.id}>
-              {version.name || version.id} - {version.creationTime}
-              {version.id === project.currentVersionId && ' (aktiv)'}
-              {version.externalId && ` [${version.externalId}]`}
-              {version.description && <><br />{version.description}</>}
-            </ListItem>
+          {versions.map(async (version) => (
+            <Link key={version.id} href={await getServiceLocalUrl(`/project/${projectId}/version/${version.id}`)}>
+              <ListItem>
+                {version.name || version.id} - {version.creationTime}
+                {version.id === project.currentVersionId && ' (aktiv)'}
+                {version.externalId && ` [${version.externalId}]`}
+                {version.description && <><br />{version.description}</>}
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Section>
