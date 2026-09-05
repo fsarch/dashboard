@@ -1,6 +1,13 @@
 .root {
   position: relative;
   z-index: 0;
+
+  // Prevents the unwrappable selected-label text (.input has white-space:
+  // nowrap) from inflating this box's intrinsic size. Without this, ancestor
+  // layouts that size themselves from content (e.g. the table layout used by
+  // Fieldset/FieldsetRow) grow wider than the viewport on narrow screens to
+  // fit long, unbroken option labels.
+  contain: inline-size;
 }
 
 .root:focus-within {
