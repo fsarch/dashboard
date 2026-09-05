@@ -17,6 +17,7 @@ import TestFunctionDialog
 import styles from './Editor.module.scss';
 import IconButton from "@/components/universals/forms/button/IconButton";
 import IconActionButton from "@/components/universals/forms/button/IconActionButton";
+import Badge from "@/components/universals/badge/badge.component";
 import { colors } from "@/app/_styles/colors";
 import { useLoadingState } from "@/components/universals/forms/button/useLoadingState";
 import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
@@ -33,6 +34,8 @@ type EditorProps = {
   functionId: string;
   versionId?: string;
   apiType: string;
+  /** Shows the code of a version without allowing it to be saved or published. */
+  readOnly?: boolean;
 };
 
 const Editor: React.FunctionComponent<EditorProps> = ({
@@ -40,6 +43,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
   functionId,
   versionId,
   apiType,
+  readOnly = false,
 }) => {
   const valueRef = useRef<string | null>(null);
 
@@ -115,6 +119,10 @@ const Editor: React.FunctionComponent<EditorProps> = ({
   }, []);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (readOnly) {
+      return;
+    }
+
     if (!event.ctrlKey && !event.metaKey) {
       return;
     }
@@ -136,16 +144,20 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         <div
           className={styles.toolbarGroup}
         >
-          <InlineLoadingWrapper isLoading={isSaving}>
-            <IconButton
-              type="button"
-              onClick={handleSave}
-              color={colors.lightBlue}
-              icon="floppy-disk"
-            >
-              Speichern
-            </IconButton>
-          </InlineLoadingWrapper>
+          {readOnly ? (
+            <Badge color={colors.lightBlue}>Nur Ansicht</Badge>
+          ) : (
+            <InlineLoadingWrapper isLoading={isSaving}>
+              <IconButton
+                type="button"
+                onClick={handleSave}
+                color={colors.lightBlue}
+                icon="floppy-disk"
+              >
+                Speichern
+              </IconButton>
+            </InlineLoadingWrapper>
+          )}
           <IconButton
             type="button"
             onClick={handleTest}
@@ -156,18 +168,20 @@ const Editor: React.FunctionComponent<EditorProps> = ({
           </IconButton>
         </div>
         <div className={styles.space} />
-        <div
-          className={styles.toolbarGroup}
-        >
-          <IconActionButton
-            type="button"
-            onClick={handlePublish}
-            color={colors.orange}
-            icon="cloud-arrow-up"
+        {!readOnly && (
+          <div
+            className={styles.toolbarGroup}
           >
-            Veröffentlichen
-          </IconActionButton>
-        </div>
+            <IconActionButton
+              type="button"
+              onClick={handlePublish}
+              color={colors.orange}
+              icon="cloud-arrow-up"
+            >
+              Veröffentlichen
+            </IconActionButton>
+          </div>
+        )}
       </div>
       <MonacoEditor
         height="100%"
@@ -176,6 +190,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         onChange={handleChange}
         theme="vs-dark"
         onMount={handleMount}
+        options={{ readOnly, domReadOnly: readOnly }}
       />
     </div>
   );

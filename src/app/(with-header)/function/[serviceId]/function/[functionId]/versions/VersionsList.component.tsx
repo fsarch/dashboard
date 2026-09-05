@@ -2,6 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Badge from '@/components/universals/badge/badge.component';
@@ -45,7 +46,9 @@ const VersionsList: React.FunctionComponent<VersionsListProps> = ({
       {versions.map((version) => (
         <ListItem key={version.id}>
           <div className={styles.headerRow}>
-            <span>{version.externalId || version.id} - {version.creationTime}</span>
+            <Link href={`/function/${serviceId}/function/${functionId}/versions/${version.id}`}>
+              {version.externalId || version.id} - {version.creationTime}
+            </Link>
             {version.isActive ? (
               <Badge color={colors.lightGreen}>aktiv</Badge>
             ) : (
