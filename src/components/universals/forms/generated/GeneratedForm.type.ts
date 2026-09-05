@@ -140,6 +140,8 @@ export type TGeneratedFormCheckboxInput = TGeneratedFormBaseInput & {
   $type: 'checkbox';
   /** Whether the input is enabled and editable */
   isEnabled?: boolean;
+  /** Visual style of the input - a native checkbox (default) or a toggle/switch. Behaves identically either way. */
+  variant?: 'checkbox' | 'toggle';
 };
 
 export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {

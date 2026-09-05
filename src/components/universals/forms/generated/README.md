@@ -90,7 +90,7 @@ export default async function Page() {
 | `password` | Password field (masked) | `{ id: 'pwd', $type: 'password', label: 'Password' }` |
 | `color` | Color picker | `{ id: 'color', $type: 'color', label: 'Color' }` |
 | `time` | Time input | `{ id: 'time', $type: 'time', label: 'Time' }` |
-| `checkbox` | Checkbox | `{ id: 'active', $type: 'checkbox', label: 'Active' }` |
+| `checkbox` | Checkbox (or toggle via `variant: 'toggle'`) | `{ id: 'active', $type: 'checkbox', label: 'Active' }` |
 | `select` | Dropdown selection | See [Select Inputs](#select-inputs) |
 | `nested-form` | Nested forms/arrays | See [Nested Forms](#nested-forms) |
 | `image-server-upload` | Image upload | `{ id: 'image', $type: 'image-server-upload', ... }` |

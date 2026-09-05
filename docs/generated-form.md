@@ -58,6 +58,12 @@ const MY_FORM: TGeneratedFormDefinition = {
 { id: 'enabled', $type: 'checkbox', label: 'Enabled' }
 ```
 
+Set `variant: 'toggle'` to render it as a toggle/switch instead of a native checkbox. Behavior (Formik field, boolean value, `isEnabled`) stays identical, only the visual presentation changes:
+
+```ts
+{ id: 'enabled', $type: 'checkbox', label: 'Enabled', variant: 'toggle' }
+```
+
 ### Password
 
 ```ts

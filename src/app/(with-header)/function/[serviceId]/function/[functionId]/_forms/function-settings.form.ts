@@ -13,10 +13,12 @@ export const FUNCTION_SETTINGS_FORM: TGeneratedFormDefinition = {
     id: 'enableDebugLogging',
     $type: 'checkbox',
     label: 'Debug Logging aktivieren',
+    variant: 'toggle',
   }, {
     id: 'enableErrorLogging',
     $type: 'checkbox',
     label: 'Error Logging aktivieren',
+    variant: 'toggle',
   }, {
     id: 'retentionTimeSeconds',
     $type: 'number',
