@@ -1,14 +1,9 @@
 
 import type { AppDefinitionType, AppNavigation, AppNavigationItem } from "@/constants/app.type";
 import { headers } from "next/headers";
-import memoize from "lodash.memoize";
-import { match } from "path-to-regexp";
 import { AutoNavigationItemType } from "@/components/universals/page/AutoNavigation.type";
 import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
-
-const createPathMatcher = memoize((route: string) => {
-  return match(route);
-});
+import { createPathMatcher } from "@/utils/app/routeMatch.utils";
 
 const selectNavigation = (data: { navigation?: Array<AppNavigationItem>; navigations?: Array<AppNavigation> }, position: 'sidebar' | 'sidebar-bottom') => {
   let navigations: Array<AppNavigationItem> | undefined = undefined;

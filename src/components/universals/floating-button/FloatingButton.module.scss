@@ -1,6 +1,11 @@
 .root {
   position: fixed;
 
+  // above regular page content (e.g. DefaultPage's .main has z-index: 1) -
+  // without this, position:fixed + z-index:auto renders (and hit-tests)
+  // *below* any sibling with an explicit z-index, so clicks never reach it
+  z-index: 2;
+
   right: 16px;
   bottom: 16px;
 
@@ -16,6 +21,7 @@
   border: 2px solid rgba(var(--color-primary-rgb), 0.9);
 
   color: #FFFFFF;
+  cursor: pointer;
 }
 
 .icon {

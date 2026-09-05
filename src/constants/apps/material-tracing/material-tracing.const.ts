@@ -1,8 +1,15 @@
 import { AppDefinitionType } from "@/constants/app.type";
+import {
+  MATERIAL_TRACING_SHORT_CODE_SCAN_FLOATING_BUTTON_ID
+} from "@/constants/apps/material-tracing/material-tracing.floating-button.const";
 
 export const MaterialTracingAppDefinition: AppDefinitionType = {
   name: 'Material Tracing',
   basePath: '/material-tracing',
+  floatingButton: {
+    id: MATERIAL_TRACING_SHORT_CODE_SCAN_FLOATING_BUTTON_ID,
+    icon: 'qrcode',
+  },
   routes: {
     '/material-type': {
       navigations: [{

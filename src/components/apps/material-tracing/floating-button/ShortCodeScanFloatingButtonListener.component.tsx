@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import FloatingButton from "@/components/universals/floating-button/FloatingButton";
+import { useCallback } from 'react';
 import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
 import { useRouter } from "next/navigation";
 import {
@@ -9,12 +8,16 @@ import {
 } from "@/app/(with-header)/material-tracing/[serviceId]/_components/ShortCodeScannerBanner.server-action";
 import CodeScannerDialog from "@/components/universals/dialogs/code-scanner/CodeScannerDialog.component";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
+import { useFloatingButtonClick } from "@/components/universals/floating-button/FloatingButtonProvider.context";
+import {
+  MATERIAL_TRACING_SHORT_CODE_SCAN_FLOATING_BUTTON_ID
+} from "@/constants/apps/material-tracing/material-tracing.floating-button.const";
 
-type ShortCodeScanFloatingButtonProps = {
-
-};
-
-const ShortCodeScanFloatingButton: React.FunctionComponent<ShortCodeScanFloatingButtonProps> = () => {
+// Renders nothing - just registers the click behaviour for the floating
+// button configured with MATERIAL_TRACING_SHORT_CODE_SCAN_FLOATING_BUTTON_ID
+// (see MaterialTracingAppDefinition), which is rendered generically by
+// DefaultPage via AutoFloatingButton.
+const ShortCodeScanFloatingButtonListener: React.FunctionComponent = () => {
   const openDialog = useOpenDialog();
 
   const router = useRouter();
@@ -32,14 +35,11 @@ const ShortCodeScanFloatingButton: React.FunctionComponent<ShortCodeScanFloating
     const response = await analyzeShortCode(result.value.value);
 
     router.push(response.url);
-  }, []);
+  }, [openDialog, router]);
 
-  return (
-    <FloatingButton
-      onClick={handleClick}
-      icon="qrcode"
-    />
-  );
+  useFloatingButtonClick(MATERIAL_TRACING_SHORT_CODE_SCAN_FLOATING_BUTTON_ID, handleClick);
+
+  return null;
 };
 
-export default ShortCodeScanFloatingButton;
+export default ShortCodeScanFloatingButtonListener;
