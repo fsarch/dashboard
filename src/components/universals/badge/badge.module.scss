@@ -2,6 +2,11 @@
   --color: #AAAAAA;
   --text-color: #000000;
 
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  white-space: nowrap;
+
   background-color: var(--color);
   color: var(--text-color);
 
