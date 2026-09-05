@@ -60,13 +60,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           {versions.map(async (version) => (
             <Link key={version.id} href={await getServiceLocalUrl(`/project/${projectId}/version/${version.id}`)}>
               <ListItem>
-                {version.name || version.id} - {version.creationTime}
-                {version.id === project.currentVersionId && (
-                  <>
-                    {' '}
+                <div className={styles.versionHeaderRow}>
+                  <span>{version.name || version.id} - {version.creationTime}</span>
+                  {version.id === project.currentVersionId && (
                     <Badge color={colors.lightGreen}>aktiv</Badge>
-                  </>
-                )}
+                  )}
+                </div>
                 {version.description && (
                   <div className={styles.versionDescription}>{version.description}</div>
                 )}
