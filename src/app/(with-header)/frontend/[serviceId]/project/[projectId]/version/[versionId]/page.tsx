@@ -3,7 +3,14 @@ import Section from '@/components/universals/section/Section';
 import Link from 'next/link';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { fetchService } from '@/utils/fetchService';
+import { colors } from '@/app/_styles/colors';
+import Badge from '@/components/universals/badge/badge.component';
 import UpdateVersionForm from './_components/UpdateVersionForm.component';
+
+type ProjectDto = {
+  id: string;
+  currentVersionId?: string;
+};
 
 type ProjectVersionDto = {
   id: string;
@@ -12,6 +19,11 @@ type ProjectVersionDto = {
   description?: string;
   externalId?: string;
   creationTime: string;
+};
+
+const getProject = async (projectId: string): Promise<ProjectDto> => {
+  const response = await fetchService(`/v1/projects/${projectId}`);
+  return response.json();
 };
 
 const getVersion = async (projectId: string, versionId: string): Promise<ProjectVersionDto> => {
@@ -25,7 +37,10 @@ export default async function VersionDetailPage({
   params: Promise<{ serviceId: string; projectId: string; versionId: string }>;
 }) {
   const { projectId, versionId } = await params;
-  const version = await getVersion(projectId, versionId);
+  const [project, version] = await Promise.all([
+    getProject(projectId),
+    getVersion(projectId, versionId),
+  ]);
 
   return (
     <DefaultPage>
@@ -35,7 +50,15 @@ export default async function VersionDetailPage({
             &larr; Zurück zum Projekt
           </Link>
         </p>
-        <h2>{version.name || version.id}</h2>
+        <h2>
+          {version.name || version.id}
+          {version.id === project.currentVersionId && (
+            <>
+              {' '}
+              <Badge color={colors.lightGreen}>aktiv</Badge>
+            </>
+          )}
+        </h2>
         {version.description && <p>{version.description}</p>}
         {version.externalId && <p>External Id: <code>{version.externalId}</code></p>}
         <p>Erstellt: {version.creationTime}</p>
