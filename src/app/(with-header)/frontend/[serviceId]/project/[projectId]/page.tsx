@@ -4,8 +4,15 @@ import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import { fetchService } from '@/utils/fetchService';
 import CreateProjectVersionForm from '../_components/CreateProjectVersionForm';
+import UpdateProjectForm from './_components/UpdateProjectForm.component';
 
-type ProjectDto = { id: string; name: string; creationTime: string };
+type ProjectDto = {
+  id: string;
+  name: string;
+  description?: string;
+  currentVersionId?: string;
+  creationTime: string;
+};
 type ProjectVersionDto = { id: string; name?: string; creationTime: string };
 
 const getProject = async (projectId: string): Promise<ProjectDto> => {
@@ -29,7 +36,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     <DefaultPage>
       <Section name="Projekt">
         <h2>{project.name}</h2>
+        {project.description && <p>{project.description}</p>}
         <p>Erstellt: {project.creationTime}</p>
+      </Section>
+
+      <Section name="Projekt bearbeiten">
+        <UpdateProjectForm args={{ project }} />
       </Section>
 
       <Section name="Versionen">
@@ -37,6 +49,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           {versions.map((version) => (
             <ListItem key={version.id}>
               {version.name || version.id} - {version.creationTime}
+              {version.id === project.currentVersionId && ' (aktiv)'}
             </ListItem>
           ))}
         </List>
