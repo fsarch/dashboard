@@ -9,6 +9,7 @@ import { colors } from '@/app/_styles/colors';
 import Badge from '@/components/universals/badge/badge.component';
 import CreateProjectVersionForm from '../_components/CreateProjectVersionForm';
 import UpdateProjectForm from './_components/UpdateProjectForm.component';
+import styles from './page.module.scss';
 
 type ProjectDto = {
   id: string;
@@ -60,14 +61,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <Link key={version.id} href={await getServiceLocalUrl(`/project/${projectId}/version/${version.id}`)}>
               <ListItem>
                 {version.name || version.id} - {version.creationTime}
-                {version.externalId && ` [${version.externalId}]`}
                 {version.id === project.currentVersionId && (
                   <>
                     {' '}
                     <Badge color={colors.lightGreen}>aktiv</Badge>
                   </>
                 )}
-                {version.description && <><br />{version.description}</>}
+                {version.description && (
+                  <div className={styles.versionDescription}>{version.description}</div>
+                )}
+                {version.externalId && (
+                  <div className={styles.versionExternalId}>{version.externalId}</div>
+                )}
               </ListItem>
             </Link>
           ))}
