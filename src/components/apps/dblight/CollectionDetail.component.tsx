@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import './monaco-setup';
 import MonacoEditor from '@monaco-editor/react';
 import { TCollectionDto } from '@/services/dblight/dblight.type';
 import Button from '@/components/universals/forms/Button';

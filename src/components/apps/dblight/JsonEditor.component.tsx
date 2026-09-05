@@ -2,6 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
+import './monaco-setup';
 import MonacoEditor from '@monaco-editor/react';
 
 type JsonEditorProps = {
