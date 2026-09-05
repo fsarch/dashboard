@@ -17,6 +17,7 @@ export enum EServiceType {
   METRIC = 'metric',
   FRONTEND = 'frontend',
   CALENDAR = 'calendar',
+  DBLIGHT = 'dblight',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -148,6 +149,13 @@ export type TCalendarConfiguration = {
   url: string;
 };
 
+export type TDblightConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.DBLIGHT,
+  url: string;
+};
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -165,7 +173,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TBotProtectionConfiguration
   | TMetricConfiguration
   | TFrontendConfiguration
-  | TCalendarConfiguration;
+  | TCalendarConfiguration
+  | TDblightConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 

@@ -93,6 +93,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Calendar',
   path: '/calendar',
   serviceType: EServiceType.CALENDAR,
+}, {
+  icon: 'database',
+  name: 'Database',
+  path: '/dblight',
+  serviceType: EServiceType.DBLIGHT,
 }];
 
 const getApps = async () => {
