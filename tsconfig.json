@@ -14,6 +14,13 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "rootDir": ".",
+    // TS 6.0 changed the default from implicitly including every package
+    // under node_modules/@types to an empty array. "*" restores the old
+    // behaviour - needed for ambient/global-only packages like @types/jest
+    // (expect/describe/test globals in *.spec.ts) and @types/webrtc
+    // (legacy Navigator.getUserMedia overloads).
+    "types": ["*"],
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
