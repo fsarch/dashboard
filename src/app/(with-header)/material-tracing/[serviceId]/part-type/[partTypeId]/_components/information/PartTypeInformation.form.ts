@@ -17,6 +17,7 @@ export const PART_TYPE_UPDATE_FORM: TGeneratedFormDefinition = {
     id: 'archiveNow',
     $type: 'checkbox',
     label: 'Archiviert',
+    variant: 'toggle',
   }],
   initialValues: {
     $type: 'jsonata',

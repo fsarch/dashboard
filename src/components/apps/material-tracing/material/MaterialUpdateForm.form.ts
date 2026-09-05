@@ -17,6 +17,7 @@ export const MATERIAL_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     id: 'archiveNow',
     $type: 'checkbox',
     label: 'Archiviert',
+    variant: 'toggle',
   }, {
     id: 'materialTypeLink',
     $type: 'link-card',

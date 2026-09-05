@@ -17,6 +17,7 @@ export const MATERIAL_TYPE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
     id: 'archiveNow',
     $type: 'checkbox',
     label: 'Archiviert',
+    variant: 'toggle',
   }],
   initialValues: {
     $type: 'jsonata',
