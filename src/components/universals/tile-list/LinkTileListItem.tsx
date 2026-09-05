@@ -12,6 +12,7 @@ type LinkTileListItemProps = {
   icon?: TIcon;
   href: string;
   small?: boolean;
+  transparent?: boolean;
 };
 
 const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
@@ -20,11 +21,12 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
   icon,
   href,
   small,
+  transparent,
 }) => {
   return (
     <Link
       href={href}
-      className={clsx(styles.root, small && styles.rootSmall)}
+      className={clsx(styles.root, small && styles.rootSmall, transparent && styles.rootTransparent)}
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
       }}

@@ -49,12 +49,14 @@
 
 .header {
   grid-area: header;
+  z-index: 1;
 }
 
 .navigation {
   grid-area: navigation;
 
   padding-top: 8px;
+  z-index: 1;
 }
 
 .main {
@@ -65,4 +67,5 @@
   padding-bottom: calc(var(--bottom-spacing, 0px) + 8px);
 
   overflow: auto;
+  z-index: 1;
 }

@@ -21,6 +21,10 @@
   color: rgb(var(--color-primary-rgb));
 }
 
+.rootTransparent {
+  background-color: rgba(51, 51, 51, 0.6);
+}
+
 .icon {
   font-size: calc(var(--custom-spacing-tile-list-item-size) / 2);
 }

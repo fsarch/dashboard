@@ -1,0 +1,89 @@
+.orbLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform;
+}
+
+.orb1 {
+    top: -10%;
+    left: -5%;
+    width: 42vw;
+    height: 42vw;
+    background: radial-gradient(circle, rgba(var(--orb1-rgb, 255, 105, 180), 0.18) 0%, rgba(var(--orb1-rgb, 255, 105, 180), 0) 70%);
+    animation: orbFloat1 38s ease-in-out infinite alternate;
+}
+
+.orb2 {
+    top: 55%;
+    left: 65%;
+    width: 36vw;
+    height: 36vw;
+    background: radial-gradient(circle, rgba(var(--orb2-rgb, 47, 96, 159), 0.18) 0%, rgba(var(--orb2-rgb, 47, 96, 159), 0) 70%);
+    animation: orbFloat2 46s ease-in-out infinite alternate;
+}
+
+.orb3 {
+    top: 15%;
+    left: 68%;
+    width: 30vw;
+    height: 30vw;
+    background: radial-gradient(circle, rgba(var(--orb3-rgb, 47, 159, 56), 0.18) 0%, rgba(var(--orb3-rgb, 47, 159, 56), 0) 70%);
+    animation: orbFloat3 33s ease-in-out infinite alternate;
+}
+
+.orb4 {
+    top: 68%;
+    left: 2%;
+    width: 34vw;
+    height: 34vw;
+    background: radial-gradient(circle, rgba(var(--orb4-rgb, 196, 92, 22), 0.18) 0%, rgba(var(--orb4-rgb, 196, 92, 22), 0) 70%);
+    animation: orbFloat4 41s ease-in-out infinite alternate;
+}
+
+/* Opt-out of movement: used wherever the layer is shown on every page (e.g. DefaultPage)
+   and constant motion sitewide would be more distracting than "dynamic". The circles
+   themselves stay, just without the drift. */
+.orbLayerStatic .orb1,
+.orbLayerStatic .orb2,
+.orbLayerStatic .orb3,
+.orbLayerStatic .orb4 {
+    animation: none;
+}
+
+@keyframes orbFloat1 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(12vw, 8vh) scale(1.15); }
+    100% { transform: translate(-6vw, 14vh) scale(0.95); }
+}
+
+@keyframes orbFloat2 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-14vw, -10vh) scale(0.9); }
+    100% { transform: translate(6vw, -16vh) scale(1.1); }
+}
+
+@keyframes orbFloat3 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-10vw, 12vh) scale(1.1); }
+    100% { transform: translate(8vw, -6vh) scale(0.9); }
+}
+
+@keyframes orbFloat4 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(10vw, -10vh) scale(1.05); }
+    100% { transform: translate(-8vw, 6vh) scale(0.95); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orb1, .orb2, .orb3, .orb4 {
+        animation: none;
+    }
+}

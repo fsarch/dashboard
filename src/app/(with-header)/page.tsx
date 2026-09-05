@@ -6,6 +6,7 @@ import { getAccessToken } from "@/utils/getAccessToken";
 import { decodeJwt } from "jose";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import BackgroundOrbs from "@/components/universals/background-orbs/BackgroundOrbs.component";
 
 import styles from './page.module.css';
 import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
@@ -54,39 +55,44 @@ export default async function Home() {
 
   return (
     <main className={styles.root}>
-      <h1 className={styles.pageTitle}>
-        {greeting} <span className={styles.pageTitlePerson}>{data.given_name || data.preferred_username || ''}</span>!
-      </h1>
-      <div className={styles.actions}>
-        <SignOutButton />
+      <BackgroundOrbs />
+      <div className={styles.content}>
+        <h1 className={styles.pageTitle}>
+          {greeting} <span className={styles.pageTitlePerson}>{data.given_name || data.preferred_username || ''}</span>!
+        </h1>
+        <div className={styles.actions}>
+          <SignOutButton />
+        </div>
+        <Section name="Apps" transparent>
+          <nav>
+            <TileList>
+              {apps.map((app) => (
+                <LinkTileListItem
+                  key={app.path}
+                  href={app.path}
+                  name={app.name}
+                  icon={app.icon}
+                  transparent
+                />
+              ))}
+            </TileList>
+          </nav>
+        </Section>
+        <Section name="Custom Apps" transparent>
+          <nav>
+            <TileList>
+              {availableCustomApps.map((app) => (
+                <LinkTileListItem
+                  key={app.id}
+                  href={`/custom-app/${app.id}`}
+                  name={app.name ?? app.id}
+                  transparent
+                />
+              ))}
+            </TileList>
+          </nav>
+        </Section>
       </div>
-      <Section name="Apps">
-        <nav>
-          <TileList>
-            {apps.map((app) => (
-              <LinkTileListItem
-                key={app.path}
-                href={app.path}
-                name={app.name}
-                icon={app.icon}
-              />
-            ))}
-          </TileList>
-        </nav>
-      </Section>
-      <Section name="Custom Apps">
-        <nav>
-          <TileList>
-            {availableCustomApps.map((app) => (
-              <LinkTileListItem
-                key={app.id}
-                href={`/custom-app/${app.id}`}
-                name={app.name ?? app.id}
-              />
-            ))}
-          </TileList>
-        </nav>
-      </Section>
     </main>
   );
 }

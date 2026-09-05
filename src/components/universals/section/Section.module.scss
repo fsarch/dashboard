@@ -10,6 +10,10 @@
   border: none;
 }
 
+.rootTransparent {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .rootWithPadding {
   @include apply-custom-padding('section');
 

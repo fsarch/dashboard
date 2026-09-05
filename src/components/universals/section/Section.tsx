@@ -7,6 +7,7 @@ type SectionProps = PropsWithChildren<{
   color?: string;
   className?: string;
   addPadding?: boolean;
+  transparent?: boolean;
 }>;
 
 const Section: React.FunctionComponent<SectionProps> = ({
@@ -15,13 +16,14 @@ const Section: React.FunctionComponent<SectionProps> = ({
   children,
   addPadding = true,
   className,
+  transparent,
 }) => {
   return (
     <fieldset
       style={{
         '--color': color,
       } as CSSProperties}
-      className={clsx(className, styles.root, addPadding && styles.rootWithPadding)}
+      className={clsx(className, styles.root, addPadding && styles.rootWithPadding, transparent && styles.rootTransparent)}
     >
       <legend className={styles.legend}>
         {name}
