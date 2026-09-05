@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import { Field } from "formik";
+import { useField } from "formik";
 import { TGeneratedFormTextAreaInput } from "@/components/universals/forms/generated/GeneratedForm.type";
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import { nestedFormUtils } from "@/components/universals/forms/generated/inputs/nested/nested-form.utils";
@@ -14,6 +14,11 @@ const GeneratedFormTextAreaInput: React.FunctionComponent<GeneratedFormTextAreaI
 }) => {
   const id = useId();
   const name = nestedFormUtils.useInputName(input.id);
+  // initialValues can come back from the API as `null` (an unset optional
+  // field) rather than `''`; Formik passes that straight through, and React
+  // warns about a `null` `value` on a controlled <textarea>. Coalesce here
+  // instead of relying on every form definition to do it in its jsonata.
+  const [field] = useField<string | null | undefined>(name);
 
   return (
     <FieldsetRow
@@ -21,10 +26,10 @@ const GeneratedFormTextAreaInput: React.FunctionComponent<GeneratedFormTextAreaI
         <label htmlFor={id}>{input.label}</label>
       )}
     >
-      <Field
+      <textarea
+        {...field}
         id={id}
-        name={name}
-        as="textarea"
+        value={field.value ?? ''}
         className={styles.textarea}
         disabled={input.isEnabled === false}
       />
