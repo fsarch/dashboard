@@ -13,7 +13,13 @@ type ProjectDto = {
   currentVersionId?: string;
   creationTime: string;
 };
-type ProjectVersionDto = { id: string; name?: string; creationTime: string };
+type ProjectVersionDto = {
+  id: string;
+  name?: string;
+  description?: string;
+  externalId?: string;
+  creationTime: string;
+};
 
 const getProject = async (projectId: string): Promise<ProjectDto> => {
   const response = await fetchService(`/v1/projects/${projectId}`);
@@ -50,6 +56,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <ListItem key={version.id}>
               {version.name || version.id} - {version.creationTime}
               {version.id === project.currentVersionId && ' (aktiv)'}
+              {version.externalId && ` [${version.externalId}]`}
+              {version.description && <><br />{version.description}</>}
             </ListItem>
           ))}
         </List>

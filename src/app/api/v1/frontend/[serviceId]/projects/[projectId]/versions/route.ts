@@ -18,6 +18,17 @@ export async function POST(
   const body = await req.arrayBuffer();
   const contentType = req.headers.get('content-type') || 'application/octet-stream';
 
+  // Optional version metadata, passed through from the browser to the
+  // frontend-service unchanged - see VERSION_*_HEADER in frontend-server's
+  // src/constants/app-constants.ts.
+  const metadataHeaders: Record<string, string> = {};
+  for (const headerName of ['x-version-name', 'x-version-description', 'x-version-external-id']) {
+    const value = req.headers.get(headerName);
+    if (value) {
+      metadataHeaders[headerName] = value;
+    }
+  }
+
   const response = await fetchService(
     `/v1/projects/${projectId}/versions`,
     {
@@ -25,6 +36,7 @@ export async function POST(
       body,
       headers: {
         'Content-Type': contentType,
+        ...metadataHeaders,
       },
     },
     { serviceId },

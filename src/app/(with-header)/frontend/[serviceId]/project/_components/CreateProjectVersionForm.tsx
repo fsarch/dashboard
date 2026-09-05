@@ -3,6 +3,8 @@
 import React, { useCallback, useState } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import FileInput from '@/components/universals/forms/FileInput';
+import Input from '@/components/universals/forms/Input';
+import TextArea from '@/components/universals/forms/TextArea';
 import Button from '@/components/universals/forms/Button';
 import Section from '@/components/universals/section/Section';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
@@ -16,6 +18,9 @@ type CreateProjectVersionFormProps = {
 
 type FormValues = {
   file: File | null;
+  name: string;
+  description: string;
+  externalId: string;
 };
 
 /**
@@ -25,11 +30,15 @@ type FormValues = {
 const uploadFile = (
   url: string,
   file: File,
+  headers: Record<string, string>,
   onProgress: (percent: number) => void,
 ) => new Promise<void>((resolve, reject) => {
   const xhr = new XMLHttpRequest();
   xhr.open('POST', url);
   xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+  Object.entries(headers).forEach(([name, value]) => {
+    xhr.setRequestHeader(name, value);
+  });
 
   xhr.upload.onprogress = (event) => {
     if (event.lengthComputable) {
@@ -75,10 +84,16 @@ const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionForm
 
       setUploadProgress(0);
 
+      const metadataHeaders: Record<string, string> = {};
+      if (values.name) metadataHeaders['X-Version-Name'] = values.name;
+      if (values.description) metadataHeaders['X-Version-Description'] = values.description;
+      if (values.externalId) metadataHeaders['X-Version-External-Id'] = values.externalId;
+
       try {
         await uploadFile(
           `/api/v1/frontend/${serviceId}/projects/${projectId}/versions`,
           values.file,
+          metadataHeaders,
           setUploadProgress,
         );
 
@@ -100,6 +115,9 @@ const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionForm
       <Formik
         initialValues={{
           file: null as File | null,
+          name: '',
+          description: '',
+          externalId: '',
         }}
         onSubmit={handleSubmit}
       >
@@ -118,6 +136,18 @@ const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionForm
                 required
                 disabled={isSubmitting}
               />
+            </FieldsetRow>
+
+            <FieldsetRow label="Name (optional)">
+              <Input name="name" type="text" disabled={isSubmitting} />
+            </FieldsetRow>
+
+            <FieldsetRow label="Beschreibung (optional)">
+              <TextArea name="description" />
+            </FieldsetRow>
+
+            <FieldsetRow label="External Id (optional)">
+              <Input name="externalId" type="text" disabled={isSubmitting} />
             </FieldsetRow>
 
             {uploadProgress !== null && (
