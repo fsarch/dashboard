@@ -46,7 +46,7 @@
     "formik": "^2.4.9",
     "joi": "^18.2.8",
     "js-yaml": "^5.4.1",
-    "jsdom": "^27.4.0",
+    "jsdom": "^30.0.1",
     "jsonata": "^2.2.2",
     "jsqr": "^1.4.0",
     "lodash.memoize": "^4.1.2",
@@ -70,7 +70,7 @@
   "devDependencies": {
     "@types/dompurify": "^3.2.0",
     "@types/jest": "^30.0.0",
-    "@types/jsdom": "^27.0.0",
+    "@types/jsdom": "^30.0.0",
     "@types/lodash.memoize": "^4.1.9",
     "@types/node": "^24.13.3",
     "@types/qrcode": "^1.5.6",
