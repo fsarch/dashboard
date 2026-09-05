@@ -22,9 +22,19 @@
 
   color: #FFFFFF;
   cursor: pointer;
-}
 
-.icon {
-  width: 32px;
-  height: 32px;
+  // Nested (rather than a bare .icon rule) so this reliably outranks
+  // FontAwesome's own .svg-inline--fa { width: 1.25em; height: 1em }
+  // rule, which has the same specificity (single class selector) - on an
+  // equal-specificity tie, whichever stylesheet happens to be inserted
+  // into <head> last wins, and that order isn't guaranteed to match
+  // source/import order once the icon's CSS module ships in its own
+  // client-component chunk (see AutoFloatingButton). That made the icon
+  // intermittently collapse to font-size (~1em) instead of 32px depending
+  // on chunk load timing - much more likely on a slow/real mobile network
+  // than on localhost, which is why it wasn't reproducible in DevTools.
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
 }
