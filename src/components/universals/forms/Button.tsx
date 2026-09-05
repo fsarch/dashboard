@@ -33,6 +33,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     const textColor = Color(color).isLight() ? '#000000' : '#FFFFFF';
     const hoverTextColor = Color(hoverColor).isLight() ? '#000000' : '#FFFFFF';
     const disabledTextColor = Color(disabledColor).isLight() ? '#000000' : '#FFFFFF';
+    const shadowRgb = Color(color).rgb().array().join(', ');
 
     return {
       '--color': color,
@@ -41,6 +42,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       '--hover-text-color': hoverTextColor,
       '--disabled-color': disabledColor,
       '--disabled-text-color': disabledTextColor,
+      '--shadow-rgb': shadowRgb,
     } as CSSProperties;
   }, [color]);
 

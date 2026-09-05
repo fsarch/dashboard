@@ -76,7 +76,6 @@ const SearchableSelect: React.FunctionComponent<SearchableSelectProps> = ({
     <>
       <div
         className={styles.root}
-        tabIndex={0}
         onFocus={handleFocus}
         onClick={isFocused ? (event) => event.stopPropagation() : undefined}
       >

@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Field } from "formik";
+import clsx from "clsx";
+import styles from './Input.module.scss';
 
 type TextAreaProps = {
   name: string;
@@ -14,7 +16,7 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
 }) => {
   return (
     <Field
-      className={className}
+      className={clsx(styles.root, styles.textarea, className)}
       as="textarea"
       name={name}
     />

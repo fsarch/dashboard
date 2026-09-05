@@ -2,8 +2,9 @@
   padding: 7px 10px;
 
   cursor: pointer;
+  transition: background-color .15s ease;
 }
 
 .root:hover {
-  background-color: #666666;
+  background-color: rgba(var(--color-primary-rgb, 255, 105, 180), 0.18);
 }
