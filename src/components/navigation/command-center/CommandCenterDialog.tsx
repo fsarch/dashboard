@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { TDialogComponent } from "@/components/universals/dialog/dialog.type";
 import styles from './CommandCenterDialog.module.scss';
 import SingleIconButton from "@/components/universals/forms/button/SingleIconButton";
@@ -12,6 +12,20 @@ const CommandCenterDialog: CommandCenterDialogType = ({
   value,
   onResult,
 }) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onResult({ status: DialogResult.CANCEL });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onResult]);
+
   return (
     <>
       <div className={styles.overlay}/>

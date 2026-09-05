@@ -31,6 +31,7 @@ const CommandCenterContent: React.FunctionComponent<CommandCenterContentProps> =
       <TileList>
         {data.apps.map((app) => (
           <LinkTileListItem
+            key={app.path}
             name={app.name}
             href={app.path}
             icon={app.icon}

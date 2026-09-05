@@ -32,3 +32,29 @@
 
   z-index: 2;
 }
+
+// Button.module.scss's `.root` styles a filled, drop-shadowed button by
+// default, which doesn't suit a plain dialog close icon. Overriding via the
+// element selector (`button.closeButton`) beats `.root` on specificity
+// deterministically, regardless of CSS-module bundling order.
+button.closeButton {
+  --color: transparent;
+  --hover-color: rgba(255, 255, 255, 0.15);
+  --text-color: #FFFFFF;
+  --hover-text-color: #FFFFFF;
+
+  box-shadow: none;
+}
+
+button.closeButton:hover:not(:disabled) {
+  box-shadow: none;
+  transform: none;
+}
+
+button.closeButton:active:not(:disabled) {
+  box-shadow: none;
+}
+
+button.closeButton:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
