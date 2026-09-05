@@ -26,9 +26,11 @@ export type FunctionPatchDto = {
 
 export type FunctionVersionDto = {
   id: string;
-  name: string;
+  functionId: string;
+  externalId: string;
   code: string;
-  isActive?: boolean;
+  isActive: boolean;
+  publishTime: string;
   creationTime: string;
 };
 

@@ -120,6 +120,13 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
           },
           icon: 'code',
         }, {
+          name: 'Versionen',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId & '/versions'",
+          },
+          icon: 'code-branch',
+        }, {
           name: 'Einstellungen',
           path: {
             $type: 'jsonata',

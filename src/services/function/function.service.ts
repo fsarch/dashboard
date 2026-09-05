@@ -55,6 +55,14 @@ const publishFunctionCode = async (functionId: string): Promise<void> => {
   return functionVersions;
 };
 
+const publishFunctionVersion = async (functionId: string, versionId: string): Promise<{ id: string }> => {
+  const response = await fetchService(`/v1/functions/${functionId}/versions/${versionId}/_actions/publish`, {
+    method: 'POST',
+  });
+
+  return response.json();
+};
+
 // Function Settings
 const patchFunction = async (functionId: string, dto: FunctionPatchDto): Promise<FunctionDto> => {
   const response = await fetchService(`/v1/functions/${functionId}`, {
@@ -104,6 +112,7 @@ export const functionService = {
   getFunctionVersions,
   setFunctionVersionCode,
   publishFunctionCode,
+  publishFunctionVersion,
   getWorkerMeta,
   patchFunction,
   listExecutions,
