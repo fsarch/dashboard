@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { TRecordDto } from '@/services/dblight/dblight.type';
+import { datetimeUtils } from '@/utils/datetime.utils';
 import Button from '@/components/universals/forms/Button';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
@@ -65,7 +66,7 @@ const RecordDetail: React.FunctionComponent<RecordDetailProps> = ({
               Erstellt
             </th>
             <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
-              {new Date(record.createdAt).toLocaleString()}
+              {datetimeUtils.formatDate(record.createdAt)}
             </td>
           </tr>
           <tr>
@@ -73,7 +74,7 @@ const RecordDetail: React.FunctionComponent<RecordDetailProps> = ({
               Zuletzt geändert
             </th>
             <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
-              {new Date(record.updatedAt).toLocaleString()}
+              {datetimeUtils.formatDate(record.updatedAt)}
             </td>
           </tr>
         </tbody>

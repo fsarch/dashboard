@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { TCollectionDto } from '@/services/dblight/dblight.type';
+import { datetimeUtils } from '@/utils/datetime.utils';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Button from '@/components/universals/forms/Button';
@@ -63,7 +64,7 @@ const CollectionsList: React.FunctionComponent<CollectionsListProps> = ({
               <br />
               <small>
                 Schema-Version {collection.currentSchemaVersion} · Erstellt{' '}
-                {new Date(collection.createdAt).toLocaleString()}
+                {datetimeUtils.formatDate(collection.createdAt)}
               </small>
             </ListItem>
           </Link>

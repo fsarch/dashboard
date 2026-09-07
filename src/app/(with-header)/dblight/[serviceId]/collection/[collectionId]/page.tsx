@@ -49,6 +49,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
         <CollectionDetail
           collection={collection}
           schema={activeVersion?.schema ?? {}}
+          schemaVersions={schemaVersions}
           serviceId={serviceId}
         />
       </Section>

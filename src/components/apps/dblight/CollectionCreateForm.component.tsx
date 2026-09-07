@@ -1,14 +1,22 @@
 'use client';
 
 import React, { useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/universals/forms/Button';
 import Input from '@/components/universals/forms/Input';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
-import JsonEditor from './JsonEditor.component';
 import { createCollectionAction } from './CollectionCreateForm.server-action';
+
+// See RecordForm.component.tsx for why this must be `ssr: false`: eagerly
+// importing `monaco-editor` (via `./monaco-setup`) during server rendering
+// throws ("window is not defined"), which makes Next fall back to a full
+// client re-render mid-interaction and steals focus/cursor from the editor.
+const JsonEditor = dynamic(() => import('./JsonEditor.component'), {
+  ssr: false,
+});
 
 const DEFAULT_SCHEMA = JSON.stringify(
   {
@@ -84,10 +92,11 @@ const CollectionCreateForm: React.FunctionComponent<CollectionCreateFormProps> =
           Name
           <Input name="name" type="input" required />
         </label>
-        <label>
-          JSON Schema
+        <div>
+          {/* See RecordForm.component.tsx for why this is a <div>, not a <label>. */}
+          <div style={{ marginBottom: '0.5rem' }}>JSON Schema</div>
           <JsonEditor name="schema" />
-        </label>
+        </div>
         <div>
           <Button type="submit">
             Collection erstellen
