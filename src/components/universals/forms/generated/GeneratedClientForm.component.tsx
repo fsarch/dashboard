@@ -19,6 +19,22 @@ import Fieldset from "@/components/universals/forms/Fieldset.component";
 import GeneratedNestedForm from "@/components/universals/forms/generated/inputs/nested/GeneratedFormNestedForm.component";
 import { renderGeneratedFormInputs } from "@/components/universals/forms/generated/renderGeneratedFormInputs";
 import DevDataSourcesSection from "@/components/universals/forms/generated/DevDataSourcesSection.component";
+import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
+import AlertDialog from "@/components/universals/dialogs/alert/AlertDialog.component";
+
+const getErrorMessage = (body: Record<string, unknown> | null | undefined): string => {
+  const message = body?.message;
+
+  if (Array.isArray(message)) {
+    return message.join(', ');
+  }
+
+  if (typeof message === 'string') {
+    return message;
+  }
+
+  return 'Die Anfrage ist fehlgeschlagen.';
+};
 
 type GeneratedClientFormProps = {
   definition: Array<TGeneratedFormInput>;
@@ -40,9 +56,26 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
   const router = useRouter();
 
   const withLoader = useWithLoading();
+  const openDialog = useOpenDialog();
 
   const handleSubmit = useCallback(async (data: TGeneratedFormInitialValues, helper: FormikHelpers<TGeneratedFormInitialValues>) => {
-    const response = await withLoader(() => onSubmit(data));
+    let response: TGeneratedFormSubmitResponse;
+
+    try {
+      response = await withLoader(() => onSubmit(data));
+    } catch (error) {
+      await openDialog(AlertDialog, {
+        text: `Fehler beim Speichern: ${error instanceof Error ? error.message : String(error)}`,
+      });
+      return;
+    }
+
+    if (!response.response.ok) {
+      await openDialog(AlertDialog, {
+        text: getErrorMessage(response.response.body),
+      });
+      return;
+    }
 
     router.refresh();
 
@@ -57,7 +90,7 @@ const GeneratedClientForm: React.FunctionComponent<GeneratedClientFormProps> = (
         }
       });
     }
-  }, [onSubmit, router, withLoader]);
+  }, [onSubmit, router, withLoader, openDialog]);
 
   return (
     <Formik

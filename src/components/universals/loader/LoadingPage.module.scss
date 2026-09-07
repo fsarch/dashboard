@@ -13,6 +13,12 @@
 
   gap: 1rem;
 
+  // Must beat DefaultPage's `.header`/`.navigation`/`.main` (z-index: 1),
+  // otherwise this fixed overlay - despite being last in the DOM - paints
+  // behind them, since without an explicit z-index it stacks at "auto"
+  // (below any positive z-index in the same stacking context).
+  z-index: 10;
+
   @include apply-custom-background-color('loading-overlay-background');
   @include apply-custom-padding('loading-overlay');
   @include apply-custom-border-radius('loading-overlay');
@@ -22,6 +28,8 @@
   position: fixed;
 
   inset: 0;
+
+  z-index: 10;
 
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(2px);

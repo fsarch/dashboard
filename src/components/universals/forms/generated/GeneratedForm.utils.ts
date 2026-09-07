@@ -117,6 +117,20 @@ const executePostSubmitAction = async (
   });
   const createData = createResponse.headers.get('Content-Type')?.startsWith('application/json') ? await createResponse.json() : null;
 
+  // Post-submit actions (e.g. redirects) only make sense when the endpoint
+  // actually succeeded - a failed submission (4xx/5xx) shouldn't redirect
+  // the user away as if nothing went wrong.
+  if (!createResponse.ok) {
+    return {
+      response: {
+        status: createResponse.status,
+        ok: false,
+        body: createData,
+      },
+      actions: [],
+    };
+  }
+
   const actions = await Promise.all((evaluatedDefinition.postEndpointActions ?? []).map(async (postEndpointAction) => {
     if (postEndpointAction.url.$type === "jsonata") {
       return {
@@ -139,6 +153,8 @@ const executePostSubmitAction = async (
 
   return {
     response: {
+      status: createResponse.status,
+      ok: true,
       body: createData,
     },
     actions: actions.filter((a): a is TGeneratedFormAction => !!a),

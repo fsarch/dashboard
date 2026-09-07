@@ -229,10 +229,14 @@ export type TGeneratedFormDefinition = {
 export type TGeneratedFormSubmitResponse = {
   /** API response containing the result data */
   response: {
+    /** HTTP status code returned by the endpoint */
+    status: number;
+    /** Whether the endpoint returned a successful (2xx) status */
+    ok: boolean;
     /** The response body - can be any structure depending on the API */
     body: Record<string, unknown>;
   };
-  /** Actions to execute after submission (e.g., redirect) */
+  /** Actions to execute after submission (e.g., redirect). Only relevant when the submission succeeded. */
   actions: Array<TGeneratedFormAction>;
 };
 
