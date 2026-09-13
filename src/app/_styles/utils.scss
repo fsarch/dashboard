@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "./config.base" as *;
 @use "./config" as *;
 
@@ -27,6 +28,7 @@
   // SPACING Custom Properties
   @each $space, $value in $colors {
     --color-#{$space}: #{$value};
+    --color-#{$space}-rgb: #{color.channel($value, "red")}, #{color.channel($value, "green")}, #{color.channel($value, "blue")};
   }
 
   // SPACING Custom Properties

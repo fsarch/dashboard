@@ -1,0 +1,13 @@
+@use '@/app/_styles/utils' as *;
+
+@mixin apply-tile-styles() {
+  @include apply-custom-padding('tile-list-item');
+
+  background-color: rgba(var(--color-contrast-light-rgb), 0);
+
+  transition: background-color 0.2s ease-in-out, color .2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(var(--color-contrast-light-rgb), 0.5);
+  }
+}
