@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import { Base64Image, BindableValue } from '@/services/image-editor-server/image-editor-server.type';
 import { TFlattenedParameterPath } from './parameter-paths.utils';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
 
 type ImageBindableFieldProps = {
@@ -71,7 +72,7 @@ const ImageBindableField: React.FunctionComponent<ImageBindableFieldProps> = ({
         </div>
 
         {isVariable ? (
-          <select value={value?.value as string ?? ''} onChange={(e) => onChange({ type: 'variable', value: e.target.value })}>
+          <select className={formControls.selectInput} value={value?.value as string ?? ''} onChange={(e) => onChange({ type: 'variable', value: e.target.value })}>
             {compatibleParameters.map((parameter) => (
               <option key={parameter.path} value={parameter.path}>{parameter.label}</option>
             ))}

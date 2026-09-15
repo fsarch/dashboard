@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import Section from '@/components/universals/section/Section';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import formControls from './FormControls.module.scss';
 import { ParameterDto } from '@/services/image-editor-server/image-editor-server.type';
 import { colors } from '@/app/_styles/colors';
 
@@ -91,6 +92,7 @@ const ParameterFields: React.FunctionComponent<{
           <FieldsetRow key={parameter.id} label={`${parameter.name}${parameter.required ? ' *' : ''}`}>
             {parameter.type === 'text' && (
               <input
+                className={formControls.textInput}
                 type="text"
                 value={(currentValue as string) ?? ''}
                 onChange={(e) => onFieldChange(fieldPath, e.target.value)}
@@ -98,6 +100,7 @@ const ParameterFields: React.FunctionComponent<{
             )}
             {parameter.type === 'number' && (
               <input
+                className={formControls.textInput}
                 type="number"
                 value={(currentValue as number) ?? ''}
                 onChange={(e) => onFieldChange(fieldPath, e.target.value === '' ? undefined : Number(e.target.value))}

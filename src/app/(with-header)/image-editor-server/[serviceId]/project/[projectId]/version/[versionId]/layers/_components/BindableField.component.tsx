@@ -4,6 +4,8 @@ import React, { useCallback } from 'react';
 import { BindableValue } from '@/services/image-editor-server/image-editor-server.type';
 import { TFlattenedParameterPath } from './parameter-paths.utils';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import colorInputStyles from '@/components/universals/forms/generated/inputs/GeneratedFormColorInput.module.scss';
+import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
 
 type TBindableFieldKind = 'text' | 'number' | 'color' | 'textarea' | 'select';
@@ -74,7 +76,7 @@ const BindableField: React.FunctionComponent<BindableFieldProps> = ({
         </div>
 
         {isVariable ? (
-          <select value={value?.value as string ?? ''} onChange={(e) => handleVariableChange(e.target.value)}>
+          <select className={formControls.selectInput} value={value?.value as string ?? ''} onChange={(e) => handleVariableChange(e.target.value)}>
             {compatibleParameters.map((parameter) => (
               <option key={parameter.path} value={parameter.path}>{parameter.label}</option>
             ))}
@@ -95,7 +97,7 @@ const ConstantInput: React.FunctionComponent<{
 }> = ({ kind, value, onChange, selectOptions }) => {
   if (kind === 'select') {
     return (
-      <select value={value as string ?? ''} onChange={(e) => onChange(e.target.value)}>
+      <select className={formControls.selectInput} value={value as string ?? ''} onChange={(e) => onChange(e.target.value)}>
         {selectOptions?.map((option) => (
           <option key={option.value} value={option.value}>{option.label}</option>
         ))}
@@ -104,15 +106,23 @@ const ConstantInput: React.FunctionComponent<{
   }
 
   if (kind === 'textarea') {
-    return <textarea value={value as string ?? ''} onChange={(e) => onChange(e.target.value)} rows={6} />;
+    return (
+      <textarea
+        className={formControls.textareaInput}
+        value={value as string ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+        rows={6}
+      />
+    );
   }
 
   if (kind === 'color') {
-    return <input type="color" value={(value as string) || '#000000'} onChange={(e) => onChange(e.target.value)} />;
+    return <input className={colorInputStyles.colorInput} type="color" value={(value as string) || '#000000'} onChange={(e) => onChange(e.target.value)} />;
   }
 
   return (
     <input
+      className={formControls.textInput}
       type={kind === 'number' ? 'number' : 'text'}
       value={value as string | number ?? ''}
       onChange={(e) => onChange(e.target.value)}

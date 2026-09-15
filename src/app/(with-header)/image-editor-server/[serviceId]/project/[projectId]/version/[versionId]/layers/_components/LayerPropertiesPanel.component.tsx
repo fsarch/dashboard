@@ -3,6 +3,8 @@
 import React, { useCallback } from 'react';
 import Section from '@/components/universals/section/Section';
 import Button from '@/components/universals/forms/Button';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import formControls from './FormControls.module.scss';
 import {
   BindableValue,
   HtmlLayerOptions,
@@ -42,10 +44,9 @@ const LayerPropertiesPanel: React.FunctionComponent<LayerPropertiesPanelProps> =
 
   return (
     <Section name={`Ebene: ${layer.name}`} color={colors.lightBlue}>
-      <label>
-        Name{' '}
-        <input type="text" value={layer.name} onChange={(e) => onChangeName(e.target.value)} />
-      </label>
+      <FieldsetRow label="Name">
+        <input className={formControls.textInput} type="text" value={layer.name} onChange={(e) => onChangeName(e.target.value)} />
+      </FieldsetRow>
 
       {layer.type === 'text' && (
         <>

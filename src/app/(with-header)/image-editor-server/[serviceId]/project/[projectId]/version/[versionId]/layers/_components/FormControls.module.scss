@@ -1,0 +1,26 @@
+// This editor manages its own React state directly (BindableField,
+// TestParametersPanel, LayerGeometryPanel, etc. all use plain controlled
+// value/onChange, not Formik) - the shared Input/Select/TextArea components
+// under components/universals/forms are hard-wired to Formik's <Field> and
+// don't fit here. `@include`ing the same input-base mixin those components
+// use keeps the visual language identical without depending on Formik or
+// reaching into another component's generated CSS module classes.
+@use '@/components/universals/forms/input-base.mixin' as inputMixin;
+
+.textInput {
+  @include inputMixin.control-chrome;
+  @include inputMixin.control-fixed-height;
+}
+
+.selectInput {
+  @include inputMixin.control-chrome;
+  @include inputMixin.control-fixed-height;
+}
+
+.textareaInput {
+  @include inputMixin.control-chrome;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  line-height: 1.5;
+}
