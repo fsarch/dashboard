@@ -8,6 +8,7 @@ import { CSS } from '@dnd-kit/utilities';
 import Section from '@/components/universals/section/Section';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
+import Icon from '@/components/universals/icon/Icon.component';
 import clsx from 'clsx';
 import {
   BindableAffineMatrix,
@@ -137,7 +138,7 @@ const SortableLayerRow: React.FunctionComponent<SortableLayerRowProps> = ({
     <div
       ref={setNodeRef}
       style={style}
-      className={clsx(styles.layerListItem, selected && styles.selected)}
+      className={styles.layerListItem}
       onClick={onSelect}
       {...attributes}
     >
@@ -174,6 +175,7 @@ const SortableLayerRow: React.FunctionComponent<SortableLayerRowProps> = ({
           </div>
         ) : undefined}
       >
+        {selected && <Icon icon="edit" className={styles.selectedIcon} />}
         {layer.order}. {layer.name} ({layer.type})
       </ListItem>
     </div>

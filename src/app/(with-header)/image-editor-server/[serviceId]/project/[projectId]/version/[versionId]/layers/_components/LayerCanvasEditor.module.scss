@@ -60,7 +60,7 @@
   cursor: move;
 
   &.selected {
-    outline: 1px dashed #2F609F;
+    outline: 1px dashed rgb(var(--color-primary-rgb, 255, 105, 180));
     outline-offset: 2px;
   }
 
@@ -82,9 +82,31 @@
   cursor: pointer;
   padding: 4px 8px;
 
-  &.selected {
-    background: #e8f0fa;
+  // The full row (this element, including its padding) is the hover target
+  // - not the inner ListItem's own :hover (list-item.module.scss), which
+  // only covers its own tighter box and used to visibly stop short of this
+  // row's padding. Selection itself is no longer a background tint (see
+  // .selectedIcon below) - it's shown via an icon instead, so hover reads
+  // unambiguously as "hover", not "is this selected or hovered?".
+  &:hover {
+    background: rgba(var(--color-primary-rgb, 255, 105, 180), 0.18);
+
+    // ListItem (the sole direct child here) has its own :hover tint,
+    // shared across the whole app (list-item.module.scss) - left alone it
+    // stacks its own semi-transparent tint on top of this row's, so the
+    // ListItem's tighter box reads visibly darker/different than the
+    // padding around it ("doubled" hover). Force it transparent instead of
+    // editing the shared component, which every other list in the app
+    // also uses.
+    > * {
+      background-color: transparent !important;
+    }
   }
+}
+
+.selectedIcon {
+  color: rgb(var(--color-primary-rgb, 255, 105, 180));
+  margin-right: 6px;
 }
 
 .dragHandle {
@@ -131,29 +153,4 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-}
-
-.bindableFieldToggle {
-  display: inline-flex;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden;
-
-  button {
-    border: none;
-    background: #fff;
-    padding: 2px 8px;
-    cursor: pointer;
-    font-size: 0.85em;
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-  }
-}
-
-.bindableFieldToggleActive {
-  background: #2F609F !important;
-  color: #fff;
 }

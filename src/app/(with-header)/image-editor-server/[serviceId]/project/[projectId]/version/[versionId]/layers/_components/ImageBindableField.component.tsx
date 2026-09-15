@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import { Base64Image, BindableValue } from '@/services/image-editor-server/image-editor-server.type';
 import { TFlattenedParameterPath } from './parameter-paths.utils';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import SegmentedControl from '@/components/universals/forms/SegmentedControl';
 import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
 
@@ -57,19 +58,14 @@ const ImageBindableField: React.FunctionComponent<ImageBindableFieldProps> = ({
   return (
     <FieldsetRow label={label}>
       <div className={styles.bindableField}>
-        <div className={styles.bindableFieldToggle}>
-          <button type="button" className={!isVariable ? styles.bindableFieldToggleActive : undefined} onClick={() => handleModeChange('constant')}>
-            Konstante
-          </button>
-          <button
-            type="button"
-            disabled={compatibleParameters.length === 0}
-            className={isVariable ? styles.bindableFieldToggleActive : undefined}
-            onClick={() => handleModeChange('variable')}
-          >
-            Parameter
-          </button>
-        </div>
+        <SegmentedControl
+          value={isVariable ? 'variable' : 'constant'}
+          onChange={handleModeChange}
+          options={[
+            { value: 'constant', label: 'Konstante' },
+            { value: 'variable', label: 'Parameter', disabled: compatibleParameters.length === 0 },
+          ]}
+        />
 
         {isVariable ? (
           <select className={formControls.selectInput} value={value?.value as string ?? ''} onChange={(e) => onChange({ type: 'variable', value: e.target.value })}>

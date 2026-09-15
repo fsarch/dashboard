@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import { BindableValue } from '@/services/image-editor-server/image-editor-server.type';
 import { TFlattenedParameterPath } from './parameter-paths.utils';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import SegmentedControl from '@/components/universals/forms/SegmentedControl';
 import colorInputStyles from '@/components/universals/forms/generated/inputs/GeneratedFormColorInput.module.scss';
 import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
@@ -57,23 +58,14 @@ const BindableField: React.FunctionComponent<BindableFieldProps> = ({
   return (
     <FieldsetRow label={label}>
       <div className={styles.bindableField}>
-        <div className={styles.bindableFieldToggle}>
-          <button
-            type="button"
-            className={!isVariable ? styles.bindableFieldToggleActive : undefined}
-            onClick={() => handleModeChange('constant')}
-          >
-            Konstante
-          </button>
-          <button
-            type="button"
-            disabled={compatibleParameters.length === 0}
-            className={isVariable ? styles.bindableFieldToggleActive : undefined}
-            onClick={() => handleModeChange('variable')}
-          >
-            Parameter
-          </button>
-        </div>
+        <SegmentedControl
+          value={isVariable ? 'variable' : 'constant'}
+          onChange={handleModeChange}
+          options={[
+            { value: 'constant', label: 'Konstante' },
+            { value: 'variable', label: 'Parameter', disabled: compatibleParameters.length === 0 },
+          ]}
+        />
 
         {isVariable ? (
           <select className={formControls.selectInput} value={value?.value as string ?? ''} onChange={(e) => handleVariableChange(e.target.value)}>
@@ -97,11 +89,11 @@ const ConstantInput: React.FunctionComponent<{
 }> = ({ kind, value, onChange, selectOptions }) => {
   if (kind === 'select') {
     return (
-      <select className={formControls.selectInput} value={value as string ?? ''} onChange={(e) => onChange(e.target.value)}>
-        {selectOptions?.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select>
+      <SegmentedControl
+        value={value as string ?? selectOptions?.[0]?.value ?? ''}
+        onChange={onChange}
+        options={selectOptions ?? []}
+      />
     );
   }
 

@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from 'react';
 import Section from '@/components/universals/section/Section';
 import Button from '@/components/universals/forms/Button';
+import SegmentedControl from '@/components/universals/forms/SegmentedControl';
 import formControls from './FormControls.module.scss';
 import { LayerDto, LayerType } from '@/services/image-editor-server/image-editor-server.type';
 import { createLayerAction } from './LayerCanvasEditor.server-action';
@@ -44,11 +45,7 @@ const AddLayerForm: React.FunctionComponent<AddLayerFormProps> = ({ projectId, v
     <Section name="Ebene hinzufügen">
       <form onSubmit={handleSubmit}>
         <input className={formControls.textInput} type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <select className={formControls.selectInput} value={type} onChange={(e) => setType(e.target.value as LayerType)}>
-          {LAYER_TYPES.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
-          ))}
-        </select>
+        <SegmentedControl value={type} onChange={setType} options={LAYER_TYPES} />
         <Button type="submit" disabled={isSubmitting || !name.trim()}>
           {isSubmitting ? 'Erstelle...' : 'Hinzufügen'}
         </Button>
