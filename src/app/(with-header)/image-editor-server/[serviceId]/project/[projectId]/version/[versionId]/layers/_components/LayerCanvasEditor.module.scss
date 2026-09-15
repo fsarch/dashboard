@@ -1,0 +1,159 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  align-items: start;
+  max-width: 100%;
+
+  // Preview above the layer list on narrow/mobile viewports, side by side
+  // (preview | 320px sidebar) on wider/desktop ones.
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// No fixed size of its own - just fills whatever the grid track above
+// gives it (full viewport width when .layout is single-column, the left
+// track next to the sidebar otherwise). `min-width: 0` overrides the grid
+// item default of `min-width: auto`, which would otherwise refuse to
+// shrink the track below the canvas's *unscaled* content size and push
+// the preview past the edge of the screen on narrow viewports - exactly
+// the overflow this is meant to prevent. canvasAreaRef (in the component)
+// measures this element's actual rendered width/height via
+// ResizeObserver to compute the preview's zoom level, so it always fits.
+.canvasArea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+// Sized to the *scaled* footprint (version.width/height * zoom) - the
+// checkerboard lives here (not on .canvas) so its tile size stays a
+// consistent 20 real screen px regardless of zoom level. .canvas inside
+// keeps the real, unscaled width/height and is shrunk purely via
+// `transform: scale(zoom)` - critically, width/height and the scale
+// transform must never both be applied to the *same* element, or the
+// canvas ends up scaled twice (too small, and effectively cropped by this
+// wrapper's overflow, which reads as "wrong proportions").
+.canvasWrapper {
+  overflow: hidden;
+  max-width: 100%;
+  border: 1px solid #ccc;
+  background-image:
+    linear-gradient(45deg, #eee 25%, transparent 25%),
+    linear-gradient(-45deg, #eee 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #eee 75%),
+    linear-gradient(-45deg, transparent 75%, #eee 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.canvas {
+  position: relative;
+  transform-origin: top left;
+}
+
+.layerTarget {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  cursor: move;
+
+  &.selected {
+    outline: 1px dashed #2F609F;
+    outline-offset: 2px;
+  }
+
+  &.locked {
+    cursor: default;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.layerListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+
+  &.selected {
+    background: #e8f0fa;
+  }
+}
+
+.dragHandle {
+  border: none;
+  background: none;
+  cursor: grab;
+  font-size: 1.1em;
+  line-height: 1;
+  padding: 0 4px;
+  touch-action: none; // required by dnd-kit's PointerSensor for touch dragging
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.reorderButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  button {
+    border: 1px solid #ccc;
+    background: #fff;
+    line-height: 1;
+    padding: 0 4px;
+    cursor: pointer;
+    font-size: 0.7em;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.lockedNotice {
+  color: #9F2F2F;
+  font-size: 0.9em;
+}
+
+.bindableField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bindableFieldToggle {
+  display: inline-flex;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+
+  button {
+    border: none;
+    background: #fff;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 0.85em;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.bindableFieldToggleActive {
+  background: #2F609F !important;
+  color: #fff;
+}

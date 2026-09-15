@@ -18,6 +18,7 @@ export enum EServiceType {
   FRONTEND = 'frontend',
   CALENDAR = 'calendar',
   DBLIGHT = 'dblight',
+  IMAGE_EDITOR_SERVER = 'image-editor-server',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -156,6 +157,13 @@ export type TDblightConfiguration = {
   url: string;
 };
 
+export type TImageEditorServerConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.IMAGE_EDITOR_SERVER,
+  url: string;
+};
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -174,7 +182,8 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TMetricConfiguration
   | TFrontendConfiguration
   | TCalendarConfiguration
-  | TDblightConfiguration;
+  | TDblightConfiguration
+  | TImageEditorServerConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 

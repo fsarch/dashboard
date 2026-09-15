@@ -98,6 +98,11 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Database',
   path: '/dblight',
   serviceType: EServiceType.DBLIGHT,
+}, {
+  icon: 'layer-group',
+  name: 'Image Editor',
+  path: '/image-editor-server',
+  serviceType: EServiceType.IMAGE_EDITOR_SERVER,
 }];
 
 const getApps = async () => {

@@ -72,5 +72,16 @@
   padding-bottom: calc(var(--bottom-spacing, 0px) + 8px);
 
   overflow: auto;
+  // Always reserve the vertical scrollbar's width, even while content is
+  // short enough not to need it. Without this, any page whose content
+  // height depends on its own measured width (e.g. the image-editor-server
+  // layer editor's canvas preview, sized via ResizeObserver) can enter a
+  // feedback loop: a taller render triggers this scrollbar, which narrows
+  // .main, which narrows the measured width, which shrinks the content
+  // back below the scrollbar threshold, removing it again - visibly
+  // "jumping" back and forth. Reserving the gutter unconditionally breaks
+  // the loop by keeping .main's content width constant regardless of
+  // whether a scrollbar is actually needed right now.
+  scrollbar-gutter: stable;
   z-index: 1;
 }
