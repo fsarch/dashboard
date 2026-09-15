@@ -1,11 +1,11 @@
-.buttons {
-  display: flex;
+@use '@/components/universals/dialog/dialog-padding.mixin' as dialogPaddingMixin;
 
-  gap: 8px;
+// Kein DialogTitle in diesem Dialog - .content übernimmt daher selbst die
+// obere Kante des Dialogs (gleicher Wert wie DialogTitle), DialogButtons
+// übernimmt wie üblich die untere Kante.
+.content {
+  @include dialogPaddingMixin.top-padding;
 
-  justify-content: flex-end;
-}
-
-.text {
-  margin-bottom: 16px;
+  width: 350px;
+  max-width: 95%;
 }

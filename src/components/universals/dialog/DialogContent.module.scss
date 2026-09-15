@@ -2,8 +2,16 @@
 
 .root {
   @include dialogPaddingMixin.horizontal-padding;
+  @include dialogPaddingMixin.bottom-padding;
 
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+// Für Dialoge, bei denen direkt danach ein Block folgt, der die untere Kante
+// selbst übernimmt (z. B. DialogButtons mit eigenem top-padding) - verhindert
+// doppelten Abstand.
+.noBottomPadding {
+  padding-bottom: 0;
 }

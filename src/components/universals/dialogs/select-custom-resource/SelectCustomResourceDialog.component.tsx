@@ -177,7 +177,7 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
       <div className={styles.root}>
         <DialogTitle>Custom-Resource-Instanz auswählen</DialogTitle>
 
-        <DialogContent>
+        <DialogContent enableBottomPadding={false}>
           {errorMessage && (
             <p className={styles.error}>{errorMessage}</p>
           )}
