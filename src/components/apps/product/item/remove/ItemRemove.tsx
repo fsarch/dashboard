@@ -4,8 +4,7 @@ import React, { useCallback } from 'react';
 import Section from "@/components/universals/section/Section";
 import Button from "@/components/universals/forms/Button";
 import { removeItem } from "@/components/apps/product/item/remove/ItemRemove.server-action";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
-import ConfirmDialogComponent from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
+import { useOpenDeleteDialog } from "@/components/universals/dialogs/confirm/useOpenDeleteDialog";
 import { useRouter } from "next/navigation";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 
@@ -20,15 +19,13 @@ const ItemRemove: React.FunctionComponent<ItemRemoveProps> = ({
   catalogId,
   homeUrl,
 }) => {
-  const openDialog = useOpenDialog();
+  const openDeleteDialog = useOpenDeleteDialog();
 
   const router = useRouter();
 
   const handleDeleteClick = useCallback(async () => {
-    const dialogRes = await openDialog(ConfirmDialogComponent, {
+    const dialogRes = await openDeleteDialog({
       text: 'Möchtest du diesen Eintrag wirklich löschen?',
-      successButtonText: 'Löschen',
-      successButtonColor: '#BB0000',
     }).result;
     if (dialogRes.status !== DialogResult.SUCCESS) {
       return;

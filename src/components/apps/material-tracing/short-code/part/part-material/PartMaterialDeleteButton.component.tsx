@@ -2,8 +2,7 @@
 
 import React, { MouseEvent, useCallback } from 'react';
 import ListItemActionIcon from "@/components/universals/list/ListItemActionIcon";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
-import ConfirmDialog from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
+import { useOpenDeleteDialog } from "@/components/universals/dialogs/confirm/useOpenDeleteDialog";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import { useRouter } from "next/navigation";
 import {
@@ -19,12 +18,13 @@ const PartMaterialDeleteButton: React.FunctionComponent<PartMaterialDeleteButton
   partId,
   materialId,
 }) => {
-  const openDialog = useOpenDialog();
+  const openDeleteDialog = useOpenDeleteDialog();
   const router = useRouter();
 
   const handleClick = useCallback(async (event: MouseEvent<HTMLButtonElement>) => {
-    const dialog = openDialog(ConfirmDialog, {
+    const dialog = openDeleteDialog({
       text: 'Möchten Sie dieses Material wirklich vom Bauteil entfernen?',
+      successButtonText: 'Entfernen',
     });
 
     const result = await dialog.result;
@@ -36,7 +36,7 @@ const PartMaterialDeleteButton: React.FunctionComponent<PartMaterialDeleteButton
     await deletePartMaterial(partId, materialId);
 
     router.refresh();
-  }, [partId, materialId, openDialog, router]);
+  }, [partId, materialId, openDeleteDialog, router]);
 
   return (
     <ListItemActionIcon

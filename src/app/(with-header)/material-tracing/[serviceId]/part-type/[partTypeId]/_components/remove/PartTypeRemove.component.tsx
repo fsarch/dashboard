@@ -2,9 +2,8 @@
 
 import React, { useCallback } from 'react';
 import Section from "@/components/universals/section/Section";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
+import { useOpenDeleteDialog } from "@/components/universals/dialogs/confirm/useOpenDeleteDialog";
 import { useRouter } from "next/navigation";
-import ConfirmDialogComponent from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import Button from "@/components/universals/forms/Button";
 import {
@@ -20,15 +19,13 @@ const PartTypeRemove: React.FunctionComponent<PartTypeRemoveProps> = ({
   partTypeId,
   homeUrl,
 }) => {
-  const openDialog = useOpenDialog();
+  const openDeleteDialog = useOpenDeleteDialog();
 
   const router = useRouter();
 
   const handleDeleteClick = useCallback(async () => {
-    const dialogRes = await openDialog(ConfirmDialogComponent, {
+    const dialogRes = await openDeleteDialog({
       text: 'Möchtest du diesen PartType wirklich löschen?',
-      successButtonText: 'Löschen',
-      successButtonColor: '#BB0000',
     }).result;
     if (dialogRes.status !== DialogResult.SUCCESS) {
       return;

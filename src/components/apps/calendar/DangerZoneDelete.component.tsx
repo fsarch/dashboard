@@ -3,8 +3,7 @@
 import React, { useCallback, useState } from 'react';
 import Section from '@/components/universals/section/Section';
 import Button from '@/components/universals/forms/Button';
-import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import ConfirmDialogComponent from '@/components/universals/dialogs/confirm/ConfirmDialog.component';
+import { useOpenDeleteDialog } from '@/components/universals/dialogs/confirm/useOpenDeleteDialog';
 import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import { useRouter } from 'next/navigation';
 
@@ -21,15 +20,14 @@ const DangerZoneDelete: React.FunctionComponent<DangerZoneDeleteProps> = ({
   redirectUrl,
   onDelete,
 }) => {
-  const openDialog = useOpenDialog();
+  const openDeleteDialog = useOpenDeleteDialog();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteClick = useCallback(async () => {
-    const dialogResult = await openDialog(ConfirmDialogComponent, {
+    const dialogResult = await openDeleteDialog({
       text: confirmText,
       successButtonText: buttonText,
-      successButtonColor: '#BB0000',
     }).result;
 
     if (dialogResult.status !== DialogResult.SUCCESS) {
@@ -43,7 +41,7 @@ const DangerZoneDelete: React.FunctionComponent<DangerZoneDeleteProps> = ({
     } finally {
       setIsDeleting(false);
     }
-  }, [confirmText, buttonText, onDelete, redirectUrl, router, openDialog]);
+  }, [confirmText, buttonText, onDelete, redirectUrl, router, openDeleteDialog]);
 
   return (
     <Section name="Danger Zone" color="#FF0000">

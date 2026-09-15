@@ -8,8 +8,7 @@ import sharedStyles from './GeneratedFormNestedForm.module.scss';
 import arrayStyles from './GeneratedFormNestedFormArray.module.scss';
 import { NestedFormContextProvider } from "@/components/universals/forms/generated/inputs/nested/nested-form.context";
 import IconButton from "@/components/universals/forms/button/IconButton";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
-import ConfirmDialog from "@/components/universals/dialogs/confirm/ConfirmDialog.component";
+import { useOpenDeleteDialog } from "@/components/universals/dialogs/confirm/useOpenDeleteDialog";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import Button from "@/components/universals/forms/Button";
 
@@ -32,10 +31,10 @@ export const GeneratedNestedFormArray: React.FunctionComponent<GeneratedNestedFo
     }));
   }, [setValues, input.addInitialValues, input.id]);
 
-  const openDialog = useOpenDialog();
+  const openDeleteDialog = useOpenDeleteDialog();
 
   const handleDelete = useCallback(async (value: unknown) => {
-    const dialogResult = await openDialog(ConfirmDialog, {
+    const dialogResult = await openDeleteDialog({
       text: 'Möchten Sie dieses Element wirklich löschen?',
     }).result;
 
