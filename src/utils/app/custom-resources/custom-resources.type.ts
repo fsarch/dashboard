@@ -52,3 +52,16 @@ export type TCustomResourceCapableService = {
   name?: string;
   type: EServiceType;
 };
+
+// Eine Custom-Resource-Definition, angereichert um den App-Typ, unter dem
+// sie geführt wird (für die service-übergreifende Übersicht/Detailseite im
+// Development-Bereich, siehe development/custom-resources).
+export type TCustomResourceDefinitionWithAppType = {
+  appType: EServiceType;
+  // Service-Instanz, über die diese Definition geladen wurde - dient nur
+  // als Beispiel, um die (laut Backend app-typ-weit identische) Definition
+  // überhaupt abzurufen. Die eigentliche Instanz-Auswahl erfolgt separat
+  // und service-übergreifend über den SelectCustomResourceDialog.
+  exampleServiceId: string;
+  resource: TCustomResourceDefinition;
+};

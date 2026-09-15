@@ -74,6 +74,9 @@ export default async function CustomResourcesPage({ params }: CustomResourcesPag
               isSelected
               icon="cubes"
             >
+              Custom Resources ({service.name ?? service.id})
+            </AutoNavigationItem>
+            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
               Custom Resources
             </AutoNavigationItem>
           </ul>

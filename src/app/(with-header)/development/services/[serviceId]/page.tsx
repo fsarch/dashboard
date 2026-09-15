@@ -54,6 +54,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
             <AutoNavigationItem href="/development/services" isSelected icon="server">
               Services
             </AutoNavigationItem>
+            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+              Custom Resources
+            </AutoNavigationItem>
           </ul>
           <div className={autoNavigationStyles.spacer} />
           <ul className={autoNavigationStyles.bottom} />

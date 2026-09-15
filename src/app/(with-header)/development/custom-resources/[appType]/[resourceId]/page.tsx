@@ -3,8 +3,7 @@ import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { APPS } from '@/constants/apps';
+import { EServiceType } from '@/utils/configuration.type';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
 import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
@@ -17,12 +16,12 @@ export const metadata: Metadata = {
   title: 'Development – Custom Resource Details',
 };
 
-type CustomResourceDetailPageProps = {
-  params: Promise<{ serviceId: string; resourceId: string }>;
+type GlobalCustomResourceDetailPageProps = {
+  params: Promise<{ appType: string; resourceId: string }>;
 };
 
-export default async function CustomResourceDetailPage({ params }: CustomResourceDetailPageProps) {
-  const { serviceId, resourceId } = await params;
+export default async function GlobalCustomResourceDetailPage({ params }: GlobalCustomResourceDetailPageProps) {
+  const { appType, resourceId } = await params;
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -35,30 +34,25 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
     return notFound();
   }
 
-  const service = await getServiceConfigurationById(serviceId);
-  if (!service) {
+  if (!(Object.values(EServiceType) as string[]).includes(appType)) {
     return notFound();
   }
 
-  if (!APPS[service.type]?.supportsCustomResources) {
+  const definition = await customResourcesUtils.getCustomResourceDefinitionForAppType(
+    appType as EServiceType,
+    resourceId,
+  );
+  if (!definition) {
     return notFound();
   }
 
-  let resource;
-  try {
-    resource = await customResourcesUtils.getCustomResourceById(serviceId, resourceId);
-  } catch {
-    return notFound();
-  }
-  if (!resource) {
-    return notFound();
-  }
+  const { resource } = definition;
 
   return (
     <div className={styles.root}>
       <DefaultPageHeader
         className={styles.header}
-        title={`Custom Resource – ${resource.name}`}
+        title={`Custom Resource – ${appType}.${resource.id}`}
       />
       <nav className={styles.navigation}>
         <div className={autoNavigationStyles.root}>
@@ -69,14 +63,7 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
             <AutoNavigationItem href="/development/services" icon="server">
               Services
             </AutoNavigationItem>
-            <AutoNavigationItem
-              href={`/development/services/${serviceId}/custom-resources`}
-              isSelected
-              icon="cubes"
-            >
-              Custom Resources ({service.name ?? service.id})
-            </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+            <AutoNavigationItem href="/development/custom-resources" isSelected icon="cubes">
               Custom Resources
             </AutoNavigationItem>
           </ul>
@@ -85,8 +72,8 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
         </div>
       </nav>
       <main className={styles.main}>
-        <Section name={`Custom Resource: ${resource.name}`}>
-          <CustomResourceDetail resource={resource} serviceId={serviceId} />
+        <Section name={`Custom Resource: ${appType}.${resource.id}`}>
+          <CustomResourceDetail appType={appType as EServiceType} resource={resource} />
         </Section>
       </main>
     </div>

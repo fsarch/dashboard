@@ -3,27 +3,20 @@ import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { APPS } from '@/constants/apps';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
 import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
+import List from '@/components/universals/list/List';
+import LinkListItem from '@/components/universals/list/LinkListItem';
 import { customResourcesUtils } from '@/utils/app/custom-resources';
-import CustomResourceDetail from './_components/CustomResourceDetail.component';
 
 export const metadata: Metadata = {
-  title: 'Development – Custom Resource Details',
+  title: 'Development – Custom Resources',
 };
 
-type CustomResourceDetailPageProps = {
-  params: Promise<{ serviceId: string; resourceId: string }>;
-};
-
-export default async function CustomResourceDetailPage({ params }: CustomResourceDetailPageProps) {
-  const { serviceId, resourceId } = await params;
-
+export default async function GlobalCustomResourcesPage() {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
@@ -35,31 +28,11 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
     return notFound();
   }
 
-  const service = await getServiceConfigurationById(serviceId);
-  if (!service) {
-    return notFound();
-  }
-
-  if (!APPS[service.type]?.supportsCustomResources) {
-    return notFound();
-  }
-
-  let resource;
-  try {
-    resource = await customResourcesUtils.getCustomResourceById(serviceId, resourceId);
-  } catch {
-    return notFound();
-  }
-  if (!resource) {
-    return notFound();
-  }
+  const definitions = await customResourcesUtils.listAllCustomResourceDefinitions();
 
   return (
     <div className={styles.root}>
-      <DefaultPageHeader
-        className={styles.header}
-        title={`Custom Resource – ${resource.name}`}
-      />
+      <DefaultPageHeader className={styles.header} title="Development" />
       <nav className={styles.navigation}>
         <div className={autoNavigationStyles.root}>
           <ul className={autoNavigationStyles.main}>
@@ -69,14 +42,7 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
             <AutoNavigationItem href="/development/services" icon="server">
               Services
             </AutoNavigationItem>
-            <AutoNavigationItem
-              href={`/development/services/${serviceId}/custom-resources`}
-              isSelected
-              icon="cubes"
-            >
-              Custom Resources ({service.name ?? service.id})
-            </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+            <AutoNavigationItem href="/development/custom-resources" isSelected icon="cubes">
               Custom Resources
             </AutoNavigationItem>
           </ul>
@@ -85,8 +51,26 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
         </div>
       </nav>
       <main className={styles.main}>
-        <Section name={`Custom Resource: ${resource.name}`}>
-          <CustomResourceDetail resource={resource} serviceId={serviceId} />
+        <Section name="Custom Resources (alle Services)">
+          <List>
+            {definitions.map(({ appType, resource }) => (
+              <LinkListItem
+                key={`${appType}.${resource.id}`}
+                href={`/development/custom-resources/${appType}/${resource.id}`}
+              >
+                <strong>{appType}.{resource.id}</strong>
+                {' '}
+                <span style={{ opacity: 0.6, fontSize: '0.85em' }}>
+                  {resource.name} — {resource.description}
+                </span>
+              </LinkListItem>
+            ))}
+          </List>
+          {definitions.length === 0 && (
+            <p style={{ padding: '8px', opacity: 0.6 }}>
+              Keine Custom Resources vorhanden.
+            </p>
+          )}
         </Section>
       </main>
     </div>

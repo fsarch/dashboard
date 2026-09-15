@@ -5,6 +5,7 @@ import { EServiceType } from '@/utils/configuration.type';
 import {
   TCustomResourceCapableService,
   TCustomResourceDefinition,
+  TCustomResourceDefinitionWithAppType,
   TCustomResourceGetRoute,
   TCustomResourceInstanceListResult,
   TCustomResourceListResponseDto,
@@ -92,10 +93,69 @@ const listCapableServices = async (appType?: EServiceType): Promise<TCustomResou
     .map((service) => ({ id: service.id, name: service.name, type: service.type }));
 };
 
+// Ein Beispiel-Service pro unterstütztem App-Typ - dient als Repräsentant,
+// über den die (laut Backend app-typ-weit identischen) Custom-Resource-
+// Definitionen dieses Typs geladen werden können.
+const listCapableAppTypes = async (): Promise<{ appType: EServiceType; exampleServiceId: string }[]> => {
+  const services = await listCapableServices();
+  const exampleServiceIdByType = new Map<EServiceType, string>();
+  for (const service of services) {
+    if (!exampleServiceIdByType.has(service.type)) {
+      exampleServiceIdByType.set(service.type, service.id);
+    }
+  }
+  return Array.from(exampleServiceIdByType.entries()).map(([appType, exampleServiceId]) => ({
+    appType,
+    exampleServiceId,
+  }));
+};
+
+// Alle Custom-Resource-Definitionen über alle unterstützten App-Typen
+// hinweg (service-übergreifende Übersicht). Ein nicht erreichbarer
+// Beispiel-Service für einen App-Typ blendet nur dessen Definitionen aus,
+// statt die gesamte Liste scheitern zu lassen.
+const listAllCustomResourceDefinitions = async (): Promise<TCustomResourceDefinitionWithAppType[]> => {
+  const appTypes = await listCapableAppTypes();
+  const definitionsByAppType = await Promise.all(
+    appTypes.map(async ({ appType, exampleServiceId }) => {
+      try {
+        const resources = await listCustomResources(exampleServiceId);
+        return resources.map((resource) => ({ appType, exampleServiceId, resource }));
+      } catch {
+        return [];
+      }
+    }),
+  );
+  return definitionsByAppType.flat();
+};
+
+// Eine einzelne Definition anhand von App-Typ + Resource-ID, für die
+// service-übergreifende Detailseite im Development-Bereich.
+const getCustomResourceDefinitionForAppType = async (
+  appType: EServiceType,
+  resourceId: string,
+): Promise<TCustomResourceDefinitionWithAppType | undefined> => {
+  const appTypes = await listCapableAppTypes();
+  const match = appTypes.find((entry) => entry.appType === appType);
+  if (!match) {
+    return undefined;
+  }
+
+  const resource = await getCustomResourceById(match.exampleServiceId, resourceId);
+  if (!resource) {
+    return undefined;
+  }
+
+  return { appType, exampleServiceId: match.exampleServiceId, resource };
+};
+
 export const customResourcesUtils = {
   listCustomResources,
   getCustomResourceById,
   listCapableServices,
+  listCapableAppTypes,
+  listAllCustomResourceDefinitions,
+  getCustomResourceDefinitionForAppType,
   list,
   get,
 };
