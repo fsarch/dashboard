@@ -5,11 +5,15 @@ import { BindableValue } from '@/services/image-editor-server/image-editor-serve
 import { TFlattenedParameterPath } from './parameter-paths.utils';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import SegmentedControl from '@/components/universals/forms/SegmentedControl';
+import Button from '@/components/universals/forms/Button';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import CodeEditorDialog from '@/components/universals/dialogs/code-editor/CodeEditorDialogDynamic.component';
 import colorInputStyles from '@/components/universals/forms/generated/inputs/GeneratedFormColorInput.module.scss';
 import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
 
-type TBindableFieldKind = 'text' | 'number' | 'color' | 'textarea' | 'select';
+type TBindableFieldKind = 'text' | 'number' | 'color' | 'textarea' | 'code' | 'select';
 
 type BindableFieldProps = {
   label: string;
@@ -17,6 +21,10 @@ type BindableFieldProps = {
   value: BindableValue<string | number> | undefined;
   onChange: (next: BindableValue<string | number>) => void;
   selectOptions?: Array<{ value: string; label: string }>;
+  // Only meaningful for kind="code" - any Monaco language id ("html",
+  // "javascript", "css", "json", ...). Defaults to "html" since that's
+  // this editor's only current source-code field.
+  codeLanguage?: string;
   // Only parameters whose type matches this field's expected value type
   // make sense to bind against (e.g. a color field binds to a "text"
   // parameter, never a "number" one).
@@ -35,6 +43,7 @@ const BindableField: React.FunctionComponent<BindableFieldProps> = ({
   value,
   onChange,
   selectOptions,
+  codeLanguage,
   compatibleParameters,
 }) => {
   const isVariable = value?.type === 'variable';
@@ -74,7 +83,7 @@ const BindableField: React.FunctionComponent<BindableFieldProps> = ({
             ))}
           </select>
         ) : (
-          <ConstantInput kind={kind} value={value?.value} onChange={handleConstantChange} selectOptions={selectOptions} />
+          <ConstantInput kind={kind} value={value?.value} onChange={handleConstantChange} selectOptions={selectOptions} codeLanguage={codeLanguage} />
         )}
       </div>
     </FieldsetRow>
@@ -86,7 +95,8 @@ const ConstantInput: React.FunctionComponent<{
   value: string | number | undefined;
   onChange: (raw: string) => void;
   selectOptions?: Array<{ value: string; label: string }>;
-}> = ({ kind, value, onChange, selectOptions }) => {
+  codeLanguage?: string;
+}> = ({ kind, value, onChange, selectOptions, codeLanguage }) => {
   if (kind === 'select') {
     return (
       <SegmentedControl
@@ -95,6 +105,10 @@ const ConstantInput: React.FunctionComponent<{
         options={selectOptions ?? []}
       />
     );
+  }
+
+  if (kind === 'code') {
+    return <CodeFieldButton value={value as string ?? ''} onChange={onChange} language={codeLanguage ?? 'html'} />;
   }
 
   if (kind === 'textarea') {
@@ -119,6 +133,34 @@ const ConstantInput: React.FunctionComponent<{
       value={value as string | number ?? ''}
       onChange={(e) => onChange(e.target.value)}
     />
+  );
+};
+
+// Source code (HTML, but the dialog itself is language-agnostic - see
+// CodeEditorDialog) doesn't get a small inline textarea: it opens the
+// same general-purpose code editor dialog used elsewhere in the app
+// (mirrors ConfirmDialog/AlertDialog's useOpenDialog() plumbing), which
+// gives a properly-sized Monaco editor instead of a cramped, wrapping
+// few-line box.
+const CodeFieldButton: React.FunctionComponent<{
+  value: string;
+  onChange: (raw: string) => void;
+  language: string;
+}> = ({ value, onChange, language }) => {
+  const openDialog = useOpenDialog();
+
+  const handleOpen = useCallback(async () => {
+    const { result } = openDialog(CodeEditorDialog, { language, code: value });
+    const dialogResult = await result;
+    if (dialogResult.status === DialogResult.SUCCESS) {
+      onChange(dialogResult.value);
+    }
+  }, [openDialog, language, value, onChange]);
+
+  return (
+    <Button type="button" onClick={handleOpen}>
+      {language.toUpperCase()} bearbeiten{value ? '' : ' (leer)'}
+    </Button>
   );
 };
 

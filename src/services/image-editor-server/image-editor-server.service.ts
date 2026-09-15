@@ -70,6 +70,7 @@ const updateLayer = async (
     order: number;
     transformationMatrix: BindableAffineMatrix;
     options: LayerOptions;
+    hidden: boolean;
   }>,
 ): Promise<LayerDto> => {
   const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/layers/${layerId}`, {

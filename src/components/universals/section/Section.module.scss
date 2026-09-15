@@ -8,6 +8,15 @@
   border-color: var(--color);
   background-color: rgba(0, 0, 0, 0.5);
   border: none;
+
+  // <fieldset> has a special sizing quirk: like a flex/grid item, its
+  // default min-width is its content's own min-content width, which
+  // `width`/`max-width` alone can't override - a Section with several wide
+  // rows (e.g. many BindableFields, each with their own label + Konstante/
+  // Parameter toggle) can end up wider than its actual container as a
+  // result, pushing the whole page into unwanted horizontal scroll. This
+  // is the standard fix: opt back into ordinary shrink-to-fit sizing.
+  min-width: 0;
 }
 
 .rootTransparent {

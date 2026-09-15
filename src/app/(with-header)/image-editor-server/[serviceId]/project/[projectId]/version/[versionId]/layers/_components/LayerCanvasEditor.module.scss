@@ -82,6 +82,17 @@
   cursor: pointer;
   padding: 4px 8px;
 
+  // ListItem (the sole direct child) otherwise shrinks to fit its own
+  // content instead of filling this row's full width, so its own internal
+  // `main { flex-grow: 1 }` (list-item.module.scss) has no spare width to
+  // actually grow into - the selection/visibility/reorder icons ended up
+  // sitting right after the name instead of at the row's true end.
+  // Stretching the ListItem itself to 100% gives that flex-grow real room.
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+
   // The full row (this element, including its padding) is the hover target
   // - not the inner ListItem's own :hover (list-item.module.scss), which
   // only covers its own tighter box and used to visibly stop short of this
@@ -105,8 +116,9 @@
 }
 
 .selectedIcon {
+  display: flex;
+  align-items: center;
   color: rgb(var(--color-primary-rgb, 255, 105, 180));
-  margin-right: 6px;
 }
 
 .dragHandle {
@@ -121,6 +133,12 @@
   &:active {
     cursor: grabbing;
   }
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .reorderButtons {
@@ -141,6 +159,24 @@
       cursor: not-allowed;
     }
   }
+}
+
+.visibilityToggle {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  line-height: 1;
+  padding: 0 4px;
+  color: inherit;
+}
+
+// Distinguishes a hidden layer at a glance in the list, without needing to
+// rely on the eye/eye-slash icon alone - matches the render pipeline's
+// "skipped entirely" semantics (not just dimmed on the actual canvas).
+.hiddenLayerLabel {
+  opacity: 0.5;
+  font-style: italic;
 }
 
 .lockedNotice {

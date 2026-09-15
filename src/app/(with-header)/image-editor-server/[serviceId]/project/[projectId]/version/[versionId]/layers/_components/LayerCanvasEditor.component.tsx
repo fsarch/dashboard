@@ -28,6 +28,7 @@ import {
   deleteLayerAction,
   updateLayerGeometryAction,
   updateLayerGeometryAndSizeAction,
+  updateLayerHiddenAction,
   updateLayerNameAction,
   updateLayerOptionsAction,
   updateLayerOrderAction,
@@ -105,6 +106,7 @@ type SortableLayerRowProps = {
   isEditable: boolean;
   onSelect: () => void;
   onReorder: (direction: 'up' | 'down') => void;
+  onToggleHidden: () => void;
 };
 
 // A single row in the "Ebenen (Reihenfolge)" list. useSortable can't be
@@ -121,6 +123,7 @@ const SortableLayerRow: React.FunctionComponent<SortableLayerRowProps> = ({
   isEditable,
   onSelect,
   onReorder,
+  onToggleHidden,
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: layer.id,
@@ -155,28 +158,44 @@ const SortableLayerRow: React.FunctionComponent<SortableLayerRowProps> = ({
           </button>
         ) : undefined}
         right={isEditable ? (
-          <div className={styles.reorderButtons}>
+          <div className={styles.rowActions}>
+            {selected && (
+              <span className={styles.selectedIcon} title="Wird bearbeitet">
+                <Icon icon="edit" />
+              </span>
+            )}
             <button
               type="button"
-              disabled={index === 0}
-              onClick={(e) => { e.stopPropagation(); onReorder('up'); }}
-              title="Nach oben"
+              className={styles.visibilityToggle}
+              onClick={(e) => { e.stopPropagation(); onToggleHidden(); }}
+              title={layer.hidden ? 'Ebene einblenden' : 'Ebene ausblenden'}
             >
-              ▲
+              <Icon icon={layer.hidden ? 'eye-slash' : 'eye'} />
             </button>
-            <button
-              type="button"
-              disabled={index === rowCount - 1}
-              onClick={(e) => { e.stopPropagation(); onReorder('down'); }}
-              title="Nach unten"
-            >
-              ▼
-            </button>
+            <div className={styles.reorderButtons}>
+              <button
+                type="button"
+                disabled={index === 0}
+                onClick={(e) => { e.stopPropagation(); onReorder('up'); }}
+                title="Nach oben"
+              >
+                ▲
+              </button>
+              <button
+                type="button"
+                disabled={index === rowCount - 1}
+                onClick={(e) => { e.stopPropagation(); onReorder('down'); }}
+                title="Nach unten"
+              >
+                ▼
+              </button>
+            </div>
           </div>
         ) : undefined}
       >
-        {selected && <Icon icon="edit" className={styles.selectedIcon} />}
-        {layer.order}. {layer.name} ({layer.type})
+        <span className={layer.hidden ? styles.hiddenLayerLabel : undefined}>
+          {layer.order}. {layer.name} ({layer.type})
+        </span>
       </ListItem>
     </div>
   );
@@ -340,6 +359,19 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
     updateLayerLocal(layerId, { name });
     await updateLayerNameAction(projectId, versionId, layerId, name);
   }, [projectId, versionId, updateLayerLocal]);
+
+  // Deselect a layer being hidden - it no longer renders on the canvas
+  // (see the WYSIWYG loop below), so Moveable would otherwise be left
+  // attached to a target that's no longer there.
+  const handleToggleHidden = useCallback(async (layerId: string) => {
+    const layer = layers.find((l) => l.id === layerId);
+    if (!layer) return;
+
+    const nextHidden = !layer.hidden;
+    updateLayerLocal(layerId, { hidden: nextHidden });
+    if (nextHidden && selectedLayerId === layerId) setSelectedLayerId(null);
+    await updateLayerHiddenAction(projectId, versionId, layerId, nextHidden);
+  }, [projectId, versionId, layers, selectedLayerId, updateLayerLocal]);
 
   const handleDelete = useCallback(async (layerId: string) => {
     setLayers((prev) => prev.filter((l) => l.id !== layerId));
@@ -510,7 +542,11 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
                 transform: `scale(${zoom})`,
               }}
             >
-              {layers.map((layer) => {
+              {/* Mirrors RenderEngineService.RenderProjectVersion: a hidden
+                  layer is skipped entirely from the preview, same as the
+                  actual render, not just dimmed - so what's shown here
+                  never overstates what the final image will contain. */}
+              {layers.filter((layer) => !layer.hidden).map((layer) => {
                 const matrix = resolveMatrix(layer.transformationMatrix, testParameters);
                 const resolvedOptions = resolveOptions(layer.options, testParameters);
 
@@ -545,6 +581,7 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
                       isEditable={isEditable}
                       onSelect={() => setSelectedLayerId(layer.id)}
                       onReorder={(direction) => handleReorder(layer.id, direction)}
+                      onToggleHidden={() => handleToggleHidden(layer.id)}
                     />
                   ))}
                 </List>

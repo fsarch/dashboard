@@ -95,6 +95,9 @@ export type LayerDto = {
   type: LayerType;
   transformationMatrix: BindableAffineMatrix;
   options: LayerOptions;
+  // Skipped entirely by the render pipeline when true - not merely
+  // rendered with reduced opacity (see requirements.md's "Layer visibility").
+  hidden: boolean;
   creationTime: string;
   deletionTime: string | null;
 };

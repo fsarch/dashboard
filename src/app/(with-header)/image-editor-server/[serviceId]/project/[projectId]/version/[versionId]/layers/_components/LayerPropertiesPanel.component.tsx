@@ -85,7 +85,7 @@ const LayerPropertiesPanel: React.FunctionComponent<LayerPropertiesPanelProps> =
 
       {layer.type === 'html' && (
         <>
-          <BindableField label="HTML" kind="textarea" value={(layer.options as HtmlLayerOptions).html} onChange={(v) => setField('html', v)} compatibleParameters={textParams} />
+          <BindableField label="HTML" kind="code" codeLanguage="html" value={(layer.options as HtmlLayerOptions).html} onChange={(v) => setField('html', v)} compatibleParameters={textParams} />
           <BindableField label="Breite" kind="number" value={(layer.options as HtmlLayerOptions).width} onChange={(v) => setField('width', v)} compatibleParameters={numberParams} />
           <BindableField label="Höhe" kind="number" value={(layer.options as HtmlLayerOptions).height} onChange={(v) => setField('height', v)} compatibleParameters={numberParams} />
         </>

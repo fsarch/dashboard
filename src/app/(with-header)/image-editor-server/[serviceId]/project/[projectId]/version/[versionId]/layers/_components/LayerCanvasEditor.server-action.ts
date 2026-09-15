@@ -81,6 +81,17 @@ export const updateLayerOrderAction = async (
   return layer;
 };
 
+export const updateLayerHiddenAction = async (
+  projectId: string,
+  versionId: string,
+  layerId: string,
+  hidden: boolean,
+): Promise<LayerDto> => {
+  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { hidden });
+  revalidatePath(PAGE_PATH, 'page');
+  return layer;
+};
+
 export const updateLayerNameAction = async (
   projectId: string,
   versionId: string,
