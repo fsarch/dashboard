@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext } from "react";
-import { TDialogComponent, TDialogResult } from "@/components/universals/dialog/dialog.type";
+import { TDialogComponent, TDialogResult, TOpenDialogOptions } from "@/components/universals/dialog/dialog.type";
 
 export type TDialog<T> = {
   id: string;
@@ -8,7 +8,7 @@ export type TDialog<T> = {
 };
 
 export type TDialogProviderContext<TInput, TResult> = {
-  openDialog: (component: TDialogComponent<TInput, TResult>, value: TInput) => TDialog<unknown>;
+  openDialog: (component: TDialogComponent<TInput, TResult>, value: TInput, options?: TOpenDialogOptions) => TDialog<unknown>;
 };
 
 export const DialogProviderContext = createContext<TDialogProviderContext<unknown, unknown>>({
@@ -22,10 +22,12 @@ export const useOpenDialog = () => {
   return useCallback(<TInput, TResult>(
     component: TDialogComponent<TInput, TResult>,
     input: TInput,
+    options?: TOpenDialogOptions,
   ): TDialog<TResult> => {
     return openDialog(
       component as TDialogComponent<unknown, unknown>,
       input,
+      options,
     ) as TDialog<TResult>;
   }, [openDialog]);
 };

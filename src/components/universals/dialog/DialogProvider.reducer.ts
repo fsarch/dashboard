@@ -17,6 +17,9 @@ export type TReducerDialog<TInput, TResult> = {
   id: string;
   component: TDialogComponent<TInput, TResult>,
   value: TInput,
+  // Overlay-Hintergrundfarbe aus der openDialog-options (siehe
+  // TOpenDialogOptions) - undefined lässt die Standardfarbe unangetastet.
+  color?: string;
   promise: {
     value: Promise<TDialogResult<TResult>>;
     resolve: (value: TDialogResult<TResult>) => void;

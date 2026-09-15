@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { TReducerDialog } from "@/components/universals/dialog/DialogProvider.reducer";
 import { TDialogResult } from "@/components/universals/dialog/dialog.type";
+import { DialogOverlayColorContext } from "@/components/universals/dialog/DialogOverlayColor.context";
 import styles from './DialogProviderDialog.module.scss';
 
 type DialogProviderDialogProps = {
@@ -39,10 +40,12 @@ const DialogProviderDialog: React.FunctionComponent<DialogProviderDialogProps> =
 
   return (
     <dialog ref={dialogRef} className={styles.root}>
-      <Component
-        value={value.value}
-        onResult={handleResult}
-      />
+      <DialogOverlayColorContext value={value.color}>
+        <Component
+          value={value.value}
+          onResult={handleResult}
+        />
+      </DialogOverlayColorContext>
     </dialog>
   );
 };

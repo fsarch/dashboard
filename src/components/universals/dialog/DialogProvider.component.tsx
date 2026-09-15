@@ -6,7 +6,7 @@ import {
   TDialog,
   TDialogProviderContext
 } from "@/components/universals/dialog/DialogProvider.context";
-import { TDialogComponent, TDialogResult } from "@/components/universals/dialog/dialog.type";
+import { TDialogComponent, TDialogResult, TOpenDialogOptions } from "@/components/universals/dialog/dialog.type";
 import { createDeferredPromise } from "@/utils/createDeferredPromise";
 import DialogProviderDialog from "@/components/universals/dialog/DialogProviderDialog.component";
 import { DialogReducer, TReducerDialog } from "@/components/universals/dialog/DialogProvider.reducer";
@@ -25,6 +25,7 @@ const DialogProvider: React.FunctionComponent<
   const handleOpenDialog = useCallback(<TInput = unknown, TResult = unknown>(
     component: TDialogComponent<TInput, TResult>,
     value: TInput,
+    options?: TOpenDialogOptions,
   ): TDialog<TResult> => {
     const promise = createDeferredPromise<TDialogResult<TResult>>();
 
@@ -32,6 +33,7 @@ const DialogProvider: React.FunctionComponent<
       id: crypto.randomUUID(),
       component,
       value,
+      color: options?.color,
       promise,
     };
 
