@@ -26,6 +26,10 @@ export type AppFloatingButton = {
 export type AppDefinitionType = {
   name: string;
   basePath: string;
+  // Ob das Backend dieser App das CustomResourcesModule exponiert
+  // (GET /v1/.meta/custom-resources). Steuert den "Custom Resources"-
+  // Einstieg im Development-Bereich für Services dieses Typs.
+  supportsCustomResources?: boolean;
   navigation?: Array<AppNavigationItem>;
   navigations?: Array<AppNavigation>;
   floatingButton?: AppFloatingButton;

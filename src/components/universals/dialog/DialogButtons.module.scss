@@ -1,0 +1,34 @@
+@use './dialog-padding.mixin' as dialogPaddingMixin;
+
+.root {
+  @include dialogPaddingMixin.horizontal-padding;
+
+  display: flex;
+  gap: 8px;
+
+  // Top edge spacing of the whole dialog is owned here, via the same
+  // value DialogTitle uses for the top edge.
+  @include dialogPaddingMixin.top-padding;
+
+  // Bottom edge spacing of the whole dialog is owned here, via the same
+  // value DialogTitle uses for the top edge.
+  @include dialogPaddingMixin.bottom-padding;
+
+  // Darker primary tint than Pagination's rgba(var(--color-primary-rgb), .1)
+  // wash (Pagination.module.scss) - mixed toward black instead of just a
+  // transparent overlay, so the dialog's actions bar reads as a distinctly
+  // darker footer.
+  background-color: color-mix(in srgb, rgb(var(--color-primary-rgb, 255, 105, 180)) 20%, black);
+}
+
+.alignLeft {
+  justify-content: flex-start;
+}
+
+.alignCenter {
+  justify-content: center;
+}
+
+.alignRight {
+  justify-content: flex-end;
+}

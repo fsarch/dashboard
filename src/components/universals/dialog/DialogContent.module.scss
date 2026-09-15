@@ -1,0 +1,9 @@
+@use './dialog-padding.mixin' as dialogPaddingMixin;
+
+.root {
+  @include dialogPaddingMixin.horizontal-padding;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

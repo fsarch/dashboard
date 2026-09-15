@@ -1,0 +1,59 @@
+@use '@/components/universals/dialog/dialog-padding.mixin' as dialogPaddingMixin;
+
+.root {
+  display: flex;
+  flex-direction: column;
+
+  width: 780px;
+  max-width: 100%;
+}
+
+.list {
+  max-height: 55vh;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clickableRow {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.clickableRow:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.disabledRow {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.instanceLabel {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subtle {
+  opacity: 0.6;
+  font-size: 0.85em;
+}
+
+.hint {
+  padding: 8px;
+  opacity: 0.6;
+}
+
+.error {
+  padding: 8px;
+  color: #d32f2f;
+}
+
+.paginationWrapper {
+  @include dialogPaddingMixin.negate-horizontal-padding;
+}

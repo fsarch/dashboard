@@ -8,9 +8,13 @@ import styles from './ServiceDetailClient.module.scss';
 
 type ServiceDetailClientProps = {
   service: TServiceConfiguration;
+  supportsCustomResources: boolean;
 };
 
-const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = ({ service }) => {
+const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = ({
+  service,
+  supportsCustomResources,
+}) => {
   const [showRaw, setShowRaw] = useState(false);
 
   const entries = Object.entries(service).filter(([key]) => key !== 'type');
@@ -50,6 +54,13 @@ const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = (
             Swagger UI öffnen
           </Button>
         </Link>
+        {supportsCustomResources && (
+          <Link href={`/development/services/${service.id}/custom-resources`} prefetch={false}>
+            <Button type="button">
+              Custom Resources anzeigen
+            </Button>
+          </Link>
+        )}
         <Button type="button" onClick={() => setShowRaw(!showRaw)}>
           {showRaw ? 'Konfiguration verbergen' : 'Konfiguration anzeigen'}
         </Button>

@@ -10,21 +10,21 @@ import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.co
 import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
-import ServiceDetailClient from './_components/ServiceDetailClient.component';
+import { customResourcesUtils } from '@/utils/app/custom-resources';
+import CustomResourceDetail from './_components/CustomResourceDetail.component';
 
 export const metadata: Metadata = {
-  title: 'Development – Service Details',
+  title: 'Development – Custom Resource Details',
 };
 
-type ServiceDetailPageProps = {
-  params: Promise<{ serviceId: string }>;
+type CustomResourceDetailPageProps = {
+  params: Promise<{ serviceId: string; resourceId: string }>;
 };
 
-export default async function ServiceDetailPage({ params }: ServiceDetailPageProps) {
-  const { serviceId } = await params;
+export default async function CustomResourceDetailPage({ params }: CustomResourceDetailPageProps) {
+  const { serviceId, resourceId } = await params;
 
   const accessToken = await getAccessToken();
-
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
     return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
@@ -40,19 +40,41 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
     return notFound();
   }
 
-  const supportsCustomResources = APPS[service.type]?.supportsCustomResources ?? false;
+  if (!APPS[service.type]?.supportsCustomResources) {
+    return notFound();
+  }
+
+  let resource;
+  try {
+    resource = await customResourcesUtils.getCustomResourceById(serviceId, resourceId);
+  } catch {
+    return notFound();
+  }
+  if (!resource) {
+    return notFound();
+  }
 
   return (
     <div className={styles.root}>
-      <DefaultPageHeader className={styles.header} title="Development" />
+      <DefaultPageHeader
+        className={styles.header}
+        title={`Custom Resource – ${resource.name}`}
+      />
       <nav className={styles.navigation}>
         <div className={autoNavigationStyles.root}>
           <ul className={autoNavigationStyles.main}>
             <AutoNavigationItem href="/development" icon="wrench">
               Access Token
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/services" isSelected icon="server">
+            <AutoNavigationItem href="/development/services" icon="server">
               Services
+            </AutoNavigationItem>
+            <AutoNavigationItem
+              href={`/development/services/${serviceId}/custom-resources`}
+              isSelected
+              icon="cubes"
+            >
+              Custom Resources
             </AutoNavigationItem>
           </ul>
           <div className={autoNavigationStyles.spacer} />
@@ -60,11 +82,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
         </div>
       </nav>
       <main className={styles.main}>
-        <Section name={`Service: ${service.name ?? service.id}`}>
-          <ServiceDetailClient service={service} supportsCustomResources={supportsCustomResources} />
+        <Section name={`Custom Resource: ${resource.name}`}>
+          <CustomResourceDetail resource={resource} serviceId={serviceId} />
         </Section>
       </main>
     </div>
   );
 }
-

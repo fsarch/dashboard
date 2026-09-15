@@ -1,0 +1,14 @@
+@use './dialog-padding.mixin' as dialogPaddingMixin;
+
+.root {
+  @include dialogPaddingMixin.horizontal-padding;
+
+  // Top spacing for the whole dialog lives here (the Dialog's own root box
+  // carries no padding at all, see dialog.module.scss) - reuses the same
+  // spacing value as the side padding for a consistent look.
+  padding-top: dialogPaddingMixin.$edge-spacing;
+
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}

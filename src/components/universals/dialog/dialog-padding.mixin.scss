@@ -1,0 +1,36 @@
+// Shared edge spacing for dialog content blocks. The Dialog's own root box
+// (dialog.module.scss) intentionally carries no padding at all - instead
+// DialogTitle owns the top edge (padding-top) and left/right edges
+// (horizontal-padding), DialogContent/other sections opt into
+// horizontal-padding for their sides, and DialogButtons owns the bottom
+// edge (bottom-padding). This keeps every edge using the same value while
+// still allowing full-bleed content (e.g. Pagination) to cancel just the
+// horizontal padding via negate-horizontal-padding.
+$edge-spacing: 24px;
+
+@mixin horizontal-padding {
+  padding-left: $edge-spacing;
+  padding-right: $edge-spacing;
+}
+
+// For a full-bleed child of a padded block (e.g. DialogContent): cancels
+// out horizontal-padding via matching negative margins, so the child spans
+// edge-to-edge of the dialog instead of stopping at the padded content box.
+@mixin negate-horizontal-padding {
+  margin-left: -$edge-spacing;
+  margin-right: -$edge-spacing;
+}
+
+// Top edge spacing, meant for whichever block sits last in the dialog
+// (e.g. DialogButtons) so the dialog's top edge matches DialogTitle's
+// top edge spacing.
+@mixin top-padding {
+  padding-top: $edge-spacing;
+}
+
+// Bottom edge spacing, meant for whichever block sits last in the dialog
+// (e.g. DialogButtons) so the dialog's bottom edge matches DialogTitle's
+// top edge spacing.
+@mixin bottom-padding {
+  padding-bottom: $edge-spacing;
+}

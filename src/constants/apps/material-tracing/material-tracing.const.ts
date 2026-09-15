@@ -6,6 +6,7 @@ import {
 export const MaterialTracingAppDefinition: AppDefinitionType = {
   name: 'Material Tracing',
   basePath: '/material-tracing',
+  supportsCustomResources: true,
   floatingButton: {
     id: MATERIAL_TRACING_SHORT_CODE_SCAN_FLOATING_BUTTON_ID,
     icon: 'qrcode',
