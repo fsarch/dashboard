@@ -1,6 +1,6 @@
 'use server';
 
-import { customResourcesUtils, TCustomResourceDefinition } from '@/utils/app/custom-resources';
+import { customResourceLinksUtils, customResourcesUtils, TCustomResourceDefinition } from '@/utils/app/custom-resources';
 import { EServiceType } from '@/utils/configuration.type';
 
 export const listCustomResourceCapableServicesAction = async (appType?: EServiceType) => customResourcesUtils.listCapableServices(appType);
@@ -50,6 +50,18 @@ export const getCustomResourceInstanceByIdAction = async (
   }
   return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId, refValues);
 };
+
+// Für den "Rücksprung"-Chevron (CustomResourcePickerInput): liefert den Link
+// zur Detailseite der Instanz, sofern eine App-Route resourceId per
+// providesCustomResource als bereitgestellt markiert hat (siehe
+// custom-resource-links.utils.ts) - sonst undefined, wenn keine
+// entsprechende Route registriert ist.
+export const getCustomResourceLinkHrefAction = async (
+  serviceId: string,
+  resourceId: string,
+  instance: unknown,
+  refValues: Record<string, string> = {},
+) => customResourceLinksUtils.buildHref(serviceId, resourceId, instance, refValues);
 
 export const searchCustomResourceInstancesAction = async (
   serviceId: string,

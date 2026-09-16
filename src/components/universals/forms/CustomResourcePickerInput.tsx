@@ -4,9 +4,12 @@ import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.con
 import SelectCustomResourceDialog, {
   getInstanceLabel,
 } from "@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component";
-import { getCustomResourceInstanceByIdAction } from "@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.server-action";
+import {
+  getCustomResourceInstanceByIdAction,
+  getCustomResourceLinkHrefAction,
+} from "@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.server-action";
 import Loader from "@/components/universals/loader/Loader";
-import LinkCard from "@/components/universals/link-card/LinkCard.component";
+import LinkCard, { LinkCardGroup } from "@/components/universals/link-card/LinkCard.component";
 import { useFormikContext } from "formik";
 import { DialogResult } from "@/components/universals/dialog/dialog.enum";
 import styles from './CustomResourcePickerInput.module.scss';
@@ -36,6 +39,12 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
   const currentId = typeof currentValue === 'string' ? currentValue : '';
 
   const [label, setLabel] = useState<string | null>(null);
+  // Link zur Detailseite der aktuell gesetzten Instanz (z. B. der
+  // product-Item-Seite), sofern deren App eine Route dafür registriert hat
+  // (siehe AppRouteCustomResourceProvider) - steuert den zusätzlichen
+  // Sprung-Chevron neben dem Stift. null = kein Link (Route nicht
+  // registriert oder ausstehend aufgelöst).
+  const [href, setHref] = useState<string | null>(null);
   // Lazy init statt false: ist bereits eine id gesetzt (z. B. beim Öffnen
   // des Bearbeiten-Formulars), soll schon der Server-Render die
   // Ladeanimation zeigen, statt kurz die rohe id aufblitzen zu lassen, bis
@@ -53,6 +62,7 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
   useEffect(() => {
     if (!currentId) {
       setLabel(null);
+      setHref(null);
       resolvedForIdRef.current = null;
       return;
     }
@@ -62,14 +72,25 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
     let cancelled = false;
     setLoadingLabel(true);
     getCustomResourceInstanceByIdAction(serviceId, resourceId, currentId, refValues)
-      .then((instance) => {
+      .then(async (instance) => {
         if (cancelled) return;
         setLabel(getInstanceLabel(instance));
         resolvedForIdRef.current = currentId;
+        // Eigener try/catch statt .catch am Gesamt-Promise: ein fehlender
+        // Link soll nicht den bereits erfolgreich geladenen Namen verwerfen.
+        try {
+          const resolvedHref = await getCustomResourceLinkHrefAction(serviceId, resourceId, instance, refValues);
+          if (!cancelled) setHref(resolvedHref ?? null);
+        } catch {
+          if (!cancelled) setHref(null);
+        }
       })
       .catch(() => {
         // Instanz evtl. gelöscht/nicht erreichbar - Fallback auf die rohe id.
-        if (!cancelled) setLabel(null);
+        if (!cancelled) {
+          setLabel(null);
+          setHref(null);
+        }
       })
       .finally(() => {
         if (!cancelled) setLoadingLabel(false);
@@ -97,6 +118,16 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
     await formik.setFieldValue(name, instanceId);
     setLabel(instance ? getInstanceLabel(instance) : null);
     resolvedForIdRef.current = instanceId || null;
+    setHref(null);
+    if (instance) {
+      // Wie im Nachlade-Effekt: Link erst nach der Auswahl separat auflösen,
+      // damit ein Fehlschlag hier nicht Name/id der frischen Auswahl verwirft.
+      try {
+        setHref(await getCustomResourceLinkHrefAction(serviceId, resourceId, instance, refValues) ?? null);
+      } catch {
+        setHref(null);
+      }
+    }
   }, [openDialog, serviceId, resourceId, refValues, formik, name]);
 
   return (
@@ -112,15 +143,29 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
         value={currentId}
         readOnly
       />
-      <LinkCard onClick={handleClick} icon={faPen}>
-        <span className={styles.value}>
-          {loadingLabel ? (
-            <Loader size={14} />
-          ) : (
-            currentId ? (label ?? currentId) : 'Kein Eintrag ausgewählt'
-          )}
-        </span>
-      </LinkCard>
+      {/* Stift- und Sprung-Aktion als ein gemeinsames LinkCardGroup, statt
+          als zwei einzelne Karten - die Trennung zwischen beiden wird erst
+          beim Hover eines der beiden Segmente sichtbar (siehe
+          LinkCard.module.scss .segment/.group), im Ruhezustand wirken sie
+          wie eine einzelne Karte. */}
+      <LinkCardGroup>
+        <LinkCard variant="segment" onClick={handleClick} icon={faPen} className={styles.picker}>
+          <span className={styles.value}>
+            {loadingLabel ? (
+              <Loader size={14} />
+            ) : (
+              currentId ? (label ?? currentId) : 'Kein Eintrag ausgewählt'
+            )}
+          </span>
+        </LinkCard>
+        {/* Rücksprung zur Detailseite der referenzierten Instanz (z. B. vom
+            material-tracing-PartType auf den product-server-Eintrag). Wie der
+            Stift daneben immer sichtbar - solange kein Link aufgelöst ist
+            (noch am Laden, kein Eintrag gewählt oder dessen App hat keine
+            passende Route registriert, siehe AppRouteCustomResourceProvider)
+            bleibt die Karte einfach abgeblendet/inaktiv statt zu verschwinden. */}
+        <LinkCard variant="segment" href={href ?? undefined} disabled={loadingLabel || !href} className={styles.jump} />
+      </LinkCardGroup>
     </div>
   );
 };

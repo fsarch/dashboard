@@ -32,3 +32,38 @@
   cursor: pointer;
 }
 
+// variant="segment": eigene Umrandung/Radius/Hintergrund entfallen, die
+// übernimmt die gemeinsame .group-Umrandung - dadurch verschmelzen mehrere
+// Segmente im Ruhezustand optisch zu einer Karte. Muss nach .root(:hover)
+// stehen, um dessen Hintergrund zu überschreiben.
+.segment {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.segment:hover {
+  background-color: rgba(var(--color-primary-rgb), 0.16);
+}
+
+// disabled: Karte bleibt an ihrer Stelle sichtbar (siehe LinkCardProps.disabled),
+// wirkt aber nicht interaktiv - kein Hover-Hintergrund, kein Zeigecursor.
+.disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+// Umrandung für eine Gruppe von .segment-LinkCards (siehe LinkCardGroup) -
+// die Trennung zwischen den Segmenten wird dadurch erst beim Hover eines
+// einzelnen Segments sichtbar (unterschiedlicher Hintergrund), nicht im
+// Ruhezustand.
+.group {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid rgba(var(--color-primary-rgb), 0.35);
+  border-radius: 8px;
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+  overflow: hidden;
+}
+

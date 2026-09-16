@@ -19,6 +19,16 @@ export const ProductAppDefinition: AppDefinitionType = {
   }],
   routes: {
     '/catalog/:catalogId{/*path}': {
+      // Markiert diese Route (ohne den optionalen /*path-Rest) als
+      // Detailseite des 'catalog'-Custom-Resource-Typs - ermöglicht z. B.
+      // einen Rücksprung-Chevron vom material-tracing-PartType-Formular auf
+      // den referenzierten Katalog (siehe CustomResourcePickerInput).
+      providesCustomResource: {
+        resourceId: 'catalog',
+        params: {
+          catalogId: { $type: 'jsonata', value: 'instance.id' },
+        },
+      },
       navigation: [{
         name: 'Katalog-Übersicht',
         path: '/',
@@ -59,6 +69,22 @@ export const ProductAppDefinition: AppDefinitionType = {
         },
         icon: 'puzzle-piece',
       }],
+    },
+    // Kein eigener navigation-Eintrag nötig: die Item-Detailseite matcht
+    // zusätzlich zur obigen Katalog-Route, deren Katalog-Navigation bleibt
+    // dadurch unverändert sichtbar (siehe navigation.utils.ts, "last match
+    // wins" nur für tatsächlich gesetzte navigation/navigations).
+    '/catalog/:catalogId/item/:itemId': {
+      providesCustomResource: {
+        resourceId: 'product',
+        params: {
+          catalogId: {
+            $type: 'jsonata',
+            value: 'refValues.`$system.crd.catalog.id`',
+          },
+          itemId: { $type: 'jsonata', value: 'instance.id' },
+        },
+      },
     },
   },
 };

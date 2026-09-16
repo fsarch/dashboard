@@ -1,3 +1,14 @@
+.picker {
+  flex: 1;
+  min-width: 0;
+}
+
+// Kompakter Sprung-Button neben der Picker-Karte - kein eigener Content,
+// nimmt daher nur so viel Breite wie nötig für den Chevron ein.
+.jump {
+  flex: none;
+}
+
 .value {
   position: relative;
 
