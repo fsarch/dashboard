@@ -3,6 +3,7 @@ import { AppDefinitionType } from "@/constants/app.type";
 export const ProductAppDefinition: AppDefinitionType = {
   name: 'Product',
   basePath: '/product',
+  supportsCustomResources: true,
   navigation: [{
     name: 'Übersicht',
     path: '/',

@@ -8,6 +8,7 @@ export type TCustomResourceApiRequest = {
   path: string;
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   auth: TCustomResourceAuth;
+  queryParams?: Record<string, string | string[]>;
 };
 
 export type TCustomResourceListRoute = {
@@ -19,9 +20,15 @@ export type TCustomResourceGetRoute = {
   request: TCustomResourceApiRequest;
 };
 
+export type TCustomResourceSearchRoute = {
+  request: TCustomResourceApiRequest;
+  enablePagination?: boolean;
+};
+
 export type TCustomResourceApiRoutes = {
   list?: TCustomResourceListRoute;
   get?: TCustomResourceGetRoute;
+  search?: TCustomResourceSearchRoute;
 };
 
 export type TCustomResourceDefinition = {

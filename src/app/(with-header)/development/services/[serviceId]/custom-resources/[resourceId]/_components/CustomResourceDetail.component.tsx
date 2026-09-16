@@ -8,6 +8,12 @@ type CustomResourceDetailProps = {
   serviceId: string;
 };
 
+// Stellt konfigurierte queryParams (Record<string, string | string[]>) als
+// einzeiligen "key=val & key2=val2" Text dar - reine Anzeige.
+const formatQueryParams = (queryParams: Record<string, string | string[]>): string => Object.entries(queryParams)
+  .map(([key, value]) => `${key}=${Array.isArray(value) ? value.join(',') : value}`)
+  .join(' & ');
+
 const CustomResourceDetail: React.FunctionComponent<CustomResourceDetailProps> = ({ resource, serviceId }) => {
   const { list, get } = resource.apiRoutes;
 
@@ -47,6 +53,12 @@ const CustomResourceDetail: React.FunctionComponent<CustomResourceDetailProps> =
                 <th>Auth</th>
                 <td><code>{list.request.auth.type}</code></td>
               </tr>
+              {list.request.queryParams && (
+                <tr>
+                  <th>Query-Parameter</th>
+                  <td><code>{formatQueryParams(list.request.queryParams)}</code></td>
+                </tr>
+              )}
               <tr>
                 <th>Pagination</th>
                 <td>{list.enablePagination ? 'Ja' : 'Nein'}</td>
@@ -73,6 +85,12 @@ const CustomResourceDetail: React.FunctionComponent<CustomResourceDetailProps> =
                 <th>Auth</th>
                 <td><code>{get.request.auth.type}</code></td>
               </tr>
+              {get.request.queryParams && (
+                <tr>
+                  <th>Query-Parameter</th>
+                  <td><code>{formatQueryParams(get.request.queryParams)}</code></td>
+                </tr>
+              )}
             </tbody>
           </table>
         </>

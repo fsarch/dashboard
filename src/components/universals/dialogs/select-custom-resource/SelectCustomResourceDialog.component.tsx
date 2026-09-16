@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
+import clsx from 'clsx';
 import { TDialogComponent } from '@/components/universals/dialog/dialog.type';
 import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import Dialog from '@/components/universals/dialog/dialog.component';
@@ -11,14 +12,21 @@ import Button from '@/components/universals/forms/Button';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
+import { useDebounce } from '@/utils/hooks/useDebounce.hook';
 import { EServiceType } from '@/utils/configuration.type';
 import { TCustomResourceCapableService, TCustomResourceDefinition } from '@/utils/app/custom-resources';
+// Direkter Datei-Import (nicht über den Barrel index.ts) - diese Datei hat
+// bewusst keine serverseitigen Imports und ist daher client-safe, im
+// Gegensatz zu custom-resources.utils.ts (fetchService/getConfiguration).
+import { getOpenReferencesForResource } from '@/utils/app/custom-resources/custom-resource-references.utils';
 import {
   getCustomResourceInstanceAction,
   listCustomResourceCapableServicesAction,
   listCustomResourceInstancesAction,
   listCustomResourceTypesAction,
+  searchCustomResourceInstancesAction,
 } from './SelectCustomResourceDialog.server-action';
+import inputStyles from '@/components/universals/forms/Input.module.scss';
 import styles from './SelectCustomResourceDialog.module.scss';
 
 export type TSelectCustomResourceDialogValue = {
@@ -39,6 +47,15 @@ export type TSelectCustomResourceDialogValue = {
 type SelectCustomResourceDialogType = TDialogComponent<TSelectCustomResourceDialogValue, unknown>;
 
 const DEFAULT_PAGE_SIZE = 20;
+
+// Ein vorgeschalteter Auswahlschritt zur Auflösung einer offenen
+// $system.crd-Referenz (siehe custom-resource-references.utils.ts): der
+// Nutzer wählt eine Instanz von `resource`, deren id anschließend unter
+// `placeholder` in refValues übernommen wird.
+type TReferenceFrame = {
+  resource: TCustomResourceDefinition;
+  placeholder: string;
+};
 
 // Instanzen haben eine backend-/typ-abhängige, beliebige Form - als Label
 // wird das name-Feld genutzt, mit Fallback auf id (Konvention wie bei
@@ -65,12 +82,24 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearch = useDebounce(searchInput.trim(), 300);
 
   const [loading, setLoading] = useState(false);
   const [fetchingInstance, setFetchingInstance] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Aufgelöste $system.crd-Referenzen (Key = Platzhalter-Text, Wert = id der
+  // gewählten Instanz) sowie der Stack noch offener Referenz-Auswahlschritte,
+  // die vor der eigentlichen Instanz-Auswahl von resolvedResource durchlaufen
+  // werden müssen (siehe custom-resource-references.utils.ts).
+  const [refValues, setRefValues] = useState<Record<string, string>>({});
+  const [frameStack, setFrameStack] = useState<TReferenceFrame[]>([]);
+
   const step = !resolvedServiceId ? 'service' : !resolvedResource ? 'type' : 'instance';
+
+  const isResolvingReference = frameStack.length > 0;
+  const activeResource = isResolvingReference ? frameStack[frameStack.length - 1].resource : resolvedResource;
 
   useEffect(() => {
     if (step !== 'service' || services !== null) {
@@ -93,8 +122,13 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
     };
   }, [step, services, value.appType]);
 
+  // types wird nicht nur für den 'type'-Auswahlschritt geladen, sondern auch
+  // gebraucht, um zu einer offenen $system.crd-Referenz (siehe
+  // getOpenReferencesForResource) die referenzierte Definition
+  // nachzuschlagen - daher unabhängig vom aktuellen step, sobald der Service
+  // bekannt ist.
   useEffect(() => {
-    if (step !== 'type' || !resolvedServiceId || types !== null) {
+    if (!resolvedServiceId || types !== null) {
       return;
     }
     let cancelled = false;
@@ -112,18 +146,85 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
     return () => {
       cancelled = true;
     };
-  }, [step, resolvedServiceId, types]);
+  }, [resolvedServiceId, types]);
+
+  // Sobald types geladen ist: prüfen, ob die aktuell aktive Resource (root
+  // oder oberster Referenz-Frame) noch offene $system.crd-Referenzen hat, die
+  // nicht in refValues vorhanden sind - falls ja, die referenzierte
+  // Definition nachschlagen und als neuen Auswahlschritt auf den Stack legen.
+  useEffect(() => {
+    if (!resolvedServiceId || !resolvedResource || types === null) {
+      return;
+    }
+    const currentResource = isResolvingReference ? frameStack[frameStack.length - 1].resource : resolvedResource;
+    const openRefs = getOpenReferencesForResource(currentResource);
+    const nextUnresolved = openRefs.find((ref) => !(ref.placeholder in refValues));
+    if (!nextUnresolved) {
+      return;
+    }
+
+    const referencedResource = types.find((type) => type.id === nextUnresolved.resourceId);
+    if (!referencedResource) {
+      setErrorMessage(`Referenzierte Custom Resource "${nextUnresolved.resourceId}" wurde nicht gefunden.`);
+      return;
+    }
+    if (frameStack.some((frame) => frame.resource.id === referencedResource.id)) {
+      setErrorMessage(`Zirkuläre Custom-Resource-Referenz auf "${referencedResource.id}" erkannt.`);
+      return;
+    }
+
+    setFrameStack((stack) => [...stack, { resource: referencedResource, placeholder: nextUnresolved.placeholder }]);
+    setInstances(null);
+    setPage(1);
+    setSearchInput('');
+  }, [resolvedServiceId, resolvedResource, types, frameStack, isResolvingReference, refValues]);
+
+  const canSearch = Boolean(activeResource?.apiRoutes.search);
+  const isSearching = canSearch && debouncedSearch.length > 0;
+  const canList = Boolean(activeResource?.apiRoutes.list);
+  const activeEnablePagination = isSearching
+    ? activeResource?.apiRoutes.search?.enablePagination
+    : activeResource?.apiRoutes.list?.enablePagination;
+  // Solange dies zutrifft, legt der Effekt oben gleich noch einen weiteren
+  // Referenz-Auswahlschritt auf den Stack - die Liste soll dafür noch nicht
+  // (kurz mit "keine Einträge") aufblitzen.
+  const hasUnresolvedReferences = Boolean(activeResource) && types !== null
+    && getOpenReferencesForResource(activeResource as TCustomResourceDefinition)
+      .some((ref) => !(ref.placeholder in refValues));
+
+  // Bei Wechsel des Suchbegriffs auf Seite 1 zurückspringen, damit die
+  // Pagination nicht auf einer nun ungültigen Seite hängen bleibt.
+  useEffect(() => {
+    setPage(1);
+    setInstances(null);
+  }, [debouncedSearch]);
 
   useEffect(() => {
-    if (step !== 'instance' || !resolvedServiceId || !resolvedResource) {
+    if (step !== 'instance' || !resolvedServiceId || !activeResource || types === null) {
+      return;
+    }
+    // Solange die aktive Resource (root oder oberster Referenz-Frame) noch
+    // offene $system.crd-Referenzen hat, noch nicht laden - der Effekt oben
+    // legt im nächsten Tick den passenden Referenz-Auswahlschritt auf den
+    // Stack.
+    const stillOpen = getOpenReferencesForResource(activeResource).some((ref) => !(ref.placeholder in refValues));
+    if (stillOpen) {
+      return;
+    }
+    if (!isSearching && !canList) {
+      // Kein List-Endpunkt und (noch) kein Suchbegriff - nichts zu laden.
+      setInstances([]);
+      setTotalItems(undefined);
+      setHasNextPage(false);
       return;
     }
     let cancelled = false;
     setLoading(true);
-    listCustomResourceInstancesAction(resolvedServiceId, resolvedResource, {
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    })
+    const pagination = { skip: (page - 1) * pageSize, take: pageSize };
+    const request = isSearching
+      ? searchCustomResourceInstancesAction(resolvedServiceId, activeResource, debouncedSearch, pagination, refValues)
+      : listCustomResourceInstancesAction(resolvedServiceId, activeResource, pagination, refValues);
+    request
       .then((result) => {
         if (cancelled) return;
         setInstances(result.data);
@@ -143,23 +244,35 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
     return () => {
       cancelled = true;
     };
-  }, [step, resolvedServiceId, resolvedResource, page, pageSize]);
+  }, [step, resolvedServiceId, activeResource, types, page, pageSize, isSearching, canList, debouncedSearch, refValues]);
 
   const handleSelectInstance = useCallback(async (instance: unknown) => {
-    if (!resolvedServiceId || !resolvedResource) return;
+    if (!resolvedServiceId || !activeResource) return;
     const instanceId = (instance as { id?: string } | null)?.id;
     if (!instanceId) return;
 
+    if (isResolvingReference) {
+      // Nur die id wird gebraucht, um den Platzhalter aufzulösen - kein
+      // get-Aufruf auf die referenzierte Resource nötig.
+      const frame = frameStack[frameStack.length - 1];
+      setRefValues((prev) => ({ ...prev, [frame.placeholder]: instanceId }));
+      setFrameStack((stack) => stack.slice(0, -1));
+      setInstances(null);
+      setPage(1);
+      setSearchInput('');
+      return;
+    }
+
     setFetchingInstance(true);
     try {
-      const data = await getCustomResourceInstanceAction(resolvedServiceId, resolvedResource, instanceId);
+      const data = await getCustomResourceInstanceAction(resolvedServiceId, activeResource, instanceId, refValues);
       onResult({ status: DialogResult.SUCCESS, value: data });
     } catch (error) {
       setErrorMessage(String(error));
     } finally {
       setFetchingInstance(false);
     }
-  }, [resolvedServiceId, resolvedResource, onResult]);
+  }, [resolvedServiceId, activeResource, isResolvingReference, frameStack, refValues, onResult]);
 
   const handlePageSizeChange = useCallback((nextPageSize: number) => {
     setPage(1);
@@ -182,7 +295,7 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
             <p className={styles.error}>{errorMessage}</p>
           )}
 
-          {!errorMessage && loading && (
+          {!errorMessage && (loading || (step === 'instance' && hasUnresolvedReferences)) && (
             <p className={styles.hint}>Lade …</p>
           )}
 
@@ -212,40 +325,60 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
 
           {!errorMessage && !loading && step === 'type' && (
             <List className={styles.list}>
-              {(types ?? []).map((type) => (
-                <div
-                  key={type.id}
-                  className={type.apiRoutes.list ? styles.clickableRow : styles.disabledRow}
-                  onClick={() => {
-                    if (!type.apiRoutes.list) return;
-                    setResolvedResource(type);
-                    setInstances(null);
-                    setPage(1);
-                  }}
-                >
-                  <ListItem>
-                    <strong>{type.name}</strong>
-                    {' '}
-                    <span className={styles.subtle}>
-                      [{type.id}] — {type.description}
-                      {!type.apiRoutes.list && ' (kein List-Endpunkt)'}
-                    </span>
-                  </ListItem>
-                </div>
-              ))}
+              {(types ?? []).map((type) => {
+                const canSelectType = Boolean(type.apiRoutes.list || type.apiRoutes.search);
+                return (
+                  <div
+                    key={type.id}
+                    className={canSelectType ? styles.clickableRow : styles.disabledRow}
+                    onClick={() => {
+                      if (!canSelectType) return;
+                      setResolvedResource(type);
+                      setInstances(null);
+                      setPage(1);
+                      setSearchInput('');
+                    }}
+                  >
+                    <ListItem>
+                      <strong>{type.name}</strong>
+                      {' '}
+                      <span className={styles.subtle}>
+                        [{type.id}] — {type.description}
+                        {!canSelectType && ' (kein List- oder Search-Endpunkt)'}
+                      </span>
+                    </ListItem>
+                  </div>
+                );
+              })}
               {types?.length === 0 && (
                 <p className={styles.hint}>Keine Custom Resources vorhanden.</p>
               )}
             </List>
           )}
 
-          {!errorMessage && step === 'instance' && resolvedResource && (
+          {!errorMessage && step === 'instance' && resolvedResource && activeResource && !hasUnresolvedReferences && (
             <>
+              {isResolvingReference && (
+                <p className={styles.hint}>
+                  Zuerst „{activeResource.name}“ auswählen (wird für „{resolvedResource.name}“ benötigt).
+                </p>
+              )}
+              {canSearch && (
+                <input
+                  className={clsx(inputStyles.root, styles.searchInput)}
+                  type="text"
+                  placeholder="Suchen …"
+                  aria-label="Custom-Resource-Instanzen durchsuchen"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              )}
               {fetchingInstance && <p className={styles.hint}>Lade Details …</p>}
               {!fetchingInstance && !loading && (
                 <List className={styles.list}>
                   {(instances ?? []).map((instance, index) => {
-                    const canSelect = Boolean((instance as { id?: string } | null)?.id) && resolvedResource.apiRoutes.get;
+                    const canSelect = Boolean((instance as { id?: string } | null)?.id)
+                      && (isResolvingReference || activeResource.apiRoutes.get);
                     return (
                       <div
                         key={index}
@@ -259,11 +392,15 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
                     );
                   })}
                   {instances?.length === 0 && (
-                    <p className={styles.hint}>Keine Einträge gefunden.</p>
+                    <p className={styles.hint}>
+                      {!isSearching && !canList
+                        ? 'Diese Custom Resource kann nur durchsucht werden - bitte Suchbegriff eingeben.'
+                        : 'Keine Einträge gefunden.'}
+                    </p>
                   )}
                 </List>
               )}
-              {resolvedResource.apiRoutes.list?.enablePagination && (
+              {activeEnablePagination && (
                 <div className={styles.paginationWrapper}>
                   <Pagination
                     currentPage={page}

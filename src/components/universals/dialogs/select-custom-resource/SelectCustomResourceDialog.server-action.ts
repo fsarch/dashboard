@@ -11,20 +11,35 @@ export const listCustomResourceInstancesAction = async (
   serviceId: string,
   resource: TCustomResourceDefinition,
   options: { skip?: number; take?: number },
+  refValues: Record<string, string> = {},
 ) => {
   if (!resource.apiRoutes.list) {
     throw new Error('this custom resource type has no list route');
   }
-  return customResourcesUtils.list(serviceId, resource.apiRoutes.list, options);
+  return customResourcesUtils.list(serviceId, resource.apiRoutes.list, options, refValues);
 };
 
 export const getCustomResourceInstanceAction = async (
   serviceId: string,
   resource: TCustomResourceDefinition,
   instanceId: string,
+  refValues: Record<string, string> = {},
 ) => {
   if (!resource.apiRoutes.get) {
     throw new Error('this custom resource type has no get route');
   }
-  return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId);
+  return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId, refValues);
+};
+
+export const searchCustomResourceInstancesAction = async (
+  serviceId: string,
+  resource: TCustomResourceDefinition,
+  query: string,
+  options: { skip?: number; take?: number },
+  refValues: Record<string, string> = {},
+) => {
+  if (!resource.apiRoutes.search) {
+    throw new Error('this custom resource type has no search route');
+  }
+  return customResourcesUtils.search(serviceId, resource.apiRoutes.search, query, options, refValues);
 };
