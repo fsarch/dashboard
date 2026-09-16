@@ -23,3 +23,12 @@
   background-color: rgba(var(--color-primary-rgb), 0.16);
 }
 
+// Reset für den Fall, dass LinkCard als <button> statt <a> gerendert wird
+// (onClick statt href) - soll optisch identisch zum Link-Fall bleiben.
+.button {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+

@@ -144,6 +144,23 @@ export type TGeneratedFormCheckboxInput = TGeneratedFormBaseInput & {
   variant?: 'checkbox' | 'toggle';
 };
 
+/**
+ * Text-Input mit "Auswählen"-Button, der den SelectCustomResourceDialog
+ * öffnet und die id der gewählten Custom-Resource-Instanz in das Feld
+ * schreibt (siehe CustomResourcePickerInput.tsx / QrInput.tsx für das
+ * gleiche Muster mit einem Code-Scanner-Dialog).
+ */
+export type TGeneratedFormCustomResourcePickerInput = TGeneratedFormBaseInput & {
+  /** Input type identifier - always 'custom-resource-picker' */
+  $type: 'custom-resource-picker';
+  /** Service-ID (services[].id in config.yml) des Custom-Resource-Backends */
+  serviceId: string;
+  /** ID der Custom-Resource-Definition (siehe GET /v1/.meta/custom-resources) */
+  resourceId: string;
+  /** Vorbelegte $system.crd-Referenzwerte, damit der Dialog diese nicht selbst per Auswahlschritt abfragen muss */
+  refValues?: Record<string, string>;
+};
+
 export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'link-card' for link card inputs */
   $type: 'link-card';
@@ -154,7 +171,7 @@ export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {
 };
 
 /** Union type of all supported input types */
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedFormFileUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput | TGeneratedFormLinkCardInput;
+export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedFormFileUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput | TGeneratedFormLinkCardInput | TGeneratedFormCustomResourcePickerInput;
 
 /** Initial values for the form - can be a JSONata expression or a static object */
 export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;

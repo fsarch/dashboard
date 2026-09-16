@@ -31,6 +31,26 @@ export const getCustomResourceInstanceAction = async (
   return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId, refValues);
 };
 
+// Wie getCustomResourceInstanceAction, aber für Aufrufer, die nur die
+// resourceId kennen (nicht die vollständige Definition) - z. B.
+// CustomResourcePickerInput, das für ein GeneratedForm-Feld nur
+// serviceId/resourceId/refValues aus der Formular-Konfiguration hat.
+export const getCustomResourceInstanceByIdAction = async (
+  serviceId: string,
+  resourceId: string,
+  instanceId: string,
+  refValues: Record<string, string> = {},
+) => {
+  const resource = await customResourcesUtils.getCustomResourceById(serviceId, resourceId);
+  if (!resource) {
+    throw new Error(`custom resource "${resourceId}" not found`);
+  }
+  if (!resource.apiRoutes.get) {
+    throw new Error('this custom resource type has no get route');
+  }
+  return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId, refValues);
+};
+
 export const searchCustomResourceInstancesAction = async (
   serviceId: string,
   resource: TCustomResourceDefinition,

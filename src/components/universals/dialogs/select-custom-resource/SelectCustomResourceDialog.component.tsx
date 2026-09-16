@@ -37,9 +37,19 @@ export type TSelectCustomResourceDialogValue = {
   // Fest vorgegebener Custom-Resource-Typ; wenn nicht gesetzt, zeigt der
   // Dialog nach der Service-Auswahl eine Typ-Auswahl.
   resource?: TCustomResourceDefinition;
+  // Alternative zu resource: nur die Definitions-ID - wird aufgelöst, sobald
+  // types geladen ist. Spart dem Aufrufer, die Definition selbst vorab zu
+  // laden (nützlich, wenn nur serviceId + resourceId bekannt sind, z. B. aus
+  // einer statischen Formular-Konfiguration).
+  resourceId?: string;
   // Schränkt die Service-Auswahl auf einen App-Typ ein (nur relevant, wenn
   // serviceId nicht gesetzt ist).
   appType?: EServiceType;
+  // Bereits bekannte $system.crd-Referenzwerte (siehe
+  // custom-resource-references.utils.ts), Key = Platzhalter-Text. Diese
+  // werden vom Referenz-Auflösungs-Effekt übersprungen, statt sie über einen
+  // Auswahlschritt abzufragen.
+  refValues?: Record<string, string>;
 };
 
 // Resolved mit den rohen JSON-Daten des get-Aufrufs auf die ausgewählte
@@ -59,8 +69,9 @@ type TReferenceFrame = {
 
 // Instanzen haben eine backend-/typ-abhängige, beliebige Form - als Label
 // wird das name-Feld genutzt, mit Fallback auf id (Konvention wie bei
-// Services/Typen in diesem Dialog).
-const getInstanceLabel = (instance: unknown): string => {
+// Services/Typen in diesem Dialog). Exportiert, damit z. B.
+// CustomResourcePickerInput denselben Label-Fallback nutzen kann.
+export const getInstanceLabel = (instance: unknown): string => {
   const record = instance as { name?: unknown; id?: unknown } | null;
   if (record && typeof record.name === 'string' && record.name) {
     return record.name;
@@ -93,7 +104,7 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
   // gewählten Instanz) sowie der Stack noch offener Referenz-Auswahlschritte,
   // die vor der eigentlichen Instanz-Auswahl von resolvedResource durchlaufen
   // werden müssen (siehe custom-resource-references.utils.ts).
-  const [refValues, setRefValues] = useState<Record<string, string>>({});
+  const [refValues, setRefValues] = useState<Record<string, string>>(value.refValues ?? {});
   const [frameStack, setFrameStack] = useState<TReferenceFrame[]>([]);
 
   const step = !resolvedServiceId ? 'service' : !resolvedResource ? 'type' : 'instance';
@@ -148,6 +159,41 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
     };
   }, [resolvedServiceId, types]);
 
+  // Gibt es (ohne vorgegebene serviceId) nur einen Custom-Resource-fähigen
+  // Service, muss der Nutzer den Auswahlschritt nicht durchlaufen - direkt
+  // übernehmen.
+  useEffect(() => {
+    if (resolvedServiceId || services === null) {
+      return;
+    }
+    if (services.length === 1) {
+      setResolvedServiceId(services[0].id);
+    }
+  }, [resolvedServiceId, services]);
+
+  // Solange dies zutrifft, löst der Effekt oben value.serviceId gleich noch
+  // auf - der Service-Auswahlschritt soll währenddessen nicht (kurz mit der
+  // einen Option) aufblitzen.
+  const isAutoResolvingServiceId = !value.serviceId && services !== null && services.length === 1 && !resolvedServiceId;
+
+  // Alternative zu einem vorgegebenen resource-Objekt: sobald types geladen
+  // ist, resourceId dagegen auflösen (siehe TSelectCustomResourceDialogValue).
+  useEffect(() => {
+    if (resolvedResource || !value.resourceId || types === null) {
+      return;
+    }
+    const match = types.find((type) => type.id === value.resourceId);
+    if (!match) {
+      setErrorMessage(`Custom Resource "${value.resourceId}" wurde nicht gefunden.`);
+      return;
+    }
+    setResolvedResource(match);
+  }, [resolvedResource, value.resourceId, types]);
+
+  // Solange dies zutrifft, löst der Effekt oben value.resourceId gleich noch
+  // auf - die Typ-Liste soll währenddessen nicht (kurz leer) aufblitzen.
+  const isAutoResolvingResourceId = Boolean(value.resourceId) && !resolvedResource;
+
   // Sobald types geladen ist: prüfen, ob die aktuell aktive Resource (root
   // oder oberster Referenz-Frame) noch offene $system.crd-Referenzen hat, die
   // nicht in refValues vorhanden sind - falls ja, die referenzierte
@@ -191,6 +237,14 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
   const hasUnresolvedReferences = Boolean(activeResource) && types !== null
     && getOpenReferencesForResource(activeResource as TCustomResourceDefinition)
       .some((ref) => !(ref.placeholder in refValues));
+
+  // Gibt es für eine aufzulösende $system.crd-Referenz (z. B. "nur ein
+  // catalog") ohnehin nur eine Instanz, muss der Nutzer sie nicht manuell
+  // auswählen - wie schon bei der Service-Auswahl automatisch übernehmen.
+  // Nur auf der ersten, unabgesuchten Seite relevant, sonst könnte z. B. eine
+  // Suche mit genau einem Treffer ungewollt sofort übernommen werden.
+  const isAutoResolvingSingleReferenceInstance = isResolvingReference && !isSearching && page === 1
+    && instances !== null && instances.length === 1 && !hasNextPage;
 
   // Bei Wechsel des Suchbegriffs auf Seite 1 zurückspringen, damit die
   // Pagination nicht auf einer nun ungültigen Seite hängen bleibt.
@@ -274,6 +328,16 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
     }
   }, [resolvedServiceId, activeResource, isResolvingReference, frameStack, refValues, onResult]);
 
+  useEffect(() => {
+    if (!isAutoResolvingSingleReferenceInstance || !instances) {
+      return;
+    }
+    handleSelectInstance(instances[0]);
+    // handleSelectInstance setzt bei Erfolg u. a. instances zurück auf null,
+    // wodurch isAutoResolvingSingleReferenceInstance im nächsten Render
+    // wieder false wird - kein Risiko einer Endlosschleife.
+  }, [isAutoResolvingSingleReferenceInstance, instances, handleSelectInstance]);
+
   const handlePageSizeChange = useCallback((nextPageSize: number) => {
     setPage(1);
     setPageSize(nextPageSize);
@@ -295,11 +359,17 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
             <p className={styles.error}>{errorMessage}</p>
           )}
 
-          {!errorMessage && (loading || (step === 'instance' && hasUnresolvedReferences)) && (
+          {!errorMessage && (
+            loading
+            || isAutoResolvingServiceId
+            || isAutoResolvingResourceId
+            || (step === 'instance' && hasUnresolvedReferences)
+            || isAutoResolvingSingleReferenceInstance
+          ) && (
             <p className={styles.hint}>Lade …</p>
           )}
 
-          {!errorMessage && !loading && step === 'service' && (
+          {!errorMessage && !loading && step === 'service' && !isAutoResolvingServiceId && (
             <List className={styles.list}>
               {(services ?? []).map((service) => (
                 <div
@@ -323,7 +393,7 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
             </List>
           )}
 
-          {!errorMessage && !loading && step === 'type' && (
+          {!errorMessage && !loading && step === 'type' && !isAutoResolvingResourceId && (
             <List className={styles.list}>
               {(types ?? []).map((type) => {
                 const canSelectType = Boolean(type.apiRoutes.list || type.apiRoutes.search);
@@ -356,7 +426,8 @@ const SelectCustomResourceDialog: SelectCustomResourceDialogType = ({ value, onR
             </List>
           )}
 
-          {!errorMessage && step === 'instance' && resolvedResource && activeResource && !hasUnresolvedReferences && (
+          {!errorMessage && step === 'instance' && resolvedResource && activeResource && !hasUnresolvedReferences
+            && !isAutoResolvingSingleReferenceInstance && (
             <>
               {isResolvingReference && (
                 <p className={styles.hint}>

@@ -14,6 +14,8 @@ import GeneratedFormNumberInput
   from "@/components/universals/forms/generated/inputs/GeneratedFormNumberInput.component";
 import GeneratedFormCheckboxInput from "@/components/universals/forms/generated/inputs/GeneratedFormCheckboxInput.component";
 import GeneratedFormLinkCardInput from "@/components/universals/forms/generated/inputs/GeneratedFormLinkCardInput.component";
+import GeneratedFormCustomResourcePickerInput
+  from "@/components/universals/forms/generated/inputs/GeneratedFormCustomResourcePickerInput.component";
 
 export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'text') {
@@ -119,6 +121,15 @@ export function renderGeneratedFormInput(input: TGeneratedFormInput) {
   if (input.$type === 'link-card') {
     return (
       <GeneratedFormLinkCardInput
+        key={input.id}
+        input={input}
+      />
+    );
+  }
+
+  if (input.$type === 'custom-resource-picker') {
+    return (
+      <GeneratedFormCustomResourcePickerInput
         key={input.id}
         input={input}
       />

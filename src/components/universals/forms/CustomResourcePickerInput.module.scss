@@ -1,0 +1,13 @@
+.value {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 1.2em;
+  min-width: 14px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

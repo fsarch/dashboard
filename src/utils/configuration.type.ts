@@ -49,11 +49,26 @@ export type TImageServiceConfiguration = {
   url: string;
 };
 
+export type TMaterialTracingProductOptions = {
+  // Service-ID (siehe services[].id) eines product-Services, dessen
+  // "product"-Custom-Resource für die Produkt-Auswahl (z. B. PartType.productId)
+  // genutzt wird.
+  service_id: string;
+  // Catalog-ID, die als $system.crd.catalog.id-Referenz vorbelegt wird, damit
+  // der Auswahl-Dialog den Katalog nicht selbst abfragen muss.
+  catalog_id: string;
+};
+
+export type TMaterialTracingOptions = {
+  product?: TMaterialTracingProductOptions;
+};
+
 export type TMaterialTracingConfiguration = {
   id: string;
   name?: string;
   type: EServiceType.MATERIAL_TRACING,
   url: string;
+  options?: TMaterialTracingOptions;
 };
 
 export type TPdfRenderConfiguration = {
