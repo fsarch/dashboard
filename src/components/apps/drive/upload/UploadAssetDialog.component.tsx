@@ -8,11 +8,7 @@ import DialogTitle from "@/components/universals/dialog/DialogTitle.component";
 import DialogContent from "@/components/universals/dialog/DialogContent.component";
 import DialogButtons from "@/components/universals/dialog/DialogButtons.component";
 import Button from "@/components/universals/forms/Button";
-import {
-  abortAssetUpload,
-  completeAssetUpload,
-  createAssetUpload,
-} from '@/components/apps/drive/upload/AssetUploadForm.server-actions';
+import { uploadAssetFile } from '@/components/apps/drive/upload/uploadAsset.util';
 import styles from './UploadAssetDialog.module.scss';
 
 export type TUploadAssetDialogValue = {
@@ -47,42 +43,10 @@ const UploadAssetDialog: UploadAssetDialogType = ({
     setIsUploading(true);
     setError(null);
 
-    let uploadId: string | undefined;
     try {
-      const upload = (await createAssetUpload({
-        name: file.name,
-        parentId: value.parentId,
-        mimeType: file.type,
-        size: file.size,
-      })).upload;
-      uploadId = upload.id;
-
-      if (upload.uploadUrl) {
-        const putRes = await fetch(upload.uploadUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type || 'application/octet-stream' },
-          body: file,
-        });
-        if (!putRes.ok) {
-          throw new Error(`Upload zum Speicher fehlgeschlagen (${putRes.status})`);
-        }
-      } else {
-        const putRes = await fetch(`/drive/${value.serviceId}/upload/${upload.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type || 'application/octet-stream' },
-          body: file,
-        });
-        if (!putRes.ok) {
-          throw new Error(`Upload fehlgeschlagen (${putRes.status})`);
-        }
-      }
-
-      await completeAssetUpload(upload.id);
+      await uploadAssetFile({ serviceId: value.serviceId, file, parentId: value.parentId });
       onResult({ status: DialogResult.SUCCESS, value: undefined });
     } catch (uploadError) {
-      if (uploadId) {
-        await abortAssetUpload(uploadId).catch(() => undefined);
-      }
       setError(uploadError instanceof Error ? uploadError.message : 'Upload fehlgeschlagen');
       setIsUploading(false);
     }

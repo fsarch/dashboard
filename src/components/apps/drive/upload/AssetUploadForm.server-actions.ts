@@ -1,7 +1,7 @@
 'use server';
 
 import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { TCreateAssetResponse, TUpload } from '@/services/file-server/file-server-api.type';
+import { TCreateAssetResponse, TFolder, TUpload } from '@/services/file-server/file-server-api.type';
 
 export const createAssetUpload = async (data: {
   name: string;
@@ -29,3 +29,9 @@ export const completeAssetUpload = async (uploadId: string) =>
   fileServerApiService.completeUpload(uploadId);
 
 export const abortAssetUpload = async (uploadId: string) => fileServerApiService.abortUpload(uploadId);
+
+// Creates a single subfolder, used to recreate a dropped folder's structure
+// one level at a time (see DriveDropzone, which caches results per path so
+// each subfolder is only created once even if many files share it).
+export const createDriveUploadFolder = async (name: string, parentId: string | null): Promise<TFolder> =>
+  fileServerApiService.createFolder({ name, parentId });

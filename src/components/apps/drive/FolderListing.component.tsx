@@ -10,6 +10,7 @@ import DriveFloatingButtonListener from '@/components/apps/drive/floating-button
 import { useOpenContextMenu } from '@/components/universals/context-menu/ContextMenuProvider.context';
 import FolderTileContextMenu from '@/components/apps/drive/context-menu/FolderTileContextMenu.component';
 import AssetTileContextMenu from '@/components/apps/drive/context-menu/AssetTileContextMenu.component';
+import DriveDropzone from '@/components/apps/drive/upload/DriveDropzone.component';
 import styles from './FolderListing.module.scss';
 
 type FolderListingProps = {
@@ -30,7 +31,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
   const openContextMenu = useOpenContextMenu();
 
   return (
-    <>
+    <DriveDropzone serviceId={serviceId} folderId={folderId}>
       <DriveFloatingButtonListener serviceId={serviceId} folderId={folderId} />
 
       <nav className={styles.breadcrumb}>
@@ -66,7 +67,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
       </TileList>
 
       {folders.length === 0 && assets.length === 0 ? <p>Dieser Ordner ist leer.</p> : null}
-    </>
+    </DriveDropzone>
   );
 };
 

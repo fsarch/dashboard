@@ -4,7 +4,7 @@ import Section from '@/components/universals/section/Section';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import Link from 'next/link';
 import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { ASSET_MOVE_FORM, ASSET_RENAME_FORM } from '@/services/drive/drive.forms';
+import { ASSET_RENAME_FORM } from '@/services/drive/drive.forms';
 import AssetThumbnail from '@/components/apps/file-server-shared/AssetThumbnail.component';
 import AssetUploadForm from '@/components/apps/drive/upload/AssetUploadForm.component';
 import PermissionsSection from '@/components/apps/file-server-shared/PermissionsSection.component';
@@ -101,10 +101,6 @@ export default async function DriveAssetPage(props: {
 
       <Section name="Umbenennen">
         <GeneratedForm definition={ASSET_RENAME_FORM(assetId, asset.name, `/asset/${assetId}`)} />
-      </Section>
-
-      <Section name="Verschieben">
-        <GeneratedForm definition={ASSET_MOVE_FORM(assetId, serviceId)} />
       </Section>
 
       <Section name="Löschen">
