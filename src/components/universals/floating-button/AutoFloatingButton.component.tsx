@@ -1,35 +1,76 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import clsx from 'clsx';
 import FloatingButton from "@/components/universals/floating-button/FloatingButton";
 import type { AppFloatingButton } from "@/constants/app.type";
 import { useFloatingButtonProvider } from "@/components/universals/floating-button/FloatingButtonProvider.context";
+import { normalizeFloatingButtons } from "@/components/universals/floating-button/floatingButton.helpers";
+import styles from './AutoFloatingButton.module.scss';
 
 type AutoFloatingButtonProps = {
-  floatingButton?: AppFloatingButton;
+  floatingButton?: AppFloatingButton | Array<AppFloatingButton>;
 };
 
 export const AutoFloatingButton: React.FunctionComponent<AutoFloatingButtonProps> = ({
   floatingButton,
 }) => {
   const { triggerClick } = useFloatingButtonProvider();
+  const [expanded, setExpanded] = useState(false);
 
-  const handleClick = useCallback(() => {
-    if (!floatingButton) {
-      return;
-    }
+  const buttons = useMemo(() => normalizeFloatingButtons(floatingButton), [floatingButton]);
 
-    triggerClick(floatingButton.id);
-  }, [triggerClick, floatingButton]);
+  const handleToggle = useCallback(() => {
+    setExpanded((current) => !current);
+  }, []);
 
-  if (!floatingButton) {
+  const handleItemClick = useCallback((id: string) => {
+    setExpanded(false);
+    triggerClick(id);
+  }, [triggerClick]);
+
+  if (buttons.length === 0) {
     return null;
   }
 
+  // A single button acts directly on click - no +/x expand/collapse.
+  if (buttons.length === 1) {
+    return (
+      <FloatingButton
+        icon={buttons[0].icon ?? 'circle'}
+        onClick={() => triggerClick(buttons[0].id)}
+      />
+    );
+  }
+
+  // Rendered bottom-to-top, first entry closest to the toggle button.
+  const stackedButtons = [...buttons].reverse();
+
   return (
-    <FloatingButton
-      icon={floatingButton.icon ?? 'circle'}
-      onClick={handleClick}
-    />
+    <div className={clsx(styles.container, expanded && styles.expanded)}>
+      {stackedButtons.map((button, index) => {
+        const distanceFromToggle = stackedButtons.length - 1 - index;
+
+        return (
+          <FloatingButton
+            key={button.id}
+            size="small"
+            className={styles.item}
+            style={{
+              position: 'static',
+              transitionDelay: `${(expanded ? distanceFromToggle : index) * 40}ms`,
+            }}
+            icon={button.icon ?? 'circle'}
+            onClick={() => handleItemClick(button.id)}
+          />
+        );
+      })}
+      <FloatingButton
+        className={styles.toggle}
+        style={{ position: 'static' }}
+        icon="plus"
+        onClick={handleToggle}
+      />
+    </div>
   );
 };

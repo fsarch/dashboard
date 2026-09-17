@@ -4,7 +4,7 @@ import { createPathMatcher } from "@/utils/app/routeMatch.utils";
 
 const getFloatingButton = async (
   config: Pick<AppDefinitionType, 'floatingButton' | 'routes'>,
-): Promise<AppFloatingButton | undefined> => {
+): Promise<AppFloatingButton | Array<AppFloatingButton> | undefined> => {
   let floatingButton = config.floatingButton;
 
   const serviceRoute = (await headers()).get('X-Service-Path');

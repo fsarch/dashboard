@@ -14,6 +14,7 @@ import { navigationUtils } from "@/utils/app/navigation.utils";
 import { floatingButtonUtils } from "@/utils/app/floatingButton.utils";
 import BackgroundOrbs from "@/components/universals/background-orbs/BackgroundOrbs.component";
 import { AutoFloatingButton } from "@/components/universals/floating-button/AutoFloatingButton.component";
+import { normalizeFloatingButtons } from "@/components/universals/floating-button/floatingButton.helpers";
 
 type DefaultPageProps = PropsWithChildren<{
   className?: string;
@@ -34,9 +35,10 @@ export const DefaultPage: React.FunctionComponent<DefaultPageProps> = async ({
   const navigations = await navigationUtils.getNavigationItems(config, 'sidebar');
   const bottomNavigationItems = await navigationUtils.getNavigationItems(config, 'sidebar-bottom');
   const floatingButton = await floatingButtonUtils.getFloatingButton(config);
+  const hasFloatingButton = normalizeFloatingButtons(floatingButton).length > 0;
 
   return (
-    <div className={clsx(className, styles.root, !navigations && styles.rootNoNavigation, floatingButton && styles.rootWithFloatingButton)}>
+    <div className={clsx(className, styles.root, !navigations && styles.rootNoNavigation, hasFloatingButton && styles.rootWithFloatingButton)}>
       <BackgroundOrbs animated={false} />
       <DefaultPageHeader
         className={styles.header}

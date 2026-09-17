@@ -19,6 +19,8 @@ export enum EServiceType {
   CALENDAR = 'calendar',
   DBLIGHT = 'dblight',
   IMAGE_EDITOR_SERVER = 'image-editor-server',
+  FILE_SERVER_DRIVE = 'file-server-drive',
+  FILE_SERVER_DAM = 'file-server-dam',
 }
 
 export type TCustomerCommunicationServiceConfiguration = {
@@ -179,6 +181,24 @@ export type TImageEditorServerConfiguration = {
   url: string;
 };
 
+// Both file-server-backed apps ("Drive" and "DAM", see src/constants/apps/drive
+// and src/constants/apps/dam) address the SAME file-server instance under two
+// different EServiceTypes, purely so each gets its own AppDefinitionType entry
+// (nav/basePath/routes) - see docs/new-app.md and the two apps' README for why.
+export type TFileServerDriveServiceConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.FILE_SERVER_DRIVE,
+  url: string;
+};
+
+export type TFileServerDamServiceConfiguration = {
+  id: string;
+  name?: string;
+  type: EServiceType.FILE_SERVER_DAM,
+  url: string;
+};
+
 export type TServiceConfiguration = TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
@@ -198,7 +218,9 @@ export type TServiceConfiguration = TCustomAppConfiguration
   | TFrontendConfiguration
   | TCalendarConfiguration
   | TDblightConfiguration
-  | TImageEditorServerConfiguration;
+  | TImageEditorServerConfiguration
+  | TFileServerDriveServiceConfiguration
+  | TFileServerDamServiceConfiguration;
 
 export type TUacComparisonOperator = 'includes' | 'equals';
 

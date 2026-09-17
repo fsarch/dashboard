@@ -53,12 +53,15 @@ export type AppDefinitionType = {
   supportsCustomResources?: boolean;
   navigation?: Array<AppNavigationItem>;
   navigations?: Array<AppNavigation>;
-  floatingButton?: AppFloatingButton;
+  // A single button renders directly and triggers its own id on click. An
+  // array of more than one renders a collapsed "+" that expands into a
+  // stack of these buttons (see AutoFloatingButton).
+  floatingButton?: AppFloatingButton | Array<AppFloatingButton>;
   routes?: {
     [route: string]: {
       navigation?: Array<AppNavigationItem>;
       navigations?: Array<AppNavigation>;
-      floatingButton?: AppFloatingButton;
+      floatingButton?: AppFloatingButton | Array<AppFloatingButton>;
       providesCustomResource?: AppRouteCustomResourceProvider;
     };
   };

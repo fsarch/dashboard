@@ -103,6 +103,16 @@ const apps: Array<TConfiguredApp> = [{
   name: 'Image Editor',
   path: '/image-editor-server',
   serviceType: EServiceType.IMAGE_EDITOR_SERVER,
+}, {
+  icon: 'folder',
+  name: 'Drive',
+  path: '/drive',
+  serviceType: EServiceType.FILE_SERVER_DRIVE,
+}, {
+  icon: 'photo-film',
+  name: 'DAM',
+  path: '/dam',
+  serviceType: EServiceType.FILE_SERVER_DAM,
 }];
 
 const getApps = async () => {
