@@ -25,12 +25,14 @@ export const FOLDER_CREATE_FORM = (parentId: string | null): TGeneratedFormDefin
   buttons: { submitButtonText: 'Ordner erstellen' },
 });
 
-export const FOLDER_MOVE_FORM = (folderId: string): TGeneratedFormDefinition => ({
+export const FOLDER_MOVE_FORM = (folderId: string, serviceId: string): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'parentId',
-      $type: 'text',
-      label: 'Ziel-Ordner-ID (leer für Wurzel)',
+      $type: 'custom-resource-picker',
+      label: 'Ziel-Ordner (leer für Wurzel)',
+      serviceId,
+      resourceId: 'folder',
     },
   ],
   initialValues: { parentId: '' },
@@ -68,12 +70,14 @@ export const ASSET_RENAME_FORM = (assetId: string, currentName: string, backPath
   buttons: { submitButtonText: 'Umbenennen' },
 });
 
-export const ASSET_MOVE_FORM = (assetId: string): TGeneratedFormDefinition => ({
+export const ASSET_MOVE_FORM = (assetId: string, serviceId: string): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'parentId',
-      $type: 'text',
-      label: 'Ziel-Ordner-ID (leer für Wurzel)',
+      $type: 'custom-resource-picker',
+      label: 'Ziel-Ordner (leer für Wurzel)',
+      serviceId,
+      resourceId: 'folder',
     },
   ],
   initialValues: { parentId: '' },

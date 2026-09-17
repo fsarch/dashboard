@@ -104,7 +104,7 @@ export default async function DriveAssetPage(props: {
       </Section>
 
       <Section name="Verschieben">
-        <GeneratedForm definition={ASSET_MOVE_FORM(assetId)} />
+        <GeneratedForm definition={ASSET_MOVE_FORM(assetId, serviceId)} />
       </Section>
 
       <Section name="Löschen">

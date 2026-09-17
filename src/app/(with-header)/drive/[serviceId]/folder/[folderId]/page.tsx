@@ -26,7 +26,7 @@ export default async function DriveFolderPage(props: {
       />
 
       <Section name="Verschieben">
-        <GeneratedForm definition={FOLDER_MOVE_FORM(folderId)} />
+        <GeneratedForm definition={FOLDER_MOVE_FORM(folderId, serviceId)} />
       </Section>
 
       <PermissionsSection
