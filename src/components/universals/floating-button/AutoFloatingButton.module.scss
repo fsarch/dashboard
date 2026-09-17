@@ -11,10 +11,18 @@
   gap: 12px;
 }
 
+// Wraps the optional title label + the actual small button of one stacked
+// item, so both slide/scale in together as a single unit.
 .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
   opacity: 0;
   transform: translateY(12px) scale(0.6);
   pointer-events: none;
+
+  transition: transform 0.18s ease, opacity 0.18s ease;
 }
 
 .expanded .item {
@@ -23,10 +31,28 @@
   pointer-events: auto;
 }
 
+.itemLabel {
+  white-space: nowrap;
+
+  padding: 6px 10px;
+
+  border-radius: 8px;
+
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 5px #000000;
+
+  color: #FFFFFF;
+  font-size: 0.85rem;
+}
+
 .toggle {
   transform: rotate(0deg);
 }
 
+// A full extra turn (360deg) on top of the 45deg needed to visually turn the
+// plus into an x - same end orientation as rotate(45deg), just with a spin
+// on the way there.
 .expanded .toggle {
-  transform: rotate(45deg);
+  transform: rotate(405deg);
 }

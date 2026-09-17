@@ -20,6 +20,8 @@ import { FrontendAppDefinition } from "@/constants/apps/frontend/frontend.const"
 import { CalendarAppDefinition } from "@/constants/apps/calendar/calendar.const";
 import { DblightAppDefinition } from "@/constants/apps/dblight/dblight.const";
 import { ImageEditorServerAppDefinition } from "@/constants/apps/image-editor-server/image-editor-server.const";
+import { DriveAppDefinition } from "@/constants/apps/drive/drive.const";
+import { DamAppDefinition } from "@/constants/apps/dam/dam.const";
 
 export const APPS: Record<EServiceType, AppDefinitionType> = {
   [EServiceType.CUSTOMER_COMMUNICATION]: CustomerCommunicationAppDefinition,
@@ -42,4 +44,6 @@ export const APPS: Record<EServiceType, AppDefinitionType> = {
   [EServiceType.CALENDAR]: CalendarAppDefinition,
   [EServiceType.DBLIGHT]: DblightAppDefinition,
   [EServiceType.IMAGE_EDITOR_SERVER]: ImageEditorServerAppDefinition,
+  [EServiceType.FILE_SERVER_DRIVE]: DriveAppDefinition,
+  [EServiceType.FILE_SERVER_DAM]: DamAppDefinition,
 };

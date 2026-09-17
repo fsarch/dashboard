@@ -21,6 +21,10 @@ export type AppFloatingButton = {
   // (see src/components/universals/floating-button/FloatingButtonProvider.context.ts)
   id: string;
   icon?: TIcon;
+  // Shown to the left of this button, but only when it's rendered as part of
+  // an expanded multi-button stack (see AutoFloatingButton) - a single
+  // floating button never shows a title.
+  title?: string;
 };
 
 // Markiert eine Route als Detailseite eines Custom-Resource-Typs (id aus GET

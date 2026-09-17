@@ -52,22 +52,29 @@ export const AutoFloatingButton: React.FunctionComponent<AutoFloatingButtonProps
         const distanceFromToggle = stackedButtons.length - 1 - index;
 
         return (
-          <FloatingButton
+          <div
             key={button.id}
-            size="small"
             className={styles.item}
-            style={{
-              position: 'static',
-              transitionDelay: `${(expanded ? distanceFromToggle : index) * 40}ms`,
-            }}
-            icon={button.icon ?? 'circle'}
-            onClick={() => handleItemClick(button.id)}
-          />
+            style={{ transitionDelay: `${(expanded ? distanceFromToggle : index) * 40}ms` }}
+          >
+            {button.title ? <span className={styles.itemLabel}>{button.title}</span> : null}
+            <FloatingButton
+              size="small"
+              style={{ position: 'static' }}
+              icon={button.icon ?? 'circle'}
+              onClick={() => handleItemClick(button.id)}
+            />
+          </div>
         );
       })}
       <FloatingButton
         className={styles.toggle}
-        style={{ position: 'static' }}
+        // Longer than FloatingButton's own default transition duration, so
+        // the extra full turn (see .expanded .toggle) is actually visible
+        // instead of snapping through it - inline wins regardless of CSS
+        // module load order (see FloatingButton.module.scss for why that
+        // matters here).
+        style={{ position: 'static', transitionDuration: '0.4s' }}
         icon="plus"
         onClick={handleToggle}
       />
