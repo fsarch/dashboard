@@ -9,8 +9,14 @@ export const renameDriveFolder = async (id: string, name: string): Promise<TFold
 export const deleteDriveFolder = async (id: string): Promise<void> =>
   fileServerApiService.deleteFolder(id);
 
+export const moveDriveFolder = async (id: string, parentId: string | null): Promise<TFolder> =>
+  fileServerApiService.moveFolder(id, parentId);
+
 export const renameDriveAsset = async (id: string, name: string): Promise<TAsset> =>
   fileServerApiService.renameAsset(id, name);
 
 export const deleteDriveAsset = async (id: string): Promise<void> =>
   fileServerApiService.deleteAsset(id);
+
+export const moveDriveAsset = async (id: string, parentId: string | null): Promise<TAsset> =>
+  fileServerApiService.moveAsset(id, parentId);

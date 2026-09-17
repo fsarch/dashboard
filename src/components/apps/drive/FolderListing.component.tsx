@@ -50,7 +50,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
             name={folder.name}
             icon="folder"
             href={`/drive/${serviceId}/folder/${folder.id}`}
-            onContextMenu={(event) => openContextMenu(FolderTileContextMenu, { folder }, event)}
+            onContextMenu={(event) => openContextMenu(FolderTileContextMenu, { serviceId, folder }, event)}
           />
         ))}
         {assets.map((asset) => (
@@ -60,7 +60,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
             href={`/drive/${serviceId}/asset/${asset.id}`}
             icon={isImageAsset(asset) ? undefined : (ASSET_TYPE_ICON[asset.type] ?? 'file')}
             image={isImageAsset(asset) ? getAssetContentUrl('/drive', serviceId, asset.id) : undefined}
-            onContextMenu={(event) => openContextMenu(AssetTileContextMenu, { asset }, event)}
+            onContextMenu={(event) => openContextMenu(AssetTileContextMenu, { serviceId, asset }, event)}
           />
         ))}
       </TileList>

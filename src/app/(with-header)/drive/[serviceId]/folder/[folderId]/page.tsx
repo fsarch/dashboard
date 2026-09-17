@@ -1,9 +1,6 @@
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { driveService } from '@/services/drive/drive.service';
-import { FOLDER_MOVE_FORM } from '@/services/drive/drive.forms';
 import FolderListing from '@/components/apps/drive/FolderListing.component';
 import PermissionsSection from '@/components/apps/file-server-shared/PermissionsSection.component';
 
@@ -24,10 +21,6 @@ export default async function DriveFolderPage(props: {
         folders={folders.data}
         assets={assets.data}
       />
-
-      <Section name="Verschieben">
-        <GeneratedForm definition={FOLDER_MOVE_FORM(folderId, serviceId)} />
-      </Section>
 
       <PermissionsSection
         resourceType="folder"

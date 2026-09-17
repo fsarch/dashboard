@@ -8,10 +8,16 @@ import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.con
 import { useOpenDeleteDialog } from '@/components/universals/dialogs/confirm/useOpenDeleteDialog';
 import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import PromptDialog from '@/components/universals/dialogs/prompt/PromptDialog.component';
+import SelectCustomResourceDialog from '@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component';
 import { TFolder } from '@/services/file-server/file-server-api.type';
-import { deleteDriveFolder, renameDriveFolder } from '@/components/apps/drive/context-menu/DriveTileContextMenu.server-actions';
+import {
+  deleteDriveFolder,
+  moveDriveFolder,
+  renameDriveFolder,
+} from '@/components/apps/drive/context-menu/DriveTileContextMenu.server-actions';
 
 type FolderTileContextMenuValue = {
+  serviceId: string;
   folder: TFolder;
 };
 
@@ -58,11 +64,43 @@ const FolderTileContextMenu: TContextMenuComponent<FolderTileContextMenuValue> =
     router.refresh();
   }, [close, openDeleteDialog, value.folder, router]);
 
+  const handleMove = useCallback(async () => {
+    close();
+
+    const dialog = openDialog(SelectCustomResourceDialog, {
+      serviceId: value.serviceId,
+      resourceId: 'folder',
+    });
+
+    const result = await dialog.result;
+    if (result.status !== DialogResult.SUCCESS) {
+      return;
+    }
+
+    const target = result.value as { id?: string } | null;
+    await moveDriveFolder(value.folder.id, target?.id ?? null);
+    router.refresh();
+  }, [close, openDialog, value.serviceId, value.folder, router]);
+
+  const handleMoveToRoot = useCallback(async () => {
+    close();
+    await moveDriveFolder(value.folder.id, null);
+    router.refresh();
+  }, [close, value.folder, router]);
+
   return (
     <>
       <ContextMenuItem icon="pen" onClick={handleRename}>
         Umbenennen
       </ContextMenuItem>
+      <ContextMenuItem icon="right-left" onClick={handleMove}>
+        Verschieben
+      </ContextMenuItem>
+      {value.folder.parentId ? (
+        <ContextMenuItem icon="house" onClick={handleMoveToRoot}>
+          Ins Hauptverzeichnis verschieben
+        </ContextMenuItem>
+      ) : null}
       <ContextMenuItem icon="trash" danger onClick={handleDelete}>
         Löschen
       </ContextMenuItem>

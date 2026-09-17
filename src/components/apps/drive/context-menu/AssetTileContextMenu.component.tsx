@@ -8,10 +8,16 @@ import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.con
 import { useOpenDeleteDialog } from '@/components/universals/dialogs/confirm/useOpenDeleteDialog';
 import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import PromptDialog from '@/components/universals/dialogs/prompt/PromptDialog.component';
+import SelectCustomResourceDialog from '@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component';
 import { TAsset } from '@/services/file-server/file-server-api.type';
-import { deleteDriveAsset, renameDriveAsset } from '@/components/apps/drive/context-menu/DriveTileContextMenu.server-actions';
+import {
+  deleteDriveAsset,
+  moveDriveAsset,
+  renameDriveAsset,
+} from '@/components/apps/drive/context-menu/DriveTileContextMenu.server-actions';
 
 type AssetTileContextMenuValue = {
+  serviceId: string;
   asset: TAsset;
 };
 
@@ -58,11 +64,43 @@ const AssetTileContextMenu: TContextMenuComponent<AssetTileContextMenuValue> = (
     router.refresh();
   }, [close, openDeleteDialog, value.asset, router]);
 
+  const handleMove = useCallback(async () => {
+    close();
+
+    const dialog = openDialog(SelectCustomResourceDialog, {
+      serviceId: value.serviceId,
+      resourceId: 'folder',
+    });
+
+    const result = await dialog.result;
+    if (result.status !== DialogResult.SUCCESS) {
+      return;
+    }
+
+    const target = result.value as { id?: string } | null;
+    await moveDriveAsset(value.asset.id, target?.id ?? null);
+    router.refresh();
+  }, [close, openDialog, value.serviceId, value.asset, router]);
+
+  const handleMoveToRoot = useCallback(async () => {
+    close();
+    await moveDriveAsset(value.asset.id, null);
+    router.refresh();
+  }, [close, value.asset, router]);
+
   return (
     <>
       <ContextMenuItem icon="pen" onClick={handleRename}>
         Umbenennen
       </ContextMenuItem>
+      <ContextMenuItem icon="right-left" onClick={handleMove}>
+        Verschieben
+      </ContextMenuItem>
+      {value.asset.parentId ? (
+        <ContextMenuItem icon="house" onClick={handleMoveToRoot}>
+          Ins Hauptverzeichnis verschieben
+        </ContextMenuItem>
+      ) : null}
       <ContextMenuItem icon="trash" danger onClick={handleDelete}>
         Löschen
       </ContextMenuItem>

@@ -25,37 +25,6 @@ export const FOLDER_CREATE_FORM = (parentId: string | null): TGeneratedFormDefin
   buttons: { submitButtonText: 'Ordner erstellen' },
 });
 
-export const FOLDER_MOVE_FORM = (folderId: string, serviceId: string): TGeneratedFormDefinition => ({
-  inputs: [
-    {
-      id: 'parentId',
-      $type: 'custom-resource-picker',
-      label: 'Ziel-Ordner (leer für Wurzel)',
-      serviceId,
-      resourceId: 'folder',
-    },
-  ],
-  initialValues: { parentId: '' },
-  endpoint: {
-    path: `/v1/folders/${folderId}/move`,
-    method: 'POST',
-    body: {
-      $type: 'jsonata',
-      value: '{ "parentId": form.parentId != "" ? form.parentId : null }',
-    },
-  },
-  postEndpointActions: [
-    {
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: "service.localPath & (response.body.parentId ? '/folder/' & response.body.parentId : '')",
-      },
-    },
-  ],
-  buttons: { submitButtonText: 'Verschieben' },
-});
-
 export const ASSET_RENAME_FORM = (assetId: string, currentName: string, backPath: string): TGeneratedFormDefinition => ({
   inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
   initialValues: { name: currentName },
@@ -68,37 +37,6 @@ export const ASSET_RENAME_FORM = (assetId: string, currentName: string, backPath
     { $type: 'redirect', url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` } },
   ],
   buttons: { submitButtonText: 'Umbenennen' },
-});
-
-export const ASSET_MOVE_FORM = (assetId: string, serviceId: string): TGeneratedFormDefinition => ({
-  inputs: [
-    {
-      id: 'parentId',
-      $type: 'custom-resource-picker',
-      label: 'Ziel-Ordner (leer für Wurzel)',
-      serviceId,
-      resourceId: 'folder',
-    },
-  ],
-  initialValues: { parentId: '' },
-  endpoint: {
-    path: `/v1/assets/${assetId}/move`,
-    method: 'POST',
-    body: {
-      $type: 'jsonata',
-      value: '{ "parentId": form.parentId != "" ? form.parentId : null }',
-    },
-  },
-  postEndpointActions: [
-    {
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: "service.localPath & (response.body.parentId ? '/folder/' & response.body.parentId : '')",
-      },
-    },
-  ],
-  buttons: { submitButtonText: 'Verschieben' },
 });
 
 export const GROUP_CREATE_FORM: TGeneratedFormDefinition = {
