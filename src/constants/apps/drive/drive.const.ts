@@ -16,21 +16,33 @@ const FOLDER_VIEW_FLOATING_BUTTON = [
 export const DriveAppDefinition: AppDefinitionType = {
   name: 'Drive',
   basePath: '/drive',
-  navigation: [
+  navigations: [
     {
-      name: 'Ordner',
-      path: '/',
-      icon: 'folder',
+      id: 'main',
+      position: 'sidebar',
+      items: [
+        {
+          name: 'Ordner',
+          path: '/',
+          icon: 'folder',
+        },
+        {
+          name: 'Gruppen',
+          path: '/groups',
+          icon: 'users',
+        },
+      ],
     },
     {
-      name: 'Papierkorb',
-      path: '/trash',
-      icon: 'trash',
-    },
-    {
-      name: 'Gruppen',
-      path: '/groups',
-      icon: 'users',
+      id: 'bottom',
+      position: 'sidebar-bottom',
+      items: [
+        {
+          name: 'Papierkorb',
+          path: '/trash',
+          icon: 'trash',
+        },
+      ],
     },
   ],
   routes: {
