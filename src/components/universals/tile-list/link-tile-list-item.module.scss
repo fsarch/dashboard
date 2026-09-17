@@ -25,6 +25,11 @@
   .icon {
     font-size: 28px;
   }
+
+  .image {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .rootTransparent {
@@ -37,6 +42,12 @@
 
 .icon {
   font-size: calc(var(--custom-spacing-tile-list-item-size) / 2);
+}
+
+.image {
+  width: calc(var(--custom-spacing-tile-list-item-size) / 2);
+  height: calc(var(--custom-spacing-tile-list-item-size) / 2);
+  object-fit: contain;
 }
 
 .name {

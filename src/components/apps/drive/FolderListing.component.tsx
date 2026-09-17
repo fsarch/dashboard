@@ -59,7 +59,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
             name={asset.name}
             href={`/drive/${serviceId}/asset/${asset.id}`}
             icon={isImageAsset(asset) ? undefined : (ASSET_TYPE_ICON[asset.type] ?? 'file')}
-            backgroundImage={isImageAsset(asset) ? getAssetContentUrl('/drive', serviceId, asset.id) : undefined}
+            image={isImageAsset(asset) ? getAssetContentUrl('/drive', serviceId, asset.id) : undefined}
             onContextMenu={(event) => openContextMenu(AssetTileContextMenu, { asset }, event)}
           />
         ))}

@@ -25,23 +25,6 @@ export const FOLDER_CREATE_FORM = (parentId: string | null): TGeneratedFormDefin
   buttons: { submitButtonText: 'Ordner erstellen' },
 });
 
-export const FOLDER_RENAME_FORM = (folderId: string, currentName: string): TGeneratedFormDefinition => ({
-  inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
-  initialValues: { name: currentName },
-  endpoint: {
-    path: `/v1/folders/${folderId}`,
-    method: 'PATCH',
-    body: { $type: 'jsonata', value: '{ "name": form.name }' },
-  },
-  postEndpointActions: [
-    {
-      $type: 'redirect',
-      url: { $type: 'jsonata', value: `service.localPath & '/folder/${folderId}'` },
-    },
-  ],
-  buttons: { submitButtonText: 'Umbenennen' },
-});
-
 export const FOLDER_MOVE_FORM = (folderId: string): TGeneratedFormDefinition => ({
   inputs: [
     {

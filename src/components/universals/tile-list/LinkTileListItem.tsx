@@ -10,6 +10,7 @@ type LinkTileListItemProps = {
   name: string;
   backgroundImage?: string;
   icon?: TIcon;
+  image?: string;
   href: string;
   small?: boolean;
   transparent?: boolean;
@@ -20,6 +21,7 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
   name,
   backgroundImage,
   icon,
+  image,
   href,
   small,
   transparent,
@@ -42,6 +44,14 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
             icon={icon}
           />
         </div>
+      ) : null}
+      {!icon && image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          className={styles.image}
+          src={image}
+          alt=""
+        />
       ) : null}
       <div className={styles.name}>{name}</div>
     </Link>
