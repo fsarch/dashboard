@@ -58,7 +58,7 @@ export default async function DamCollectionPage(props: {
       </Section>
 
       <Section name="Asset hinzufügen">
-        <GeneratedForm definition={COLLECTION_ADD_ASSET_FORM(collectionId)} />
+        <GeneratedForm definition={COLLECTION_ADD_ASSET_FORM(collectionId, serviceId)} />
       </Section>
 
       <Section name="Umbenennen">

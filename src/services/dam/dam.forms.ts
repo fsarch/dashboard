@@ -1,4 +1,5 @@
 import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import { TMetadataDataType } from '@/services/file-server/file-server-api.type';
 
 export const COLLECTION_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
@@ -37,12 +38,17 @@ export const COLLECTION_RENAME_FORM = (collectionId: string, currentName: string
   buttons: { submitButtonText: 'Umbenennen' },
 });
 
-export const COLLECTION_ADD_ASSET_FORM = (collectionId: string): TGeneratedFormDefinition => ({
+export const COLLECTION_ADD_ASSET_FORM = (
+  collectionId: string,
+  serviceId: string,
+): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'assetId',
-      $type: 'text',
-      label: 'Asset-ID (aus Drive/DAM Asset-Detailseite)',
+      $type: 'custom-resource-picker',
+      label: 'Asset',
+      serviceId,
+      resourceId: 'asset',
     },
   ],
   initialValues: { assetId: '' },
@@ -122,7 +128,7 @@ export const METADATA_DEFINITION_CREATE_FORM: TGeneratedFormDefinition = {
     body: {
       $type: 'jsonata',
       value:
-        '{ "key": form.key, "dataType": form.dataType } & (form.appliesToType != "" ? { "appliesToType": form.appliesToType } : {}) & (form.dataType = "enum" ? { "enumValues": $split(form.enumValues, ",").$trim($) } : {})',
+        '$merge([{ "key": form.key, "dataType": form.dataType }, (form.appliesToType != "" ? { "appliesToType": form.appliesToType } : {}), (form.dataType = "enum" ? { "enumValues": $split(form.enumValues, ",").$trim($) } : {})])',
     },
   },
   postEndpointActions: [
@@ -152,7 +158,7 @@ export const ASSET_ADD_TAG_FORM = (assetId: string, backPath: string): TGenerate
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": body.data.{ "id": id, "value": id, "label": key } }',
+        value: '{ "body": [body.data.{ "id": id, "value": id, "label": key }] }',
       },
     },
   },
@@ -169,14 +175,24 @@ export const ASSET_ADD_TAG_FORM = (assetId: string, backPath: string): TGenerate
 export const ASSET_SET_METADATA_FORM = (
   assetId: string,
   definitionId: string,
+  dataType: TMetadataDataType,
   backPath: string,
 ): TGeneratedFormDefinition => ({
-  inputs: [{ id: 'value', $type: 'text', label: 'Wert' }],
+  inputs: [{
+    id: 'value',
+    $type: 'text',
+    label: dataType === 'number' ? 'Wert (Dezimaltrennzeichen "," oder ".")' : 'Wert',
+  }],
   initialValues: { value: '' },
   endpoint: {
     path: `/v1/assets/${assetId}/metadata/${definitionId}`,
     method: 'PUT',
-    body: { $type: 'jsonata', value: '{ "value": form.value }' },
+    body: {
+      $type: 'jsonata',
+      value: dataType === 'number'
+        ? '{ "value": $replace(form.value, ",", ".") }'
+        : '{ "value": form.value }',
+    },
   },
   postEndpointActions: [
     { $type: 'redirect', url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` } },

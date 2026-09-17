@@ -63,7 +63,7 @@ export const PERMISSION_GRANT_FORM = (
     body: {
       $type: 'jsonata',
       value:
-        '{ "subjectType": form.subjectType, "permission": form.permission } & (form.subjectType != "public" ? { "subjectId": form.subjectId } : {})',
+        '$merge([{ "subjectType": form.subjectType, "permission": form.permission }, (form.subjectType != "public" ? { "subjectId": form.subjectId } : {})])',
     },
   },
   postEndpointActions: [

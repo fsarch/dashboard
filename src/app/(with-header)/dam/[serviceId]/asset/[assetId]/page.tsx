@@ -79,7 +79,7 @@ export default async function DamAssetPage(props: {
         {definitionsWithoutValue.map((definition) => (
           <details key={definition.id}>
             <summary>{definition.key} setzen</summary>
-            <GeneratedForm definition={ASSET_SET_METADATA_FORM(assetId, definition.id, backPath)} />
+            <GeneratedForm definition={ASSET_SET_METADATA_FORM(assetId, definition.id, definition.dataType, backPath)} />
           </details>
         ))}
       </Section>
