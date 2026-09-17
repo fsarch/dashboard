@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import styles from './layout.module.scss';
 import DialogProvider from "@/components/universals/dialog/DialogProvider.component";
 import FloatingButtonProvider from "@/components/universals/floating-button/FloatingButtonProvider.component";
+import ContextMenuProvider from "@/components/universals/context-menu/ContextMenuProvider.component";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
@@ -35,17 +36,19 @@ export default async function RootLayout(props: LayoutProps | LayoutPropsExtende
   return (
     <FloatingButtonProvider>
       <DialogProvider>
-        <div className={styles.root}>
-          <div className={styles.header}>
-            {header}
+        <ContextMenuProvider>
+          <div className={styles.root}>
+            <div className={styles.header}>
+              {header}
+            </div>
+            <div className={styles.navigation}>
+              {navigation}
+            </div>
+            <div className={styles.content}>
+              {children}
+            </div>
           </div>
-          <div className={styles.navigation}>
-            {navigation}
-          </div>
-          <div className={styles.content}>
-            {children}
-          </div>
-        </div>
+        </ContextMenuProvider>
       </DialogProvider>
     </FloatingButtonProvider>
   );

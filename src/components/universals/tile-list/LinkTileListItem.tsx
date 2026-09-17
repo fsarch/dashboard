@@ -13,6 +13,7 @@ type LinkTileListItemProps = {
   href: string;
   small?: boolean;
   transparent?: boolean;
+  onContextMenu?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
@@ -22,6 +23,7 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
   href,
   small,
   transparent,
+  onContextMenu,
 }) => {
   return (
     <Link
@@ -30,6 +32,7 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
       }}
+      onContextMenu={onContextMenu}
     >
       {icon ? (
         <div

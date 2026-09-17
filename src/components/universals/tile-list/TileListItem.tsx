@@ -10,6 +10,7 @@ type TileListItemProps = {
   backgroundImage?: string;
   icon?: TIcon;
   transparent?: boolean;
+  onContextMenu?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const TileListItem: React.FunctionComponent<TileListItemProps> = ({
@@ -17,6 +18,7 @@ const TileListItem: React.FunctionComponent<TileListItemProps> = ({
   backgroundImage,
   icon,
   transparent,
+  onContextMenu,
 }) => {
   return (
     <div
@@ -24,6 +26,7 @@ const TileListItem: React.FunctionComponent<TileListItemProps> = ({
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
       }}
+      onContextMenu={onContextMenu}
     >
       {icon ? (
         <div

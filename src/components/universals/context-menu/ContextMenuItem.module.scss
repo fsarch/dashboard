@@ -1,0 +1,34 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+
+  padding: 8px 16px;
+
+  background: none;
+  border: none;
+
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.2);
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1em;
+  text-align: center;
+}
+
+.label {
+  flex-grow: 1;
+}
+
+.danger {
+  color: #BB0000;
+}

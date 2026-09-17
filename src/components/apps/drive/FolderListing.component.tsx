@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import TileList from '@/components/universals/tile-list/TileList';
@@ -5,6 +7,9 @@ import LinkTileListItem from '@/components/universals/tile-list/LinkTileListItem
 import { TAsset, TFolder, TFolderPathEntry } from '@/services/file-server/file-server-api.type';
 import { ASSET_TYPE_ICON, getAssetContentUrl, isImageAsset } from '@/components/apps/file-server-shared/AssetThumbnail.component';
 import DriveFloatingButtonListener from '@/components/apps/drive/floating-button/DriveFloatingButtonListener.component';
+import { useOpenContextMenu } from '@/components/universals/context-menu/ContextMenuProvider.context';
+import FolderTileContextMenu from '@/components/apps/drive/context-menu/FolderTileContextMenu.component';
+import AssetTileContextMenu from '@/components/apps/drive/context-menu/AssetTileContextMenu.component';
 import styles from './FolderListing.module.scss';
 
 type FolderListingProps = {
@@ -22,6 +27,8 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
   folders,
   assets,
 }) => {
+  const openContextMenu = useOpenContextMenu();
+
   return (
     <>
       <DriveFloatingButtonListener serviceId={serviceId} folderId={folderId} />
@@ -43,6 +50,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
             name={folder.name}
             icon="folder"
             href={`/drive/${serviceId}/folder/${folder.id}`}
+            onContextMenu={(event) => openContextMenu(FolderTileContextMenu, { folder }, event)}
           />
         ))}
         {assets.map((asset) => (
@@ -52,6 +60,7 @@ const FolderListing: React.FunctionComponent<FolderListingProps> = ({
             href={`/drive/${serviceId}/asset/${asset.id}`}
             icon={isImageAsset(asset) ? undefined : (ASSET_TYPE_ICON[asset.type] ?? 'file')}
             backgroundImage={isImageAsset(asset) ? getAssetContentUrl('/drive', serviceId, asset.id) : undefined}
+            onContextMenu={(event) => openContextMenu(AssetTileContextMenu, { asset }, event)}
           />
         ))}
       </TileList>
