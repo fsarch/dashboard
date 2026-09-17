@@ -3,6 +3,7 @@ import { AppDefinitionType } from '@/constants/app.type';
 export const DamAppDefinition: AppDefinitionType = {
   name: 'DAM',
   basePath: '/dam',
+  supportsCustomResources: true,
   navigation: [
     {
       name: 'Mediathek',

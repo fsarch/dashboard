@@ -16,6 +16,7 @@ const FOLDER_VIEW_FLOATING_BUTTON = [
 export const DriveAppDefinition: AppDefinitionType = {
   name: 'Drive',
   basePath: '/drive',
+  supportsCustomResources: true,
   navigations: [
     {
       id: 'main',
