@@ -1,6 +1,6 @@
-import List from "@/components/universals/list/List";
-import { dataTableService } from "@/services/datatable/datatable.service";
-import DataTableListItem from "@/components/apps/datatable/datatable-list/DataTableListItem";
+import DataTableListItem from '@/components/apps/datatable/datatable-list/DataTableListItem';
+import List from '@/components/universals/list/List';
+import { dataTableService } from '@/services/datatable/datatable.service';
 
 export default async function Home() {
   const dataTables = await dataTableService.listDataTables();
@@ -10,10 +10,7 @@ export default async function Home() {
       DataTable-Overview
       <List>
         {dataTables.map((dataTable) => (
-          <DataTableListItem
-            key={dataTable.id}
-            dataTable={dataTable}
-          />
+          <DataTableListItem key={dataTable.id} dataTable={dataTable} />
         ))}
       </List>
     </div>

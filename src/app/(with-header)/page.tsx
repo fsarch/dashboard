@@ -1,18 +1,17 @@
-import TileList from "@/components/universals/tile-list/TileList";
-import Section from "@/components/universals/section/Section";
-import { getServiceConfigurations } from "@/utils/configuration.utils";
-import { EServiceType } from "@/utils/configuration.type";
-import { getAccessToken } from "@/utils/getAccessToken";
-import { decodeJwt } from "jose";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import BackgroundOrbs from "@/components/universals/background-orbs/BackgroundOrbs.component";
-
+import { decodeJwt } from 'jose';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import SignOutButton from '@/components/navigation/SignOutButton';
+import BackgroundOrbs from '@/components/universals/background-orbs/BackgroundOrbs.component';
+import Section from '@/components/universals/section/Section';
+import LinkTileListItem from '@/components/universals/tile-list/LinkTileListItem';
+import TileList from '@/components/universals/tile-list/TileList';
+import { appUtils } from '@/utils/app/app.utils';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurations } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import styles from './page.module.css';
-import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
-import { appUtils } from "@/utils/app/app.utils";
-import { uacUtils } from "@/utils/uac.utils";
-import SignOutButton from "@/components/navigation/SignOutButton";
 
 function getGreetingByHour(date: Date = new Date()): string {
   const hour = date.getHours();
@@ -38,18 +37,29 @@ export default async function Home() {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
-  const data = decodeJwt(accessToken) as { given_name?: string; preferred_username: string; };
+  const data = decodeJwt(accessToken) as {
+    given_name?: string;
+    preferred_username: string;
+  };
   const apps = await appUtils.getApps();
   const greeting = getGreetingByHour();
-  const availableCustomApps = (await Promise.all(
-    customApps.map(async (app) => ({
-      app,
-      isAllowed: await uacUtils.hasAppPermission(EServiceType.CUSTOM_APP, app.id, accessToken),
-    })),
-  ))
+  const availableCustomApps = (
+    await Promise.all(
+      customApps.map(async (app) => ({
+        app,
+        isAllowed: await uacUtils.hasAppPermission(
+          EServiceType.CUSTOM_APP,
+          app.id,
+          accessToken,
+        ),
+      })),
+    )
+  )
     .filter(({ isAllowed }) => isAllowed)
     .map(({ app }) => app);
 
@@ -58,7 +68,11 @@ export default async function Home() {
       <BackgroundOrbs />
       <div className={styles.content}>
         <h1 className={styles.pageTitle}>
-          {greeting} <span className={styles.pageTitlePerson}>{data.given_name || data.preferred_username || ''}</span>!
+          {greeting}{' '}
+          <span className={styles.pageTitlePerson}>
+            {data.given_name || data.preferred_username || ''}
+          </span>
+          !
         </h1>
         <div className={styles.actions}>
           <SignOutButton />

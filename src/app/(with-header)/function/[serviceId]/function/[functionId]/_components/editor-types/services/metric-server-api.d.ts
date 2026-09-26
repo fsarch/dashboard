@@ -209,20 +209,28 @@ namespace FsArchApiCatalog {
      * @param metricId The metric ID
      * @param data The measurement data
      */
-    create(metricId: string, data: CreateMeasurementDto): Promise<MeasurementDto>;
+    create(
+      metricId: string,
+      data: CreateMeasurementDto,
+    ): Promise<MeasurementDto>;
 
     /**
      * Bulk create multiple measurements
      * @param measurements Array of measurement data
      */
-    bulkCreate(measurements: Array<CreateMeasurementDto>): Promise<BulkCreateMeasurementResultDto>;
+    bulkCreate(
+      measurements: Array<CreateMeasurementDto>,
+    ): Promise<BulkCreateMeasurementResultDto>;
 
     /**
      * Aggregate measurements for a specific metric
      * @param metricId The metric ID
      * @param data The aggregation parameters
      */
-    aggregate(metricId: string, data: AggregateMeasurementsDto): Promise<Array<AggregatedMeasurementDto>>;
+    aggregate(
+      metricId: string,
+      data: AggregateMeasurementsDto,
+    ): Promise<Array<AggregatedMeasurementDto>>;
   }
 
   declare interface MetricServerApi {

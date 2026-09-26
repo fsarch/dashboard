@@ -1,12 +1,12 @@
-import React from 'react';
-import { Field } from "formik";
+import clsx from 'clsx';
+import { Field } from 'formik';
+import type React from 'react';
 import styles from './Select.module.scss';
-import clsx from "clsx";
 
 type SelectProps = {
   id?: string;
   name: string;
-  values: Array<{ id?: string; value: string; label: string; }>;
+  values: Array<{ id?: string; value: string; label: string }>;
   disabled?: boolean;
   className?: string;
 };
@@ -27,7 +27,9 @@ const Select: React.FunctionComponent<SelectProps> = ({
       disabled={disabled}
     >
       {values?.map((value) => (
-        <option key={value.id ?? value.value} value={value.value}>{value.label}</option>
+        <option key={value.id ?? value.value} value={value.value}>
+          {value.label}
+        </option>
       ))}
     </Field>
   );

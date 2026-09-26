@@ -1,20 +1,20 @@
 import React, { useEffect, useRef } from 'react';
-import { TDialogComponent } from "@/components/universals/dialog/dialog.type";
-import { DialogResult } from "@/components/universals/dialog/dialog.enum";
-import Dialog from "@/components/universals/dialog/dialog.component";
-import { codeScannerDialogUtils } from "@/components/universals/dialogs/code-scanner/CodeScannerDialog.utils";
-import { BrowserDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/BrowserDecoder";
-import { QrDecoder } from "@/components/universals/dialogs/code-scanner/_utils/decoder/QrDecoder";
+import Dialog from '@/components/universals/dialog/dialog.component';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type { TDialogComponent } from '@/components/universals/dialog/dialog.type';
+import { BrowserDecoder } from '@/components/universals/dialogs/code-scanner/_utils/decoder/BrowserDecoder';
+import { QrDecoder } from '@/components/universals/dialogs/code-scanner/_utils/decoder/QrDecoder';
+import { codeScannerDialogUtils } from '@/components/universals/dialogs/code-scanner/CodeScannerDialog.utils';
+import IconButton from '@/components/universals/forms/button/IconButton';
+import SingleIconButton from '@/components/universals/forms/button/SingleIconButton';
 import styles from './CodeScannerDialog.module.scss';
-import IconButton from "@/components/universals/forms/button/IconButton";
-import SingleIconButton from "@/components/universals/forms/button/SingleIconButton";
 
-type CodeScannerDialogType = TDialogComponent<{ enableQRCode: boolean }, { value: string }>;
+type CodeScannerDialogType = TDialogComponent<
+  { enableQRCode: boolean },
+  { value: string }
+>;
 
-const CodeScannerDialog: CodeScannerDialogType = ({
-  value,
-  onResult,
-}) => {
+const CodeScannerDialog: CodeScannerDialogType = ({ value, onResult }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const CodeScannerDialog: CodeScannerDialogType = ({
         abortSignal: abortController.signal,
       });
 
-      const barcodeDetector = await BrowserDecoder.IsSupported()
+      const barcodeDetector = (await BrowserDecoder.IsSupported())
         ? new BrowserDecoder()
         : new QrDecoder();
 
@@ -72,7 +72,7 @@ const CodeScannerDialog: CodeScannerDialogType = ({
             value: rawValue,
           },
         });
-      }
+      };
 
       const interval = window.setInterval(() => {
         if (abortController.signal.aborted) {
@@ -94,16 +94,13 @@ const CodeScannerDialog: CodeScannerDialogType = ({
 
     return () => {
       abortController.abort();
-    }
+    };
   }, []);
 
   return (
     <Dialog>
       <div className={styles.wrapper}>
-        <canvas
-          className={styles.canvas}
-          ref={canvasRef}
-        />
+        <canvas className={styles.canvas} ref={canvasRef} />
         <SingleIconButton
           onClick={() => onResult({ status: DialogResult.CANCEL })}
           className={styles.closeButton}

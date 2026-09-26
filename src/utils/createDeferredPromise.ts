@@ -11,5 +11,5 @@ export function createDeferredPromise<TResult>() {
     resolve: resolve!,
     reject: reject!,
     value: promise,
-  }
+  };
 }

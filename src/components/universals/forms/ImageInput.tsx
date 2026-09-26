@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { useField } from "formik";
-import FileInput from "@/components/universals/forms/FileInput";
+import { useField } from 'formik';
+import type React from 'react';
+import FileInput from '@/components/universals/forms/FileInput';
 
 type ImageInputProps = {
   name: string;

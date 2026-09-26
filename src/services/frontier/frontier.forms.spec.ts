@@ -12,36 +12,46 @@ describe('frontier forms', () => {
     expect(form.endpoint.method).toBe('POST');
     expect(form.endpoint.body).toEqual({
       $type: 'jsonata',
-      value: expect.stringContaining('"divergenceCookies": $reduce(form.divergenceCookies'),
+      value: expect.stringContaining(
+        '"divergenceCookies": $reduce(form.divergenceCookies',
+      ),
     });
 
     const nestedFieldIds = form.inputs.map((input) => input.id);
-    expect(nestedFieldIds).toEqual(expect.arrayContaining([
-      'divergenceCookies',
-      'divergenceHeaders',
-      'divergenceQueryParameters',
-    ]));
+    expect(nestedFieldIds).toEqual(
+      expect.arrayContaining([
+        'divergenceCookies',
+        'divergenceHeaders',
+        'divergenceQueryParameters',
+      ]),
+    );
   });
 
   test('cache policy update form uses patch endpoint and nested initial values', () => {
-    const form = frontierForms.FRONTIER_CACHE_POLICY_UPDATE_FORM('group-1', 'policy-1', {
-      id: 'policy-1',
-      name: 'Default policy',
-      enableCacheTags: true,
-      cacheTagsHeader: 'Cache-Tag',
-      defaultTTL: 60,
-      minTTL: 10,
-      maxTTL: 300,
-      divergenceCookies: ['session'],
-      divergenceHeaders: ['x-country'],
-      divergenceQueryParameters: ['lang'],
-      enableStaleWhileError: true,
-      staleWhileErrorTime: 15,
-      enableStaleWhileRevalidate: true,
-      staleWhileRevalidateTime: 30,
-    });
+    const form = frontierForms.FRONTIER_CACHE_POLICY_UPDATE_FORM(
+      'group-1',
+      'policy-1',
+      {
+        id: 'policy-1',
+        name: 'Default policy',
+        enableCacheTags: true,
+        cacheTagsHeader: 'Cache-Tag',
+        defaultTTL: 60,
+        minTTL: 10,
+        maxTTL: 300,
+        divergenceCookies: ['session'],
+        divergenceHeaders: ['x-country'],
+        divergenceQueryParameters: ['lang'],
+        enableStaleWhileError: true,
+        staleWhileErrorTime: 15,
+        enableStaleWhileRevalidate: true,
+        staleWhileRevalidateTime: 30,
+      },
+    );
 
-    expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/cache-policies/policy-1');
+    expect(form.endpoint.path).toBe(
+      '/v1/domain-groups/group-1/cache-policies/policy-1',
+    );
     expect(form.endpoint.method).toBe('PATCH');
     expect(form.initialValues).toMatchObject({
       divergenceCookies: [{ value: 'session' }],
@@ -55,12 +65,13 @@ describe('frontier forms', () => {
 
     expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules');
     expect(form.endpoint.method).toBe('POST');
-    expect(form.inputs.map((input) => input.id)).toEqual(expect.arrayContaining([
-      'corsPolicyId',
-      'logPolicyId',
-    ]));
+    expect(form.inputs.map((input) => input.id)).toEqual(
+      expect.arrayContaining(['corsPolicyId', 'logPolicyId']),
+    );
     expect(form.inputs.map((input) => input.id)).not.toContain('corsEnabled');
-    expect(form.inputs.map((input) => input.id)).not.toContain('corsAllowedOrigins');
+    expect(form.inputs.map((input) => input.id)).not.toContain(
+      'corsAllowedOrigins',
+    );
     expect(form.initialValues).toEqual({
       $type: 'jsonata',
       value: expect.stringContaining('"upstreamGroupId"'),
@@ -69,18 +80,24 @@ describe('frontier forms', () => {
   });
 
   test('path rule update form uses patch endpoint and maps corsPolicyId', () => {
-    const form = frontierForms.FRONTIER_PATH_RULE_UPDATE_FORM('group-1', 'rule-1', {
-      id: 'rule-1',
-      name: 'My rule',
-      path: '/api/*',
-      cachePolicyId: 'cp-1',
-      upstreamGroupId: 'ug-1',
-      order: 1,
-      corsPolicyId: 'cors-1',
-      logPolicyId: 'log-1',
-    });
+    const form = frontierForms.FRONTIER_PATH_RULE_UPDATE_FORM(
+      'group-1',
+      'rule-1',
+      {
+        id: 'rule-1',
+        name: 'My rule',
+        path: '/api/*',
+        cachePolicyId: 'cp-1',
+        upstreamGroupId: 'ug-1',
+        order: 1,
+        corsPolicyId: 'cors-1',
+        logPolicyId: 'log-1',
+      },
+    );
 
-    expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/path-rules/rule-1');
+    expect(form.endpoint.path).toBe(
+      '/v1/domain-groups/group-1/path-rules/rule-1',
+    );
     expect(form.endpoint.method).toBe('PATCH');
     expect(form.initialValues).toMatchObject({
       name: 'My rule',
@@ -99,22 +116,26 @@ describe('frontier forms', () => {
 
     expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/log-policies');
     expect(form.endpoint.method).toBe('POST');
-    expect(form.inputs.map((input) => input.id)).toEqual(expect.arrayContaining([
-      'name',
-      'enabled',
-      'retentionTimeSeconds',
-    ]));
+    expect(form.inputs.map((input) => input.id)).toEqual(
+      expect.arrayContaining(['name', 'enabled', 'retentionTimeSeconds']),
+    );
   });
 
   test('log policy update form maps initial values and uses patch endpoint', () => {
-    const form = frontierForms.FRONTIER_LOG_POLICY_UPDATE_FORM('group-1', 'log-1', {
-      id: 'log-1',
-      name: 'Default log policy',
-      enabled: true,
-      retentionTimeSeconds: 3600,
-    });
+    const form = frontierForms.FRONTIER_LOG_POLICY_UPDATE_FORM(
+      'group-1',
+      'log-1',
+      {
+        id: 'log-1',
+        name: 'Default log policy',
+        enabled: true,
+        retentionTimeSeconds: 3600,
+      },
+    );
 
-    expect(form.endpoint.path).toBe('/v1/domain-groups/group-1/log-policies/log-1');
+    expect(form.endpoint.path).toBe(
+      '/v1/domain-groups/group-1/log-policies/log-1',
+    );
     expect(form.endpoint.method).toBe('PATCH');
     expect(form.initialValues).toMatchObject({
       name: 'Default log policy',
@@ -123,4 +144,3 @@ describe('frontier forms', () => {
     });
   });
 });
-

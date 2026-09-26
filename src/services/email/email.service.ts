@@ -1,12 +1,12 @@
-import { fetchService } from "@/utils/fetchService";
-import {
+import type {
   AccountDto,
   EmailListDto,
   EmailListParams,
   EmailListResponseDto,
   EmailSingleDto,
   TPaginationResultDto,
-} from "@/services/email/email.type";
+} from '@/services/email/email.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listAccounts = async (): Promise<Array<AccountDto>> => {
   const response = await fetchService('/v1/accounts');
@@ -28,8 +28,10 @@ const listEmails = async (
 ): Promise<TPaginationResultDto<EmailListDto>> => {
   const url = new URL(`/v1/accounts/${accountId}/emails`, 'http://localhost'); // Base URL will be replaced by fetchService
 
-  if (options?.page !== undefined) url.searchParams.append('page', options.page.toString());
-  if (options?.limit !== undefined) url.searchParams.append('limit', options.limit.toString());
+  if (options?.page !== undefined)
+    url.searchParams.append('page', options.page.toString());
+  if (options?.limit !== undefined)
+    url.searchParams.append('limit', options.limit.toString());
   if (options?.search) url.searchParams.append('search', options.search);
   if (options?.sort) url.searchParams.append('sort', options.sort);
 
@@ -49,8 +51,13 @@ const listEmails = async (
   };
 };
 
-const getEmail = async (accountId: string, emailId: string): Promise<EmailSingleDto> => {
-  const response = await fetchService(`/v1/accounts/${accountId}/emails/${emailId}`);
+const getEmail = async (
+  accountId: string,
+  emailId: string,
+): Promise<EmailSingleDto> => {
+  const response = await fetchService(
+    `/v1/accounts/${accountId}/emails/${emailId}`,
+  );
   const email = await response.json();
 
   return email;
@@ -76,4 +83,3 @@ export const emailService = {
   getEmail,
   syncEmails,
 };
-

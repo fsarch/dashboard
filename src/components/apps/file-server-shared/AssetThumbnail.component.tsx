@@ -1,7 +1,7 @@
-import React from 'react';
+import type { IconName } from '@fortawesome/fontawesome-svg-core';
+import type React from 'react';
 import Icon from '@/components/universals/icon/Icon.component';
-import { IconName } from '@fortawesome/fontawesome-svg-core';
-import { TAsset } from '@/services/file-server/file-server-api.type';
+import type { TAsset } from '@/services/file-server/file-server-api.type';
 import styles from './AssetThumbnail.module.scss';
 
 type AssetThumbnailProps = {
@@ -26,11 +26,16 @@ export const ASSET_TYPE_ICON: Record<string, IconName> = {
   other: 'file',
 };
 
-export const isImageAsset = (asset: Pick<TAsset, 'mimeType' | 'currentVersionId'>): boolean =>
+export const isImageAsset = (
+  asset: Pick<TAsset, 'mimeType' | 'currentVersionId'>,
+): boolean =>
   Boolean(asset.currentVersionId && asset.mimeType?.startsWith('image/'));
 
-export const getAssetContentUrl = (basePath: string, serviceId: string, assetId: string): string =>
-  `${basePath}/${serviceId}/asset/${assetId}/content`;
+export const getAssetContentUrl = (
+  basePath: string,
+  serviceId: string,
+  assetId: string,
+): string => `${basePath}/${serviceId}/asset/${assetId}/content`;
 
 const AssetThumbnail: React.FunctionComponent<AssetThumbnailProps> = ({
   basePath,

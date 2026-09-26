@@ -1,6 +1,6 @@
-import { fetchService } from "@/utils/fetchService";
-import { TShortCode } from "@/services/material-tracing/short-code.type";
-import type { TPaginationResult } from "./pagination.type";
+import type { TShortCode } from '@/services/material-tracing/short-code.type';
+import { fetchService } from '@/utils/fetchService';
+import type { TPaginationResult } from './pagination.type';
 
 const listShortCodes = async (options?: {
   skip?: number;
@@ -45,7 +45,9 @@ const createShortCode = async (): Promise<TShortCode> => {
   return shortCode;
 };
 
-const batchCreateShortCodes = async (amount: number): Promise<{
+const batchCreateShortCodes = async (
+  amount: number,
+): Promise<{
   shortCodes: Array<TShortCode>;
   failedCount: number;
   errors: Array<string>;
@@ -61,7 +63,9 @@ const batchCreateShortCodes = async (amount: number): Promise<{
   // Create batches of requests with max 5 concurrent
   for (let i = 0; i < amount; i += MAX_CONCURRENT) {
     const batchSize = Math.min(MAX_CONCURRENT, amount - i);
-    const batchPromises = Array.from({ length: batchSize }, () => createShortCode());
+    const batchPromises = Array.from({ length: batchSize }, () =>
+      createShortCode(),
+    );
 
     const batchResults = await Promise.allSettled(batchPromises);
 
@@ -69,7 +73,9 @@ const batchCreateShortCodes = async (amount: number): Promise<{
       if (result.status === 'fulfilled') {
         results.push(result.value);
       } else {
-        errors.push(`Creation ${i + index + 1} failed: ${result.reason?.message || 'Unknown error'}`);
+        errors.push(
+          `Creation ${i + index + 1} failed: ${result.reason?.message || 'Unknown error'}`,
+        );
       }
     });
   }
@@ -77,7 +83,7 @@ const batchCreateShortCodes = async (amount: number): Promise<{
   return {
     shortCodes: results,
     failedCount: amount - results.length,
-    errors
+    errors,
   };
 };
 

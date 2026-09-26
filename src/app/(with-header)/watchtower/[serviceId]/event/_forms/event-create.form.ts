@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -31,8 +31,16 @@ export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
               { id: 'ip', value: 'ip', label: 'IP' },
               { id: 'asn', value: 'asn', label: 'ASN' },
               { id: 'subnet', value: 'subnet', label: 'Subnet' },
-              { id: 'browserFingerprint', value: 'browserFingerprint', label: 'Browser Fingerprint' },
-              { id: 'customFingerprint', value: 'customFingerprint', label: 'Custom Fingerprint' },
+              {
+                id: 'browserFingerprint',
+                value: 'browserFingerprint',
+                label: 'Browser Fingerprint',
+              },
+              {
+                id: 'customFingerprint',
+                value: 'customFingerprint',
+                label: 'Custom Fingerprint',
+              },
             ],
           },
         },
@@ -51,7 +59,8 @@ export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
   ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "eventTypeId": dataSource.eventTypes[0].id, "scopes": [], "externalId": "" }',
+    value:
+      '{ "eventTypeId": dataSource.eventTypes[0].id, "scopes": [], "externalId": "" }',
   },
   endpoint: {
     path: '/v1/events',
@@ -72,7 +81,8 @@ export const EVENT_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [body.data.{"id": id, "value": id, "label": name & " (Score: " & defaultScoreFactor & ", TTL: " & defaultTtlSeconds & "s)"}] }',
+        value:
+          '{ "body": [body.data.{"id": id, "value": id, "label": name & " (Score: " & defaultScoreFactor & ", TTL: " & defaultTtlSeconds & "s)"}] }',
       },
     },
   },

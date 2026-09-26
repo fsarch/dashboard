@@ -1,6 +1,6 @@
-import React from 'react';
-import { TFormView } from "@/components/apps/custom-app/custom-app.type";
-import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
+import type React from 'react';
+import type { TFormView } from '@/components/apps/custom-app/custom-app.type';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 
 type FormViewProps = {
   view: TFormView;

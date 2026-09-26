@@ -1,13 +1,13 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { watchtowerService } from '@/services/watchtower/watchtower.service';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import EventTypeDetail from './_components/EventTypeDetail.component';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -16,23 +16,27 @@ type EventTypeDetailPageProps = {
   params: Promise<{ serviceId: string; eventTypeId: string }>;
 };
 
-export default async function EventTypeDetailPage({ params }: EventTypeDetailPageProps) {
+export default async function EventTypeDetailPage({
+  params,
+}: EventTypeDetailPageProps) {
   const { serviceId, eventTypeId } = await params;
 
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
-  
+
   if (service) {
     const canAccessService = await uacUtils.hasAppPermission(
       EServiceType.WATCHTOWER,
       serviceId,
-      accessToken
+      accessToken,
     );
     if (!canAccessService) {
       return notFound();
@@ -43,7 +47,10 @@ export default async function EventTypeDetailPage({ params }: EventTypeDetailPag
   }
 
   try {
-    const eventType = await watchtowerService.getEventTypeById(eventTypeId, serviceId);
+    const eventType = await watchtowerService.getEventTypeById(
+      eventTypeId,
+      serviceId,
+    );
 
     return (
       <DefaultPage>

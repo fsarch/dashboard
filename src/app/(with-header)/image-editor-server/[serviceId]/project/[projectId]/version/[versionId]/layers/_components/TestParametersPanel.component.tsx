@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import Section from '@/components/universals/section/Section';
-import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
-import formControls from './FormControls.module.scss';
-import { ParameterDto } from '@/services/image-editor-server/image-editor-server.type';
+import type React from 'react';
+import { useCallback } from 'react';
 import { colors } from '@/app/_styles/colors';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import Section from '@/components/universals/section/Section';
+import type { ParameterDto } from '@/services/image-editor-server/image-editor-server.type';
+import formControls from './FormControls.module.scss';
 
 type TestParametersPanelProps = {
   parameters: ParameterDto[];
@@ -25,7 +26,11 @@ function readFileAsBase64(file: File): Promise<string> {
   });
 }
 
-function setAtPath(root: Record<string, unknown>, segments: string[], value: unknown): Record<string, unknown> {
+function setAtPath(
+  root: Record<string, unknown>,
+  segments: string[],
+  value: unknown,
+): Record<string, unknown> {
   if (segments.length === 0) return root;
   const [head, ...rest] = segments;
 
@@ -50,14 +55,25 @@ function getAtPath(root: Record<string, unknown>, segments: string[]): unknown {
 // the version's Parameter schema so LayerCanvasEditor can resolve
 // variable-bound fields live (see bindable-value.utils.ts), without leaving
 // the page or waiting on a real render. Recurses into "object" parameters.
-const TestParametersPanel: React.FunctionComponent<TestParametersPanelProps> = ({ parameters, value, onChange }) => {
-  const handleFieldChange = useCallback((path: string[], next: unknown) => {
-    onChange(setAtPath(value, path, next));
-  }, [value, onChange]);
+const TestParametersPanel: React.FunctionComponent<
+  TestParametersPanelProps
+> = ({ parameters, value, onChange }) => {
+  const handleFieldChange = useCallback(
+    (path: string[], next: unknown) => {
+      onChange(setAtPath(value, path, next));
+    },
+    [value, onChange],
+  );
 
   return (
     <Section name="Test-Parameter (Live-Vorschau)" color={colors.lightPurple}>
-      <ParameterFields parameters={parameters} parentId={null} path={[]} value={value} onFieldChange={handleFieldChange} />
+      <ParameterFields
+        parameters={parameters}
+        parentId={null}
+        path={[]}
+        value={value}
+        onFieldChange={handleFieldChange}
+      />
     </Section>
   );
 };
@@ -83,13 +99,22 @@ const ParameterFields: React.FunctionComponent<{
           return (
             <fieldset key={parameter.id} style={{ marginLeft: 16 }}>
               <legend>{parameter.name}</legend>
-              <ParameterFields parameters={parameters} parentId={parameter.id} path={fieldPath} value={value} onFieldChange={onFieldChange} />
+              <ParameterFields
+                parameters={parameters}
+                parentId={parameter.id}
+                path={fieldPath}
+                value={value}
+                onFieldChange={onFieldChange}
+              />
             </fieldset>
           );
         }
 
         return (
-          <FieldsetRow key={parameter.id} label={`${parameter.name}${parameter.required ? ' *' : ''}`}>
+          <FieldsetRow
+            key={parameter.id}
+            label={`${parameter.name}${parameter.required ? ' *' : ''}`}
+          >
             {parameter.type === 'text' && (
               <input
                 className={formControls.textInput}
@@ -103,7 +128,12 @@ const ParameterFields: React.FunctionComponent<{
                 className={formControls.textInput}
                 type="number"
                 value={(currentValue as number) ?? ''}
-                onChange={(e) => onFieldChange(fieldPath, e.target.value === '' ? undefined : Number(e.target.value))}
+                onChange={(e) =>
+                  onFieldChange(
+                    fieldPath,
+                    e.target.value === '' ? undefined : Number(e.target.value),
+                  )
+                }
               />
             )}
             {parameter.type === 'image' && (

@@ -1,14 +1,14 @@
-import { fetchService } from "@/utils/fetchService";
-import { 
-  FunctionDto, 
-  FunctionPatchDto, 
-  FunctionVersionDto, 
-  WorkerMetaDto,
+import type {
+  ExecutionCreateDto,
   ExecutionDto,
   ExecutionListDto,
-  ExecutionCreateDto,
-  LogDto
-} from "@/services/function/function.type";
+  FunctionDto,
+  FunctionPatchDto,
+  FunctionVersionDto,
+  LogDto,
+  WorkerMetaDto,
+} from '@/services/function/function.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listFunctions = async (): Promise<Array<FunctionDto>> => {
   const functionsResponse = await fetchService('/v1/functions');
@@ -24,47 +24,69 @@ const getWorkerMeta = async (): Promise<WorkerMetaDto> => {
   return workerMeta;
 };
 
-const getFunctionVersions = async (functionId: string): Promise<Array<FunctionVersionDto>> => {
-  const functionVersionsResponse = await fetchService(`/v1/functions/${functionId}/versions`);
+const getFunctionVersions = async (
+  functionId: string,
+): Promise<Array<FunctionVersionDto>> => {
+  const functionVersionsResponse = await fetchService(
+    `/v1/functions/${functionId}/versions`,
+  );
   const functionVersions = await functionVersionsResponse.json();
 
   return functionVersions;
 };
 
-const setFunctionVersionCode = async (functionId: string, code: string): Promise<void> => {
-  const functionVersionsResponse = await fetchService(`/v1/functions/${functionId}/versions`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+const setFunctionVersionCode = async (
+  functionId: string,
+  code: string,
+): Promise<void> => {
+  const functionVersionsResponse = await fetchService(
+    `/v1/functions/${functionId}/versions`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code,
+      }),
     },
-    body: JSON.stringify({
-      code,
-    }),
-  });
+  );
   const functionVersions = await functionVersionsResponse.json();
 
   return functionVersions;
 };
 
 const publishFunctionCode = async (functionId: string): Promise<void> => {
-  const functionVersionsResponse = await fetchService(`/v1/functions/${functionId}/versions/_actions/publish`, {
-    method: 'POST',
-  });
+  const functionVersionsResponse = await fetchService(
+    `/v1/functions/${functionId}/versions/_actions/publish`,
+    {
+      method: 'POST',
+    },
+  );
   const functionVersions = await functionVersionsResponse.json();
 
   return functionVersions;
 };
 
-const publishFunctionVersion = async (functionId: string, versionId: string): Promise<{ id: string }> => {
-  const response = await fetchService(`/v1/functions/${functionId}/versions/${versionId}/_actions/publish`, {
-    method: 'POST',
-  });
+const publishFunctionVersion = async (
+  functionId: string,
+  versionId: string,
+): Promise<{ id: string }> => {
+  const response = await fetchService(
+    `/v1/functions/${functionId}/versions/${versionId}/_actions/publish`,
+    {
+      method: 'POST',
+    },
+  );
 
   return response.json();
 };
 
 // Function Settings
-const patchFunction = async (functionId: string, dto: FunctionPatchDto): Promise<FunctionDto> => {
+const patchFunction = async (
+  functionId: string,
+  dto: FunctionPatchDto,
+): Promise<FunctionDto> => {
   const response = await fetchService(`/v1/functions/${functionId}`, {
     method: 'PATCH',
     headers: {
@@ -77,8 +99,10 @@ const patchFunction = async (functionId: string, dto: FunctionPatchDto): Promise
 };
 
 // Executions
-const listExecutions = async (functionId?: string): Promise<ExecutionListDto[]> => {
-  const url = functionId 
+const listExecutions = async (
+  functionId?: string,
+): Promise<ExecutionListDto[]> => {
+  const url = functionId
     ? `/v1/executions/function/${functionId}`
     : '/v1/executions';
   const response = await fetchService(url);
@@ -90,7 +114,9 @@ const getExecution = async (executionId: string): Promise<ExecutionDto> => {
   return response.json();
 };
 
-const createExecution = async (dto: ExecutionCreateDto): Promise<{ id: string }> => {
+const createExecution = async (
+  dto: ExecutionCreateDto,
+): Promise<{ id: string }> => {
   const response = await fetchService('/v1/executions', {
     method: 'POST',
     headers: {

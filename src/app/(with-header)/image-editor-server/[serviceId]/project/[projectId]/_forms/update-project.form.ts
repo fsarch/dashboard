@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -8,7 +8,8 @@ export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
   ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": args.project.name, "description": args.project.description, "externalId": args.project.externalId }',
+    value:
+      '{ "name": args.project.name, "description": args.project.description, "externalId": args.project.externalId }',
   },
   endpoint: {
     path: {
@@ -18,7 +19,8 @@ export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "description": form.description, "externalId": form.externalId }',
+      value:
+        '{ "name": form.name, "description": form.description, "externalId": form.externalId }',
     },
   },
   buttons: {

@@ -1,27 +1,30 @@
 import type {
   TGeneratedFormAction,
-  TGeneratedFormDataSource, TGeneratedFormEndpoint, TGeneratedFormInitialValues, TGeneratedFormInput,
-  TJsonataExpression
-} from "@/components/universals/forms/generated/GeneratedForm.type";
-import type { AppNavigation, AppNavigationItem } from "@/constants/app.type";
+  TGeneratedFormDataSource,
+  TGeneratedFormEndpoint,
+  TGeneratedFormInitialValues,
+  TGeneratedFormInput,
+  TJsonataExpression,
+} from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { AppNavigation, AppNavigationItem } from '@/constants/app.type';
 
-export type TCustomAppClickHandler = {
-  $type: 'open-service-view';
-  path: TJsonataExpression;
-} | ({
-  $type: 'fetch';
-} & TGeneratedFormEndpoint);
+export type TCustomAppClickHandler =
+  | {
+      $type: 'open-service-view';
+      path: TJsonataExpression;
+    }
+  | ({
+      $type: 'fetch';
+    } & TGeneratedFormEndpoint);
 
 export type TCustomAppClickHandlerResponse = {
-  $type: 'open-url',
+  $type: 'open-url';
   url: string;
 };
 
-export type TCustomAppClickHandlerFunc = (
-  data: {
-    query: Record<string, string>;
-  }
-) => Promise<TCustomAppClickHandlerResponse | null>;
+export type TCustomAppClickHandlerFunc = (data: {
+  query: Record<string, string>;
+}) => Promise<TCustomAppClickHandlerResponse | null>;
 
 export type TDataSourceRef = {
   $type: 'datasource';
@@ -85,7 +88,14 @@ export type TParagraphView = {
   text: string | TJsonataExpression;
 };
 
-export type TView = TViewGroupView | TListView | TFormView | TButtonView | TIframeView | TSectionView | TParagraphView;
+export type TView =
+  | TViewGroupView
+  | TListView
+  | TFormView
+  | TButtonView
+  | TIframeView
+  | TSectionView
+  | TParagraphView;
 
 export type TCustomAppListView = TListView & TCustomAppBaseView;
 

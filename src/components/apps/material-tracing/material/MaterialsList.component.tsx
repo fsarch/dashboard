@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-import List from '@/components/universals/list/List';
+import type React from 'react';
 import LinkListItem from '@/components/universals/list/LinkListItem';
-import { TMaterial } from '@/services/material-tracing/material.type';
-import { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import List from '@/components/universals/list/List';
 import PaginationFetcherComponent from '@/components/universals/pagination/PaginationFetcher.component';
-import { PaginationResultType } from '@/components/universals/pagination/PaginationFetcher.type';
+import type { PaginationResultType } from '@/components/universals/pagination/PaginationFetcher.type';
+import type { TMaterial } from '@/services/material-tracing/material.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
 
 type MaterialWithUrl = TMaterial & {
   url: string;
@@ -77,4 +77,3 @@ const MaterialsList: React.FunctionComponent<MaterialsListProps> = ({
 };
 
 export default MaterialsList;
-

@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const IP_ASN_DATASOURCE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -22,7 +22,8 @@ export const IP_ASN_DATASOURCE_CREATE_FORM: TGeneratedFormDefinition = {
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "externalId": form.externalId != "" ? form.externalId : null }',
+      value:
+        '{ "name": form.name, "externalId": form.externalId != "" ? form.externalId : null }',
     },
   },
 };

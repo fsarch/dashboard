@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from 'react';
-
+import clsx from 'clsx';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import styles from './tile-list.module.scss';
-import clsx from "clsx";
 
 type TileListProps = PropsWithChildren<{
   orientation?: 'left' | 'center' | 'right';

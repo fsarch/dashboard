@@ -1,6 +1,6 @@
 'use server';
 
-import { dataTableService } from "@/services/datatable/datatable.service";
+import { dataTableService } from '@/services/datatable/datatable.service';
 
 export async function loadDataTableData({
   dataTableId,

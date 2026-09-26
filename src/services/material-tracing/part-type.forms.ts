@@ -1,5 +1,8 @@
-import { TGeneratedFormDefinition, TGeneratedFormInput } from "@/components/universals/forms/generated/GeneratedForm.type";
-import { TMaterialTracingProductOptions } from "@/utils/configuration.type";
+import type {
+  TGeneratedFormDefinition,
+  TGeneratedFormInput,
+} from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TMaterialTracingProductOptions } from '@/utils/configuration.type';
 
 // $system.crd.catalog.id-Referenz des "product"-Custom-Resource-Typs (siehe
 // product-server GET /v1/.meta/custom-resources) - muss vorbelegt werden,
@@ -14,54 +17,69 @@ const PRODUCT_CUSTOM_RESOURCE_ID = 'product';
 // Andernfalls (ältere/nicht konfigurierte Instanzen) bleibt das bisherige
 // Verhalten - ein select-Input, das per Datasource-Proxy alle Produkte des
 // material-tracing-Backends selbst lädt.
-const buildProductIdInput = (productOptions?: TMaterialTracingProductOptions): TGeneratedFormInput => (
-  productOptions ? {
-    id: 'productId',
-    $type: 'custom-resource-picker',
-    label: 'Produkt (product-server)',
-    serviceId: productOptions.service_id,
-    resourceId: PRODUCT_CUSTOM_RESOURCE_ID,
-    refValues: { [CATALOG_REFERENCE_PLACEHOLDER]: productOptions.catalog_id },
-  } : {
-    id: 'productId',
-    $type: 'select',
-    label: 'Produkt (product-server)',
-    enableSearch: true,
-    data: { $type: 'datasource', value: 'productItems' },
-  }
-);
+const buildProductIdInput = (
+  productOptions?: TMaterialTracingProductOptions,
+): TGeneratedFormInput =>
+  productOptions
+    ? {
+        id: 'productId',
+        $type: 'custom-resource-picker',
+        label: 'Produkt (product-server)',
+        serviceId: productOptions.service_id,
+        resourceId: PRODUCT_CUSTOM_RESOURCE_ID,
+        refValues: {
+          [CATALOG_REFERENCE_PLACEHOLDER]: productOptions.catalog_id,
+        },
+      }
+    : {
+        id: 'productId',
+        $type: 'select',
+        label: 'Produkt (product-server)',
+        enableSearch: true,
+        data: { $type: 'datasource', value: 'productItems' },
+      };
 
-export const buildPartTypeCreateForm = (productOptions?: TMaterialTracingProductOptions): TGeneratedFormDefinition => ({
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'externalId',
-    $type: 'text',
-    label: 'ExternalId',
-  }, buildProductIdInput(productOptions)],
+export const buildPartTypeCreateForm = (
+  productOptions?: TMaterialTracingProductOptions,
+): TGeneratedFormDefinition => ({
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    },
+    {
+      id: 'externalId',
+      $type: 'text',
+      label: 'ExternalId',
+    },
+    buildProductIdInput(productOptions),
+  ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "externalId": "", "productId": "" }'
+    value: '{ "name": "", "externalId": "", "productId": "" }',
   },
   endpoint: {
     path: '/v1/part-types',
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "externalId": form.externalId != "" ? form.externalId : null, "productId": form.productId != "" ? form.productId : null }',
+      value:
+        '{ "name": form.name, "externalId": form.externalId != "" ? form.externalId : null, "productId": form.productId != "" ? form.productId : null }',
     },
   },
-  dataSources: productOptions ? undefined : {
-    productItems: {
-      $type: 'fetch',
-      path: '/v1/product-server/items',
-      method: 'GET',
-      transformResponse: {
-        $type: 'jsonata',
-        value: '{ "body": $append([{ "id": "", "value": "", "label": "Kein Produkt" }], body.data.{ "id": id, "value": id, "label": name }) }',
+  dataSources: productOptions
+    ? undefined
+    : {
+        productItems: {
+          $type: 'fetch',
+          path: '/v1/product-server/items',
+          method: 'GET',
+          transformResponse: {
+            $type: 'jsonata',
+            value:
+              '{ "body": $append([{ "id": "", "value": "", "label": "Kein Produkt" }], body.data.{ "id": id, "value": id, "label": name }) }',
+          },
+        },
       },
-    },
-  },
 });

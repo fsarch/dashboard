@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Field } from "formik";
-import clsx from "clsx";
+import clsx from 'clsx';
+import { Field } from 'formik';
+import type React from 'react';
 import styles from './Input.module.scss';
 
 type TextAreaProps = {

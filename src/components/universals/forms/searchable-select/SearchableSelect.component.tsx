@@ -1,32 +1,42 @@
 'use client';
 
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { useField } from "formik";
+import clsx from 'clsx';
+import { useField } from 'formik';
+import type React from 'react';
+import {
+  type ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import SearchableSelectItem, {
-  SearchableSelectItemValueType
-} from "@/components/universals/forms/searchable-select/SearchableSelectItem.component";
+  type SearchableSelectItemValueType,
+} from '@/components/universals/forms/searchable-select/SearchableSelectItem.component';
 import styles from './SearchableSelect.module.scss';
-import clsx from "clsx";
 
 type SearchableSelectProps = {
   id?: string;
   name: string;
-  values: Array<{ id?: string; value: string; label: string; }>;
+  values: Array<{ id?: string; value: string; label: string }>;
 };
 
 const SearchableSelect: React.FunctionComponent<SearchableSelectProps> = ({
   id,
   name,
-  values
+  values,
 }) => {
   const [inputProps, metaProps, helpers] = useField(name);
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const handleValueChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  }, [setSearchValue]);
+  const handleValueChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [setSearchValue],
+  );
 
   useEffect(() => {
     if (!isFocused) {
@@ -44,31 +54,36 @@ const SearchableSelect: React.FunctionComponent<SearchableSelectProps> = ({
     };
   }, [setIsFocused, isFocused]);
 
-  const handleItemClick = useCallback(async (value: SearchableSelectItemValueType) => {
-    await helpers.setValue(value.id ?? value.value);
-    await helpers.setTouched(true);
-    setIsFocused(false);
-  }, [setIsFocused]);
+  const handleItemClick = useCallback(
+    async (value: SearchableSelectItemValueType) => {
+      await helpers.setValue(value.id ?? value.value);
+      await helpers.setTouched(true);
+      setIsFocused(false);
+    },
+    [setIsFocused],
+  );
 
   const selectedItem = useMemo(
-    () => values?.find((val) => val.id ? inputProps.value === val.id : inputProps.value === val.value),
+    () =>
+      values?.find((val) =>
+        val.id ? inputProps.value === val.id : inputProps.value === val.value,
+      ),
     [inputProps.value],
   );
 
   const handleFocus = useCallback(() => setIsFocused(true), [setIsFocused]);
 
-  const filteredValues = useMemo(
-    () => {
-      if (!searchValue) {
-        return values;
-      }
+  const filteredValues = useMemo(() => {
+    if (!searchValue) {
+      return values;
+    }
 
-      const normalizedSearchValue = searchValue.toLowerCase();
+    const normalizedSearchValue = searchValue.toLowerCase();
 
-      return values.filter((value) => value.label.toLowerCase().includes(normalizedSearchValue))
-    },
-    [values, searchValue],
-  );
+    return values.filter((value) =>
+      value.label.toLowerCase().includes(normalizedSearchValue),
+    );
+  }, [values, searchValue]);
 
   return (
     <>
@@ -77,17 +92,21 @@ const SearchableSelect: React.FunctionComponent<SearchableSelectProps> = ({
         onFocus={handleFocus}
         onClick={isFocused ? (event) => event.stopPropagation() : undefined}
       >
-        <div className={styles.input}>
-          {selectedItem?.label}
-        </div>
+        <div className={styles.input}>{selectedItem?.label}</div>
         <input
           type="text"
           value={searchValue}
           onChange={handleValueChange}
-          className={clsx(styles.searchInput, isFocused && styles.searchInputVisible)}
+          className={clsx(
+            styles.searchInput,
+            isFocused && styles.searchInputVisible,
+          )}
         />
         <div
-          className={clsx(styles.datatable, isFocused && styles.datatableVisible)}
+          className={clsx(
+            styles.datatable,
+            isFocused && styles.datatableVisible,
+          )}
         >
           {filteredValues.map((value) => (
             <SearchableSelectItem

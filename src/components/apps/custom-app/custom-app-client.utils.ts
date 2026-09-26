@@ -1,20 +1,16 @@
 'use client';
 
-import {
-  TCustomAppClickHandlerFunc,
-} from "@/components/apps/custom-app/custom-app.type";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+import type { TCustomAppClickHandlerFunc } from '@/components/apps/custom-app/custom-app.type';
 
-function useClickHandler(
-  handler: TCustomAppClickHandlerFunc,
-) {
+function useClickHandler(handler: TCustomAppClickHandlerFunc) {
   return useCallback(async () => {
     const searchQueryParams = new URLSearchParams(window.location.search);
 
     return await handler({
       query: Object.fromEntries(searchQueryParams.entries()),
     });
-  }, [handler])
+  }, [handler]);
 }
 
 export const customAppClientUtils = {

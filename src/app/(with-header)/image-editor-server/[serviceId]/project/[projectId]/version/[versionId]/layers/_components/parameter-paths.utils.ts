@@ -1,6 +1,13 @@
-import { ParameterDto, ParameterType } from '@/services/image-editor-server/image-editor-server.type';
+import type {
+  ParameterDto,
+  ParameterType,
+} from '@/services/image-editor-server/image-editor-server.type';
 
-export type TFlattenedParameterPath = { path: string; type: ParameterType; label: string };
+export type TFlattenedParameterPath = {
+  path: string;
+  type: ParameterType;
+  label: string;
+};
 
 /**
  * Flattens a version's Parameter tree (flat rows linked by parentId, see
@@ -9,7 +16,9 @@ export type TFlattenedParameterPath = { path: string; type: ParameterType; label
  * "city" child becomes the path "address.city". Only leaf (non-object)
  * parameters are returned, since only they hold an actual bindable value.
  */
-export function flattenParameterPaths(parameters: ParameterDto[]): TFlattenedParameterPath[] {
+export function flattenParameterPaths(
+  parameters: ParameterDto[],
+): TFlattenedParameterPath[] {
   const childrenByParentId = new Map<string, ParameterDto[]>();
 
   for (const parameter of parameters) {
@@ -22,7 +31,9 @@ export function flattenParameterPaths(parameters: ParameterDto[]): TFlattenedPar
   const result: TFlattenedParameterPath[] = [];
 
   function walk(parentKey: string, prefix: string) {
-    const children = [...(childrenByParentId.get(parentKey) ?? [])].sort((a, b) => a.order - b.order);
+    const children = [...(childrenByParentId.get(parentKey) ?? [])].sort(
+      (a, b) => a.order - b.order,
+    );
 
     for (const child of children) {
       const path = prefix ? `${prefix}.${child.name}` : child.name;

@@ -1,27 +1,40 @@
-import { fetchService } from "@/utils/fetchService";
-import {
+import type {
   AttributeItemTypeCreateDto,
   AttributeItemTypeDto,
   ItemTypeCreateDto,
-  ItemTypeDto
-} from "@/services/product/item-type.type";
+  ItemTypeDto,
+} from '@/services/product/item-type.type';
+import { fetchService } from '@/utils/fetchService';
 
-const listItemTypes = async (catalogId: string): Promise<Array<ItemTypeDto>> => {
-  const itemTypesResponse = await fetchService(`/v1/catalogs/${catalogId}/item-types`);
+const listItemTypes = async (
+  catalogId: string,
+): Promise<Array<ItemTypeDto>> => {
+  const itemTypesResponse = await fetchService(
+    `/v1/catalogs/${catalogId}/item-types`,
+  );
   const itemType = await itemTypesResponse.json();
 
   return itemType;
 };
 
-const getItemType = async (catalogId: string, itemTypeId: string): Promise<ItemTypeDto | null> => {
-  return (await listItemTypes(catalogId)).find(it => it.id = itemTypeId) ?? null;
+const getItemType = async (
+  catalogId: string,
+  itemTypeId: string,
+): Promise<ItemTypeDto | null> => {
+  return (
+    (await listItemTypes(catalogId)).find((it) => (it.id = itemTypeId)) ?? null
+  );
 };
 
 export type TListAttributeOptions = {
   embed: Array<'attribute'>;
 };
 
-const listAttributes = async (catalogId: string, itemTypeId: string, options?: TListAttributeOptions): Promise<Array<AttributeItemTypeDto>> => {
+const listAttributes = async (
+  catalogId: string,
+  itemTypeId: string,
+  options?: TListAttributeOptions,
+): Promise<Array<AttributeItemTypeDto>> => {
   const searchParams = new URLSearchParams();
   if (options?.embed) {
     options.embed.forEach((embed) => {
@@ -29,7 +42,9 @@ const listAttributes = async (catalogId: string, itemTypeId: string, options?: T
     });
   }
 
-  const itemTypesResponse = await fetchService(`/v1/catalogs/${catalogId}/item-types/${itemTypeId}/attributes?${searchParams}`);
+  const itemTypesResponse = await fetchService(
+    `/v1/catalogs/${catalogId}/item-types/${itemTypeId}/attributes?${searchParams}`,
+  );
   const itemType = await itemTypesResponse.json();
 
   return itemType;
@@ -41,16 +56,19 @@ const createAttribute = async (
   attributeId: string,
   createDto: AttributeItemTypeCreateDto,
 ): Promise<{ id: string } | null> => {
-  const res = await fetchService(`/v1/catalogs/${catalogId}/item-types/${itemTypeId}/attributes`, {
-    method: 'POST',
-    body: JSON.stringify({
-      ...createDto,
-      attributeId,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetchService(
+    `/v1/catalogs/${catalogId}/item-types/${itemTypeId}/attributes`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        ...createDto,
+        attributeId,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-  });
+  );
 
   return await res.json();
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import './monaco-setup';
 import MonacoEditor from '@monaco-editor/react';
 
@@ -14,14 +14,27 @@ type SchemaViewerProps = {
  * there - see `RecordForm.component.tsx` for why `monaco-editor` must never
  * be evaluated during server rendering.
  */
-const SchemaViewer: React.FunctionComponent<SchemaViewerProps> = ({ schema }) => (
-  <div style={{ height: '320px', border: '1px solid var(--color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+const SchemaViewer: React.FunctionComponent<SchemaViewerProps> = ({
+  schema,
+}) => (
+  <div
+    style={{
+      height: '320px',
+      border: '1px solid var(--color-border)',
+      borderRadius: '8px',
+      overflow: 'hidden',
+    }}
+  >
     <MonacoEditor
       height="100%"
       defaultLanguage="json"
       value={JSON.stringify(schema, null, 2)}
       theme="vs-dark"
-      options={{ readOnly: true, domReadOnly: true, minimap: { enabled: false } }}
+      options={{
+        readOnly: true,
+        domReadOnly: true,
+        minimap: { enabled: false },
+      }}
     />
   </div>
 );

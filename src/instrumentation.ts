@@ -12,7 +12,9 @@ export async function register() {
     return;
   }
 
-  const { initializeTracing, registerShutdownHandler } = await import("@/utils/tracing/tracing");
+  const { initializeTracing, registerShutdownHandler } = await import(
+    '@/utils/tracing/tracing'
+  );
 
   const tracingEnabled = await initializeTracing();
 

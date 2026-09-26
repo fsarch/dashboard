@@ -1,8 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { TDialogComponent } from '@/components/universals/dialog/dialog.type';
-import { TCodeEditorDialogValue } from './CodeEditorDialog.component';
+import type { TDialogComponent } from '@/components/universals/dialog/dialog.type';
+import type { TCodeEditorDialogValue } from './CodeEditorDialog.component';
 
 // monaco-editor references `window` at module-eval time, so it can't be
 // server-rendered - eagerly importing CodeEditorDialog.component (even
@@ -20,8 +20,11 @@ import { TCodeEditorDialogValue } from './CodeEditorDialog.component';
 // alias) doesn't structurally accept - the runtime shape is identical
 // either way (openDialog only ever renders it as <Component value=.../>),
 // so this cast just bridges the two type conventions.
-const CodeEditorDialogDynamic = dynamic(() => import('./CodeEditorDialog.component'), {
-  ssr: false,
-}) as TDialogComponent<TCodeEditorDialogValue, string>;
+const CodeEditorDialogDynamic = dynamic(
+  () => import('./CodeEditorDialog.component'),
+  {
+    ssr: false,
+  },
+) as TDialogComponent<TCodeEditorDialogValue, string>;
 
 export default CodeEditorDialogDynamic;

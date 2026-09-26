@@ -1,10 +1,16 @@
-import React from 'react';
-import { actionService } from "@/services/material-tracing/action.service";
-import ActionButton from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/ActionButton.component";
-import Section from "@/components/universals/section/Section";
+import type React from 'react';
+import ActionButton from '@/app/(with-header)/material-tracing/[serviceId]/_components/actions/ActionButton.component';
+import Section from '@/components/universals/section/Section';
+import { actionService } from '@/services/material-tracing/action.service';
 
 type ActionsProps = {
-  type: 'part' | 'manufacturer' | 'material' | 'material_type' | 'part_type' | 'short_code';
+  type:
+    | 'part'
+    | 'manufacturer'
+    | 'material'
+    | 'material_type'
+    | 'part_type'
+    | 'short_code';
   basePath: string;
 };
 

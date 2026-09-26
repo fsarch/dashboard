@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 export async function toggleDevMode(enabled: boolean): Promise<void> {
   const cookieStore = await cookies();
-  
+
   if (enabled) {
     await cookieStore.set('dev-mode', 'true', {
       path: '/',

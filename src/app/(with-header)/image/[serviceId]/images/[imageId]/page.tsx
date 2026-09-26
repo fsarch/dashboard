@@ -1,15 +1,15 @@
-import { imagesAdminService } from '@/services/image/images-admin.service';
-import { ImageDto, TagDefinitionDto } from '@/services/image/images-admin.type';
-import { IMAGE_TAG_CREATE_FORM } from '@/services/image/image.forms';
+import Link from 'next/link';
+import { colors } from '@/app/_styles/colors';
+import PatchImageVisibilityForm from '@/components/apps/image/patch/PatchImageVisibilityForm';
+import Badge from '@/components/universals/badge/badge.component';
+import Button from '@/components/universals/forms/Button';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import Badge from '@/components/universals/badge/badge.component';
-import { colors } from '@/app/_styles/colors';
-import Link from 'next/link';
+import { IMAGE_TAG_CREATE_FORM } from '@/services/image/image.forms';
+import { imagesAdminService } from '@/services/image/images-admin.service';
+import { ImageDto, TagDefinitionDto } from '@/services/image/images-admin.type';
 import styles from './page.module.scss';
-import Button from '@/components/universals/forms/Button';
-import PatchImageVisibilityForm from '@/components/apps/image/patch/PatchImageVisibilityForm';
 
 export default async function ImageDetailPage(props: {
   params: Promise<{ serviceId: string; imageId: string }>;
@@ -39,7 +39,11 @@ export default async function ImageDetailPage(props: {
               alt=""
               width={300}
               height={300}
-              style={{ objectFit: 'contain', background: 'repeating-conic-gradient(#A0A0A0 0 25%, #606060 0 50%) 50% / 20px 20px' }}
+              style={{
+                objectFit: 'contain',
+                background:
+                  'repeating-conic-gradient(#A0A0A0 0 25%, #606060 0 50%) 50% / 20px 20px',
+              }}
             />
           </div>
           <div className={styles.imageDetails}>
@@ -58,7 +62,9 @@ export default async function ImageDetailPage(props: {
               <dd>{image.md5}</dd>
               <dt>Visibility</dt>
               <dd>
-                <Badge color={image.isPublic ? colors.lightGreen : colors.lightRed}>
+                <Badge
+                  color={image.isPublic ? colors.lightGreen : colors.lightRed}
+                >
                   {image.isPublic ? 'Öffentlich' : 'Privat'}
                 </Badge>
               </dd>
@@ -116,10 +122,7 @@ export default async function ImageDetailPage(props: {
                   }}
                   className={styles.deleteForm}
                 >
-                  <Button
-                    type="submit"
-                    color={colors.error}
-                  >
+                  <Button type="submit" color={colors.error}>
                     × Löschen
                   </Button>
                 </form>

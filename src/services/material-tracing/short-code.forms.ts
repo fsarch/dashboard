@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const SHORT_CODE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [],

@@ -1,15 +1,11 @@
-import React from 'react';
+import type React from 'react';
 
-type AttributeTextSettingsProps = {
+type AttributeTextSettingsProps = {};
 
-};
-
-const AttributeTextSettings: React.FunctionComponent<AttributeTextSettingsProps> = () => {
-  return (
-    <div>
-Text
-    </div>
-  );
+const AttributeTextSettings: React.FunctionComponent<
+  AttributeTextSettingsProps
+> = () => {
+  return <div>Text</div>;
 };
 
 export default AttributeTextSettings;

@@ -1,6 +1,5 @@
 import Quagga from '@ericblade/quagga2';
-import { BarcodeDecodeResponse, IDecoder } from "./IDecoder";
-
+import type { BarcodeDecodeResponse, IDecoder } from './IDecoder';
 
 export class QuaggaDecoder implements IDecoder {
   private analyzeCanvas: HTMLCanvasElement;
@@ -19,7 +18,7 @@ export class QuaggaDecoder implements IDecoder {
 
     const analyzeCanvasCtx = this.analyzeCanvas.getContext('2d');
     if (!analyzeCanvasCtx) {
-      return { type: 'quagga', results: [], };
+      return { type: 'quagga', results: [] };
     }
 
     analyzeCanvasCtx.filter = 'saturate(10%) contrast(200%)';
@@ -43,27 +42,28 @@ export class QuaggaDecoder implements IDecoder {
         src: objectUrl,
         numOfWorkers: 1,
         frequency: 10,
-        decoder : {
-          readers : ["ean_reader"]
+        decoder: {
+          readers: ['ean_reader'],
         },
       });
 
       if (response?.codeResult?.code) {
         return {
           type: 'quagga',
-          results: [{
-            rawValue: response.codeResult.code,
-          }]
-        }
+          results: [
+            {
+              rawValue: response.codeResult.code,
+            },
+          ],
+        };
       }
 
-      return { type: 'quagga', results: [], };
+      return { type: 'quagga', results: [] };
     } catch (ex) {
       console.error(ex);
-      return { type: 'quagga', results: [], };
+      return { type: 'quagga', results: [] };
     } finally {
       URL.revokeObjectURL(objectUrl);
-
     }
   }
 }

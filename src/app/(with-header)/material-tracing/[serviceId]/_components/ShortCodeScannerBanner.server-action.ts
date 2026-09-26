@@ -1,28 +1,36 @@
 'use server';
 
-import { shortCodeService } from "@/services/material-tracing/short-code.service";
-import { EShortCodeType, TShortCode } from "@/services/material-tracing/short-code.type";
-import { materialService } from "@/services/material-tracing/material.service";
-import { TMaterial } from "@/services/material-tracing/material.type";
-import { TPart } from "@/services/material-tracing/part.type";
-import { partService } from "@/services/material-tracing/part.service";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { materialService } from '@/services/material-tracing/material.service';
+import type { TMaterial } from '@/services/material-tracing/material.type';
+import { partService } from '@/services/material-tracing/part.service';
+import type { TPart } from '@/services/material-tracing/part.type';
+import { shortCodeService } from '@/services/material-tracing/short-code.service';
+import {
+  EShortCodeType,
+  type TShortCode,
+} from '@/services/material-tracing/short-code.type';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
-type TShortCodeResponse = {
-  type: EShortCodeType.MATERIAL,
-  value: TMaterial;
-  url: string;
-} | {
-  type: EShortCodeType.PART,
-  value: TPart;
-  url: string;
-} | {
-  type: 'unconnected';
-  value: TShortCode;
-  url: string;
-}
+type TShortCodeResponse =
+  | {
+      type: EShortCodeType.MATERIAL;
+      value: TMaterial;
+      url: string;
+    }
+  | {
+      type: EShortCodeType.PART;
+      value: TPart;
+      url: string;
+    }
+  | {
+      type: 'unconnected';
+      value: TShortCode;
+      url: string;
+    };
 
-export async function analyzeShortCode(shortCode: string): Promise<TShortCodeResponse> {
+export async function analyzeShortCode(
+  shortCode: string,
+): Promise<TShortCodeResponse> {
   const shortCodeRes = await shortCodeService.getShortCode(shortCode);
 
   if (shortCodeRes.shortCodeTypeId === EShortCodeType.MATERIAL) {

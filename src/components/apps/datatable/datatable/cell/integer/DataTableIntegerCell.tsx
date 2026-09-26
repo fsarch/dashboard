@@ -1,22 +1,25 @@
-import React, { ChangeEvent, ChangeEventHandler, useCallback } from 'react';
-import { DataTableIntegerMappingDto } from "@/services/datatable/datatable.type";
-import DataTableInputCell from "@/components/apps/datatable/datatable/cell/DataTableInputCell";
-import { useDataTableValue } from "@/components/apps/datatable/datatable/hooks/useDataTableValue";
+import type React from 'react';
+import { type ChangeEvent, ChangeEventHandler, useCallback } from 'react';
+import DataTableInputCell from '@/components/apps/datatable/datatable/cell/DataTableInputCell';
+import { useDataTableValue } from '@/components/apps/datatable/datatable/hooks/useDataTableValue';
+import type { DataTableIntegerMappingDto } from '@/services/datatable/datatable.type';
 
 type DataTableIntegerCellProps = {
   value: any;
   mapping: DataTableIntegerMappingDto;
 };
 
-const DataTableIntegerCell: React.FunctionComponent<DataTableIntegerCellProps> = ({
-  value,
-  mapping,
-}) => {
+const DataTableIntegerCell: React.FunctionComponent<
+  DataTableIntegerCellProps
+> = ({ value, mapping }) => {
   const [displayValue, updateValue] = useDataTableValue(mapping, value);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    updateValue(parseInt(event.target.value, 10));
-  }, [updateValue]);
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      updateValue(parseInt(event.target.value, 10));
+    },
+    [updateValue],
+  );
 
   return (
     <DataTableInputCell

@@ -1,9 +1,9 @@
 'use server';
 
-import { partService } from "@/services/material-tracing/part.service";
-import { TPart } from "@/services/material-tracing/part.type";
-import { TPaginationResult } from "@/services/material-tracing/pagination.type";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import { partService } from '@/services/material-tracing/part.service';
+import type { TPart } from '@/services/material-tracing/part.type';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 type PartWithUrl = TPart & {
   url: string;
@@ -25,8 +25,8 @@ export async function loadArchivedPartsAction(options?: {
   const partsWithUrls = await Promise.all(
     partsResult.data.map(async (part) => ({
       ...part,
-      url: await getServiceLocalUrl(`/part/${part.id}`)
-    }))
+      url: await getServiceLocalUrl(`/part/${part.id}`),
+    })),
   );
 
   return {

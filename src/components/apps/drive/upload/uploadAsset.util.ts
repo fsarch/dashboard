@@ -7,11 +7,18 @@ import {
 
 // PUTs the file content to `url`, reporting progress via XHR (fetch doesn't
 // expose upload progress).
-const putContent = (url: string, file: File, onProgress?: (loaded: number, total: number) => void) =>
+const putContent = (
+  url: string,
+  file: File,
+  onProgress?: (loaded: number, total: number) => void,
+) =>
   new Promise<void>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PUT', url);
-    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+    xhr.setRequestHeader(
+      'Content-Type',
+      file.type || 'application/octet-stream',
+    );
     if (onProgress) {
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -52,16 +59,22 @@ export async function uploadAssetFile({
   let uploadId: string | undefined;
   try {
     const upload = existingAssetId
-      ? await createAssetVersionUpload(existingAssetId, { mimeType: file.type, size: file.size })
-      : (await createAssetUpload({
-          name: file.name,
-          parentId,
+      ? await createAssetVersionUpload(existingAssetId, {
           mimeType: file.type,
           size: file.size,
-        })).upload;
+        })
+      : (
+          await createAssetUpload({
+            name: file.name,
+            parentId,
+            mimeType: file.type,
+            size: file.size,
+          })
+        ).upload;
     uploadId = upload.id;
 
-    const targetUrl = upload.uploadUrl ?? `/drive/${serviceId}/upload/${upload.id}`;
+    const targetUrl =
+      upload.uploadUrl ?? `/drive/${serviceId}/upload/${upload.id}`;
     await putContent(targetUrl, file, onProgress);
 
     await completeAssetUpload(upload.id);
@@ -69,6 +82,8 @@ export async function uploadAssetFile({
     if (uploadId) {
       await abortAssetUpload(uploadId).catch(() => undefined);
     }
-    throw uploadError instanceof Error ? uploadError : new Error('Upload fehlgeschlagen');
+    throw uploadError instanceof Error
+      ? uploadError
+      : new Error('Upload fehlgeschlagen');
   }
 }

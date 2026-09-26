@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
-import Select from '@/components/universals/forms/Select';
-import Button from '@/components/universals/forms/Button';
-import { patchImageVisibility } from './PatchImageVisibility.server-action';
+import { Form, Formik, type FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import Button from '@/components/universals/forms/Button';
+import Select from '@/components/universals/forms/Select';
+import { patchImageVisibility } from './PatchImageVisibility.server-action';
 
 type PatchImageVisibilityFormProps = {
   imageId: string;
@@ -17,18 +18,19 @@ type FormData = {
   visibility: string;
 };
 
-const PatchImageVisibilityForm: React.FunctionComponent<PatchImageVisibilityFormProps> = ({
-  imageId,
-  currentVisibility,
-  serviceId,
-}) => {
+const PatchImageVisibilityForm: React.FunctionComponent<
+  PatchImageVisibilityFormProps
+> = ({ imageId, currentVisibility, serviceId }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (data: FormData, helpers: FormikHelpers<FormData>) => {
-    await patchImageVisibility(imageId, data.visibility === 'public');
-    router.refresh();
-    helpers.setSubmitting(false);
-  }, [imageId, router]);
+  const handleSubmit = useCallback(
+    async (data: FormData, helpers: FormikHelpers<FormData>) => {
+      await patchImageVisibility(imageId, data.visibility === 'public');
+      router.refresh();
+      helpers.setSubmitting(false);
+    },
+    [imageId, router],
+  );
 
   return (
     <Formik
@@ -45,9 +47,7 @@ const PatchImageVisibilityForm: React.FunctionComponent<PatchImageVisibilityForm
             { value: 'private', label: 'Privat' },
           ]}
         />
-        <Button type="submit">
-          Visibility speichern
-        </Button>
+        <Button type="submit">Visibility speichern</Button>
       </Form>
     </Formik>
   );

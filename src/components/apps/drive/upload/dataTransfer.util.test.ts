@@ -1,6 +1,6 @@
 import { resolveDroppedFiles } from './dataTransfer.util';
 
-const fakeFile = (name: string) => ({ name } as unknown as File);
+const fakeFile = (name: string) => ({ name }) as unknown as File;
 
 describe('resolveDroppedFiles', () => {
   it('falls back to a flat file list when the entries API is unavailable', async () => {
@@ -96,7 +96,10 @@ describe('resolveDroppedFiles', () => {
     };
 
     const dataTransfer = {
-      items: [{ webkitGetAsEntry: () => photosDirEntry }, { webkitGetAsEntry: () => rootFileEntry }],
+      items: [
+        { webkitGetAsEntry: () => photosDirEntry },
+        { webkitGetAsEntry: () => rootFileEntry },
+      ],
       files: [],
     } as unknown as DataTransfer;
 

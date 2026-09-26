@@ -1,6 +1,7 @@
-import React, { CSSProperties, PropsWithChildren } from 'react';
+import clsx from 'clsx';
+import type React from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
 import styles from './Section.module.scss';
-import clsx from "clsx";
 
 type SectionProps = PropsWithChildren<{
   name: string;
@@ -20,17 +21,20 @@ const Section: React.FunctionComponent<SectionProps> = ({
 }) => {
   return (
     <fieldset
-      style={{
-        '--color': color,
-      } as CSSProperties}
-      className={clsx(className, styles.root, addPadding && styles.rootWithPadding, transparent && styles.rootTransparent)}
+      style={
+        {
+          '--color': color,
+        } as CSSProperties
+      }
+      className={clsx(
+        className,
+        styles.root,
+        addPadding && styles.rootWithPadding,
+        transparent && styles.rootTransparent,
+      )}
     >
-      <legend className={styles.legend}>
-        {name}
-      </legend>
-      <div>
-        {children}
-      </div>
+      <legend className={styles.legend}>{name}</legend>
+      <div>{children}</div>
     </fieldset>
   );
 };

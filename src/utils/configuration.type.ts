@@ -26,28 +26,28 @@ export enum EServiceType {
 export type TCustomerCommunicationServiceConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.CUSTOMER_COMMUNICATION,
+  type: EServiceType.CUSTOMER_COMMUNICATION;
   url: string;
 };
 
 export type TDatatableServiceConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.DATATABLE,
+  type: EServiceType.DATATABLE;
   url: string;
 };
 
 export type TProductServiceConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.PIM,
+  type: EServiceType.PIM;
   url: string;
 };
 
 export type TImageServiceConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.IMAGE,
+  type: EServiceType.IMAGE;
   url: string;
 };
 
@@ -68,7 +68,7 @@ export type TMaterialTracingOptions = {
 export type TMaterialTracingConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.MATERIAL_TRACING,
+  type: EServiceType.MATERIAL_TRACING;
   url: string;
   options?: TMaterialTracingOptions;
 };
@@ -76,7 +76,7 @@ export type TMaterialTracingConfiguration = {
 export type TPdfRenderConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.PDF_RENDER,
+  type: EServiceType.PDF_RENDER;
   url: string;
 };
 
@@ -99,7 +99,7 @@ export type TFunctionGatewayConfiguration = {
 export type TCustomAppConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.CUSTOM_APP,
+  type: EServiceType.CUSTOM_APP;
   url: string;
   path: string;
 };
@@ -107,77 +107,77 @@ export type TCustomAppConfiguration = {
 export type TPrinterConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.PRINTER,
+  type: EServiceType.PRINTER;
   url: string;
 };
 
 export type TAIConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.AI,
+  type: EServiceType.AI;
   url: string;
 };
 
 export type TEmailServerConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.EMAIL_SERVER,
+  type: EServiceType.EMAIL_SERVER;
   url: string;
 };
 
 export type TFrontierConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.FRONTIER,
+  type: EServiceType.FRONTIER;
   url: string;
 };
 
 export type TWatchtowerConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.WATCHTOWER,
+  type: EServiceType.WATCHTOWER;
   url: string;
 };
 
 export type TBotProtectionConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.BOT_PROTECTION,
+  type: EServiceType.BOT_PROTECTION;
   url: string;
 };
 
 export type TMetricConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.METRIC,
+  type: EServiceType.METRIC;
   url: string;
 };
 
 export type TFrontendConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.FRONTEND,
+  type: EServiceType.FRONTEND;
   url: string;
 };
 
 export type TCalendarConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.CALENDAR,
+  type: EServiceType.CALENDAR;
   url: string;
 };
 
 export type TDblightConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.DBLIGHT,
+  type: EServiceType.DBLIGHT;
   url: string;
 };
 
 export type TImageEditorServerConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.IMAGE_EDITOR_SERVER,
+  type: EServiceType.IMAGE_EDITOR_SERVER;
   url: string;
 };
 
@@ -188,18 +188,19 @@ export type TImageEditorServerConfiguration = {
 export type TFileServerDriveServiceConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.FILE_SERVER_DRIVE,
+  type: EServiceType.FILE_SERVER_DRIVE;
   url: string;
 };
 
 export type TFileServerDamServiceConfiguration = {
   id: string;
   name?: string;
-  type: EServiceType.FILE_SERVER_DAM,
+  type: EServiceType.FILE_SERVER_DAM;
   url: string;
 };
 
-export type TServiceConfiguration = TCustomAppConfiguration
+export type TServiceConfiguration =
+  | TCustomAppConfiguration
   | TCustomerCommunicationServiceConfiguration
   | TDatatableServiceConfiguration
   | TProductServiceConfiguration
@@ -296,7 +297,7 @@ export type TTracingOtlpGrpcExporterConfiguration = {
 
 export type TConfiguration = {
   services: Array<TServiceConfiguration>;
-  defaults: Record<string, { id: string; }>;
+  defaults: Record<string, { id: string }>;
   theme?: {
     primary_color?: string;
     background_color?: string;

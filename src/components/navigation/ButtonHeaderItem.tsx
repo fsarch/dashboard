@@ -1,4 +1,5 @@
-import React, { MouseEventHandler, PropsWithChildren } from 'react';
+import type React from 'react';
+import type { MouseEventHandler, PropsWithChildren } from 'react';
 import styles from './ButtonHeaderItem.module.scss';
 
 type ButtonHeaderItemProps = PropsWithChildren<{
@@ -10,11 +11,7 @@ const ButtonHeaderItem: React.FunctionComponent<ButtonHeaderItemProps> = ({
   onClick,
 }) => {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={styles.root}
-    >
+    <button type="button" onClick={onClick} className={styles.root}>
       {children}
     </button>
   );

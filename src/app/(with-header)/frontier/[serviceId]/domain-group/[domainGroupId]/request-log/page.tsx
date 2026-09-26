@@ -1,14 +1,14 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { frontierService } from '@/services/frontier/frontier.service';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
-import { uacUtils } from '@/utils/uac.utils';
-import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
 import Link from 'next/link';
 import Button from '@/components/universals/forms/Button';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
+import Section from '@/components/universals/section/Section';
+import { frontierService } from '@/services/frontier/frontier.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -27,7 +27,9 @@ export default async function RequestLogListPage({
   const pageSize = Math.min(Math.max(pageSizeRaw, 1), 100);
   const offset = (page - 1) * pageSize;
 
-  const baseLogPath = await getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log`);
+  const baseLogPath = await getServiceLocalUrl(
+    `/domain-group/${domainGroupId}/request-log`,
+  );
   const createPageHref = (targetPage: number) => {
     const query = new URLSearchParams({
       page: `${targetPage}`,
@@ -38,17 +40,30 @@ export default async function RequestLogListPage({
   };
 
   const [requestLogsWithSentinel, canSeeDevResponse] = await Promise.all([
-    frontierService.listRequestLogs(domainGroupId, { limit: pageSize + 1, offset }),
+    frontierService.listRequestLogs(domainGroupId, {
+      limit: pageSize + 1,
+      offset,
+    }),
     uacUtils.isDeveloper(),
   ]);
 
   const hasNextPage = requestLogsWithSentinel.length > pageSize;
-  const requestLogs = hasNextPage ? requestLogsWithSentinel.slice(0, pageSize) : requestLogsWithSentinel;
+  const requestLogs = hasNextPage
+    ? requestLogsWithSentinel.slice(0, pageSize)
+    : requestLogsWithSentinel;
 
   return (
     <DefaultPage>
       <Section name="Request Logs">
-        <div style={{ marginBottom: '12px', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            marginBottom: '12px',
+            display: 'flex',
+            gap: '8px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           <span>Seite {page}</span>
           {page > 1 ? (
             <Link href={createPageHref(page - 1)}>
@@ -69,17 +84,27 @@ export default async function RequestLogListPage({
               const requestLogId = log.id ?? `__absolute-${offset + index}`;
               const method = log.incomingMethod ?? '-';
               const url = log.incomingUrl ?? '-';
-              const status = log.responseStatusCode !== undefined ? log.responseStatusCode : '-';
-              const duration = log.requestTimeMs !== undefined ? `${log.requestTimeMs} ms` : '-';
-              const timestamp = log.createdAt ? new Date(log.createdAt).toLocaleString('de-DE') : '-';
+              const status =
+                log.responseStatusCode !== undefined
+                  ? log.responseStatusCode
+                  : '-';
+              const duration =
+                log.requestTimeMs !== undefined
+                  ? `${log.requestTimeMs} ms`
+                  : '-';
+              const timestamp = log.createdAt
+                ? new Date(log.createdAt).toLocaleString('de-DE')
+                : '-';
 
               return (
                 <LinkListItem
                   key={requestLogId}
-                  href={`${await getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log/${requestLogId}`)}?${new URLSearchParams({
-                    page: `${page}`,
-                    pageSize: `${pageSize}`,
-                  }).toString()}`}
+                  href={`${await getServiceLocalUrl(`/domain-group/${domainGroupId}/request-log/${requestLogId}`)}?${new URLSearchParams(
+                    {
+                      page: `${page}`,
+                      pageSize: `${pageSize}`,
+                    },
+                  ).toString()}`}
                 >
                   [{timestamp}] {method} {url} {'->'} {status} ({duration})
                 </LinkListItem>
@@ -94,4 +119,3 @@ export default async function RequestLogListPage({
     </DefaultPage>
   );
 }
-

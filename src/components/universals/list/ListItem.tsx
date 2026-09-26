@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, ReactElement } from 'react';
+import type React from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
 import styles from './list-item.module.scss';
 
 type ListItemProps = PropsWithChildren<{
@@ -13,19 +14,9 @@ const ListItem: React.FunctionComponent<ListItemProps> = ({
 }) => {
   return (
     <div className={styles.root}>
-      {left ? (
-        <div className={styles.left}>
-          {left}
-        </div>
-      ) : null}
-      <div className={styles.main}>
-        {children}
-      </div>
-      {right ? (
-        <div className={styles.right}>
-          {right}
-        </div>
-      ) : null}
+      {left ? <div className={styles.left}>{left}</div> : null}
+      <div className={styles.main}>{children}</div>
+      {right ? <div className={styles.right}>{right}</div> : null}
     </div>
   );
 };

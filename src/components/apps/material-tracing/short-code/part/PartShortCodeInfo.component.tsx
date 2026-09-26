@@ -1,18 +1,17 @@
-import React from 'react';
-import Link from "next/link";
-import PartShortCodeDeleteForm
-  from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
-import { partService } from "@/services/material-tracing/part.service";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import Link from 'next/link';
+import type React from 'react';
+import PartShortCodeDeleteForm from '@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component';
+import { partService } from '@/services/material-tracing/part.service';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import styles from './PartShortCodeInfo.module.scss';
 
 type PartShortCodeInfoComponentProps = {
   code: string;
 };
 
-const PartShortCodeInfoComponent: React.FunctionComponent<PartShortCodeInfoComponentProps> = async ({
-  code,
-}) => {
+const PartShortCodeInfoComponent: React.FunctionComponent<
+  PartShortCodeInfoComponentProps
+> = async ({ code }) => {
   const parts = await partService.listPartsByShortCode(code);
   const part = parts[0];
   const partUrl = part ? await getServiceLocalUrl(`/part/${part.id}`) : null;
@@ -23,8 +22,10 @@ const PartShortCodeInfoComponent: React.FunctionComponent<PartShortCodeInfoCompo
         <>
           <Link href={partUrl!} className={styles.itemCard}>
             <div className={styles.itemLabel}>Verbundenes Bauteil</div>
-            Name: {part.name}<br />
-            ID: {part.id}<br />
+            Name: {part.name}
+            <br />
+            ID: {part.id}
+            <br />
             Anzahl: {part.amount}
           </Link>
 
@@ -38,7 +39,9 @@ const PartShortCodeInfoComponent: React.FunctionComponent<PartShortCodeInfoCompo
             />
           </div>
         </>
-      ) : <div className={styles.empty}>Kein verbundenes Bauteil gefunden.</div>}
+      ) : (
+        <div className={styles.empty}>Kein verbundenes Bauteil gefunden.</div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { imagesAdminService } from "@/services/image/images-admin.service";
+import { NextResponse } from 'next/server';
+import { imagesAdminService } from '@/services/image/images-admin.service';
 
 export const GET = async (
   request: Request,
@@ -15,5 +15,5 @@ export const GET = async (
     headers: {
       'Cache-Control': 'private, no-cache, no-store, must-revalidate',
     },
-  })
+  });
 };

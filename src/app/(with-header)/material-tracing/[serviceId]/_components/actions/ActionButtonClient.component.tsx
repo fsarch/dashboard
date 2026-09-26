@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { TActionResponse } from "@/services/material-tracing/action.type";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
-import BinaryDialog from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/dialog/Binary.dialog";
-import ActionButton from "@/components/universals/forms/button/ActionButton";
-import AlertDialog from "@/components/universals/dialogs/alert/AlertDialog.component";
+import type React from 'react';
+import { useCallback } from 'react';
+import BinaryDialog from '@/app/(with-header)/material-tracing/[serviceId]/_components/actions/dialog/Binary.dialog';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import ActionButton from '@/components/universals/forms/button/ActionButton';
+import type { TActionResponse } from '@/services/material-tracing/action.type';
 
 type ActionButtonClientProps = {
   onClick: () => Promise<TActionResponse>;
@@ -50,14 +51,10 @@ const ActionButtonClient: React.FunctionComponent<ActionButtonClientProps> = ({
         console.info('unknown action type', action);
       }
     }
-
   }, [openDialog, onClick]);
 
   return (
-    <ActionButton
-      type="button"
-      onClick={handleClick}
-    >
+    <ActionButton type="button" onClick={handleClick}>
       {name}
     </ActionButton>
   );

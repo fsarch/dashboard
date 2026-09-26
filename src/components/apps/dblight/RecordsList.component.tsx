@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { TRecordPageDto } from '@/services/dblight/dblight.type';
+import type React from 'react';
+import { useCallback } from 'react';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
-import Button from '@/components/universals/forms/Button';
-import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
-import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type { TRecordPageDto } from '@/services/dblight/dblight.type';
 import { deleteRecordAction } from './RecordActions.server-action';
 
 type RecordsListProps = {
@@ -59,17 +60,21 @@ const RecordsList: React.FunctionComponent<RecordsListProps> = ({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Link href={`/dblight/${serviceId}/collection/${collectionId}/record/create`} passHref>
-          <Button type="button">
-            Eintrag hinzufügen
-          </Button>
+        <Link
+          href={`/dblight/${serviceId}/collection/${collectionId}/record/create`}
+          passHref
+        >
+          <Button type="button">Eintrag hinzufügen</Button>
         </Link>
       </div>
 
       {page.data.length > 0 ? (
         <List>
           {page.data.map((record) => (
-            <div key={record.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div
+              key={record.id}
+              style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
+            >
               <Link
                 href={`/dblight/${serviceId}/collection/${collectionId}/record/${record.id}`}
                 style={{ flex: 1 }}
@@ -106,9 +111,7 @@ const RecordsList: React.FunctionComponent<RecordsListProps> = ({
             href={`/dblight/${serviceId}/collection/${collectionId}/record?cursor=${encodeURIComponent(page.nextCursor)}`}
             passHref
           >
-            <Button type="button">
-              Nächste Seite
-            </Button>
+            <Button type="button">Nächste Seite</Button>
           </Link>
         </div>
       )}

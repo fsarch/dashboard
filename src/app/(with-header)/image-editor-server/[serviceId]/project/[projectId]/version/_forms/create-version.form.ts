@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const CREATE_VERSION_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -18,14 +18,18 @@ export const CREATE_VERSION_FORM: TGeneratedFormDefinition = {
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "width": $number(form.width), "height": $number(form.height), "externalId": form.externalId != \'\' ? form.externalId }',
+      value:
+        '{ "width": $number(form.width), "height": $number(form.height), "externalId": form.externalId != \'\' ? form.externalId }',
     },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: "service.localPath & '/project/' & args.projectId & '/version/' & response.body.id",
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value:
+          "service.localPath & '/project/' & args.projectId & '/version/' & response.body.id",
+      },
     },
-  }],
+  ],
 };

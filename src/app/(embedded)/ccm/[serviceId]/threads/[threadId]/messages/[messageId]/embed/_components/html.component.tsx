@@ -1,17 +1,14 @@
-import React from 'react';
-import styles from './html.module.scss';
-
-import { JSDOM } from 'jsdom';
 import DOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+import type React from 'react';
 import * as sanitizeHtml from 'sanitize-html';
+import styles from './html.module.scss';
 
 type HtmlProps = {
   content: string;
 };
 
-const Html: React.FunctionComponent<HtmlProps> = ({
-  content,
-}) => {
+const Html: React.FunctionComponent<HtmlProps> = ({ content }) => {
   const window = new JSDOM('').window;
   const purify = DOMPurify(window);
   const cleanContent = purify.sanitize(content);

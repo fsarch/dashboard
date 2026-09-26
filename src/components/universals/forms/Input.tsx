@@ -1,12 +1,21 @@
-import React from 'react';
-import { Field } from "formik";
+import clsx from 'clsx';
+import { Field } from 'formik';
+import type React from 'react';
 import styles from './Input.module.scss';
-import clsx from "clsx";
 
 type InputProps = {
   id?: string;
   name: string;
-  type: 'input' | 'text' | 'password' | 'checkbox' | 'file' | 'number' | 'time' | 'url' | 'datetime-local';
+  type:
+    | 'input'
+    | 'text'
+    | 'password'
+    | 'checkbox'
+    | 'file'
+    | 'number'
+    | 'time'
+    | 'url'
+    | 'datetime-local';
   disabled?: boolean;
   required?: boolean;
   min?: number;

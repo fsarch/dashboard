@@ -1,18 +1,19 @@
-import React, { useEffect, useMemo } from 'react';
-import { useServerActionData } from "@/utils/hooks/useServerActionData.hook";
-import { loadItemTypes } from "@/components/apps/product/attribute/create/AttributeLinkSettings.server-action";
-import { useFormikContext } from "formik";
-import { useSyncedRef } from "@/utils/hooks/useSyncedRef.hook";
-import Select from "@/components/universals/forms/Select";
-import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
+import { useFormikContext } from 'formik';
+import type React from 'react';
+import { useEffect, useMemo } from 'react';
+import { loadItemTypes } from '@/components/apps/product/attribute/create/AttributeLinkSettings.server-action';
+import Select from '@/components/universals/forms/Select';
+import SimpleFieldsetRow from '@/components/universals/forms/SimpleFieldsetRow.component';
+import { useServerActionData } from '@/utils/hooks/useServerActionData.hook';
+import { useSyncedRef } from '@/utils/hooks/useSyncedRef.hook';
 
 type AttributeLinkSettingsProps = {
   catalogId: string;
 };
 
-const AttributeLinkSettings: React.FunctionComponent<AttributeLinkSettingsProps> = ({
-  catalogId,
-}) => {
+const AttributeLinkSettings: React.FunctionComponent<
+  AttributeLinkSettingsProps
+> = ({ catalogId }) => {
   const { data, isLoading } = useServerActionData(loadItemTypes, [catalogId]);
 
   const formikContext = useFormikContext();
@@ -24,14 +25,22 @@ const AttributeLinkSettings: React.FunctionComponent<AttributeLinkSettingsProps>
       return;
     }
 
-    const currentLoadingData = formikStatusRef.current?.loadingData ? [...formikStatusRef.current.loadingData].filter(s => s !== 'attribute.link') : [];
+    const currentLoadingData = formikStatusRef.current?.loadingData
+      ? [...formikStatusRef.current.loadingData].filter(
+          (s) => s !== 'attribute.link',
+        )
+      : [];
 
     currentLoadingData.push('attribute.link');
 
     formikContext.setStatus({ loadingData: currentLoadingData });
 
     return () => {
-      const currentLoadingData = formikStatusRef.current?.loadingData ? [...formikStatusRef.current.loadingData].filter(s => s !== 'attribute.link') : [];
+      const currentLoadingData = formikStatusRef.current?.loadingData
+        ? [...formikStatusRef.current.loadingData].filter(
+            (s) => s !== 'attribute.link',
+          )
+        : [];
 
       formikContext.setStatus({ loadingData: currentLoadingData });
     };
@@ -57,18 +66,12 @@ const AttributeLinkSettings: React.FunctionComponent<AttributeLinkSettingsProps>
     return (data ?? []).map((itemType) => ({
       label: itemType.name,
       value: itemType.id,
-    }))
+    }));
   }, [data]);
 
   return (
     <SimpleFieldsetRow label="ItemType">
-      {(id) => (
-        <Select
-          id={id}
-          name="itemTypeId"
-          values={values}
-        />
-      )}
+      {(id) => <Select id={id} name="itemTypeId" values={values} />}
     </SimpleFieldsetRow>
   );
 };

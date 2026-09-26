@@ -1,17 +1,20 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const ImageEditorServerAppDefinition: AppDefinitionType = {
   name: 'Image Editor',
   basePath: '/image-editor-server',
-  navigation: [{
-    name: 'Übersicht',
-    path: '/',
-    icon: 'layer-group',
-  }, {
-    name: 'Projekte',
-    path: '/project',
-    icon: 'project-diagram',
-  }],
+  navigation: [
+    {
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    },
+    {
+      name: 'Projekte',
+      path: '/project',
+      icon: 'project-diagram',
+    },
+  ],
   routes: {
     '/project{/*path}': {
       navigation: [
@@ -29,7 +32,10 @@ export const ImageEditorServerAppDefinition: AppDefinitionType = {
         },
         {
           name: 'Versionen',
-          path: { $type: 'jsonata', value: "'/project/' & params.projectId & '/version'" },
+          path: {
+            $type: 'jsonata',
+            value: "'/project/' & params.projectId & '/version'",
+          },
           icon: 'code-branch',
         },
       ],
@@ -38,22 +44,37 @@ export const ImageEditorServerAppDefinition: AppDefinitionType = {
       navigation: [
         {
           name: 'Zurück zu Versionen',
-          path: { $type: 'jsonata', value: "'/project/' & params.projectId & '/version'" },
+          path: {
+            $type: 'jsonata',
+            value: "'/project/' & params.projectId & '/version'",
+          },
           icon: 'arrow-left',
         },
         {
           name: 'Version',
-          path: { $type: 'jsonata', value: "'/project/' & params.projectId & '/version/' & params.versionId" },
+          path: {
+            $type: 'jsonata',
+            value:
+              "'/project/' & params.projectId & '/version/' & params.versionId",
+          },
           icon: 'code-branch',
         },
         {
           name: 'Parameter',
-          path: { $type: 'jsonata', value: "'/project/' & params.projectId & '/version/' & params.versionId & '/parameter'" },
+          path: {
+            $type: 'jsonata',
+            value:
+              "'/project/' & params.projectId & '/version/' & params.versionId & '/parameter'",
+          },
           icon: 'sliders',
         },
         {
           name: 'Ebenen',
-          path: { $type: 'jsonata', value: "'/project/' & params.projectId & '/version/' & params.versionId & '/layers'" },
+          path: {
+            $type: 'jsonata',
+            value:
+              "'/project/' & params.projectId & '/version/' & params.versionId & '/layers'",
+          },
           icon: 'layer-group',
         },
       ],

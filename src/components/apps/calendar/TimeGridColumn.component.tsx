@@ -1,8 +1,8 @@
-import React from 'react';
-import Link from 'next/link';
 import clsx from 'clsx';
-import { TTimeGridBlock, GRID_HEIGHT_PX } from './timeGrid.utils';
+import Link from 'next/link';
+import type React from 'react';
 import styles from './TimeGrid.module.scss';
+import { GRID_HEIGHT_PX, type TTimeGridBlock } from './timeGrid.utils';
 
 type TimeGridColumnProps = {
   blocks: TTimeGridBlock[];
@@ -31,15 +31,21 @@ const TimeGridColumn: React.FunctionComponent<TimeGridColumnProps> = ({
         'repeating-linear-gradient(to bottom, var(--hour-line-color) 0, var(--hour-line-color) 1px, transparent 1px, transparent calc(100% / 24))',
     }}
   >
-    {nowTopPercent !== null && <div className={styles.nowLine} style={{ top: `${nowTopPercent}%` }} />}
+    {nowTopPercent !== null && (
+      <div className={styles.nowLine} style={{ top: `${nowTopPercent}%` }} />
+    )}
     {blocks.map((block) => {
-      const cancelled = block.instance.isException && block.instance.exceptionType === 'cancelled';
+      const cancelled =
+        block.instance.isException &&
+        block.instance.exceptionType === 'cancelled';
       const widthPercent = 100 / block.columnCount;
 
       return (
         <Link
           key={block.instance.id}
-          href={eventHref(block.instance.recurringInstanceOf ?? block.instance.id)}
+          href={eventHref(
+            block.instance.recurringInstanceOf ?? block.instance.id,
+          )}
           className={clsx(styles.block, cancelled && styles.blockCancelled)}
           style={{
             top: `${block.topPercent}%`,
@@ -50,9 +56,11 @@ const TimeGridColumn: React.FunctionComponent<TimeGridColumnProps> = ({
           title={block.instance.title ?? undefined}
         >
           <span className={styles.blockTime}>
-            {new Date(block.instance.startAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
-          </span>
-          {' '}
+            {new Date(block.instance.startAt).toLocaleTimeString('de-DE', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </span>{' '}
           <span>{block.instance.title || '(ohne Titel)'}</span>
         </Link>
       );

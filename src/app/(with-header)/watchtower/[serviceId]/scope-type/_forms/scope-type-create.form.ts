@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const SCOPE_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -34,14 +34,16 @@ export const SCOPE_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
   ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "scopeDataTypeId": "", "name": "", "key": "", "scoreFactor": "", "externalId": "" }',
+    value:
+      '{ "scopeDataTypeId": "", "name": "", "key": "", "scoreFactor": "", "externalId": "" }',
   },
   endpoint: {
     path: '/v1/scope-types',
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "scopeDataTypeId": form.scopeDataTypeId, "name": form.name, "key": form.key, "scoreFactor": form.scoreFactor, "externalId": form.externalId != "" ? form.externalId : null }',
+      value:
+        '{ "scopeDataTypeId": form.scopeDataTypeId, "name": form.name, "key": form.key, "scoreFactor": form.scoreFactor, "externalId": form.externalId != "" ? form.externalId : null }',
     },
   },
   dataSources: {

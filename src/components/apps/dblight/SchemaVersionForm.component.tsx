@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import { Form, Formik, type FormikHelpers } from 'formik';
 import dynamic from 'next/dynamic';
-import { Form, Formik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/universals/forms/Button';
+import type React from 'react';
+import { useCallback } from 'react';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
 import { createSchemaVersionAction } from './SchemaVersionForm.server-action';
 
 // See RecordForm.component.tsx for why this must be `ssr: false`.
@@ -42,7 +43,10 @@ const SchemaVersionForm: React.FunctionComponent<SchemaVersionFormProps> = ({
   const openDialog = useOpenDialog();
 
   const handleSubmit = useCallback(
-    async (values: SchemaVersionFormValues, helpers: FormikHelpers<SchemaVersionFormValues>) => {
+    async (
+      values: SchemaVersionFormValues,
+      helpers: FormikHelpers<SchemaVersionFormValues>,
+    ) => {
       let schema: Record<string, unknown>;
       try {
         schema = JSON.parse(values.schema);
@@ -78,19 +82,18 @@ const SchemaVersionForm: React.FunctionComponent<SchemaVersionFormProps> = ({
     >
       <Form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <p>
-          Nur abwärtskompatible Änderungen werden akzeptiert (z. B. neue optionale Felder,
-          neue Default-Werte, zusätzliche Enum-Werte). Der Server prüft das neue Schema gegen
-          jeden bestehenden Eintrag der Collection und lehnt die Version ab, sobald auch nur
-          ein Eintrag dadurch ungültig würde.
+          Nur abwärtskompatible Änderungen werden akzeptiert (z. B. neue
+          optionale Felder, neue Default-Werte, zusätzliche Enum-Werte). Der
+          Server prüft das neue Schema gegen jeden bestehenden Eintrag der
+          Collection und lehnt die Version ab, sobald auch nur ein Eintrag
+          dadurch ungültig würde.
         </p>
         <div>
           <div style={{ marginBottom: '0.5rem' }}>JSON Schema</div>
           <JsonEditor name="schema" />
         </div>
         <div>
-          <Button type="submit">
-            Neue Schema-Version veröffentlichen
-          </Button>
+          <Button type="submit">Neue Schema-Version veröffentlichen</Button>
         </div>
       </Form>
     </Formik>

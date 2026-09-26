@@ -1,4 +1,4 @@
-import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
+import type { EContentType } from '@/constants/apps/customer-communication/content-type.enum';
 
 export type TThread = {
   id: string;
@@ -10,7 +10,7 @@ export type TThread = {
   communicationProvider: {
     id: string;
     meta?: Record<string, unknown>;
-  }
+  };
 };
 
 export type TMessage = {

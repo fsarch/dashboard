@@ -1,6 +1,6 @@
 // src/main.d.ts
 
-declare module "@point-of-sale/webusb-receipt-printer" {
+declare module '@point-of-sale/webusb-receipt-printer' {
   declare class EventEmitter {
     on(event: string, listener: (...args: any[]) => void): this;
 
@@ -17,8 +17,7 @@ declare module "@point-of-sale/webusb-receipt-printer" {
 
   declare const DeviceProfiles: DeviceProfile[];
 
-  declare class ReceiptPrinterDriver {
-  }
+  declare class ReceiptPrinterDriver {}
 
   declare class USBDevice {
     vendorId: number;
@@ -49,7 +48,10 @@ declare module "@point-of-sale/webusb-receipt-printer" {
       }>;
     };
 
-    transferIn(endpointNumber: number, length: number): Promise<USBInTransferResult>;
+    transferIn(
+      endpointNumber: number,
+      length: number,
+    ): Promise<USBInTransferResult>;
 
     transferOut(endpointNumber: number, data: BufferSource): Promise<any>;
   }
@@ -71,16 +73,19 @@ declare module "@point-of-sale/webusb-receipt-printer" {
 
     print(command: BufferSource): Promise<void>;
 
-    addEventListener(event: 'connected', listener: (info: {
-      type: 'usb';
-      manufacturerName?: string;
-      productName?: string;
-      serialNumber?: string;
-      vendorId: number;
-      productId: number;
-      language?: string;
-      codepageMapping?: any;
-    }) => void): void;
+    addEventListener(
+      event: 'connected',
+      listener: (info: {
+        type: 'usb';
+        manufacturerName?: string;
+        productName?: string;
+        serialNumber?: string;
+        vendorId: number;
+        productId: number;
+        language?: string;
+        codepageMapping?: any;
+      }) => void,
+    ): void;
     addEventListener(event: 'disconnected', listener: () => void): void;
     addEventListener(event: 'data', listener: (data: DataView) => void): void;
     addEventListener(event: string, listener: (...args: any[]) => void): void;

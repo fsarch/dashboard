@@ -1,4 +1,4 @@
-import { TExpandedEventDto } from '@/services/calendar/calendar.type';
+import type { TExpandedEventDto } from '@/services/calendar/calendar.type';
 
 // Shared layout engine for the day/week time-grid views: turns a list of event instances into
 // percentage-positioned blocks against a 0-24h vertical scale, splitting time-overlapping
@@ -32,13 +32,22 @@ type TClippedEntry = {
 
 // Lays out one day's worth of instances (already the caller's responsibility to pick the right
 // day's instances - see the per-day bucketing in the week view) into top/height/column positions.
-export function layoutDayInstances(instances: TExpandedEventDto[], dayStart: Date): TTimeGridBlock[] {
-  const midnight = new Date(dayStart.getFullYear(), dayStart.getMonth(), dayStart.getDate()).getTime();
+export function layoutDayInstances(
+  instances: TExpandedEventDto[],
+  dayStart: Date,
+): TTimeGridBlock[] {
+  const midnight = new Date(
+    dayStart.getFullYear(),
+    dayStart.getMonth(),
+    dayStart.getDate(),
+  ).getTime();
 
   const clipped: TClippedEntry[] = instances
     .map((instance) => {
       const startMs = new Date(instance.startAt).getTime();
-      const endMs = instance.endAt ? new Date(instance.endAt).getTime() : startMs + DEFAULT_DURATION_MINUTES * 60_000;
+      const endMs = instance.endAt
+        ? new Date(instance.endAt).getTime()
+        : startMs + DEFAULT_DURATION_MINUTES * 60_000;
 
       return {
         instance,
@@ -48,7 +57,10 @@ export function layoutDayInstances(instances: TExpandedEventDto[], dayStart: Dat
     })
     // Drop instances that don't actually intersect this day (e.g. a multi-day event bucketed here
     // by its start day but the caller still passed leftovers, or a bad/negative duration).
-    .filter(({ rawStart, rawEnd }) => rawEnd > 0 && rawStart < MINUTES_PER_DAY && rawEnd > rawStart)
+    .filter(
+      ({ rawStart, rawEnd }) =>
+        rawEnd > 0 && rawStart < MINUTES_PER_DAY && rawEnd > rawStart,
+    )
     .map(({ instance, rawStart, rawEnd }) => {
       const start = Math.min(Math.max(rawStart, 0), MINUTES_PER_DAY);
       const end = Math.min(Math.max(rawEnd, 0), MINUTES_PER_DAY);
@@ -113,7 +125,11 @@ export function layoutDayInstances(instances: TExpandedEventDto[], dayStart: Dat
 // or null if that day isn't today.
 export function nowLinePercent(dayStart: Date): number | null {
   const now = new Date();
-  const midnight = new Date(dayStart.getFullYear(), dayStart.getMonth(), dayStart.getDate());
+  const midnight = new Date(
+    dayStart.getFullYear(),
+    dayStart.getMonth(),
+    dayStart.getDate(),
+  );
   const diffMinutes = (now.getTime() - midnight.getTime()) / 60_000;
 
   if (diffMinutes < 0 || diffMinutes >= MINUTES_PER_DAY) {
@@ -123,4 +139,7 @@ export function nowLinePercent(dayStart: Date): number | null {
   return (diffMinutes / MINUTES_PER_DAY) * 100;
 }
 
-export const HOUR_LABELS = Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, '0')}:00`);
+export const HOUR_LABELS = Array.from(
+  { length: 24 },
+  (_, hour) => `${String(hour).padStart(2, '0')}:00`,
+);

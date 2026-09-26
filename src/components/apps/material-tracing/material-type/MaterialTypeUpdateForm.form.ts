@@ -1,24 +1,29 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const MATERIAL_TYPE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'hint',
-    $type: 'text',
-    label: 'Hinweis',
-  }, {
-    id: 'externalId',
-    $type: 'text',
-    label: 'External Id',
-  }, {
-    id: 'archiveNow',
-    $type: 'checkbox',
-    label: 'Archiviert',
-    variant: 'toggle',
-  }],
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    },
+    {
+      id: 'hint',
+      $type: 'text',
+      label: 'Hinweis',
+    },
+    {
+      id: 'externalId',
+      $type: 'text',
+      label: 'External Id',
+    },
+    {
+      id: 'archiveNow',
+      $type: 'checkbox',
+      label: 'Archiviert',
+      variant: 'toggle',
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
     value: `{ 
@@ -34,7 +39,7 @@ export const MATERIAL_TYPE_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   endpoint: {
     path: {
       $type: 'jsonata',
-      value: "'/v1/material-types/' & args.materialType.id"
+      value: "'/v1/material-types/' & args.materialType.id",
     },
     method: 'PATCH',
     body: {

@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { TRecordDto } from '@/services/dblight/dblight.type';
-import { datetimeUtils } from '@/utils/datetime.utils';
-import Button from '@/components/universals/forms/Button';
+import type React from 'react';
+import { useCallback } from 'react';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
 import { DialogResult } from '@/components/universals/dialog/dialog.enum';
-import RecordForm from './RecordForm.component';
+import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
+import type { TRecordDto } from '@/services/dblight/dblight.type';
+import { datetimeUtils } from '@/utils/datetime.utils';
 import { deleteRecordAction } from './RecordActions.server-action';
+import RecordForm from './RecordForm.component';
 
 type RecordDetailProps = {
   record: TRecordDto;
@@ -54,26 +55,65 @@ const RecordDetail: React.FunctionComponent<RecordDetailProps> = ({
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <tbody>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               ID
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               <code>{record.id}</code>
             </td>
           </tr>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               Erstellt
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               {datetimeUtils.formatDate(record.createdAt)}
             </td>
           </tr>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               Zuletzt geändert
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               {datetimeUtils.formatDate(record.updatedAt)}
             </td>
           </tr>
@@ -91,10 +131,11 @@ const RecordDetail: React.FunctionComponent<RecordDetailProps> = ({
         <Button type="button" onClick={handleDelete} color="#d32f2f">
           Eintrag löschen
         </Button>
-        <Link href={`/dblight/${serviceId}/collection/${collectionId}/record`} passHref>
-          <Button type="button">
-            Zurück zur Liste
-          </Button>
+        <Link
+          href={`/dblight/${serviceId}/collection/${collectionId}/record`}
+          passHref
+        >
+          <Button type="button">Zurück zur Liste</Button>
         </Link>
       </div>
     </div>

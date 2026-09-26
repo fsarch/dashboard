@@ -1,12 +1,16 @@
 'use server';
 
-import { ListAttributeElementCreateDto } from "@/services/product/attribute.type";
-import { attributeService } from "@/services/product/attribute.service";
+import { attributeService } from '@/services/product/attribute.service';
+import type { ListAttributeElementCreateDto } from '@/services/product/attribute.type';
 
 export async function createListAttributeElement(
   catalogId: string,
   attributeId: string,
   createDto: ListAttributeElementCreateDto,
 ) {
-  await attributeService.createAttributeElement(catalogId, attributeId, createDto);
+  await attributeService.createAttributeElement(
+    catalogId,
+    attributeId,
+    createDto,
+  );
 }

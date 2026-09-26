@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
-import { AttributeDto, ImageAttributeDto } from "@/services/product/attribute.type";
-import { ItemImageAttributeDto } from "@/services/product/item-attribute.type";
-import Input from "@/components/universals/forms/Input";
-import { ImageInput } from "@/components/universals/forms/ImageInput";
-import TileList from "@/components/universals/tile-list/TileList";
-import { ImageListInput } from "@/components/universals/forms/ImageListInput";
+import type React from 'react';
+import { ImageInput } from '@/components/universals/forms/ImageInput';
+import { ImageListInput } from '@/components/universals/forms/ImageListInput';
+import Input from '@/components/universals/forms/Input';
+import TileList from '@/components/universals/tile-list/TileList';
+import {
+  AttributeDto,
+  type ImageAttributeDto,
+} from '@/services/product/attribute.type';
+import type { ItemImageAttributeDto } from '@/services/product/item-attribute.type';
 
 type ItemImageAttributeProps = {
   attribute: ImageAttributeDto;
@@ -14,15 +17,11 @@ type ItemImageAttributeProps = {
   catalogId: string;
 };
 
-export const ItemImageAttribute: React.FunctionComponent<ItemImageAttributeProps> = ({
-  attribute,
-  value,
-  catalogId,
-}) => {
+export const ItemImageAttribute: React.FunctionComponent<
+  ItemImageAttributeProps
+> = ({ attribute, value, catalogId }) => {
   return (
-    <TileList
-      orientation="left"
-    >
+    <TileList orientation="left">
       {value?.value?.map((value, index) => (
         <ImageListInput
           key={index}

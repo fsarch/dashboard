@@ -1,19 +1,23 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import RecordDetail from '@/components/apps/dblight/RecordDetail.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { dblightService } from '@/services/dblight/dblight.service';
-import RecordDetail from '@/components/apps/dblight/RecordDetail.component';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
 type RecordPageProps = {
-  params: Promise<{ serviceId: string; collectionId: string; recordId: string }>;
+  params: Promise<{
+    serviceId: string;
+    collectionId: string;
+    recordId: string;
+  }>;
 };
 
 export default async function RecordPage({ params }: RecordPageProps) {
@@ -22,7 +26,9 @@ export default async function RecordPage({ params }: RecordPageProps) {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -39,12 +45,20 @@ export default async function RecordPage({ params }: RecordPageProps) {
     return notFound();
   }
 
-  const record = await dblightService.getRecord(collectionId, recordId, serviceId);
+  const record = await dblightService.getRecord(
+    collectionId,
+    recordId,
+    serviceId,
+  );
 
   return (
     <DefaultPage>
       <Section name={`Eintrag: ${record.id}`}>
-        <RecordDetail record={record} serviceId={serviceId} collectionId={collectionId} />
+        <RecordDetail
+          record={record}
+          serviceId={serviceId}
+          collectionId={collectionId}
+        />
       </Section>
     </DefaultPage>
   );

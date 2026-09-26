@@ -1,11 +1,11 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import Button from '@/components/universals/forms/Button';
 import { colors } from '@/app/_styles/colors';
-import { fileServerApiService } from '@/services/file-server/file-server-api.service';
+import Button from '@/components/universals/forms/Button';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
 import { TAG_CREATE_FORM } from '@/services/dam/dam.forms';
+import { fileServerApiService } from '@/services/file-server/file-server-api.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -30,7 +30,9 @@ export default async function DamTagsPage() {
                   <td>
                     <code>{tag.key}</code>
                   </td>
-                  <td>{new Date(tag.creationTime).toLocaleDateString('de-DE')}</td>
+                  <td>
+                    {new Date(tag.creationTime).toLocaleDateString('de-DE')}
+                  </td>
                   <td>
                     <form
                       action={async () => {

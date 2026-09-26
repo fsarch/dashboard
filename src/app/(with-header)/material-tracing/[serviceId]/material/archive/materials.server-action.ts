@@ -1,8 +1,8 @@
 'use server';
 
 import { materialService } from '@/services/material-tracing/material.service';
-import { TMaterial } from '@/services/material-tracing/material.type';
-import { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import type { TMaterial } from '@/services/material-tracing/material.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 type MaterialWithUrl = TMaterial & {
@@ -33,4 +33,3 @@ export async function loadArchivedMaterialsAction(options?: {
     metadata: materialsResult.metadata,
   };
 }
-

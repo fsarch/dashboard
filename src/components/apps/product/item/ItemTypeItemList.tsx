@@ -1,11 +1,11 @@
-import React from 'react';
-import { ItemTypeDto } from "@/services/product/item-type.type";
-import { ItemDto } from "@/services/product/item.type";
-import Link from "next/link";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import ListItem from "@/components/universals/list/ListItem";
-import List from "@/components/universals/list/List";
-import Section from "@/components/universals/section/Section";
+import Link from 'next/link';
+import type React from 'react';
+import List from '@/components/universals/list/List';
+import ListItem from '@/components/universals/list/ListItem';
+import Section from '@/components/universals/section/Section';
+import type { ItemDto } from '@/services/product/item.type';
+import type { ItemTypeDto } from '@/services/product/item-type.type';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 type ItemTypeItemListProps = {
   itemType: ItemTypeDto;
@@ -23,18 +23,16 @@ const ItemTypeItemList: React.FunctionComponent<ItemTypeItemListProps> = ({
   }
 
   return (
-    <Section
-      name={itemType.name}
-    >
+    <Section name={itemType.name}>
       <List>
         {items?.map(async (item) => (
           <Link
             key={item.id}
-            href={await getServiceLocalUrl(`/catalog/${catalogId}/item/${item.id}`)}
+            href={
+              await getServiceLocalUrl(`/catalog/${catalogId}/item/${item.id}`)
+            }
           >
-            <ListItem>
-              {item.name}
-            </ListItem>
+            <ListItem>{item.name}</ListItem>
           </Link>
         ))}
       </List>

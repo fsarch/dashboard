@@ -1,36 +1,40 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'materialTypeId',
-    $type: 'select',
-    label: 'Material Type',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'materialTypes',
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
     },
-  }, {
-    id: 'imageRef',
-    $type: 'image-server-upload',
-    label: 'Bild',
-    imageServerAdminUrl: {
-      $type: 'datasource',
-      value: 'imageServerAdminUrl',
+    {
+      id: 'materialTypeId',
+      $type: 'select',
+      label: 'Material Type',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'materialTypes',
+      },
     },
-    transformResponse: {
-      $type: 'jsonata',
-      value: '{ "body": body.id }',
+    {
+      id: 'imageRef',
+      $type: 'image-server-upload',
+      label: 'Bild',
+      imageServerAdminUrl: {
+        $type: 'datasource',
+        value: 'imageServerAdminUrl',
+      },
+      transformResponse: {
+        $type: 'jsonata',
+        value: '{ "body": body.id }',
+      },
+      preferCapture: 'environment',
     },
-    preferCapture: 'environment',
-  }],
+  ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "materialTypeId": dataSource.materialTypes[0].id }'
+    value: '{ "name": "", "materialTypeId": dataSource.materialTypes[0].id }',
   },
   endpoint: {
     path: '/v1/materials',
@@ -40,13 +44,15 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
       value: 'form',
     },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: "service.localPath & '/material/' & response.body.id",
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: "service.localPath & '/material/' & response.body.id",
+      },
     },
-  }],
+  ],
   dataSources: {
     materialTypes: {
       $type: 'fetch',
@@ -54,7 +60,8 @@ export const MATERIAL_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
       },
     },
     imageServerAdminUrl: {

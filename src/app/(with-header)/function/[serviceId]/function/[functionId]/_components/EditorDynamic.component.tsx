@@ -7,4 +7,3 @@ const EditorDynamic = dynamic(() => import('./Editor.component'), {
 });
 
 export default EditorDynamic;
-

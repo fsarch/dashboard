@@ -1,2 +1,2 @@
-export * from './MetricTypeCreateForm.component';
 export * from './MetricCreateForm.component';
+export * from './MetricTypeCreateForm.component';

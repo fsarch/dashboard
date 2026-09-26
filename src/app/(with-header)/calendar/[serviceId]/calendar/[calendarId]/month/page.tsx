@@ -1,26 +1,26 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
-import { headers } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
 import clsx from 'clsx';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import { headers } from 'next/headers';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { calendarService } from '@/services/calendar/calendar.service';
+import type { TExpandedEventDto } from '@/services/calendar/calendar.type';
 import {
+  currentMonthRange,
+  dayKey,
+  endOfWeekSunday,
   loadOrNotFound,
   monthToRange,
-  currentMonthRange,
-  toMonthInputValue,
   shiftMonth,
   startOfWeekMonday,
-  endOfWeekSunday,
-  dayKey,
+  toMonthInputValue,
 } from '@/services/calendar/calendar.utils';
-import { TExpandedEventDto } from '@/services/calendar/calendar.type';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import styles from './MonthView.module.scss';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -44,7 +44,9 @@ export default async function MonthViewPage({
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -55,16 +57,22 @@ export default async function MonthViewPage({
   const canAccessService = await uacUtils.hasAppPermission(
     EServiceType.CALENDAR,
     serviceId,
-    accessToken
+    accessToken,
   );
   if (!canAccessService) {
     return notFound();
   }
 
-  const calendar = await loadOrNotFound(calendarService.getCalendarById(calendarId, serviceId));
+  const calendar = await loadOrNotFound(
+    calendarService.getCalendarById(calendarId, serviceId),
+  );
 
-  const monthRange = (monthParam && monthToRange(monthParam)) || currentMonthRange();
-  const month = monthParam && monthToRange(monthParam) ? monthParam : toMonthInputValue(monthRange.from);
+  const monthRange =
+    (monthParam && monthToRange(monthParam)) || currentMonthRange();
+  const month =
+    monthParam && monthToRange(monthParam)
+      ? monthParam
+      : toMonthInputValue(monthRange.from);
 
   const gridStart = startOfWeekMonday(monthRange.from);
   const gridEnd = endOfWeekSunday(monthRange.to);
@@ -73,7 +81,7 @@ export default async function MonthViewPage({
     calendarId,
     gridStart.toISOString(),
     gridEnd.toISOString(),
-    serviceId
+    serviceId,
   );
 
   const instancesByDay = new Map<string, TExpandedEventDto[]>();
@@ -84,11 +92,17 @@ export default async function MonthViewPage({
     instancesByDay.set(key, dayInstances);
   }
   for (const dayInstances of instancesByDay.values()) {
-    dayInstances.sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
+    dayInstances.sort(
+      (a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime(),
+    );
   }
 
   const days: Date[] = [];
-  for (let cursor = new Date(gridStart); cursor <= gridEnd; cursor.setDate(cursor.getDate() + 1)) {
+  for (
+    let cursor = new Date(gridStart);
+    cursor <= gridEnd;
+    cursor.setDate(cursor.getDate() + 1)
+  ) {
     days.push(new Date(cursor));
   }
   const weeks: Date[][] = [];
@@ -97,29 +111,42 @@ export default async function MonthViewPage({
   }
 
   const today = dayKey(new Date());
-  const monthLabel = monthRange.from.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+  const monthLabel = monthRange.from.toLocaleDateString('de-DE', {
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <DefaultPage>
       <Section name={`Monatsansicht: ${calendar.name}`}>
         <div className={styles.header}>
           <div className={styles.nav}>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${shiftMonth(month, -1)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${shiftMonth(month, -1)}`}
+            >
               « Vorheriger Monat
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${toMonthInputValue(new Date())}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${toMonthInputValue(new Date())}`}
+            >
               Heute
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${shiftMonth(month, 1)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${shiftMonth(month, 1)}`}
+            >
               Nächster Monat »
             </Link>
           </div>
           <div className={styles.title}>{monthLabel}</div>
           <div className={styles.nav}>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${toMonthInputValue(monthRange.from)}-01`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${toMonthInputValue(monthRange.from)}-01`}
+            >
               Wochenansicht
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/instances?month=${month}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/instances?month=${month}`}
+            >
               Listenansicht
             </Link>
           </div>
@@ -127,65 +154,97 @@ export default async function MonthViewPage({
 
         <div className={styles.weekdays}>
           {WEEKDAY_LABELS.map((label) => (
-            <div key={label} className={styles.weekday}>{label}</div>
+            <div key={label} className={styles.weekday}>
+              {label}
+            </div>
           ))}
         </div>
 
         <div className={styles.grid}>
-          {weeks.flatMap((week) => week.map((day) => {
-            const key = dayKey(day);
-            const isCurrentMonth = day.getMonth() === monthRange.from.getMonth();
-            const isToday = key === today;
-            const dayInstances = instancesByDay.get(key) ?? [];
-            const visibleInstances = dayInstances.slice(0, MAX_VISIBLE_EVENTS_PER_DAY);
-            const hiddenCount = dayInstances.length - visibleInstances.length;
+          {weeks.flatMap((week) =>
+            week.map((day) => {
+              const key = dayKey(day);
+              const isCurrentMonth =
+                day.getMonth() === monthRange.from.getMonth();
+              const isToday = key === today;
+              const dayInstances = instancesByDay.get(key) ?? [];
+              const visibleInstances = dayInstances.slice(
+                0,
+                MAX_VISIBLE_EVENTS_PER_DAY,
+              );
+              const hiddenCount = dayInstances.length - visibleInstances.length;
 
-            const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 0, 0, 0);
-            const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 23, 59, 59);
+              const dayStart = new Date(
+                day.getFullYear(),
+                day.getMonth(),
+                day.getDate(),
+                0,
+                0,
+                0,
+              );
+              const dayEnd = new Date(
+                day.getFullYear(),
+                day.getMonth(),
+                day.getDate(),
+                23,
+                59,
+                59,
+              );
 
-            return (
-              <div
-                key={key}
-                className={clsx(styles.day, !isCurrentMonth && styles.dayOutside, isToday && styles.dayToday)}
-              >
-                <Link
-                  href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${key}`}
-                  className={styles.dayNumber}
+              return (
+                <div
+                  key={key}
+                  className={clsx(
+                    styles.day,
+                    !isCurrentMonth && styles.dayOutside,
+                    isToday && styles.dayToday,
+                  )}
                 >
-                  {isToday ? (
-                    <span className={styles.dayTodayNumber}>{day.getDate()}</span>
-                  ) : (
-                    day.getDate()
-                  )}
-                </Link>
-                <div className={styles.events}>
-                  {visibleInstances.map((instance) => (
-                    <Link
-                      key={instance.id}
-                      href={`/calendar/${serviceId}/calendar/${calendarId}/event/${instance.recurringInstanceOf ?? instance.id}`}
-                      className={clsx(
-                        styles.event,
-                        instance.isException && instance.exceptionType === 'cancelled' && styles.eventCancelled
-                      )}
-                      title={instance.title ?? undefined}
-                    >
-                      {new Date(instance.startAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
-                      {' '}
-                      {instance.title || '(ohne Titel)'}
-                    </Link>
-                  ))}
-                  {hiddenCount > 0 && (
-                    <Link
-                      href={`/calendar/${serviceId}/calendar/${calendarId}/instances?from=${encodeURIComponent(dayStart.toISOString())}&to=${encodeURIComponent(dayEnd.toISOString())}`}
-                      className={styles.more}
-                    >
-                      +{hiddenCount} weitere
-                    </Link>
-                  )}
+                  <Link
+                    href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${key}`}
+                    className={styles.dayNumber}
+                  >
+                    {isToday ? (
+                      <span className={styles.dayTodayNumber}>
+                        {day.getDate()}
+                      </span>
+                    ) : (
+                      day.getDate()
+                    )}
+                  </Link>
+                  <div className={styles.events}>
+                    {visibleInstances.map((instance) => (
+                      <Link
+                        key={instance.id}
+                        href={`/calendar/${serviceId}/calendar/${calendarId}/event/${instance.recurringInstanceOf ?? instance.id}`}
+                        className={clsx(
+                          styles.event,
+                          instance.isException &&
+                            instance.exceptionType === 'cancelled' &&
+                            styles.eventCancelled,
+                        )}
+                        title={instance.title ?? undefined}
+                      >
+                        {new Date(instance.startAt).toLocaleTimeString(
+                          'de-DE',
+                          { hour: '2-digit', minute: '2-digit' },
+                        )}{' '}
+                        {instance.title || '(ohne Titel)'}
+                      </Link>
+                    ))}
+                    {hiddenCount > 0 && (
+                      <Link
+                        href={`/calendar/${serviceId}/calendar/${calendarId}/instances?from=${encodeURIComponent(dayStart.toISOString())}&to=${encodeURIComponent(dayEnd.toISOString())}`}
+                        className={styles.more}
+                      >
+                        +{hiddenCount} weitere
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          }))}
+              );
+            }),
+          )}
         </div>
       </Section>
     </DefaultPage>

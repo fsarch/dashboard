@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback } from 'react';
-import { useRouter } from "next/navigation";
-import { useLocalPrinter } from "./LocalPrinter.context";
-import { PrintJobDto } from "@/services/printer/printer.type";
-import { executeAutoPrintJob } from "./LocalPrinter.utils";
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import type { PrintJobDto } from '@/services/printer/printer.type';
+import { useLocalPrinter } from './LocalPrinter.context';
+import { executeAutoPrintJob } from './LocalPrinter.utils';
 
 type AutoPrintMonitorProps = {
   printerId: string;
@@ -19,48 +20,55 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
   const router = useRouter();
   const processedJobsRef = useRef<Set<string>>(new Set());
 
-  const processNewJobs = useCallback(async (signal: AbortSignal) => {
-    if (!localPrinter?.autoPrint || !localPrinter.printer) {
-      return;
-    }
-
-    const executionId = crypto.randomUUID();
-
-    // Find new jobs that haven't been processed yet
-    const newJobs = jobs.filter(job =>
-      !processedJobsRef.current.has(job.id) &&
-      !job.printTime && // Not yet printed
-      job.data // Has printable data
-    );
-
-    for (const job of newJobs) {
-      try {
-        if (signal.aborted) {
-          console.log(`[${executionId}] Start execution`);
-          return;
-        }
-
-        if (processedJobsRef.current.has(job.id)) {
-          continue;
-        }
-
-        console.log(`[${executionId}] Auto-printing job ${job.id}...`);
-        processedJobsRef.current.add(job.id);
-        await executeAutoPrintJob(localPrinter, job);
-      } catch (error) {
-        console.error(`[${executionId}] Failed to auto-print job ${job.id}:`, error);
-        // Mark as processed to avoid infinite retry
-        processedJobsRef.current.add(job.id);
+  const processNewJobs = useCallback(
+    async (signal: AbortSignal) => {
+      if (!localPrinter?.autoPrint || !localPrinter.printer) {
+        return;
       }
-    }
 
-    console.log(`[${executionId}] End execution`);
+      const executionId = crypto.randomUUID();
 
-    await new Promise(resolve => setTimeout(resolve, 5000));
+      // Find new jobs that haven't been processed yet
+      const newJobs = jobs.filter(
+        (job) =>
+          !processedJobsRef.current.has(job.id) &&
+          !job.printTime && // Not yet printed
+          job.data, // Has printable data
+      );
 
-    // Refresh to show updated job status
-    router.refresh();
-  }, [localPrinter, jobs, router]);
+      for (const job of newJobs) {
+        try {
+          if (signal.aborted) {
+            console.log(`[${executionId}] Start execution`);
+            return;
+          }
+
+          if (processedJobsRef.current.has(job.id)) {
+            continue;
+          }
+
+          console.log(`[${executionId}] Auto-printing job ${job.id}...`);
+          processedJobsRef.current.add(job.id);
+          await executeAutoPrintJob(localPrinter, job);
+        } catch (error) {
+          console.error(
+            `[${executionId}] Failed to auto-print job ${job.id}:`,
+            error,
+          );
+          // Mark as processed to avoid infinite retry
+          processedJobsRef.current.add(job.id);
+        }
+      }
+
+      console.log(`[${executionId}] End execution`);
+
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      // Refresh to show updated job status
+      router.refresh();
+    },
+    [localPrinter, jobs, router],
+  );
 
   // Monitor for new jobs when auto-print is enabled
   useEffect(() => {
@@ -75,15 +83,17 @@ const AutoPrintMonitor: React.FunctionComponent<AutoPrintMonitorProps> = ({
 
     return () => {
       abortController.abort();
-    }
+    };
   }, [localPrinter?.autoPrint, jobs, processNewJobs]);
 
   // Clean up processed jobs list periodically to prevent memory leaks
   useEffect(() => {
     const cleanup = setInterval(() => {
-      const currentJobIds = new Set(jobs.map(job => job.id));
+      const currentJobIds = new Set(jobs.map((job) => job.id));
       processedJobsRef.current = new Set(
-        Array.from(processedJobsRef.current).filter(id => currentJobIds.has(id))
+        Array.from(processedJobsRef.current).filter((id) =>
+          currentJobIds.has(id),
+        ),
       );
     }, 60_000); // Clean up every minute
 

@@ -1,9 +1,15 @@
 'use client';
 
-import React, { CSSProperties, MouseEventHandler, PropsWithChildren, useMemo } from 'react';
 import clsx from 'clsx';
+import Color from 'color';
+import type React from 'react';
+import {
+  type CSSProperties,
+  type MouseEventHandler,
+  type PropsWithChildren,
+  useMemo,
+} from 'react';
 import styles from './Button.module.scss';
-import Color from "color";
 
 export type ButtonProps = PropsWithChildren<{
   name?: string;
@@ -32,7 +38,9 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     const disabledColor = Color(color).darken(0.5);
     const textColor = Color(color).isLight() ? '#000000' : '#FFFFFF';
     const hoverTextColor = Color(hoverColor).isLight() ? '#000000' : '#FFFFFF';
-    const disabledTextColor = Color(disabledColor).isLight() ? '#000000' : '#FFFFFF';
+    const disabledTextColor = Color(disabledColor).isLight()
+      ? '#000000'
+      : '#FFFFFF';
     const shadowRgb = Color(color).rgb().array().join(', ');
 
     return {

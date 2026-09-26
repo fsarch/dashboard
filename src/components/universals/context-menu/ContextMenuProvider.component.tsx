@@ -1,11 +1,20 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type React from 'react';
+import {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   ContextMenuProviderContext,
-  TContextMenuProviderContext,
-} from "@/components/universals/context-menu/ContextMenuProvider.context";
-import { TContextMenuComponent } from "@/components/universals/context-menu/contextMenu.type";
+  type TContextMenuProviderContext,
+} from '@/components/universals/context-menu/ContextMenuProvider.context';
+import type { TContextMenuComponent } from '@/components/universals/context-menu/contextMenu.type';
 import styles from './ContextMenuProvider.module.scss';
 
 type TActiveContextMenu = {
@@ -32,29 +41,35 @@ const ContextMenuProvider: React.FunctionComponent<PropsWithChildren> = ({
     setActiveMenu((current) => (current?.id === id ? null : current));
   }, []);
 
-  const openContextMenu = useCallback((
-    component: TContextMenuComponent<unknown>,
-    value: unknown,
-    event: React.MouseEvent,
-  ) => {
-    const id = crypto.randomUUID();
+  const openContextMenu = useCallback(
+    (
+      component: TContextMenuComponent<unknown>,
+      value: unknown,
+      event: React.MouseEvent,
+    ) => {
+      const id = crypto.randomUUID();
 
-    setActiveMenu({
-      id,
-      component,
-      value,
-      position: { x: event.clientX, y: event.clientY },
-    });
+      setActiveMenu({
+        id,
+        component,
+        value,
+        position: { x: event.clientX, y: event.clientY },
+      });
 
-    return {
-      id,
-      close: () => handleClose(id),
-    };
-  }, [handleClose]);
+      return {
+        id,
+        close: () => handleClose(id),
+      };
+    },
+    [handleClose],
+  );
 
-  const contextMenuProviderContext = useMemo((): TContextMenuProviderContext => ({
-    openContextMenu,
-  }), [openContextMenu]);
+  const contextMenuProviderContext = useMemo(
+    (): TContextMenuProviderContext => ({
+      openContextMenu,
+    }),
+    [openContextMenu],
+  );
 
   // Clamps the menu into the viewport once its rendered size is known - runs
   // before paint so there's no visible jump from the raw cursor position.
@@ -70,8 +85,14 @@ const ContextMenuProvider: React.FunctionComponent<PropsWithChildren> = ({
     }
 
     const { width, height } = element.getBoundingClientRect();
-    const x = Math.min(activeMenu.position.x, window.innerWidth - width - VIEWPORT_MARGIN);
-    const y = Math.min(activeMenu.position.y, window.innerHeight - height - VIEWPORT_MARGIN);
+    const x = Math.min(
+      activeMenu.position.x,
+      window.innerWidth - width - VIEWPORT_MARGIN,
+    );
+    const y = Math.min(
+      activeMenu.position.y,
+      window.innerHeight - height - VIEWPORT_MARGIN,
+    );
 
     setMenuStyle({
       left: Math.max(VIEWPORT_MARGIN, x),
@@ -111,7 +132,10 @@ const ContextMenuProvider: React.FunctionComponent<PropsWithChildren> = ({
           />
           <div ref={menuRef} className={styles.menu} style={menuStyle}>
             {Component ? (
-              <Component value={activeMenu.value} close={() => handleClose(activeMenu.id)} />
+              <Component
+                value={activeMenu.value}
+                close={() => handleClose(activeMenu.id)}
+              />
             ) : null}
           </div>
         </>

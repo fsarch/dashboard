@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { AttributeDto } from "@/services/product/attribute.type";
-import { Form, Formik } from "formik";
-import Input from "@/components/universals/forms/Input";
+import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
 import {
-  AttributeItemTypeSetDto,
-  updateSelection
-} from "@/components/apps/product/item-type/ItemTypeAttributeSelection.server-action";
-import Button from "@/components/universals/forms/Button";
-import Checkbox from "@/components/universals/forms/Checkbox";
-import { useRouter } from "next/navigation";
+  type AttributeItemTypeSetDto,
+  updateSelection,
+} from '@/components/apps/product/item-type/ItemTypeAttributeSelection.server-action';
+import Button from '@/components/universals/forms/Button';
+import Checkbox from '@/components/universals/forms/Checkbox';
+import Input from '@/components/universals/forms/Input';
+import type { AttributeDto } from '@/services/product/attribute.type';
 
 type ItemTypeAttributeSelectionProps = {
   catalogId: string;
@@ -19,19 +20,19 @@ type ItemTypeAttributeSelectionProps = {
   selectedAttributeIds: Array<string>;
 };
 
-const ItemTypeAttributeSelection: React.FunctionComponent<ItemTypeAttributeSelectionProps> = ({
-  catalogId,
-  itemTypeId,
-  attributes,
-  selectedAttributeIds,
-}) => {
+const ItemTypeAttributeSelection: React.FunctionComponent<
+  ItemTypeAttributeSelectionProps
+> = ({ catalogId, itemTypeId, attributes, selectedAttributeIds }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (values: AttributeItemTypeSetDto) => {
-    await updateSelection(catalogId, itemTypeId, values);
+  const handleSubmit = useCallback(
+    async (values: AttributeItemTypeSetDto) => {
+      await updateSelection(catalogId, itemTypeId, values);
 
-    router.refresh();
-  }, [catalogId, itemTypeId, router]);
+      router.refresh();
+    },
+    [catalogId, itemTypeId, router],
+  );
 
   return (
     <Formik
@@ -42,9 +43,7 @@ const ItemTypeAttributeSelection: React.FunctionComponent<ItemTypeAttributeSelec
     >
       <Form>
         {attributes.map((attribute: AttributeDto) => (
-          <div
-            key={attribute.id}
-          >
+          <div key={attribute.id}>
             <label>
               <Checkbox
                 name="attributes"
@@ -55,9 +54,7 @@ const ItemTypeAttributeSelection: React.FunctionComponent<ItemTypeAttributeSelec
             </label>
           </div>
         ))}
-        <Button type="submit">
-          Speichern
-        </Button>
+        <Button type="submit">Speichern</Button>
       </Form>
     </Formik>
   );

@@ -1,48 +1,48 @@
-import { fetchService } from "@/utils/fetchService";
-import {
+import { fetchService } from '@/utils/fetchService';
+import type {
+  TAggregationModeCreateDto,
+  TAggregationModeDto,
+  TAggregationModeReadDto,
+  TAggregationModeTypeDto,
+  TAggregationModeUpdateDto,
+  TEventCreateDto,
+  TEventDto,
+  TEventScopeDto,
+  TEventTypeCreateDto,
+  TEventTypeDto,
+  TIpAsnDataCreateBodyDto,
+  TIpAsnDataDto,
+  TIpAsnDatasourceCreateDto,
+  TIpAsnDatasourceDto,
+  TPaginationParams,
+  TPaginationResultDto,
+  TScopeDataTypeCreateDto,
+  TScopeDataTypeDto,
+  TScopeDto,
+  TScopeSpecDto,
+  TScopeTypeCreateDto,
   TScopeTypeDto,
   TScopeTypeReadDto,
-  TScopeTypeCreateDto,
-  TScopeDataTypeDto,
-  TScopeDataTypeCreateDto,
-  TIpAsnDatasourceDto,
-  TIpAsnDatasourceCreateDto,
-  TIpAsnDataDto,
-  TIpAsnDataCreateBodyDto,
-  TEventTypeDto,
-  TEventTypeCreateDto,
-  TEventDto,
-  TEventCreateDto,
-  TAggregationModeDto,
-  TAggregationModeTypeDto,
-  TAggregationModeReadDto,
-  TAggregationModeCreateDto,
-  TAggregationModeUpdateDto,
-  TScopeDto,
-  TEventScopeDto,
-  TScopeSpecDto,
   TScoreCalculateRequestDto,
   TScoreCalculationResultDto,
-  TPaginationResultDto,
-  TPaginationParams,
-} from "./watchtower.type";
+} from './watchtower.type';
 
 // Scope Data Types
 const listScopeDataTypes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TScopeDataTypeDto>> => {
   const response = await fetchService(
     `/v1/scope-data-types?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getScopeDataTypeById = async (
   id: number,
-  serviceId: string
+  serviceId: string,
 ): Promise<TScopeDataTypeDto> => {
   const response = await fetchService(`/v1/scope-data-types/${id}`, undefined, {
     serviceId,
@@ -52,32 +52,36 @@ const getScopeDataTypeById = async (
 
 const createScopeDataType = async (
   dto: TScopeDataTypeCreateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TScopeDataTypeDto> => {
-  const response = await fetchService(`/v1/scope-data-types`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  const response = await fetchService(
+    `/v1/scope-data-types`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
   return response.json();
 };
 
 // Scope Types
 const listScopeTypes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TScopeTypeDto>> => {
   const response = await fetchService(
     `/v1/scope-types?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getScopeTypeById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TScopeTypeReadDto> => {
   const response = await fetchService(`/v1/scope-types/${id}`, undefined, {
     serviceId,
@@ -87,47 +91,59 @@ const getScopeTypeById = async (
 
 const createScopeType = async (
   dto: TScopeTypeCreateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
-  await fetchService(`/v1/scope-types`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  await fetchService(
+    `/v1/scope-types`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
 };
 
 // IP-ASN Datasources
 const listIpAsnDatasources = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TIpAsnDatasourceDto>> => {
   const response = await fetchService(
     `/v1/ip-asn/datasources?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getIpAsnDatasourceById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TIpAsnDatasourceDto> => {
-  const response = await fetchService(`/v1/ip-asn/datasources/${id}`, undefined, {
-    serviceId,
-  });
+  const response = await fetchService(
+    `/v1/ip-asn/datasources/${id}`,
+    undefined,
+    {
+      serviceId,
+    },
+  );
   return response.json();
 };
 
 const createIpAsnDatasource = async (
   dto: TIpAsnDatasourceCreateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TIpAsnDatasourceDto> => {
-  const response = await fetchService(`/v1/ip-asn/datasources`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  const response = await fetchService(
+    `/v1/ip-asn/datasources`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
   return response.json();
 };
 
@@ -135,12 +151,12 @@ const createIpAsnDatasource = async (
 const listIpAsnData = async (
   datasourceId: string,
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TIpAsnDataDto>> => {
   const response = await fetchService(
     `/v1/ip-asn/datasources/${datasourceId}/data?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
@@ -148,12 +164,12 @@ const listIpAsnData = async (
 const getIpAsnDataById = async (
   datasourceId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TIpAsnDataDto> => {
   const response = await fetchService(
     `/v1/ip-asn/datasources/${datasourceId}/data/${id}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
@@ -161,7 +177,7 @@ const getIpAsnDataById = async (
 const createIpAsnData = async (
   datasourceId: string,
   dto: TIpAsnDataCreateBodyDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TIpAsnDataDto> => {
   const response = await fetchService(
     `/v1/ip-asn/datasources/${datasourceId}/data`,
@@ -170,7 +186,7 @@ const createIpAsnData = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
@@ -178,19 +194,19 @@ const createIpAsnData = async (
 // Event Types
 const listEventTypes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TEventTypeDto>> => {
   const response = await fetchService(
     `/v1/event-types?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getEventTypeById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventTypeDto> => {
   const response = await fetchService(`/v1/event-types/${id}`, undefined, {
     serviceId,
@@ -200,115 +216,139 @@ const getEventTypeById = async (
 
 const createEventType = async (
   dto: TEventTypeCreateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
-  await fetchService(`/v1/event-types`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  await fetchService(
+    `/v1/event-types`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
 };
 
 // Events
 const createEvent = async (
   dto: TEventCreateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventDto> => {
-  const response = await fetchService(`/v1/events`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  const response = await fetchService(
+    `/v1/events`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
   return response.json();
 };
 
 // Aggregation Mode Types
 const listAggregationModeTypes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TAggregationModeTypeDto>> => {
   const response = await fetchService(
     `/v1/aggregation-mode-types?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getAggregationModeTypeById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TAggregationModeTypeDto> => {
-  const response = await fetchService(`/v1/aggregation-mode-types/${id}`, undefined, {
-    serviceId,
-  });
+  const response = await fetchService(
+    `/v1/aggregation-mode-types/${id}`,
+    undefined,
+    {
+      serviceId,
+    },
+  );
   return response.json();
 };
 
 // Aggregation Modes
 const listAggregationModes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TAggregationModeDto>> => {
   const response = await fetchService(
     `/v1/aggregation-modes?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getAggregationModeById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TAggregationModeReadDto> => {
-  const response = await fetchService(`/v1/aggregation-modes/${id}`, undefined, {
-    serviceId,
-  });
+  const response = await fetchService(
+    `/v1/aggregation-modes/${id}`,
+    undefined,
+    {
+      serviceId,
+    },
+  );
   return response.json();
 };
 
 const createAggregationMode = async (
   dto: TAggregationModeCreateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TAggregationModeDto> => {
-  const response = await fetchService(`/v1/aggregation-modes`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  const response = await fetchService(
+    `/v1/aggregation-modes`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
   return response.json();
 };
 
 const updateAggregationMode = async (
   id: string,
   dto: TAggregationModeUpdateDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TAggregationModeDto> => {
-  const response = await fetchService(`/v1/aggregation-modes/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  const response = await fetchService(
+    `/v1/aggregation-modes/${id}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
   return response.json();
 };
 
 // Scopes
 const listScopes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TScopeDto>> => {
   const response = await fetchService(
     `/v1/scopes?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getScopeById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TScopeDto> => {
   const response = await fetchService(`/v1/scopes/${id}`, undefined, {
     serviceId,
@@ -320,12 +360,12 @@ const getScopeById = async (
 const listEventsByScope = async (
   scopeId: string,
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TEventScopeDto>> => {
   const response = await fetchService(
     `/v1/scopes/${scopeId}/events?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
@@ -333,20 +373,30 @@ const listEventsByScope = async (
 // Score Calculation
 const calculateScopeScore = async (
   scope: TScopeDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TScoreCalculationResultDto> => {
   // Build scope spec from the actual scope data
   // Determine type and value based on the scope type
   const scopeSpec: TScopeSpecDto = {
     id: scope.id,
-    type: scope.ipScope ? 'ip' : scope.asnScope ? 'asn' : scope.subnetScope ? 'subnet' : 'custom',
-    value: scope.ipScope?.address || scope.asnScope?.asn.toString() || scope.subnetScope?.address || scope.id,
+    type: scope.ipScope
+      ? 'ip'
+      : scope.asnScope
+        ? 'asn'
+        : scope.subnetScope
+          ? 'subnet'
+          : 'custom',
+    value:
+      scope.ipScope?.address ||
+      scope.asnScope?.asn.toString() ||
+      scope.subnetScope?.address ||
+      scope.id,
   };
-  
+
   const requestBody: TScoreCalculateRequestDto = {
     scopes: [scopeSpec],
   };
-  
+
   const response = await fetchService(
     `/v1/score/_actions/calculate`,
     {
@@ -354,7 +404,7 @@ const calculateScopeScore = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     },
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };

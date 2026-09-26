@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import Button from "@/components/universals/forms/Button";
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import { syncEmailsAction } from '@/components/apps/email/EmailSync.server-action';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
 
 type EmailSyncButtonProps = {
   accountId: string;
 };
 
-const EmailSyncButton: React.FunctionComponent<EmailSyncButtonProps> = ({ accountId }) => {
+const EmailSyncButton: React.FunctionComponent<EmailSyncButtonProps> = ({
+  accountId,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const openDialog = useOpenDialog();
 
@@ -23,7 +26,10 @@ const EmailSyncButton: React.FunctionComponent<EmailSyncButtonProps> = ({ accoun
         text: result.message,
       }).result;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Ein unerwarteter Fehler ist aufgetreten';
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Ein unerwarteter Fehler ist aufgetreten';
       await openDialog(AlertDialog, {
         text: message,
       }).result;
@@ -33,15 +39,10 @@ const EmailSyncButton: React.FunctionComponent<EmailSyncButtonProps> = ({ accoun
   }, [accountId, openDialog]);
 
   return (
-    <Button
-      type="button"
-      onClick={handleSync}
-      disabled={isLoading}
-    >
+    <Button type="button" onClick={handleSync} disabled={isLoading}>
       {isLoading ? '⟳ Synchronisierung läuft...' : '⟳ Emails synchronisieren'}
     </Button>
   );
 };
 
 export default EmailSyncButton;
-

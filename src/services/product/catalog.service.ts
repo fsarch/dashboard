@@ -1,5 +1,8 @@
-import { fetchService } from "@/utils/fetchService";
-import type { CatalogDto, CreateCatalogDto } from "@/services/product/catalog.type";
+import type {
+  CatalogDto,
+  CreateCatalogDto,
+} from '@/services/product/catalog.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listCatalogs = async (): Promise<Array<CatalogDto>> => {
   const catalogResponse = await fetchService('/v1/catalogs');
@@ -8,7 +11,9 @@ const listCatalogs = async (): Promise<Array<CatalogDto>> => {
   return catalogs;
 };
 
-const createCatalog = async (createDto: CreateCatalogDto): Promise<{ id: string; }> => {
+const createCatalog = async (
+  createDto: CreateCatalogDto,
+): Promise<{ id: string }> => {
   const catalogCreateResponse = await fetchService('/v1/catalogs', {
     method: 'POST',
     headers: {

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import Button from '@/components/universals/forms/Button';
 
 type TFreq = 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
@@ -31,17 +32,26 @@ type TParsedRRule = {
 
 function parseRRule(rrule: string): TParsedRRule {
   const parts: Record<string, string> = {};
-  rrule.split(';').filter(Boolean).forEach((part) => {
-    const [key, value] = part.split('=');
-    if (key && value !== undefined) {
-      parts[key] = value;
-    }
-  });
+  rrule
+    .split(';')
+    .filter(Boolean)
+    .forEach((part) => {
+      const [key, value] = part.split('=');
+      if (key && value !== undefined) {
+        parts[key] = value;
+      }
+    });
 
   const freq = parts.FREQ as TFreq;
 
   return {
-    freq: freq === 'DAILY' || freq === 'WEEKLY' || freq === 'MONTHLY' || freq === 'YEARLY' ? freq : 'WEEKLY',
+    freq:
+      freq === 'DAILY' ||
+      freq === 'WEEKLY' ||
+      freq === 'MONTHLY' ||
+      freq === 'YEARLY'
+        ? freq
+        : 'WEEKLY',
     interval: parts.INTERVAL ? parseInt(parts.INTERVAL, 10) || 1 : 1,
     byDay: parts.BYDAY ? parts.BYDAY.split(',') : [],
     count: parts.COUNT ? parseInt(parts.COUNT, 10) : undefined,
@@ -65,7 +75,10 @@ function dateInputValueToUntil(dateValue: string): string | undefined {
     return undefined;
   }
 
-  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return date
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
 }
 
 type TBuilderState = {
@@ -84,7 +97,10 @@ function buildRRule(state: TBuilderState): string {
     segments.push(`INTERVAL=${state.interval}`);
   }
 
-  if (state.byDay.length > 0 && (state.freq === 'WEEKLY' || state.freq === 'MONTHLY')) {
+  if (
+    state.byDay.length > 0 &&
+    (state.freq === 'WEEKLY' || state.freq === 'MONTHLY')
+  ) {
     segments.push(`BYDAY=${state.byDay.join(',')}`);
   }
 
@@ -104,21 +120,28 @@ function buildRRule(state: TBuilderState): string {
 // (RFC 5545) by picking frequency/interval/weekdays/end-condition instead of writing it by
 // hand. One-directional ("Übernehmen" writes into the text field) - the text field stays the
 // source of truth and can always be edited directly.
-const RRuleBuilder: React.FunctionComponent<RRuleBuilderProps> = ({ value, onChange }) => {
+const RRuleBuilder: React.FunctionComponent<RRuleBuilderProps> = ({
+  value,
+  onChange,
+}) => {
   const initial = parseRRule(value);
   const [freq, setFreq] = useState<TFreq>(initial.freq);
   const [interval, setIntervalValue] = useState<number>(initial.interval);
   const [byDay, setByDay] = useState<string[]>(initial.byDay);
   const [endType, setEndType] = useState<TEndType>(
-    initial.count ? 'count' : initial.until ? 'until' : 'never'
+    initial.count ? 'count' : initial.until ? 'until' : 'never',
   );
   const [count, setCount] = useState<number>(initial.count ?? 10);
-  const [until, setUntil] = useState<string>(untilToDateInputValue(initial.until));
+  const [until, setUntil] = useState<string>(
+    untilToDateInputValue(initial.until),
+  );
 
   const toggleDay = (day: string) => {
-    setByDay((current) => (
-      current.includes(day) ? current.filter((d) => d !== day) : [...current, day]
-    ));
+    setByDay((current) =>
+      current.includes(day)
+        ? current.filter((d) => d !== day)
+        : [...current, day],
+    );
   };
 
   const handleApply = () => {
@@ -138,17 +161,29 @@ const RRuleBuilder: React.FunctionComponent<RRuleBuilderProps> = ({ value, onCha
     >
       <strong>RRULE-Ausfüllassistent</strong>
 
-      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '0.5rem',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+        }}
+      >
         <label htmlFor="rrule-interval">Wiederholt sich alle</label>
         <input
           id="rrule-interval"
           type="number"
           min={1}
           value={interval}
-          onChange={(event) => setIntervalValue(Math.max(1, parseInt(event.target.value, 10) || 1))}
+          onChange={(event) =>
+            setIntervalValue(Math.max(1, parseInt(event.target.value, 10) || 1))
+          }
           style={{ width: '4rem' }}
         />
-        <select value={freq} onChange={(event) => setFreq(event.target.value as TFreq)}>
+        <select
+          value={freq}
+          onChange={(event) => setFreq(event.target.value as TFreq)}
+        >
           <option value="DAILY">Tag(e)</option>
           <option value="WEEKLY">Woche(n)</option>
           <option value="MONTHLY">Monat(e)</option>
@@ -159,7 +194,10 @@ const RRuleBuilder: React.FunctionComponent<RRuleBuilderProps> = ({ value, onCha
       {(freq === 'WEEKLY' || freq === 'MONTHLY') && (
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           {WEEKDAYS.map((day) => (
-            <label key={day.value} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <label
+              key={day.value}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+            >
               <input
                 type="checkbox"
                 checked={byDay.includes(day.value)}
@@ -171,7 +209,14 @@ const RRuleBuilder: React.FunctionComponent<RRuleBuilderProps> = ({ value, onCha
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '1.25rem',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}
+      >
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
           <input
             type="radio"
@@ -194,7 +239,9 @@ const RRuleBuilder: React.FunctionComponent<RRuleBuilderProps> = ({ value, onCha
             min={1}
             value={count}
             disabled={endType !== 'count'}
-            onChange={(event) => setCount(Math.max(1, parseInt(event.target.value, 10) || 1))}
+            onChange={(event) =>
+              setCount(Math.max(1, parseInt(event.target.value, 10) || 1))
+            }
             style={{ width: '4rem' }}
           />
           Terminen

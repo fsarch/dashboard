@@ -1,11 +1,13 @@
-import { TIcon } from "@/components/universals/icon/Icon.type";
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 
 export type AppNavigationItem = {
   name: string;
-  path: string | {
-    $type: 'jsonata',
-    value: string;
-  };
+  path:
+    | string
+    | {
+        $type: 'jsonata';
+        value: string;
+      };
   icon?: TIcon;
 };
 
@@ -42,10 +44,14 @@ export type AppRouteCustomResourceProvider = {
   // sind die rohen JSON-Daten der Instanz, refValues die bereits aufgelösten
   // $system.crd-Referenzwerte (siehe custom-resource-references.utils.ts),
   // z. B. um refValues.`$system.crd.catalog.id` als catalogId einzusetzen.
-  params?: Record<string, string | {
-    $type: 'jsonata',
-    value: string;
-  }>;
+  params?: Record<
+    string,
+    | string
+    | {
+        $type: 'jsonata';
+        value: string;
+      }
+  >;
 };
 
 export type AppDefinitionType = {

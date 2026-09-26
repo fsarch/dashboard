@@ -1,5 +1,8 @@
-import { createContext, useCallback, useContext } from "react";
-import { TContextMenu, TContextMenuComponent } from "@/components/universals/context-menu/contextMenu.type";
+import { createContext, useCallback, useContext } from 'react';
+import type {
+  TContextMenu,
+  TContextMenuComponent,
+} from '@/components/universals/context-menu/contextMenu.type';
 
 export type TContextMenuProviderContext = {
   openContextMenu: (
@@ -9,9 +12,10 @@ export type TContextMenuProviderContext = {
   ) => TContextMenu;
 };
 
-export const ContextMenuProviderContext = createContext<TContextMenuProviderContext>({
-  openContextMenu: () => ({ id: '', close: () => {} }),
-});
+export const ContextMenuProviderContext =
+  createContext<TContextMenuProviderContext>({
+    openContextMenu: () => ({ id: '', close: () => {} }),
+  });
 
 export const useContextMenu = () => useContext(ContextMenuProviderContext);
 
@@ -21,17 +25,20 @@ export const useContextMenu = () => useContext(ContextMenuProviderContext);
 export const useOpenContextMenu = () => {
   const { openContextMenu } = useContextMenu();
 
-  return useCallback(<TInput,>(
-    component: TContextMenuComponent<TInput>,
-    value: TInput,
-    event: React.MouseEvent,
-  ): TContextMenu => {
-    event.preventDefault();
+  return useCallback(
+    <TInput>(
+      component: TContextMenuComponent<TInput>,
+      value: TInput,
+      event: React.MouseEvent,
+    ): TContextMenu => {
+      event.preventDefault();
 
-    return openContextMenu(
-      component as TContextMenuComponent<unknown>,
-      value,
-      event,
-    );
-  }, [openContextMenu]);
+      return openContextMenu(
+        component as TContextMenuComponent<unknown>,
+        value,
+        event,
+      );
+    },
+    [openContextMenu],
+  );
 };

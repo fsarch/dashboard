@@ -1,10 +1,10 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
 import Link from 'next/link';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
-import { fetchService } from '@/utils/fetchService';
 import { colors } from '@/app/_styles/colors';
 import Badge from '@/components/universals/badge/badge.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { fetchService } from '@/utils/fetchService';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import UpdateVersionForm from './_components/UpdateVersionForm.component';
 
 type ProjectDto = {
@@ -26,8 +26,13 @@ const getProject = async (projectId: string): Promise<ProjectDto> => {
   return response.json();
 };
 
-const getVersion = async (projectId: string, versionId: string): Promise<ProjectVersionDto> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}`);
+const getVersion = async (
+  projectId: string,
+  versionId: string,
+): Promise<ProjectVersionDto> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}`,
+  );
   return response.json();
 };
 
@@ -60,7 +65,11 @@ export default async function VersionDetailPage({
           )}
         </h2>
         {version.description && <p>{version.description}</p>}
-        {version.externalId && <p>External Id: <code>{version.externalId}</code></p>}
+        {version.externalId && (
+          <p>
+            External Id: <code>{version.externalId}</code>
+          </p>
+        )}
         <p>Erstellt: {version.creationTime}</p>
       </Section>
 

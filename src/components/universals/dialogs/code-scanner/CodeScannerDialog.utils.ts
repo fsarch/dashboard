@@ -11,18 +11,30 @@ function getUserMediaStream(): Promise<MediaStream> {
   }
 
   return new Promise<MediaStream>((resolve, reject) => {
-    const getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
+    const getUserMedia = (
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia
+    ).bind(navigator);
 
-    getUserMedia(constraints, (stream) => {
-      resolve(stream);
-    }, (error) => {
-      // An error occurred
-      reject(error);
-    });
+    getUserMedia(
+      constraints,
+      (stream) => {
+        resolve(stream);
+      },
+      (error) => {
+        // An error occurred
+        reject(error);
+      },
+    );
   });
 }
 
-export async function getVideoStream({ abortSignal }: { abortSignal: AbortSignal }): Promise<{ video: HTMLVideoElement }> {
+export async function getVideoStream({
+  abortSignal,
+}: {
+  abortSignal: AbortSignal;
+}): Promise<{ video: HTMLVideoElement }> {
   const video = document.createElement('video');
   const stream = await getUserMediaStream();
 
@@ -48,7 +60,7 @@ export async function getVideoStream({ abortSignal }: { abortSignal: AbortSignal
 
   return {
     video,
-  }
+  };
 }
 
 export const codeScannerDialogUtils = {

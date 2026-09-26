@@ -1,26 +1,31 @@
 'use client';
 
-import React, { PropsWithChildren, useEffect } from 'react';
+import type React from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 
-type AutoSizerProps = PropsWithChildren<{
+type AutoSizerProps = PropsWithChildren<{}>;
 
-}>;
-
-const AutoSizer: React.FunctionComponent<AutoSizerProps> = ({
-  children,
-}) => {
+const AutoSizer: React.FunctionComponent<AutoSizerProps> = ({ children }) => {
   useEffect(() => {
     const sendHeight = () => {
       const body = document.body,
         html = document.documentElement;
 
-      const height = Math.max( body.scrollHeight, body.offsetHeight,
-        html.clientHeight, html.scrollHeight, html.offsetHeight );
+      const height = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight,
+      );
 
-      window.parent.postMessage({
-        type: 'resize',
-        payload: height,
-      }, '*');
+      window.parent.postMessage(
+        {
+          type: 'resize',
+          payload: height,
+        },
+        '*',
+      );
     };
 
     const interval = setInterval(() => {
@@ -31,7 +36,7 @@ const AutoSizer: React.FunctionComponent<AutoSizerProps> = ({
 
     return () => {
       clearInterval(interval);
-    }
+    };
   }, []);
 
   return children;

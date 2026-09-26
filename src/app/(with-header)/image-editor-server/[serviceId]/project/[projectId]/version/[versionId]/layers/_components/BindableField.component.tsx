@@ -1,19 +1,26 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { BindableValue } from '@/services/image-editor-server/image-editor-server.type';
-import { TFlattenedParameterPath } from './parameter-paths.utils';
-import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
-import SegmentedControl from '@/components/universals/forms/SegmentedControl';
-import Button from '@/components/universals/forms/Button';
+import type React from 'react';
+import { useCallback } from 'react';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import CodeEditorDialog from '@/components/universals/dialogs/code-editor/CodeEditorDialogDynamic.component';
+import Button from '@/components/universals/forms/Button';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import colorInputStyles from '@/components/universals/forms/generated/inputs/GeneratedFormColorInput.module.scss';
+import SegmentedControl from '@/components/universals/forms/SegmentedControl';
+import type { BindableValue } from '@/services/image-editor-server/image-editor-server.type';
 import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
+import type { TFlattenedParameterPath } from './parameter-paths.utils';
 
-type TBindableFieldKind = 'text' | 'number' | 'color' | 'textarea' | 'code' | 'select';
+type TBindableFieldKind =
+  | 'text'
+  | 'number'
+  | 'color'
+  | 'textarea'
+  | 'code'
+  | 'select';
 
 type BindableFieldProps = {
   label: string;
@@ -48,21 +55,36 @@ const BindableField: React.FunctionComponent<BindableFieldProps> = ({
 }) => {
   const isVariable = value?.type === 'variable';
 
-  const handleModeChange = useCallback((mode: 'constant' | 'variable') => {
-    if (mode === 'variable') {
-      onChange({ type: 'variable', value: compatibleParameters[0]?.path ?? '' });
-    } else {
-      onChange({ type: 'constant', value: kind === 'number' ? 0 : '' });
-    }
-  }, [onChange, compatibleParameters, kind]);
+  const handleModeChange = useCallback(
+    (mode: 'constant' | 'variable') => {
+      if (mode === 'variable') {
+        onChange({
+          type: 'variable',
+          value: compatibleParameters[0]?.path ?? '',
+        });
+      } else {
+        onChange({ type: 'constant', value: kind === 'number' ? 0 : '' });
+      }
+    },
+    [onChange, compatibleParameters, kind],
+  );
 
-  const handleConstantChange = useCallback((raw: string) => {
-    onChange({ type: 'constant', value: kind === 'number' ? Number(raw) : raw });
-  }, [onChange, kind]);
+  const handleConstantChange = useCallback(
+    (raw: string) => {
+      onChange({
+        type: 'constant',
+        value: kind === 'number' ? Number(raw) : raw,
+      });
+    },
+    [onChange, kind],
+  );
 
-  const handleVariableChange = useCallback((path: string) => {
-    onChange({ type: 'variable', value: path });
-  }, [onChange]);
+  const handleVariableChange = useCallback(
+    (path: string) => {
+      onChange({ type: 'variable', value: path });
+    },
+    [onChange],
+  );
 
   return (
     <FieldsetRow label={label}>
@@ -72,18 +94,34 @@ const BindableField: React.FunctionComponent<BindableFieldProps> = ({
           onChange={handleModeChange}
           options={[
             { value: 'constant', label: 'Konstante' },
-            { value: 'variable', label: 'Parameter', disabled: compatibleParameters.length === 0 },
+            {
+              value: 'variable',
+              label: 'Parameter',
+              disabled: compatibleParameters.length === 0,
+            },
           ]}
         />
 
         {isVariable ? (
-          <select className={formControls.selectInput} value={value?.value as string ?? ''} onChange={(e) => handleVariableChange(e.target.value)}>
+          <select
+            className={formControls.selectInput}
+            value={(value?.value as string) ?? ''}
+            onChange={(e) => handleVariableChange(e.target.value)}
+          >
             {compatibleParameters.map((parameter) => (
-              <option key={parameter.path} value={parameter.path}>{parameter.label}</option>
+              <option key={parameter.path} value={parameter.path}>
+                {parameter.label}
+              </option>
             ))}
           </select>
         ) : (
-          <ConstantInput kind={kind} value={value?.value} onChange={handleConstantChange} selectOptions={selectOptions} codeLanguage={codeLanguage} />
+          <ConstantInput
+            kind={kind}
+            value={value?.value}
+            onChange={handleConstantChange}
+            selectOptions={selectOptions}
+            codeLanguage={codeLanguage}
+          />
         )}
       </div>
     </FieldsetRow>
@@ -100,7 +138,7 @@ const ConstantInput: React.FunctionComponent<{
   if (kind === 'select') {
     return (
       <SegmentedControl
-        value={value as string ?? selectOptions?.[0]?.value ?? ''}
+        value={(value as string) ?? selectOptions?.[0]?.value ?? ''}
         onChange={onChange}
         options={selectOptions ?? []}
       />
@@ -108,14 +146,20 @@ const ConstantInput: React.FunctionComponent<{
   }
 
   if (kind === 'code') {
-    return <CodeFieldButton value={value as string ?? ''} onChange={onChange} language={codeLanguage ?? 'html'} />;
+    return (
+      <CodeFieldButton
+        value={(value as string) ?? ''}
+        onChange={onChange}
+        language={codeLanguage ?? 'html'}
+      />
+    );
   }
 
   if (kind === 'textarea') {
     return (
       <textarea
         className={formControls.textareaInput}
-        value={value as string ?? ''}
+        value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
         rows={6}
       />
@@ -123,14 +167,21 @@ const ConstantInput: React.FunctionComponent<{
   }
 
   if (kind === 'color') {
-    return <input className={colorInputStyles.colorInput} type="color" value={(value as string) || '#000000'} onChange={(e) => onChange(e.target.value)} />;
+    return (
+      <input
+        className={colorInputStyles.colorInput}
+        type="color"
+        value={(value as string) || '#000000'}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    );
   }
 
   return (
     <input
       className={formControls.textInput}
       type={kind === 'number' ? 'number' : 'text'}
-      value={value as string | number ?? ''}
+      value={(value as string | number) ?? ''}
       onChange={(e) => onChange(e.target.value)}
     />
   );

@@ -1,18 +1,19 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { Form, Formik } from "formik";
-import Input from "@/components/universals/forms/Input";
-import Button from "@/components/universals/forms/Button";
-import { useRouter } from "next/navigation";
+import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   connectPartPartId,
   loadAvailableParts,
-} from "@/components/apps/material-tracing/part/PartPartIdConnectForm.server-action";
-import Fieldset from "@/components/universals/forms/Fieldset.component";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
-import SearchableSelect from "@/components/universals/forms/searchable-select/SearchableSelect.component";
-import { TPart } from "@/services/material-tracing/part.type";
+} from '@/components/apps/material-tracing/part/PartPartIdConnectForm.server-action';
+import Button from '@/components/universals/forms/Button';
+import Fieldset from '@/components/universals/forms/Fieldset.component';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import Input from '@/components/universals/forms/Input';
+import SearchableSelect from '@/components/universals/forms/searchable-select/SearchableSelect.component';
+import type { TPart } from '@/services/material-tracing/part.type';
 
 type PartPartIdConnectFormProps = {
   partId: string;
@@ -23,9 +24,9 @@ type ConnectPartPartIdFormData = {
   amount: string;
 };
 
-export const PartPartIdConnectForm: React.FunctionComponent<PartPartIdConnectFormProps> = ({
-  partId,
-}) => {
+export const PartPartIdConnectForm: React.FunctionComponent<
+  PartPartIdConnectFormProps
+> = ({ partId }) => {
   const router = useRouter();
   const [allParts, setAllParts] = useState<TPart[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,19 +49,22 @@ export const PartPartIdConnectForm: React.FunctionComponent<PartPartIdConnectFor
     loadParts();
   }, [partId]);
 
-  const handleSubmit = useCallback(async (value: ConnectPartPartIdFormData) => {
-    await connectPartPartId({
-      value: {
-        childPartId: value.childPartId,
-        amount: parseInt(value.amount, 10),
-      },
-      partId,
-    });
-    router.refresh();
-  }, [router, partId]);
+  const handleSubmit = useCallback(
+    async (value: ConnectPartPartIdFormData) => {
+      await connectPartPartId({
+        value: {
+          childPartId: value.childPartId,
+          amount: parseInt(value.amount, 10),
+        },
+        partId,
+      });
+      router.refresh();
+    },
+    [router, partId],
+  );
 
   // Convert parts to format expected by SearchableSelect
-  const partOptions = allParts.map(part => ({
+  const partOptions = allParts.map((part) => ({
     id: part.id,
     value: part.id,
     label: `${part.name} (ID: ${part.id})`,
@@ -80,28 +84,18 @@ export const PartPartIdConnectForm: React.FunctionComponent<PartPartIdConnectFor
     >
       <Form>
         <Fieldset>
-          <FieldsetRow
-            label={(
-              <label htmlFor="part-part-id">Part</label>
-            )}
-          >
+          <FieldsetRow label={<label htmlFor="part-part-id">Part</label>}>
             <SearchableSelect
               id="part-part-id"
               name="childPartId"
               values={partOptions}
             />
           </FieldsetRow>
-          <FieldsetRow
-            label={(
-              <label htmlFor="part-part-amount">Anzahl</label>
-            )}
-          >
-            <Input id="part-part-amount" name="amount" type="number"/>
+          <FieldsetRow label={<label htmlFor="part-part-amount">Anzahl</label>}>
+            <Input id="part-part-amount" name="amount" type="number" />
           </FieldsetRow>
         </Fieldset>
-        <Button type="submit">
-          Verbinden
-        </Button>
+        <Button type="submit">Verbinden</Button>
       </Form>
     </Formik>
   );

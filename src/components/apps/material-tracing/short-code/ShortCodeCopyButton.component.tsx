@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import Button from '@/components/universals/forms/Button';
 import styles from './ShortCodeCopyButton.module.scss';
 
@@ -8,10 +9,12 @@ type ShortCodeCopyButtonProps = {
   value: string;
 };
 
-const ShortCodeCopyButton: React.FunctionComponent<ShortCodeCopyButtonProps> = ({
-  value,
-}) => {
-  const [copyState, setCopyState] = useState<'idle' | 'success' | 'error'>('idle');
+const ShortCodeCopyButton: React.FunctionComponent<
+  ShortCodeCopyButtonProps
+> = ({ value }) => {
+  const [copyState, setCopyState] = useState<'idle' | 'success' | 'error'>(
+    'idle',
+  );
 
   const handleCopy = useCallback(async () => {
     try {
@@ -29,11 +32,14 @@ const ShortCodeCopyButton: React.FunctionComponent<ShortCodeCopyButtonProps> = (
       <Button type="button" onClick={handleCopy}>
         ShortCode kopieren
       </Button>
-      {copyState === 'success' ? <span className={styles.feedback}>Kopiert</span> : null}
-      {copyState === 'error' ? <span className={styles.feedbackError}>Fehler beim Kopieren</span> : null}
+      {copyState === 'success' ? (
+        <span className={styles.feedback}>Kopiert</span>
+      ) : null}
+      {copyState === 'error' ? (
+        <span className={styles.feedbackError}>Fehler beim Kopieren</span>
+      ) : null}
     </div>
   );
 };
 
 export default ShortCodeCopyButton;
-

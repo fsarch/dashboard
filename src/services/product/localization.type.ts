@@ -14,4 +14,4 @@ export type LocalizationCreateDto = {
   countryCode: string;
 
   languageCode: string;
-}
+};

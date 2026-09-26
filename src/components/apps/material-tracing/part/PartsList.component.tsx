@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
-import List from "@/components/universals/list/List";
-import { TPart } from "@/services/material-tracing/part.type";
+import type React from 'react';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import PaginationFetcherComponent from '@/components/universals/pagination/PaginationFetcher.component';
+import type { PaginationResultType } from '@/components/universals/pagination/PaginationFetcher.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import type { TPart } from '@/services/material-tracing/part.type';
 import styles from './PartsList.module.scss';
-import LinkListItem from "@/components/universals/list/LinkListItem";
-import { TPaginationResult } from "@/services/material-tracing/pagination.type";
-import PaginationFetcherComponent from "@/components/universals/pagination/PaginationFetcher.component";
-import { PaginationResultType } from "@/components/universals/pagination/PaginationFetcher.type";
 
 type PartWithUrl = TPart & {
   url: string;

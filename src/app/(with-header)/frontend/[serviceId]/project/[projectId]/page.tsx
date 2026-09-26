@@ -16,7 +16,11 @@ const getProject = async (projectId: string): Promise<ProjectDto> => {
   return response.json();
 };
 
-export default async function ProjectDetailPage({ params }: { params: Promise<{ serviceId: string; projectId: string }> }) {
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise<{ serviceId: string; projectId: string }>;
+}) {
   const { projectId } = await params;
   const project = await getProject(projectId);
 

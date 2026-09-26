@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { TPaginationParams, TPaginationResultDto } from './calendar.type';
 import { CalendarApiError } from './calendar.errors';
+import type { TPaginationParams, TPaginationResultDto } from './calendar.type';
 
 // Awaits a single-entity fetch (getCalendarById/getEventById/...). Converts a 404
 // (CalendarApiError with status 404) into Next.js' notFound(), instead of letting callers
@@ -38,7 +38,7 @@ export const unwrapEnvelope = <T>(body: unknown): T => {
 // present.
 export const normalizePaginationResult = <T>(
   rawBody: unknown,
-  params: TPaginationParams
+  params: TPaginationParams,
 ): TPaginationResultDto<T> => {
   const body = unwrapEnvelope<unknown>(rawBody);
 
@@ -86,7 +86,9 @@ export const toIsoString = (value: string): string | undefined => {
 // datetime-local values are interpreted by the browser as local time (this mirrors toIsoString's
 // `new Date(value)` interpretation), so the ISO string - which is UTC - must be converted to local
 // time here rather than just truncated, or the displayed value drifts by the UTC offset.
-export const toDatetimeLocalValue = (value: string | null | undefined): string => {
+export const toDatetimeLocalValue = (
+  value: string | null | undefined,
+): string => {
   if (!value) {
     return '';
   }
@@ -102,7 +104,9 @@ export const toDatetimeLocalValue = (value: string | null | undefined): string =
 // Converts an event's metadata object (or null/undefined) to the pretty-printed JSON text shown
 // in the metadata textarea. Returns '' for no metadata, mirroring toDatetimeLocalValue's '' for
 // no date.
-export const toMetadataJsonValue = (metadata: Record<string, unknown> | null | undefined): string => {
+export const toMetadataJsonValue = (
+  metadata: Record<string, unknown> | null | undefined,
+): string => {
   if (!metadata) {
     return '';
   }
@@ -115,7 +119,9 @@ export const toMetadataJsonValue = (metadata: Record<string, unknown> | null | u
 // like the other optional TCreateEventDto fields - omits the key from the request body rather
 // than clearing existing metadata on update. Throws a user-facing error for invalid JSON or a
 // non-object value (arrays/strings/numbers), matching the backend's @IsObject() validation.
-export const parseMetadataJson = (value: string): Record<string, unknown> | undefined => {
+export const parseMetadataJson = (
+  value: string,
+): Record<string, unknown> | undefined => {
   if (!value.trim()) {
     return undefined;
   }
@@ -128,7 +134,9 @@ export const parseMetadataJson = (value: string): Record<string, unknown> | unde
   }
 
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
-    throw new Error('Metadaten müssen ein JSON-Objekt sein (z.B. { "key": "value" })');
+    throw new Error(
+      'Metadaten müssen ein JSON-Objekt sein (z.B. { "key": "value" })',
+    );
   }
 
   return parsed as Record<string, unknown>;
@@ -141,10 +149,13 @@ function pad(value: number): string {
   return String(value).padStart(2, '0');
 }
 
-export const toMonthInputValue = (date: Date): string => `${date.getFullYear()}-${pad(date.getMonth() + 1)}`;
+export const toMonthInputValue = (date: Date): string =>
+  `${date.getFullYear()}-${pad(date.getMonth() + 1)}`;
 
 // First/last instant of the given month ("YYYY-MM"). Returns null for an invalid/empty string.
-export const monthToRange = (month: string): { from: Date; to: Date } | null => {
+export const monthToRange = (
+  month: string,
+): { from: Date; to: Date } | null => {
   const match = month.match(/^(\d{4})-(\d{2})$/);
   if (!match) {
     return null;
@@ -170,26 +181,47 @@ export const currentMonthRange = (): { from: Date; to: Date } => {
 // Adds `delta` months to a "YYYY-MM" string, e.g. shiftMonth('2026-01', -1) -> '2025-12'.
 export const shiftMonth = (month: string, delta: number): string => {
   const range = monthToRange(month) ?? currentMonthRange();
-  return toMonthInputValue(new Date(range.from.getFullYear(), range.from.getMonth() + delta, 1));
+  return toMonthInputValue(
+    new Date(range.from.getFullYear(), range.from.getMonth() + delta, 1),
+  );
 };
 
 export const startOfWeekMonday = (date: Date): Date => {
   const day = date.getDay(); // 0 = Sunday
   const diff = day === 0 ? -6 : 1 - day;
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + diff, 0, 0, 0, 0);
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() + diff,
+    0,
+    0,
+    0,
+    0,
+  );
 };
 
 export const endOfWeekSunday = (date: Date): Date => {
   const start = startOfWeekMonday(date);
-  return new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6, 23, 59, 59, 999);
+  return new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    start.getDate() + 6,
+    23,
+    59,
+    59,
+    999,
+  );
 };
 
 // "YYYY-MM-DD" key for grouping events by day. Also usable as an <input type="date"> value.
-export const dayKey = (date: Date): string => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+export const dayKey = (date: Date): string =>
+  `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 // Parses an <input type="date"> value ("2026-08-08") into a local Date at midnight.
 // Returns null for an invalid/empty string.
-export const parseDateInputValue = (value: string | undefined | null): Date | null => {
+export const parseDateInputValue = (
+  value: string | undefined | null,
+): Date | null => {
   if (!value) {
     return null;
   }
@@ -209,12 +241,30 @@ export const parseDateInputValue = (value: string | undefined | null): Date | nu
 
 // First/last instant of the day containing `date`.
 export const dayRange = (date: Date): { from: Date; to: Date } => ({
-  from: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0),
-  to: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999),
+  from: new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    0,
+    0,
+    0,
+    0,
+  ),
+  to: new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    23,
+    59,
+    59,
+    999,
+  ),
 });
 
 // Adds `delta` days to a "YYYY-MM-DD" string, e.g. shiftDate('2026-08-08', -1) -> '2026-08-07'.
 export const shiftDate = (date: string, delta: number): string => {
   const parsed = parseDateInputValue(date) ?? new Date();
-  return dayKey(new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate() + delta));
+  return dayKey(
+    new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate() + delta),
+  );
 };

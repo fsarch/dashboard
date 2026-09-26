@@ -1,6 +1,13 @@
-import React, { ChangeEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
+import type React from 'react';
+import {
+  type ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styles from './DataTableInputCell.module.scss';
-import clsx from "clsx";
 
 type DataTableInputCellProps = {
   value: string;
@@ -26,11 +33,12 @@ const DataTableInputCell: React.FunctionComponent<DataTableInputCellProps> = ({
   }, [editMode]);
 
   return (
-    <div
-      className={styles.root}
-    >
+    <div className={styles.root}>
       <div
-        className={clsx(styles.disabledOverlay, editMode && styles.hideDisabledOverlay)}
+        className={clsx(
+          styles.disabledOverlay,
+          editMode && styles.hideDisabledOverlay,
+        )}
         onDoubleClick={handleDoubleClick}
       />
       <input

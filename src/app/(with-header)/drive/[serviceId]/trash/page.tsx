@@ -1,10 +1,10 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Section from '@/components/universals/section/Section';
+import Button from '@/components/universals/forms/Button';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
-import Button from '@/components/universals/forms/Button';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
 import { fileServerApiService } from '@/services/file-server/file-server-api.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 
 export const generateMetadata = createAutomaticMetadata();
 

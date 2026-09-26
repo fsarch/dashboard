@@ -1,8 +1,11 @@
 'use server';
 
-import { emailService } from "@/services/email/email.service";
-import { EmailListDto, TPaginationResultDto } from "@/services/email/email.type";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
+import { emailService } from '@/services/email/email.service';
+import type {
+  EmailListDto,
+  TPaginationResultDto,
+} from '@/services/email/email.type';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 export type EmailListItemWithUrl = EmailListDto & {
   url: string;
@@ -18,7 +21,8 @@ export async function loadPaginatedEmailsAction(
   },
 ): Promise<TPaginationResultDto<EmailListItemWithUrl>> {
   const limit = options?.take ?? 25;
-  const page = options?.skip !== undefined ? Math.floor(options.skip / limit) + 1 : 1;
+  const page =
+    options?.skip !== undefined ? Math.floor(options.skip / limit) + 1 : 1;
 
   const emailsResult = await emailService.listEmails(accountId, {
     page,

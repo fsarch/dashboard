@@ -1,8 +1,8 @@
-import React from 'react';
-import { TIcon } from "@/components/universals/icon/Icon.type";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type React from 'react';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 
 library.add(fas);
 
@@ -11,17 +11,9 @@ type IconProps = {
   className?: string;
 };
 
-const Icon: React.FunctionComponent<IconProps> = ({
-  icon,
-  className,
-}) => {
-  if (typeof icon === "string") {
-    return (
-      <FontAwesomeIcon
-        className={className}
-        icon={icon}
-      />
-    );
+const Icon: React.FunctionComponent<IconProps> = ({ icon, className }) => {
+  if (typeof icon === 'string') {
+    return <FontAwesomeIcon className={className} icon={icon} />;
   }
 
   return (

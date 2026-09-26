@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import CircleIcon from './CircleIcon';
 
 type AiIconProps = {
@@ -15,11 +15,14 @@ const AiIcon: React.FC<AiIconProps> = ({
   className,
   style,
 }) => {
-  const varStyle: React.CSSProperties = { ...(style || {}) } as React.CSSProperties;
+  const varStyle: React.CSSProperties = {
+    ...(style || {}),
+  } as React.CSSProperties;
   if (color) {
     // expose the provided color as a CSS variable so CircleIcon can use currentColor or var(--color-primary)
     (varStyle as any)['--ai-color-primary'] = 'rgb(var(--color-primary-rgb))';
-    (varStyle as any)['--ai-color-background'] = 'color-mix(in srgb, var(--ai-color-primary) 20%, #000000)';
+    (varStyle as any)['--ai-color-background'] =
+      'color-mix(in srgb, var(--ai-color-primary) 20%, #000000)';
     (varStyle as any)['--ai-color-secondary'] = 'var(--ai-color-primary)';
     varStyle.color = 'color-mix(in srgb, var(--ai-color-primary) 60%, #000000)';
   }
@@ -34,4 +37,3 @@ const AiIcon: React.FC<AiIconProps> = ({
 };
 
 export default AiIcon;
-

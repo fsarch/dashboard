@@ -1,5 +1,5 @@
-import type { AttributeType } from "@/services/product/attribute.const";
-import type { AttributeDto } from "@/services/product/attribute.type";
+import type { AttributeType } from '@/services/product/attribute.const';
+import type { AttributeDto } from '@/services/product/attribute.type';
 
 export type ItemAttributeBaseDto = {
   id: string;
@@ -45,4 +45,9 @@ export type ItemImageAttributeDto = ItemAttributeBaseDto & {
   }>;
 };
 
-export type ItemAttributeDto = ItemTextAttributeDto | ItemListAttributeDto | ItemBooleanAttributeDto | ItemLinkAttributeDto | ItemImageAttributeDto;
+export type ItemAttributeDto =
+  | ItemTextAttributeDto
+  | ItemListAttributeDto
+  | ItemBooleanAttributeDto
+  | ItemLinkAttributeDto
+  | ItemImageAttributeDto;

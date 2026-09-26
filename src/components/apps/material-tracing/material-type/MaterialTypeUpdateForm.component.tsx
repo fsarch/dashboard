@@ -1,8 +1,8 @@
 import 'server-only';
 
-import React from 'react';
-import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
-import { MATERIAL_TYPE_UPDATE_FORM_DEFINITION } from "@/components/apps/material-tracing/material-type/MaterialTypeUpdateForm.form";
+import type React from 'react';
+import { MATERIAL_TYPE_UPDATE_FORM_DEFINITION } from '@/components/apps/material-tracing/material-type/MaterialTypeUpdateForm.form';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 
 type MaterialTypeUpdateFormProps = {
   args: {
@@ -11,13 +11,13 @@ type MaterialTypeUpdateFormProps = {
       name: string;
       hint?: string;
       externalId?: string;
-    },
+    };
   };
 };
 
-const MaterialTypeUpdateForm: React.FunctionComponent<MaterialTypeUpdateFormProps> = ({
-  args,
-}) => {
+const MaterialTypeUpdateForm: React.FunctionComponent<
+  MaterialTypeUpdateFormProps
+> = ({ args }) => {
   return (
     <GeneratedForm
       definition={MATERIAL_TYPE_UPDATE_FORM_DEFINITION}

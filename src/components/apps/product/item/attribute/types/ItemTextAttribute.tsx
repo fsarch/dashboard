@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { AttributeDto } from "@/services/product/attribute.type";
-import { ItemTextAttributeDto } from "@/services/product/item-attribute.type";
-import Input from "@/components/universals/forms/Input";
+import type React from 'react';
+import Input from '@/components/universals/forms/Input';
+import type { AttributeDto } from '@/services/product/attribute.type';
+import type { ItemTextAttributeDto } from '@/services/product/item-attribute.type';
 
 type ItemTextAttributeProps = {
   id?: string;
@@ -16,14 +16,10 @@ const ItemTextAttribute: React.FunctionComponent<ItemTextAttributeProps> = ({
   attribute,
   value,
 }) => {
-  console.log(`attributes['${attribute.id}'].value`)
+  console.log(`attributes['${attribute.id}'].value`);
 
   return (
-    <Input
-      id={id}
-      type="text"
-      name={`attributes['${attribute.id}'].value`}
-    />
+    <Input id={id} type="text" name={`attributes['${attribute.id}'].value`} />
   );
 };
 

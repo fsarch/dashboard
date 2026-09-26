@@ -1,4 +1,4 @@
-import { EServiceType } from '@/utils/configuration.type';
+import type { EServiceType } from '@/utils/configuration.type';
 
 export type TCustomResourceAuth = {
   type: 'credential-propagation';

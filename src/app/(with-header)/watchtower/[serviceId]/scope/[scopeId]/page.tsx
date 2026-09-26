@@ -1,13 +1,13 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { watchtowerService } from '@/services/watchtower/watchtower.service';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import ScopeDetail from '../_components/ScopeDetail.component';
 import ScopeEventsList from '../_components/ScopeEventsList.component';
 import ScopeScoreDisplay from '../_components/ScopeScoreDisplay.component';
@@ -19,7 +19,10 @@ type ScopeDetailPageProps = {
   searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
 
-export default async function ScopeDetailPage({ params, searchParams }: ScopeDetailPageProps) {
+export default async function ScopeDetailPage({
+  params,
+  searchParams,
+}: ScopeDetailPageProps) {
   const { serviceId, scopeId } = await params;
   const { page = '1', pageSize = '25' } = await searchParams;
 
@@ -27,7 +30,9 @@ export default async function ScopeDetailPage({ params, searchParams }: ScopeDet
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -36,7 +41,7 @@ export default async function ScopeDetailPage({ params, searchParams }: ScopeDet
     const canAccessService = await uacUtils.hasAppPermission(
       EServiceType.WATCHTOWER,
       serviceId,
-      accessToken
+      accessToken,
     );
     if (!canAccessService) {
       return notFound();
@@ -53,11 +58,14 @@ export default async function ScopeDetailPage({ params, searchParams }: ScopeDet
     const events = await watchtowerService.listEventsByScope(
       scopeId,
       { page: parseInt(page), pageSize: parseInt(pageSize) },
-      serviceId
+      serviceId,
     );
 
     // Calculate score for this scope
-    const scoreResult = await watchtowerService.calculateScopeScore(scope, serviceId);
+    const scoreResult = await watchtowerService.calculateScopeScore(
+      scope,
+      serviceId,
+    );
 
     return (
       <DefaultPage>

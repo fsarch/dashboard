@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useState } from 'react';
+import Button from '@/components/universals/forms/Button';
 import Input from '@/components/universals/forms/Input';
 import TextArea from '@/components/universals/forms/TextArea';
-import Button from '@/components/universals/forms/Button';
-import { TEventDto } from '@/services/calendar/calendar.type';
+import type { TEventDto } from '@/services/calendar/calendar.type';
 
 export type TEventFormValues = {
   title: string;
@@ -49,13 +50,24 @@ const EventForm: React.FunctionComponent<EventFormProps> = ({
         router.refresh();
       }
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : String(submitError));
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : String(submitError),
+      );
     }
   };
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      <Form style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '480px' }}>
+      <Form
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.75rem',
+          maxWidth: '480px',
+        }}
+      >
         <div>
           <label htmlFor="event-title">Titel</label>
           <Input id="event-title" name="title" type="text" />
@@ -70,11 +82,21 @@ const EventForm: React.FunctionComponent<EventFormProps> = ({
         </div>
         <div>
           <label htmlFor="event-timezone">Zeitzone</label>
-          <Input id="event-timezone" name="timezone" type="text" placeholder="Europe/Berlin" />
+          <Input
+            id="event-timezone"
+            name="timezone"
+            type="text"
+            placeholder="Europe/Berlin"
+          />
         </div>
         <div>
           <label htmlFor="event-startAt">Start *</label>
-          <Input id="event-startAt" name="startAt" type="datetime-local" required />
+          <Input
+            id="event-startAt"
+            name="startAt"
+            type="datetime-local"
+            required
+          />
         </div>
         <div>
           <label htmlFor="event-endAt">Ende</label>

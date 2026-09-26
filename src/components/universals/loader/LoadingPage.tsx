@@ -1,6 +1,6 @@
-import React from 'react';
-import Loader from "@/components/universals/loader/Loader";
-import styles from "./LoadingPage.module.scss";
+import type React from 'react';
+import Loader from '@/components/universals/loader/Loader';
+import styles from './LoadingPage.module.scss';
 
 type LoadingPageProps = {
   text?: string;
@@ -11,17 +11,13 @@ const LoadingPage: React.FunctionComponent<LoadingPageProps> = ({
 }) => {
   return (
     <>
-      <div className={styles.backdrop}/>
-      <div
-        className={styles.modal}
-      >
+      <div className={styles.backdrop} />
+      <div className={styles.modal}>
         <div className={styles.loader}>
-          <Loader/>
+          <Loader />
         </div>
 
-        <div className={styles.text}>
-          {text}
-        </div>
+        <div className={styles.text}>{text}</div>
       </div>
     </>
   );

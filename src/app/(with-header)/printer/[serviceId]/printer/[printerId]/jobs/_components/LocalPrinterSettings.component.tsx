@@ -1,25 +1,31 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import Section from "@/components/universals/section/Section";
-import Button from "@/components/universals/forms/Button";
-import {
-  LocalPrinterProvider, TLocalPrinterContext
-} from "@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinter.context";
+import type WebBluetoothReceiptPrinterType from '@point-of-sale/webbluetooth-receipt-printer';
+import WebBluetoothReceiptPrinter from '@point-of-sale/webbluetooth-receipt-printer';
 import type WebUSBReceiptPrinterType from '@point-of-sale/webusb-receipt-printer';
 import WebUSBReceiptPrinter from '@point-of-sale/webusb-receipt-printer';
-import { useRouter } from "next/navigation";
-import WebBluetoothReceiptPrinter from "@point-of-sale/webbluetooth-receipt-printer";
-import type WebBluetoothReceiptPrinterType from "@point-of-sale/webbluetooth-receipt-printer";
+import { useRouter } from 'next/navigation';
+import React, {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  LocalPrinterProvider,
+  type TLocalPrinterContext,
+} from '@/app/(with-header)/printer/[serviceId]/printer/[printerId]/jobs/_components/LocalPrinter.context';
+import Button from '@/components/universals/forms/Button';
+import Section from '@/components/universals/section/Section';
 
-type LocalPrinterSettingsProps = PropsWithChildren<{
+type LocalPrinterSettingsProps = PropsWithChildren<{}>;
 
-}>;
-
-const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> = ({
-  children,
-}) => {
-  const [printer, setPrinter] = React.useState<TLocalPrinterContext | null>(null);
+const LocalPrinterSettings: React.FunctionComponent<
+  LocalPrinterSettingsProps
+> = ({ children }) => {
+  const [printer, setPrinter] = React.useState<TLocalPrinterContext | null>(
+    null,
+  );
   const [autoPrint, setAutoPrint] = useState(false);
 
   const router = useRouter();
@@ -33,14 +39,15 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
   }, [router]);
 
   const handleConnectClick = useCallback(async () => {
-    // @ts-ignore
-    // const WebUSBReceiptPrinter = (await import('@point-of-sale/webusb-receipt-printer/dist/webusb-receipt-printer.esm')).default;
-
     const receiptPrinter: WebUSBReceiptPrinterType = new WebUSBReceiptPrinter();
 
-    const res = await new Promise<Omit<TLocalPrinterContext, 'autoPrint' | 'setAutoPrint'>>((resolve) => {
+    const res = await new Promise<
+      Omit<TLocalPrinterContext, 'autoPrint' | 'setAutoPrint'>
+    >((resolve) => {
       receiptPrinter.addEventListener('connected', (device) => {
-        console.log(`Connected to ${device.manufacturerName} ${device.productName} (#${device.serialNumber})`);
+        console.log(
+          `Connected to ${device.manufacturerName} ${device.productName} (#${device.serialNumber})`,
+        );
 
         const printerLanguage = device.language;
         const printerCodepageMapping = device.codepageMapping;
@@ -69,14 +76,16 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
   }, [autoPrint, setAutoPrint]);
 
   const handleBluetoothConnectClick = useCallback(async () => {
-    // @ts-ignore
-    // const WebUSBReceiptPrinter = (await import('@point-of-sale/webusb-receipt-printer/dist/webusb-receipt-printer.esm')).default;
+    const receiptPrinter: WebBluetoothReceiptPrinterType =
+      new WebBluetoothReceiptPrinter();
 
-    const receiptPrinter: WebBluetoothReceiptPrinterType = new WebBluetoothReceiptPrinter();
-
-    const res = await new Promise<Omit<TLocalPrinterContext, 'autoPrint' | 'setAutoPrint'>>((resolve) => {
+    const res = await new Promise<
+      Omit<TLocalPrinterContext, 'autoPrint' | 'setAutoPrint'>
+    >((resolve) => {
       receiptPrinter.addEventListener('connected', (device) => {
-        console.log(`Connected to ${device.manufacturerName} ${device.productName} (#${device.serialNumber})`);
+        console.log(
+          `Connected to ${device.manufacturerName} ${device.productName} (#${device.serialNumber})`,
+        );
 
         const printerLanguage = device.language;
         const printerCodepageMapping = device.codepageMapping;
@@ -121,21 +130,17 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
     <>
       <Section name="Lokale Druckereinstellungen">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <Button
-            type="button"
-            onClick={handleConnectClick}
-          >
+          <Button type="button" onClick={handleConnectClick}>
             Drucker verbinden
           </Button>
-          <Button
-            type="button"
-            onClick={handleBluetoothConnectClick}
-          >
+          <Button type="button" onClick={handleBluetoothConnectClick}>
             Bluetoothdrucker verbinden
           </Button>
 
           {printer && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
               <label>
                 <input
                   type="checkbox"
@@ -146,11 +151,13 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
                 Auto-Druck aktivieren
               </label>
               {autoPrint && (
-                <span style={{
-                  color: 'green',
-                  fontSize: '0.9rem',
-                  fontWeight: 'bold'
-                }}>
+                <span
+                  style={{
+                    color: 'green',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                  }}
+                >
                   ● Aktiv
                 </span>
               )}
@@ -158,9 +165,7 @@ const LocalPrinterSettings: React.FunctionComponent<LocalPrinterSettingsProps> =
           )}
         </div>
       </Section>
-      <LocalPrinterProvider value={printer}>
-        {children}
-      </LocalPrinterProvider>
+      <LocalPrinterProvider value={printer}>{children}</LocalPrinterProvider>
     </>
   );
 };

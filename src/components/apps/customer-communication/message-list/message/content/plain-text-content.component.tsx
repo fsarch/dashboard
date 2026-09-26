@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 type PlainTextContentProps = {
   value: string;
@@ -7,11 +7,7 @@ type PlainTextContentProps = {
 const PlainTextContent: React.FunctionComponent<PlainTextContentProps> = ({
   value,
 }) => {
-  return (
-    <>
-      {value}
-    </>
-  );
+  return <>{value}</>;
 };
 
 export default PlainTextContent;

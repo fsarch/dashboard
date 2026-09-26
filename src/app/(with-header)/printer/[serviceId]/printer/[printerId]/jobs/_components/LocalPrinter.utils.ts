@@ -1,9 +1,15 @@
-import ReceiptPrinterEncoder, { PrinterLanguage } from '@point-of-sale/receipt-printer-encoder';
-import { PrintJobDto, ReceiptDataDto } from "@/services/printer/printer.type";
-import { TLocalPrinterContext } from "./LocalPrinter.context";
+import ReceiptPrinterEncoder, {
+  type PrinterLanguage,
+} from '@point-of-sale/receipt-printer-encoder';
+import type {
+  PrintJobDto,
+  ReceiptDataDto,
+} from '@/services/printer/printer.type';
+import type { TLocalPrinterContext } from './LocalPrinter.context';
 import {
-  updateCollectionTime, updatePrintTime
-} from "./LocalPrinterPrintIcon.server-action";
+  updateCollectionTime,
+  updatePrintTime,
+} from './LocalPrinterPrintIcon.server-action';
 
 const DEFAULT_FONT = 'a';
 
@@ -138,7 +144,7 @@ function encodeReceiptData(
  */
 export async function executeAutoPrintJob(
   localPrinter: TLocalPrinterContext,
-  job: PrintJobDto
+  job: PrintJobDto,
 ): Promise<void> {
   if (!localPrinter.printer || !localPrinter.device) {
     throw new Error('No printer connected');
@@ -153,11 +159,11 @@ export async function executeAutoPrintJob(
     await updateCollectionTime(job.printerId, job.id);
 
     // Step 2: Encode and print
-    const {device, printer} = localPrinter;
+    const { device, printer } = localPrinter;
 
     console.log(device);
 
-    let encoder = new ReceiptPrinterEncoder({
+    const encoder = new ReceiptPrinterEncoder({
       language: device.language as PrinterLanguage | undefined,
       codepageCandidates: [device.codepageMapping, 'epson'],
     }).initialize();

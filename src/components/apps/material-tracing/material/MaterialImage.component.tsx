@@ -1,6 +1,6 @@
 import 'server-only';
 
-import React from 'react';
+import type React from 'react';
 import { materialService } from '@/services/material-tracing/material.service';
 import { proxyRequestUtils } from '@/utils/proxy-request.utils';
 import styles from './MaterialImage.module.scss';
@@ -24,13 +24,8 @@ const MaterialImage: React.FunctionComponent<MaterialImageProps> = async ({
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={proxyUrl}
-      alt=""
-      className={styles.image}
-    />
+    <img src={proxyUrl} alt="" className={styles.image} />
   );
 };
 
 export default MaterialImage;
-

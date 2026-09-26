@@ -1,16 +1,16 @@
-import React from 'react';
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import TileList from "@/components/universals/tile-list/TileList";
-import { AppNavigationItem } from "@/constants/app.type";
-import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
+import type React from 'react';
+import LinkTileListItem from '@/components/universals/tile-list/LinkTileListItem';
+import TileList from '@/components/universals/tile-list/TileList';
+import type { AppNavigationItem } from '@/constants/app.type';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 type NavigationTileListProps = {
   navigation: Array<AppNavigationItem>;
 };
 
-const NavigationTileList: React.FunctionComponent<NavigationTileListProps> = async ({
-  navigation,
-}) => {
+const NavigationTileList: React.FunctionComponent<
+  NavigationTileListProps
+> = async ({ navigation }) => {
   return (
     <TileList>
       {navigation.map(async (navigationItem, index) => (

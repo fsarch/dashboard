@@ -1,5 +1,5 @@
 import { fetchService } from '@/utils/fetchService';
-import {
+import type {
   BindableAffineMatrix,
   LayerDto,
   LayerOptions,
@@ -14,25 +14,44 @@ import {
 // (mirroring the `frontend` app's convention), since GeneratedForm already
 // owns their create/update requests.
 
-const getProjectVersion = async (projectId: string, versionId: string): Promise<ProjectVersionDto> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}`);
+const getProjectVersion = async (
+  projectId: string,
+  versionId: string,
+): Promise<ProjectVersionDto> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}`,
+  );
   return response.json();
 };
 
-const listProjectVersions = async (projectId: string): Promise<ProjectVersionDto[]> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions?take=1000`);
+const listProjectVersions = async (
+  projectId: string,
+): Promise<ProjectVersionDto[]> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions?take=1000`,
+  );
   const result = await response.json();
   return result.data;
 };
 
-const listParameters = async (projectId: string, versionId: string): Promise<ParameterDto[]> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/parameters?take=1000`);
+const listParameters = async (
+  projectId: string,
+  versionId: string,
+): Promise<ParameterDto[]> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/parameters?take=1000`,
+  );
   const result = await response.json();
   return result.data;
 };
 
-const listLayers = async (projectId: string, versionId: string): Promise<LayerDto[]> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/layers?take=1000`);
+const listLayers = async (
+  projectId: string,
+  versionId: string,
+): Promise<LayerDto[]> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/layers?take=1000`,
+  );
   const result = await response.json();
   return result.data as LayerDto[];
 };
@@ -48,14 +67,19 @@ const createLayer = async (
     options: LayerOptions;
   },
 ): Promise<LayerDto> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/layers`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/layers`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
 
   if (!response.ok) {
-    throw new Error(`failed to create layer: ${response.status} ${await response.text()}`);
+    throw new Error(
+      `failed to create layer: ${response.status} ${await response.text()}`,
+    );
   }
 
   return response.json();
@@ -73,26 +97,40 @@ const updateLayer = async (
     hidden: boolean;
   }>,
 ): Promise<LayerDto> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/layers/${layerId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/layers/${layerId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
 
   if (!response.ok) {
-    throw new Error(`failed to update layer: ${response.status} ${await response.text()}`);
+    throw new Error(
+      `failed to update layer: ${response.status} ${await response.text()}`,
+    );
   }
 
   return response.json();
 };
 
-const deleteLayer = async (projectId: string, versionId: string, layerId: string): Promise<void> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/layers/${layerId}`, {
-    method: 'DELETE',
-  });
+const deleteLayer = async (
+  projectId: string,
+  versionId: string,
+  layerId: string,
+): Promise<void> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/layers/${layerId}`,
+    {
+      method: 'DELETE',
+    },
+  );
 
   if (!response.ok) {
-    throw new Error(`failed to delete layer: ${response.status} ${await response.text()}`);
+    throw new Error(
+      `failed to delete layer: ${response.status} ${await response.text()}`,
+    );
   }
 };
 
@@ -100,12 +138,17 @@ const renderProjectVersion = async (
   projectId: string,
   versionId: string,
   parameters: Record<string, unknown>,
-): Promise<{ ok: true; base64: string } | { ok: false; status: number; message: string }> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/_actions/render`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ parameters }),
-  });
+): Promise<
+  { ok: true; base64: string } | { ok: false; status: number; message: string }
+> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/_actions/render`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ parameters }),
+    },
+  );
 
   if (!response.ok) {
     const body = await response.text();
@@ -116,13 +159,21 @@ const renderProjectVersion = async (
   return { ok: true, base64: Buffer.from(arrayBuffer).toString('base64') };
 };
 
-const activateProjectVersion = async (projectId: string, versionId: string): Promise<ProjectVersionDto> => {
-  const response = await fetchService(`/v1/projects/${projectId}/versions/${versionId}/_actions/activate`, {
-    method: 'POST',
-  });
+const activateProjectVersion = async (
+  projectId: string,
+  versionId: string,
+): Promise<ProjectVersionDto> => {
+  const response = await fetchService(
+    `/v1/projects/${projectId}/versions/${versionId}/_actions/activate`,
+    {
+      method: 'POST',
+    },
+  );
 
   if (!response.ok) {
-    throw new Error(`failed to activate version: ${response.status} ${await response.text()}`);
+    throw new Error(
+      `failed to activate version: ${response.status} ${await response.text()}`,
+    );
   }
 
   return response.json();

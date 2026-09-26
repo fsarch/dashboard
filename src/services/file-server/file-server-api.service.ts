@@ -1,5 +1,4 @@
-import { fetchService } from '@/utils/fetchService';
-import {
+import type {
   TAsset,
   TAssetMetadataValue,
   TAssetVersion,
@@ -19,6 +18,7 @@ import {
   TTrash,
   TUpload,
 } from '@/services/file-server/file-server-api.type';
+import { fetchService } from '@/utils/fetchService';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
 
@@ -43,7 +43,10 @@ const listFolders = async (
   page = 1,
   pageSize = 100,
 ): Promise<TPaginationResult<TFolder>> => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
   if (parentId) {
     params.set('parentId', parentId);
   }
@@ -58,11 +61,19 @@ const getFolderChildren = async (
   page = 1,
   pageSize = 100,
 ): Promise<TFolderChildren> => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
-  return json(await fetchService(`/v1/folders/${id}/children?${params.toString()}`));
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
+  return json(
+    await fetchService(`/v1/folders/${id}/children?${params.toString()}`),
+  );
 };
 
-const createFolder = async (data: { name: string; parentId?: string | null }): Promise<TFolder> =>
+const createFolder = async (data: {
+  name: string;
+  parentId?: string | null;
+}): Promise<TFolder> =>
   json(
     await fetchService('/v1/folders', {
       method: 'POST',
@@ -80,7 +91,10 @@ const renameFolder = async (id: string, name: string): Promise<TFolder> =>
     }),
   );
 
-const moveFolder = async (id: string, parentId: string | null): Promise<TFolder> =>
+const moveFolder = async (
+  id: string,
+  parentId: string | null,
+): Promise<TFolder> =>
   json(
     await fetchService(`/v1/folders/${id}/move`, {
       method: 'POST',
@@ -102,7 +116,10 @@ const listAssets = async (
   page = 1,
   pageSize = 100,
 ): Promise<TPaginationResult<TAsset>> => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
   if (parentId) {
     params.set('parentId', parentId);
   }
@@ -135,7 +152,10 @@ const renameAsset = async (id: string, name: string): Promise<TAsset> =>
     }),
   );
 
-const moveAsset = async (id: string, parentId: string | null): Promise<TAsset> =>
+const moveAsset = async (
+  id: string,
+  parentId: string | null,
+): Promise<TAsset> =>
   json(
     await fetchService(`/v1/assets/${id}/move`, {
       method: 'POST',
@@ -152,10 +172,17 @@ const restoreAsset = async (id: string): Promise<TAsset> =>
 
 // Follows the redirect (S3 presigned URL) or streams the filesystem-backend
 // body transparently - `fetch` resolves both to one final Response either way.
-const fetchAssetContent = (id: string, disposition: 'content' | 'download', range?: string): Promise<Response> =>
-  fetchService(`/v1/assets/${id}/${disposition === 'download' ? 'download' : 'content'}`, {
-    headers: range ? { Range: range } : undefined,
-  });
+const fetchAssetContent = (
+  id: string,
+  disposition: 'content' | 'download',
+  range?: string,
+): Promise<Response> =>
+  fetchService(
+    `/v1/assets/${id}/${disposition === 'download' ? 'download' : 'content'}`,
+    {
+      headers: range ? { Range: range } : undefined,
+    },
+  );
 
 const listAssetVersions = async (assetId: string): Promise<TAssetVersion[]> =>
   json(await fetchService(`/v1/assets/${assetId}/versions`));
@@ -172,24 +199,36 @@ const createAssetVersion = async (
     }),
   );
 
-const restoreAssetVersion = async (assetId: string, versionId: string): Promise<TAsset> =>
+const restoreAssetVersion = async (
+  assetId: string,
+  versionId: string,
+): Promise<TAsset> =>
   json(
     await fetchService(`/v1/assets/${assetId}/versions/${versionId}/restore`, {
       method: 'POST',
     }),
   );
 
-const removeAssetVersion = async (assetId: string, versionId: string): Promise<void> =>
+const removeAssetVersion = async (
+  assetId: string,
+  versionId: string,
+): Promise<void> =>
   empty(
     await fetchService(`/v1/assets/${assetId}/versions/${versionId}`, {
       method: 'DELETE',
     }),
   );
 
-const listAssetMetadata = async (assetId: string): Promise<TAssetMetadataValue[]> =>
+const listAssetMetadata = async (
+  assetId: string,
+): Promise<TAssetMetadataValue[]> =>
   json(await fetchService(`/v1/assets/${assetId}/metadata`));
 
-const setAssetMetadata = async (assetId: string, definitionId: string, value: string): Promise<void> =>
+const setAssetMetadata = async (
+  assetId: string,
+  definitionId: string,
+  value: string,
+): Promise<void> =>
   empty(
     await fetchService(`/v1/assets/${assetId}/metadata/${definitionId}`, {
       method: 'PUT',
@@ -198,7 +237,10 @@ const setAssetMetadata = async (assetId: string, definitionId: string, value: st
     }),
   );
 
-const removeAssetMetadata = async (assetId: string, definitionId: string): Promise<void> =>
+const removeAssetMetadata = async (
+  assetId: string,
+  definitionId: string,
+): Promise<void> =>
   empty(
     await fetchService(`/v1/assets/${assetId}/metadata/${definitionId}`, {
       method: 'DELETE',
@@ -209,17 +251,29 @@ const listAssetTags = async (assetId: string): Promise<TTag[]> =>
   json(await fetchService(`/v1/assets/${assetId}/tags`));
 
 const addAssetTag = async (assetId: string, tagId: string): Promise<void> =>
-  empty(await fetchService(`/v1/assets/${assetId}/tags/${tagId}`, { method: 'POST' }));
+  empty(
+    await fetchService(`/v1/assets/${assetId}/tags/${tagId}`, {
+      method: 'POST',
+    }),
+  );
 
 const removeAssetTag = async (assetId: string, tagId: string): Promise<void> =>
-  empty(await fetchService(`/v1/assets/${assetId}/tags/${tagId}`, { method: 'DELETE' }));
+  empty(
+    await fetchService(`/v1/assets/${assetId}/tags/${tagId}`, {
+      method: 'DELETE',
+    }),
+  );
 
 const listAssetCollections = async (assetId: string): Promise<TCollection[]> =>
   json(await fetchService(`/v1/assets/${assetId}/collections`));
 // endregion
 
 // region Uploads
-const uploadContent = async (uploadId: string, body: BodyInit, contentType: string | null): Promise<TUpload> =>
+const uploadContent = async (
+  uploadId: string,
+  body: BodyInit,
+  contentType: string | null,
+): Promise<TUpload> =>
   json(
     await fetchService(`/v1/uploads/${uploadId}/content`, {
       method: 'PUT',
@@ -230,16 +284,26 @@ const uploadContent = async (uploadId: string, body: BodyInit, contentType: stri
     }),
   );
 
-const completeUpload = async (uploadId: string): Promise<{ asset: TAsset; version: TAssetVersion }> =>
-  json(await fetchService(`/v1/uploads/${uploadId}/complete`, { method: 'POST' }));
+const completeUpload = async (
+  uploadId: string,
+): Promise<{ asset: TAsset; version: TAssetVersion }> =>
+  json(
+    await fetchService(`/v1/uploads/${uploadId}/complete`, { method: 'POST' }),
+  );
 
 const abortUpload = async (uploadId: string): Promise<void> =>
   empty(await fetchService(`/v1/uploads/${uploadId}`, { method: 'DELETE' }));
 // endregion
 
 // region Collections
-const listCollections = async (page = 1, pageSize = 100): Promise<TPaginationResult<TCollection>> => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+const listCollections = async (
+  page = 1,
+  pageSize = 100,
+): Promise<TPaginationResult<TCollection>> => {
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
   return json(await fetchService(`/v1/collections?${params.toString()}`));
 };
 
@@ -255,7 +319,10 @@ const createCollection = async (name: string): Promise<TCollection> =>
     }),
   );
 
-const renameCollection = async (id: string, name: string): Promise<TCollection> =>
+const renameCollection = async (
+  id: string,
+  name: string,
+): Promise<TCollection> =>
   json(
     await fetchService(`/v1/collections/${id}`, {
       method: 'PATCH',
@@ -275,15 +342,34 @@ const listCollectionAssets = async (
   page = 1,
   pageSize = 100,
 ): Promise<TPaginationResult<TAsset>> => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
-  return json(await fetchService(`/v1/collections/${id}/assets?${params.toString()}`));
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
+  return json(
+    await fetchService(`/v1/collections/${id}/assets?${params.toString()}`),
+  );
 };
 
-const addAssetToCollection = async (id: string, assetId: string): Promise<void> =>
-  empty(await fetchService(`/v1/collections/${id}/assets/${assetId}`, { method: 'POST' }));
+const addAssetToCollection = async (
+  id: string,
+  assetId: string,
+): Promise<void> =>
+  empty(
+    await fetchService(`/v1/collections/${id}/assets/${assetId}`, {
+      method: 'POST',
+    }),
+  );
 
-const removeAssetFromCollection = async (id: string, assetId: string): Promise<void> =>
-  empty(await fetchService(`/v1/collections/${id}/assets/${assetId}`, { method: 'DELETE' }));
+const removeAssetFromCollection = async (
+  id: string,
+  assetId: string,
+): Promise<void> =>
+  empty(
+    await fetchService(`/v1/collections/${id}/assets/${assetId}`, {
+      method: 'DELETE',
+    }),
+  );
 // endregion
 
 // region Groups
@@ -294,9 +380,13 @@ const listGroups = async (): Promise<TGroup[]> => {
   return result.data;
 };
 
-const getGroup = async (id: string): Promise<TGroup> => json(await fetchService(`/v1/groups/${id}`));
+const getGroup = async (id: string): Promise<TGroup> =>
+  json(await fetchService(`/v1/groups/${id}`));
 
-const createGroup = async (data: { name: string; permissionResourceId: string }): Promise<TGroup> =>
+const createGroup = async (data: {
+  name: string;
+  permissionResourceId: string;
+}): Promise<TGroup> =>
   json(
     await fetchService('/v1/groups', {
       method: 'POST',
@@ -350,7 +440,9 @@ const listMetadataDefinitions = async (): Promise<TMetadataDefinition[]> => {
   return result.data;
 };
 
-const getMetadataDefinition = async (id: string): Promise<TMetadataDefinition> =>
+const getMetadataDefinition = async (
+  id: string,
+): Promise<TMetadataDefinition> =>
   json(await fetchService(`/v1/metadata-definitions/${id}`));
 
 const createMetadataDefinition = async (data: {
@@ -368,10 +460,18 @@ const createMetadataDefinition = async (data: {
   );
 
 const deleteMetadataDefinition = async (id: string): Promise<void> =>
-  empty(await fetchService(`/v1/metadata-definitions/${id}`, { method: 'DELETE' }));
+  empty(
+    await fetchService(`/v1/metadata-definitions/${id}`, { method: 'DELETE' }),
+  );
 
-const restoreMetadataDefinition = async (id: string): Promise<TMetadataDefinition> =>
-  json(await fetchService(`/v1/metadata-definitions/${id}/restore`, { method: 'POST' }));
+const restoreMetadataDefinition = async (
+  id: string,
+): Promise<TMetadataDefinition> =>
+  json(
+    await fetchService(`/v1/metadata-definitions/${id}/restore`, {
+      method: 'POST',
+    }),
+  );
 // endregion
 
 // region Permissions
@@ -385,19 +485,30 @@ const listPermissions = async (
   resourceType: TPermissionResourceType,
   resourceId: string,
 ): Promise<TPermission[]> =>
-  json(await fetchService(`/v1/${RESOURCE_CONTROLLER_PATH[resourceType]}/${resourceId}/permissions`));
+  json(
+    await fetchService(
+      `/v1/${RESOURCE_CONTROLLER_PATH[resourceType]}/${resourceId}/permissions`,
+    ),
+  );
 
 const grantPermission = async (
   resourceType: TPermissionResourceType,
   resourceId: string,
-  data: { subjectType: TPermissionSubjectType; subjectId?: string; permission: TPermissionType },
+  data: {
+    subjectType: TPermissionSubjectType;
+    subjectId?: string;
+    permission: TPermissionType;
+  },
 ): Promise<TPermission> =>
   json(
-    await fetchService(`/v1/${RESOURCE_CONTROLLER_PATH[resourceType]}/${resourceId}/permissions`, {
-      method: 'POST',
-      headers: JSON_HEADERS,
-      body: JSON.stringify(data),
-    }),
+    await fetchService(
+      `/v1/${RESOURCE_CONTROLLER_PATH[resourceType]}/${resourceId}/permissions`,
+      {
+        method: 'POST',
+        headers: JSON_HEADERS,
+        body: JSON.stringify(data),
+      },
+    ),
   );
 
 const revokePermission = async (
@@ -415,7 +526,10 @@ const revokePermission = async (
 
 // region Trash
 const listTrash = async (page = 1, pageSize = 100): Promise<TTrash> => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
   return json(await fetchService(`/v1/trash?${params.toString()}`));
 };
 // endregion

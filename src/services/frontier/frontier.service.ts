@@ -1,5 +1,4 @@
-import { fetchService } from '@/utils/fetchService';
-import {
+import type {
   CachePolicyCreateDto,
   CachePolicyDto,
   CachePolicyUpdateDto,
@@ -28,8 +27,12 @@ import {
   UpstreamGroupUpdateDto,
   UpstreamUpdateDto,
 } from '@/services/frontier/frontier.type';
+import { fetchService } from '@/utils/fetchService';
 
-const findById = <T extends { id: string }>(entries: T[], id: string): T | null => {
+const findById = <T extends { id: string }>(
+  entries: T[],
+  id: string,
+): T | null => {
   return entries.find((entry) => entry.id === id) ?? null;
 };
 
@@ -40,12 +43,16 @@ const listDomainGroups = async (): Promise<DomainGroupDto[]> => {
   return response.json();
 };
 
-const getDomainGroup = async (domainGroupId: string): Promise<DomainGroupDto | null> => {
+const getDomainGroup = async (
+  domainGroupId: string,
+): Promise<DomainGroupDto | null> => {
   const domainGroups = await listDomainGroups();
   return findById(domainGroups, domainGroupId);
 };
 
-const createDomainGroup = async (data: DomainGroupCreateDto): Promise<DomainGroupDto> => {
+const createDomainGroup = async (
+  data: DomainGroupCreateDto,
+): Promise<DomainGroupDto> => {
   const response = await fetchService('/v1/domain-groups', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -57,86 +64,140 @@ const createDomainGroup = async (data: DomainGroupCreateDto): Promise<DomainGrou
 // --- Domains ---
 
 const listDomains = async (domainGroupId: string): Promise<DomainDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/domain`);
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/domain`,
+  );
   return response.json();
 };
 
-const getDomain = async (domainGroupId: string, domainId: string): Promise<DomainDto | null> => {
+const getDomain = async (
+  domainGroupId: string,
+  domainId: string,
+): Promise<DomainDto | null> => {
   const domains = await listDomains(domainGroupId);
   return findById(domains, domainId);
 };
 
-const createDomain = async (domainGroupId: string, data: DomainCreateDto): Promise<DomainDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/domain`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createDomain = async (
+  domainGroupId: string,
+  data: DomainCreateDto,
+): Promise<DomainDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/domain`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
 // --- Cache Policies ---
 
-const listCachePolicies = async (domainGroupId: string): Promise<CachePolicyDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cache-policies`);
+const listCachePolicies = async (
+  domainGroupId: string,
+): Promise<CachePolicyDto[]> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cache-policies`,
+  );
   return response.json();
 };
 
-const getCachePolicy = async (domainGroupId: string, cachePolicyId: string): Promise<CachePolicyDto | null> => {
+const getCachePolicy = async (
+  domainGroupId: string,
+  cachePolicyId: string,
+): Promise<CachePolicyDto | null> => {
   const cachePolicies = await listCachePolicies(domainGroupId);
   return findById(cachePolicies, cachePolicyId);
 };
 
-const createCachePolicy = async (domainGroupId: string, data: CachePolicyCreateDto): Promise<CachePolicyDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cache-policies`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createCachePolicy = async (
+  domainGroupId: string,
+  data: CachePolicyCreateDto,
+): Promise<CachePolicyDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cache-policies`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const updateCachePolicy = async (domainGroupId: string, id: string, data: CachePolicyUpdateDto): Promise<CachePolicyDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cache-policies/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const updateCachePolicy = async (
+  domainGroupId: string,
+  id: string,
+  data: CachePolicyUpdateDto,
+): Promise<CachePolicyDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cache-policies/${id}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
 // --- Path Rules ---
 
 const listPathRules = async (domainGroupId: string): Promise<PathRuleDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules`);
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/path-rules`,
+  );
   return response.json();
 };
 
-const getPathRule = async (domainGroupId: string, pathRuleId: string): Promise<PathRuleDto | null> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`);
+const getPathRule = async (
+  domainGroupId: string,
+  pathRuleId: string,
+): Promise<PathRuleDto | null> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/path-rules/${pathRuleId}`,
+  );
   if (!response.ok) return null;
   return response.json();
 };
 
-const createPathRule = async (domainGroupId: string, data: PathRuleCreateDto): Promise<PathRuleDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createPathRule = async (
+  domainGroupId: string,
+  data: PathRuleCreateDto,
+): Promise<PathRuleDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/path-rules`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const updatePathRule = async (domainGroupId: string, id: string, data: PathRuleUpdateDto): Promise<PathRuleDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const updatePathRule = async (
+  domainGroupId: string,
+  id: string,
+  data: PathRuleUpdateDto,
+): Promise<PathRuleDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/path-rules/${id}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const deletePathRule = async (domainGroupId: string, id: string): Promise<void> => {
+const deletePathRule = async (
+  domainGroupId: string,
+  id: string,
+): Promise<void> => {
   await fetchService(`/v1/domain-groups/${domainGroupId}/path-rules/${id}`, {
     method: 'DELETE',
   });
@@ -144,36 +205,61 @@ const deletePathRule = async (domainGroupId: string, id: string): Promise<void> 
 
 // --- CORS Policies ---
 
-const listCorsPolicies = async (domainGroupId: string): Promise<CorsPolicyDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies`);
+const listCorsPolicies = async (
+  domainGroupId: string,
+): Promise<CorsPolicyDto[]> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cors-policies`,
+  );
   return response.json();
 };
 
-const getCorsPolicy = async (domainGroupId: string, corsPolicyId: string): Promise<CorsPolicyDto | null> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies/${corsPolicyId}`);
+const getCorsPolicy = async (
+  domainGroupId: string,
+  corsPolicyId: string,
+): Promise<CorsPolicyDto | null> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cors-policies/${corsPolicyId}`,
+  );
   if (!response.ok) return null;
   return response.json();
 };
 
-const createCorsPolicy = async (domainGroupId: string, data: CorsPolicyCreateDto): Promise<CorsPolicyDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createCorsPolicy = async (
+  domainGroupId: string,
+  data: CorsPolicyCreateDto,
+): Promise<CorsPolicyDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cors-policies`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const updateCorsPolicy = async (domainGroupId: string, id: string, data: CorsPolicyUpdateDto): Promise<CorsPolicyDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const updateCorsPolicy = async (
+  domainGroupId: string,
+  id: string,
+  data: CorsPolicyUpdateDto,
+): Promise<CorsPolicyDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/cors-policies/${id}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const deleteCorsPolicy = async (domainGroupId: string, id: string): Promise<void> => {
+const deleteCorsPolicy = async (
+  domainGroupId: string,
+  id: string,
+): Promise<void> => {
   await fetchService(`/v1/domain-groups/${domainGroupId}/cors-policies/${id}`, {
     method: 'DELETE',
   });
@@ -181,36 +267,61 @@ const deleteCorsPolicy = async (domainGroupId: string, id: string): Promise<void
 
 // --- Log Policies ---
 
-const listLogPolicies = async (domainGroupId: string): Promise<LogPolicyDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies`);
+const listLogPolicies = async (
+  domainGroupId: string,
+): Promise<LogPolicyDto[]> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/log-policies`,
+  );
   return response.json();
 };
 
-const getLogPolicy = async (domainGroupId: string, logPolicyId: string): Promise<LogPolicyDto | null> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies/${logPolicyId}`);
+const getLogPolicy = async (
+  domainGroupId: string,
+  logPolicyId: string,
+): Promise<LogPolicyDto | null> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/log-policies/${logPolicyId}`,
+  );
   if (!response.ok) return null;
   return response.json();
 };
 
-const createLogPolicy = async (domainGroupId: string, data: LogPolicyCreateDto): Promise<LogPolicyDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createLogPolicy = async (
+  domainGroupId: string,
+  data: LogPolicyCreateDto,
+): Promise<LogPolicyDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/log-policies`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const updateLogPolicy = async (domainGroupId: string, id: string, data: LogPolicyUpdateDto): Promise<LogPolicyDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const updateLogPolicy = async (
+  domainGroupId: string,
+  id: string,
+  data: LogPolicyUpdateDto,
+): Promise<LogPolicyDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/log-policies/${id}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const deleteLogPolicy = async (domainGroupId: string, id: string): Promise<void> => {
+const deleteLogPolicy = async (
+  domainGroupId: string,
+  id: string,
+): Promise<void> => {
   await fetchService(`/v1/domain-groups/${domainGroupId}/log-policies/${id}`, {
     method: 'DELETE',
   });
@@ -246,10 +357,15 @@ const getRequestLog = async (
   query?: RequestLogListQuery,
 ): Promise<RequestLogDto | null> => {
   const requestLogAbsoluteIndexPrefix = '__absolute-';
-  const isAbsoluteIndexReference = requestLogId.startsWith(requestLogAbsoluteIndexPrefix);
+  const isAbsoluteIndexReference = requestLogId.startsWith(
+    requestLogAbsoluteIndexPrefix,
+  );
 
   if (isAbsoluteIndexReference) {
-    const absoluteIndex = Number.parseInt(requestLogId.replace(requestLogAbsoluteIndexPrefix, ''), 10);
+    const absoluteIndex = Number.parseInt(
+      requestLogId.replace(requestLogAbsoluteIndexPrefix, ''),
+      10,
+    );
     if (Number.isNaN(absoluteIndex) || absoluteIndex < 0) {
       return null;
     }
@@ -269,97 +385,170 @@ const getRequestLog = async (
     offset: query?.offset ?? 0,
   });
 
-  return requestLogs.find((requestLog, index) => {
-    if (requestLog.id) {
-      return requestLog.id === requestLogId;
-    }
+  return (
+    requestLogs.find((requestLog, index) => {
+      if (requestLog.id) {
+        return requestLog.id === requestLogId;
+      }
 
-    return `${requestLogAbsoluteIndexPrefix}${index + (query?.offset ?? 0)}` === requestLogId;
-  }) ?? null;
+      return (
+        `${requestLogAbsoluteIndexPrefix}${index + (query?.offset ?? 0)}` ===
+        requestLogId
+      );
+    }) ?? null
+  );
 };
 
 // --- Upstream Groups ---
 
-const listUpstreamGroups = async (domainGroupId: string): Promise<UpstreamGroupDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups`);
+const listUpstreamGroups = async (
+  domainGroupId: string,
+): Promise<UpstreamGroupDto[]> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups`,
+  );
   return response.json();
 };
 
-const getUpstreamGroup = async (domainGroupId: string, upstreamGroupId: string): Promise<UpstreamGroupDto | null> => {
+const getUpstreamGroup = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+): Promise<UpstreamGroupDto | null> => {
   const upstreamGroups = await listUpstreamGroups(domainGroupId);
   return findById(upstreamGroups, upstreamGroupId);
 };
 
-const createUpstreamGroup = async (domainGroupId: string, data: UpstreamGroupCreateDto): Promise<UpstreamGroupDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createUpstreamGroup = async (
+  domainGroupId: string,
+  data: UpstreamGroupCreateDto,
+): Promise<UpstreamGroupDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const getUpstreamGroupById = async (domainGroupId: string, upstreamGroupId: string): Promise<UpstreamGroupDto | null> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`);
+const getUpstreamGroupById = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+): Promise<UpstreamGroupDto | null> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`,
+  );
   if (!response.ok) return null;
   return response.json();
 };
 
-const updateUpstreamGroup = async (domainGroupId: string, upstreamGroupId: string, data: UpstreamGroupUpdateDto): Promise<UpstreamGroupDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const updateUpstreamGroup = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+  data: UpstreamGroupUpdateDto,
+): Promise<UpstreamGroupDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const deleteUpstreamGroup = async (domainGroupId: string, upstreamGroupId: string): Promise<void> => {
-  await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`, {
-    method: 'DELETE',
-  });
+const deleteUpstreamGroup = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+): Promise<void> => {
+  await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}`,
+    {
+      method: 'DELETE',
+    },
+  );
 };
 
 // --- Upstreams ---
 
-const listUpstreams = async (domainGroupId: string, upstreamGroupId: string): Promise<UpstreamDto[]> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`);
+const listUpstreams = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+): Promise<UpstreamDto[]> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`,
+  );
   return response.json();
 };
 
-const getUpstream = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string): Promise<UpstreamDto | null> => {
+const getUpstream = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamId: string,
+): Promise<UpstreamDto | null> => {
   const upstreams = await listUpstreams(domainGroupId, upstreamGroupId);
   return findById(upstreams, upstreamId);
 };
 
-const createUpstream = async (domainGroupId: string, upstreamGroupId: string, data: UpstreamCreateDto): Promise<UpstreamDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const createUpstream = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+  data: UpstreamCreateDto,
+): Promise<UpstreamDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const getUpstreamById = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string): Promise<UpstreamDto | null> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`);
+const getUpstreamById = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamId: string,
+): Promise<UpstreamDto | null> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`,
+  );
   if (!response.ok) return null;
   return response.json();
 };
 
-const updateUpstream = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string, data: UpstreamUpdateDto): Promise<UpstreamDto> => {
-  const response = await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
+const updateUpstream = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamId: string,
+  data: UpstreamUpdateDto,
+): Promise<UpstreamDto> => {
+  const response = await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    },
+  );
   return response.json();
 };
 
-const deleteUpstream = async (domainGroupId: string, upstreamGroupId: string, upstreamId: string): Promise<void> => {
-  await fetchService(`/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`, {
-    method: 'DELETE',
-  });
+const deleteUpstream = async (
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamId: string,
+): Promise<void> => {
+  await fetchService(
+    `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`,
+    {
+      method: 'DELETE',
+    },
+  );
 };
 
 // --- Hooks ---
@@ -385,7 +574,10 @@ const createHook = async (data: HookCreateDto): Promise<HookDto> => {
   return response.json();
 };
 
-const updateHook = async (id: string, data: HookUpdateDto): Promise<HookDto> => {
+const updateHook = async (
+  id: string,
+  data: HookUpdateDto,
+): Promise<HookDto> => {
   const response = await fetchService(`/v1/hooks/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -446,4 +638,3 @@ export const frontierService = {
   updateHook,
   deleteHook,
 };
-

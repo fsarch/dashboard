@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOut } from "@fortawesome/free-solid-svg-icons/faSignOut";
-import clsx from "clsx";
+import { faSignOut } from '@fortawesome/free-solid-svg-icons/faSignOut';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import type React from 'react';
+import { useCallback } from 'react';
 import styles from './SignOutIcon.module.scss';
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 type SignOutIconProps = {
   className: string;

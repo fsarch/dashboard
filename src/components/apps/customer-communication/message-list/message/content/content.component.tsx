@@ -1,9 +1,7 @@
-import React from 'react';
-import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
-import PlainTextContent
-  from "@/components/apps/customer-communication/message-list/message/content/plain-text-content.component";
-import MarkdownContent
-  from "@/components/apps/customer-communication/message-list/message/content/markdown-content.component";
+import type React from 'react';
+import MarkdownContent from '@/components/apps/customer-communication/message-list/message/content/markdown-content.component';
+import PlainTextContent from '@/components/apps/customer-communication/message-list/message/content/plain-text-content.component';
+import { EContentType } from '@/constants/apps/customer-communication/content-type.enum';
 import styles from './content.module.scss';
 
 type ContentProps = {
@@ -20,22 +18,24 @@ const Content: React.FunctionComponent<ContentProps> = ({
   messageId,
 }) => {
   if (contentType === EContentType.TEXT_PLAIN) {
-    return <PlainTextContent value={content}/>
+    return <PlainTextContent value={content} />;
   }
 
   if (contentType === EContentType.TEXT_MARKDOWN) {
-    return <MarkdownContent threadId={threadId} messageId={messageId} />
+    return <MarkdownContent threadId={threadId} messageId={messageId} />;
   }
 
   if (contentType === EContentType.TEXT_HTML) {
-    return <MarkdownContent className={styles.htmlContent} threadId={threadId} messageId={messageId} />
+    return (
+      <MarkdownContent
+        className={styles.htmlContent}
+        threadId={threadId}
+        messageId={messageId}
+      />
+    );
   }
 
-  return (
-    <div>
-      Unsupported ContentType: {contentType}
-    </div>
-  );
+  return <div>Unsupported ContentType: {contentType}</div>;
 };
 
 export default Content;

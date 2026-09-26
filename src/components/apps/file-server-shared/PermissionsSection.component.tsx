@@ -1,12 +1,12 @@
-import React from 'react';
-import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import Button from '@/components/universals/forms/Button';
-import Badge from '@/components/universals/badge/badge.component';
+import type React from 'react';
 import { colors } from '@/app/_styles/colors';
-import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { TPermissionResourceType } from '@/services/file-server/file-server-api.type';
 import { PERMISSION_GRANT_FORM } from '@/components/apps/file-server-shared/permission.forms';
+import Badge from '@/components/universals/badge/badge.component';
+import Button from '@/components/universals/forms/Button';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import Section from '@/components/universals/section/Section';
+import { fileServerApiService } from '@/services/file-server/file-server-api.service';
+import type { TPermissionResourceType } from '@/services/file-server/file-server-api.type';
 
 type PermissionsSectionProps = {
   resourceType: TPermissionResourceType;
@@ -22,12 +22,13 @@ const SUBJECT_LABEL: Record<string, string> = {
   public: 'Öffentlich',
 };
 
-const PermissionsSection: React.FunctionComponent<PermissionsSectionProps> = async ({
-  resourceType,
-  resourceId,
-  backPath,
-}) => {
-  const permissions = await fileServerApiService.listPermissions(resourceType, resourceId);
+const PermissionsSection: React.FunctionComponent<
+  PermissionsSectionProps
+> = async ({ resourceType, resourceId, backPath }) => {
+  const permissions = await fileServerApiService.listPermissions(
+    resourceType,
+    resourceId,
+  );
 
   return (
     <Section name="Berechtigungen">
@@ -45,8 +46,9 @@ const PermissionsSection: React.FunctionComponent<PermissionsSectionProps> = asy
             {permissions.map((permission) => (
               <tr key={permission.id}>
                 <td>
-                  <Badge color={colors.lightBlue}>{SUBJECT_LABEL[permission.subjectType]}</Badge>
-                  {' '}
+                  <Badge color={colors.lightBlue}>
+                    {SUBJECT_LABEL[permission.subjectType]}
+                  </Badge>{' '}
                   {permission.subjectId ?? '–'}
                 </td>
                 <td>{permission.permission}</td>
@@ -72,10 +74,15 @@ const PermissionsSection: React.FunctionComponent<PermissionsSectionProps> = asy
           </tbody>
         </table>
       ) : (
-        <p>Keine Berechtigungen vergeben (nur der Eigentümer und Platform-Admins haben Zugriff).</p>
+        <p>
+          Keine Berechtigungen vergeben (nur der Eigentümer und Platform-Admins
+          haben Zugriff).
+        </p>
       )}
 
-      <GeneratedForm definition={PERMISSION_GRANT_FORM(resourceType, resourceId, backPath)} />
+      <GeneratedForm
+        definition={PERMISSION_GRANT_FORM(resourceType, resourceId, backPath)}
+      />
     </Section>
   );
 };

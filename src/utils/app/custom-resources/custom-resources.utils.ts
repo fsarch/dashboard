@@ -1,8 +1,8 @@
-import { fetchService } from '@/utils/fetchService';
-import { getConfiguration } from '@/utils/configuration.utils';
 import { APPS } from '@/constants/apps';
-import { EServiceType } from '@/utils/configuration.type';
-import {
+import type { EServiceType } from '@/utils/configuration.type';
+import { getConfiguration } from '@/utils/configuration.utils';
+import { fetchService } from '@/utils/fetchService';
+import type {
   TCustomResourceCapableService,
   TCustomResourceDefinition,
   TCustomResourceDefinitionWithAppType,
@@ -17,7 +17,8 @@ import {
 // literaler Textbaustein in ein RegExp-Pattern eingesetzt werden kann (siehe
 // resolvePlaceholders) - wichtig für Namen wie "$system.crd.catalog.id", die
 // mit "$" ein Regex-Metazeichen (End-Anker) enthalten.
-const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegExp = (value: string): string =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Ersetzt Platzhalter der Form {{name}} in path/queryParams-Werten - siehe
 // @fsarch/server/custom-resource README (Placeholders): {{id}}, nur für
@@ -25,12 +26,16 @@ const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\
 // Instanzen anderer Custom-Resource-Typen (siehe
 // custom-resource-references.utils.ts). Wird von diesem Modul selbst nicht
 // ausgewertet, nur die hier bekannten Variablen werden aufgelöst.
-const resolvePlaceholders = (value: string, vars: Record<string, string>): string =>
+const resolvePlaceholders = (
+  value: string,
+  vars: Record<string, string>,
+): string =>
   Object.entries(vars).reduce(
-    (resolved, [name, varValue]) => resolved.replace(
-      new RegExp(`\\{\\{\\s*${escapeRegExp(name)}\\s*\\}\\}`, 'g'),
-      encodeURIComponent(varValue),
-    ),
+    (resolved, [name, varValue]) =>
+      resolved.replace(
+        new RegExp(`\\{\\{\\s*${escapeRegExp(name)}\\s*\\}\\}`, 'g'),
+        encodeURIComponent(varValue),
+      ),
     value,
   );
 
@@ -41,18 +46,24 @@ const resolvePlaceholders = (value: string, vars: Record<string, string>): strin
 const resolveQueryParams = (
   queryParams: Record<string, string | string[]> | undefined,
   vars: Record<string, string>,
-): [string, string][] => Object.entries(queryParams ?? {}).flatMap(([key, value]) => (
-  Array.isArray(value)
-    ? value.map((entry) => [key, resolvePlaceholders(entry, vars)] as [string, string])
-    : [[key, resolvePlaceholders(value, vars)] as [string, string]]
-));
+): [string, string][] =>
+  Object.entries(queryParams ?? {}).flatMap(([key, value]) =>
+    Array.isArray(value)
+      ? value.map(
+          (entry) =>
+            [key, resolvePlaceholders(entry, vars)] as [string, string],
+        )
+      : [[key, resolvePlaceholders(value, vars)] as [string, string]],
+  );
 
 // Nicht-paginierte list/search-Routen (enablePagination: false, z. B. bei
 // product-server) liefern laut Live-Check ein rohes Array statt des
 // {data, metadata}-Pagination-Envelopes (siehe
 // src/services/material-tracing/pagination.type.ts) - hier normalisiert, da
 // dieses Modul beide Response-Formen unterstützen muss.
-const normalizeInstanceListResponse = (body: unknown): TCustomResourceInstanceListResult => {
+const normalizeInstanceListResponse = (
+  body: unknown,
+): TCustomResourceInstanceListResult => {
   if (Array.isArray(body)) {
     return {
       data: body,
@@ -67,8 +78,12 @@ const normalizeInstanceListResponse = (body: unknown): TCustomResourceInstanceLi
   return body as TCustomResourceInstanceListResult;
 };
 
-const listCustomResources = async (serviceId: string): Promise<TCustomResourceDefinition[]> => {
-  const response = await fetchService('/v1/.meta/custom-resources', undefined, { serviceId });
+const listCustomResources = async (
+  serviceId: string,
+): Promise<TCustomResourceDefinition[]> => {
+  const response = await fetchService('/v1/.meta/custom-resources', undefined, {
+    serviceId,
+  });
   if (!response.ok) {
     throw new Error(`failed to list custom resources (${response.status})`);
   }
@@ -100,9 +115,13 @@ const list = async (
   options: { skip?: number; take?: number } = {},
   refValues: Record<string, string> = {},
 ): Promise<TCustomResourceInstanceListResult> => {
-  const url = new URL(resolvePlaceholders(listRoute.request.path, refValues), 'http://localhost');
-  resolveQueryParams(listRoute.request.queryParams, refValues)
-    .forEach(([key, value]) => url.searchParams.append(key, value));
+  const url = new URL(
+    resolvePlaceholders(listRoute.request.path, refValues),
+    'http://localhost',
+  );
+  resolveQueryParams(listRoute.request.queryParams, refValues).forEach(
+    ([key, value]) => url.searchParams.append(key, value),
+  );
   if (options.skip !== undefined) {
     url.searchParams.set('skip', String(options.skip));
   }
@@ -116,7 +135,9 @@ const list = async (
     { serviceId },
   );
   if (!response.ok) {
-    throw new Error(`failed to list custom resource instances (${response.status})`);
+    throw new Error(
+      `failed to list custom resource instances (${response.status})`,
+    );
   }
 
   return normalizeInstanceListResponse(await response.json());
@@ -133,9 +154,13 @@ const get = async (
   refValues: Record<string, string> = {},
 ): Promise<unknown> => {
   const vars = { ...refValues, id: instanceId };
-  const url = new URL(resolvePlaceholders(getRoute.request.path, vars), 'http://localhost');
-  resolveQueryParams(getRoute.request.queryParams, vars)
-    .forEach(([key, value]) => url.searchParams.append(key, value));
+  const url = new URL(
+    resolvePlaceholders(getRoute.request.path, vars),
+    'http://localhost',
+  );
+  resolveQueryParams(getRoute.request.queryParams, vars).forEach(
+    ([key, value]) => url.searchParams.append(key, value),
+  );
 
   const response = await fetchService(
     url.pathname + url.search,
@@ -143,7 +168,9 @@ const get = async (
     { serviceId },
   );
   if (!response.ok) {
-    throw new Error(`failed to get custom resource instance (${response.status})`);
+    throw new Error(
+      `failed to get custom resource instance (${response.status})`,
+    );
   }
 
   return response.json();
@@ -162,9 +189,13 @@ const search = async (
   refValues: Record<string, string> = {},
 ): Promise<TCustomResourceInstanceListResult> => {
   const vars = { ...refValues, query };
-  const url = new URL(resolvePlaceholders(searchRoute.request.path, vars), 'http://localhost');
-  resolveQueryParams(searchRoute.request.queryParams, vars)
-    .forEach(([key, value]) => url.searchParams.append(key, value));
+  const url = new URL(
+    resolvePlaceholders(searchRoute.request.path, vars),
+    'http://localhost',
+  );
+  resolveQueryParams(searchRoute.request.queryParams, vars).forEach(
+    ([key, value]) => url.searchParams.append(key, value),
+  );
   if (options.skip !== undefined) {
     url.searchParams.set('skip', String(options.skip));
   }
@@ -178,7 +209,9 @@ const search = async (
     { serviceId },
   );
   if (!response.ok) {
-    throw new Error(`failed to search custom resource instances (${response.status})`);
+    throw new Error(
+      `failed to search custom resource instances (${response.status})`,
+    );
   }
 
   return normalizeInstanceListResponse(await response.json());
@@ -186,18 +219,26 @@ const search = async (
 
 // Alle konfigurierten Services, deren App-Typ supportsCustomResources
 // gesetzt hat, optional gefiltert auf einen bestimmten App-Typ.
-const listCapableServices = async (appType?: EServiceType): Promise<TCustomResourceCapableService[]> => {
+const listCapableServices = async (
+  appType?: EServiceType,
+): Promise<TCustomResourceCapableService[]> => {
   const configuration = await getConfiguration();
   return configuration.services
     .filter((service) => APPS[service.type]?.supportsCustomResources)
     .filter((service) => !appType || service.type === appType)
-    .map((service) => ({ id: service.id, name: service.name, type: service.type }));
+    .map((service) => ({
+      id: service.id,
+      name: service.name,
+      type: service.type,
+    }));
 };
 
 // Ein Beispiel-Service pro unterstütztem App-Typ - dient als Repräsentant,
 // über den die (laut Backend app-typ-weit identischen) Custom-Resource-
 // Definitionen dieses Typs geladen werden können.
-const listCapableAppTypes = async (): Promise<{ appType: EServiceType; exampleServiceId: string }[]> => {
+const listCapableAppTypes = async (): Promise<
+  { appType: EServiceType; exampleServiceId: string }[]
+> => {
   const services = await listCapableServices();
   const exampleServiceIdByType = new Map<EServiceType, string>();
   for (const service of services) {
@@ -205,23 +246,31 @@ const listCapableAppTypes = async (): Promise<{ appType: EServiceType; exampleSe
       exampleServiceIdByType.set(service.type, service.id);
     }
   }
-  return Array.from(exampleServiceIdByType.entries()).map(([appType, exampleServiceId]) => ({
-    appType,
-    exampleServiceId,
-  }));
+  return Array.from(exampleServiceIdByType.entries()).map(
+    ([appType, exampleServiceId]) => ({
+      appType,
+      exampleServiceId,
+    }),
+  );
 };
 
 // Alle Custom-Resource-Definitionen über alle unterstützten App-Typen
 // hinweg (service-übergreifende Übersicht). Ein nicht erreichbarer
 // Beispiel-Service für einen App-Typ blendet nur dessen Definitionen aus,
 // statt die gesamte Liste scheitern zu lassen.
-const listAllCustomResourceDefinitions = async (): Promise<TCustomResourceDefinitionWithAppType[]> => {
+const listAllCustomResourceDefinitions = async (): Promise<
+  TCustomResourceDefinitionWithAppType[]
+> => {
   const appTypes = await listCapableAppTypes();
   const definitionsByAppType = await Promise.all(
     appTypes.map(async ({ appType, exampleServiceId }) => {
       try {
         const resources = await listCustomResources(exampleServiceId);
-        return resources.map((resource) => ({ appType, exampleServiceId, resource }));
+        return resources.map((resource) => ({
+          appType,
+          exampleServiceId,
+          resource,
+        }));
       } catch {
         return [];
       }
@@ -242,7 +291,10 @@ const getCustomResourceDefinitionForAppType = async (
     return undefined;
   }
 
-  const resource = await getCustomResourceById(match.exampleServiceId, resourceId);
+  const resource = await getCustomResourceById(
+    match.exampleServiceId,
+    resourceId,
+  );
   if (!resource) {
     return undefined;
   }

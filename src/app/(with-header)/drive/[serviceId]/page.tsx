@@ -1,7 +1,7 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { driveService } from '@/services/drive/drive.service';
 import FolderListing from '@/components/apps/drive/FolderListing.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import { driveService } from '@/services/drive/drive.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 
 export const generateMetadata = createAutomaticMetadata();
 

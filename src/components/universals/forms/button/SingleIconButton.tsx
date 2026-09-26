@@ -1,8 +1,8 @@
-import React from 'react';
-import Button, { ButtonProps } from "@/components/universals/forms/Button";
-import { TIcon } from "@/components/universals/icon/Icon.type";
-import Icon from "@/components/universals/icon/Icon.component";
-import clsx from "clsx";
+import clsx from 'clsx';
+import type React from 'react';
+import Button, { type ButtonProps } from '@/components/universals/forms/Button';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './SingleIconButton.module.scss';
 
 export type SingleIconButtonProps = ButtonProps & {
@@ -16,11 +16,8 @@ const SingleIconButton: React.FunctionComponent<SingleIconButtonProps> = ({
   ...props
 }) => {
   return (
-    <Button
-      {...props}
-      className={clsx(className, styles.root)}
-    >
-      <Icon className={styles.icon} icon={icon}/>
+    <Button {...props} className={clsx(className, styles.root)}>
+      <Icon className={styles.icon} icon={icon} />
     </Button>
   );
 };

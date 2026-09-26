@@ -1,8 +1,12 @@
 'use server';
 
-import { imagesAdminService } from "@/services/image/images-admin.service";
+import { imagesAdminService } from '@/services/image/images-admin.service';
 
-export const uploadImage = async (options: { base64: string; name: string; isPublic: boolean; }) => {
+export const uploadImage = async (options: {
+  base64: string;
+  name: string;
+  isPublic: boolean;
+}) => {
   const buffer = Buffer.from(options.base64, 'base64');
 
   await imagesAdminService.uploadImage({

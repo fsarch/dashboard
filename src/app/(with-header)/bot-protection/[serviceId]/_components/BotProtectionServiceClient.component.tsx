@@ -1,17 +1,17 @@
 'use client';
 
-import React from 'react';
-import { TServiceConfiguration } from '@/utils/configuration.type';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
 import { useEffect } from 'react';
+import type { TServiceConfiguration } from '@/utils/configuration.type';
 
 type BotProtectionServiceClientProps = {
   service: TServiceConfiguration;
 };
 
-const BotProtectionServiceClient: React.FunctionComponent<BotProtectionServiceClientProps> = ({
-  service,
-}) => {
+const BotProtectionServiceClient: React.FunctionComponent<
+  BotProtectionServiceClientProps
+> = ({ service }) => {
   const router = useRouter();
 
   // Automatically redirect to claims page

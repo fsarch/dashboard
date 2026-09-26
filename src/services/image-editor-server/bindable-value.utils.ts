@@ -1,4 +1,4 @@
-import { BindableValue } from './image-editor-server.type';
+import type { BindableValue } from './image-editor-server.type';
 
 // Client-side mirror of the backend's src/rendering/bindable-value(-resolver).ts,
 // used ONLY to drive the WYSIWYG layer editor's live preview (resolving
@@ -23,12 +23,19 @@ export function isBindableValue(node: unknown): node is BindableValue<unknown> {
   );
 }
 
-function resolveDotPath(parameters: Record<string, unknown>, path: string): unknown {
+function resolveDotPath(
+  parameters: Record<string, unknown>,
+  path: string,
+): unknown {
   const segments = path.split('.');
   let current: unknown = parameters;
 
   for (const segment of segments) {
-    if (current === null || current === undefined || typeof current !== 'object') {
+    if (
+      current === null ||
+      current === undefined ||
+      typeof current !== 'object'
+    ) {
       return undefined;
     }
 
@@ -47,5 +54,7 @@ export function resolveBindableValue<T>(
     return undefined;
   }
 
-  return bindable.type === 'constant' ? bindable.value : (resolveDotPath(testParameters, bindable.value) as T);
+  return bindable.type === 'constant'
+    ? bindable.value
+    : (resolveDotPath(testParameters, bindable.value) as T);
 }

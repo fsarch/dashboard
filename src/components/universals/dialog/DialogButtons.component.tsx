@@ -1,5 +1,6 @@
-import React, { PropsWithChildren } from 'react';
 import clsx from 'clsx';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import styles from './DialogButtons.module.scss';
 
 export type TDialogButtonsAlignment = 'left' | 'center' | 'right';
@@ -20,7 +21,9 @@ const DialogButtons: React.FunctionComponent<DialogButtonsProps> = ({
   className,
   alignment = 'right',
 }) => (
-  <div className={clsx(styles.root, ALIGNMENT_CLASS_NAMES[alignment], className)}>
+  <div
+    className={clsx(styles.root, ALIGNMENT_CLASS_NAMES[alignment], className)}
+  >
     {children}
   </div>
 );

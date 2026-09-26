@@ -1,15 +1,15 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import { calendarService } from '@/services/calendar/calendar.service';
 import { CALENDAR_CREATE_FORM } from '@/services/calendar/calendar.forms';
+import { calendarService } from '@/services/calendar/calendar.service';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import CalendarsList from './_components/CalendarsList.component';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -30,7 +30,9 @@ export default async function CalendarsPage({
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -41,7 +43,7 @@ export default async function CalendarsPage({
   const canAccessService = await uacUtils.hasAppPermission(
     EServiceType.CALENDAR,
     serviceId,
-    accessToken
+    accessToken,
   );
   if (!canAccessService) {
     return notFound();
@@ -49,7 +51,7 @@ export default async function CalendarsPage({
 
   const calendars = await calendarService.listCalendars(
     { page: parseInt(page), pageSize: parseInt(pageSize) },
-    serviceId
+    serviceId,
   );
 
   return (

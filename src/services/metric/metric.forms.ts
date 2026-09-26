@@ -1,16 +1,19 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 // Metric Type Create Form
 export const METRIC_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'externalId',
-    $type: 'text',
-    label: 'External ID (Optional)',
-  }],
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    },
+    {
+      id: 'externalId',
+      $type: 'text',
+      label: 'External ID (Optional)',
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
     value: '{ "name": "", "externalId": "" }',
@@ -20,16 +23,19 @@ export const METRIC_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "externalId": form.externalId = "" ? null : form.externalId }',
+      value:
+        '{ "name": form.name, "externalId": form.externalId = "" ? null : form.externalId }',
     },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: "service.localPath & '/metric-type/' & response.body.id",
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: "service.localPath & '/metric-type/' & response.body.id",
+      },
     },
-  }],
+  ],
   buttons: {
     submitButtonText: 'Create Metric Type',
   },
@@ -38,42 +44,50 @@ export const METRIC_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
 
 // Metric Create Form
 export const METRIC_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'metricTypeId',
-    $type: 'select',
-    label: 'Metric Type',
-    data: {
-      $type: 'datasource',
-      value: 'metricTypes',
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
     },
-  }, {
-    id: 'externalId',
-    $type: 'text',
-    label: 'External ID (Optional)',
-  }],
+    {
+      id: 'metricTypeId',
+      $type: 'select',
+      label: 'Metric Type',
+      data: {
+        $type: 'datasource',
+        value: 'metricTypes',
+      },
+    },
+    {
+      id: 'externalId',
+      $type: 'text',
+      label: 'External ID (Optional)',
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "metricTypeId": dataSource.metricTypes[0] ? dataSource.metricTypes[0].value : "", "externalId": "" }',
+    value:
+      '{ "name": "", "metricTypeId": dataSource.metricTypes[0] ? dataSource.metricTypes[0].value : "", "externalId": "" }',
   },
   endpoint: {
     path: '/metrics',
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "metricTypeId": form.metricTypeId, "externalId": form.externalId = "" ? null : form.externalId }',
+      value:
+        '{ "name": form.name, "metricTypeId": form.metricTypeId, "externalId": form.externalId = "" ? null : form.externalId }',
     },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: "service.localPath & '/metric/' & response.body.id",
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: "service.localPath & '/metric/' & response.body.id",
+      },
     },
-  }],
+  ],
   buttons: {
     submitButtonText: 'Create Metric',
   },
@@ -84,7 +98,8 @@ export const METRIC_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
       },
     },
   },

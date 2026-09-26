@@ -1,10 +1,13 @@
-import React from 'react';
-import IconButton, { IconButtonProps } from "@/components/universals/forms/button/IconButton";
+import type React from 'react';
+import IconButton, {
+  type IconButtonProps,
+} from '@/components/universals/forms/button/IconButton';
 import LoadingActionButtonBase, {
-  LoadingButtonBaseProps
-} from "@/components/universals/forms/button/LoadingActionButtonBase";
+  type LoadingButtonBaseProps,
+} from '@/components/universals/forms/button/LoadingActionButtonBase';
 
-type IconLoadingButtonProps = Omit<IconButtonProps, 'onClick'> & Pick<LoadingButtonBaseProps, 'onClick'>;
+type IconLoadingButtonProps = Omit<IconButtonProps, 'onClick'> &
+  Pick<LoadingButtonBaseProps, 'onClick'>;
 
 const IconActionButton: React.FunctionComponent<IconLoadingButtonProps> = ({
   onClick,
@@ -12,16 +15,8 @@ const IconActionButton: React.FunctionComponent<IconLoadingButtonProps> = ({
   ...props
 }) => {
   return (
-    <LoadingActionButtonBase
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {(loaderProps) => (
-        <IconButton
-          {...props}
-          {...loaderProps}
-        />
-      )}
+    <LoadingActionButtonBase onClick={onClick} disabled={disabled}>
+      {(loaderProps) => <IconButton {...props} {...loaderProps} />}
     </LoadingActionButtonBase>
   );
 };

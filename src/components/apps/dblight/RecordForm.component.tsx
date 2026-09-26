@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import { Form, Formik, type FormikHelpers } from 'formik';
 import dynamic from 'next/dynamic';
-import { Form, Formik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/universals/forms/Button';
+import type React from 'react';
+import { useCallback } from 'react';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
-import { createRecordAction, replaceRecordAction } from './RecordForm.server-action';
+import Button from '@/components/universals/forms/Button';
+import {
+  createRecordAction,
+  replaceRecordAction,
+} from './RecordForm.server-action';
 
 // `JsonEditor` pulls in `monaco-editor` (via `./monaco-setup`) at module
 // scope, which references `window` during evaluation. Loaded statically,
@@ -42,7 +46,10 @@ const RecordForm: React.FunctionComponent<RecordFormProps> = ({
   const isEdit = Boolean(recordId);
 
   const handleSubmit = useCallback(
-    async (values: RecordFormValues, helpers: FormikHelpers<RecordFormValues>) => {
+    async (
+      values: RecordFormValues,
+      helpers: FormikHelpers<RecordFormValues>,
+    ) => {
       let data: Record<string, unknown>;
       try {
         data = JSON.parse(values.data);
@@ -57,10 +64,18 @@ const RecordForm: React.FunctionComponent<RecordFormProps> = ({
       try {
         if (recordId) {
           await replaceRecordAction(serviceId, collectionId, recordId, data);
-          router.push(`/dblight/${serviceId}/collection/${collectionId}/record/${recordId}`);
+          router.push(
+            `/dblight/${serviceId}/collection/${collectionId}/record/${recordId}`,
+          );
         } else {
-          const created = await createRecordAction(serviceId, collectionId, data);
-          router.push(`/dblight/${serviceId}/collection/${collectionId}/record/${created.id}`);
+          const created = await createRecordAction(
+            serviceId,
+            collectionId,
+            data,
+          );
+          router.push(
+            `/dblight/${serviceId}/collection/${collectionId}/record/${created.id}`,
+          );
         }
         router.refresh();
       } catch (error) {

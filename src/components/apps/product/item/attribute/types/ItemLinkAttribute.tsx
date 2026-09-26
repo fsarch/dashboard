@@ -1,10 +1,10 @@
-import React from 'react';
-import { AttributeDto } from "@/services/product/attribute.type";
-import { ItemLinkAttributeDto } from "@/services/product/item-attribute.type";
-import { attributeService } from "@/services/product/attribute.service";
-import Checkbox from "@/components/universals/forms/Checkbox";
-import SearchableSelect from "@/components/universals/forms/searchable-select/SearchableSelect.component";
-import { itemService } from "@/services/product/item.service";
+import type React from 'react';
+import Checkbox from '@/components/universals/forms/Checkbox';
+import SearchableSelect from '@/components/universals/forms/searchable-select/SearchableSelect.component';
+import { attributeService } from '@/services/product/attribute.service';
+import type { AttributeDto } from '@/services/product/attribute.type';
+import { itemService } from '@/services/product/item.service';
+import type { ItemLinkAttributeDto } from '@/services/product/item-attribute.type';
 
 type ItemLinkAttributeProps = {
   attribute: AttributeDto;
@@ -12,15 +12,14 @@ type ItemLinkAttributeProps = {
   catalogId: string;
 };
 
-const ItemLinkAttribute: React.FunctionComponent<ItemLinkAttributeProps> = async ({
-  attribute,
-  value,
-  catalogId,
-}) => {
-  const elements = await attributeService.getAttributeElements(catalogId, attribute.id);
-  const selectableItems = await itemService.listItems(catalogId, undefined, {
-
-  });
+const ItemLinkAttribute: React.FunctionComponent<
+  ItemLinkAttributeProps
+> = async ({ attribute, value, catalogId }) => {
+  const elements = await attributeService.getAttributeElements(
+    catalogId,
+    attribute.id,
+  );
+  const selectableItems = await itemService.listItems(catalogId, undefined, {});
 
   console.log('attribute', attribute);
 

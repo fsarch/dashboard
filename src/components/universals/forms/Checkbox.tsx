@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Field } from "formik";
+import { Field } from 'formik';
+import type React from 'react';
 
 type CheckboxProps = {
   id?: string;

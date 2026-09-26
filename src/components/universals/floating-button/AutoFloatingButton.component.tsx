@@ -1,33 +1,40 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
 import clsx from 'clsx';
-import FloatingButton from "@/components/universals/floating-button/FloatingButton";
-import type { AppFloatingButton } from "@/constants/app.type";
-import { useFloatingButtonProvider } from "@/components/universals/floating-button/FloatingButtonProvider.context";
-import { normalizeFloatingButtons } from "@/components/universals/floating-button/floatingButton.helpers";
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import FloatingButton from '@/components/universals/floating-button/FloatingButton';
+import { useFloatingButtonProvider } from '@/components/universals/floating-button/FloatingButtonProvider.context';
+import { normalizeFloatingButtons } from '@/components/universals/floating-button/floatingButton.helpers';
+import type { AppFloatingButton } from '@/constants/app.type';
 import styles from './AutoFloatingButton.module.scss';
 
 type AutoFloatingButtonProps = {
   floatingButton?: AppFloatingButton | Array<AppFloatingButton>;
 };
 
-export const AutoFloatingButton: React.FunctionComponent<AutoFloatingButtonProps> = ({
-  floatingButton,
-}) => {
+export const AutoFloatingButton: React.FunctionComponent<
+  AutoFloatingButtonProps
+> = ({ floatingButton }) => {
   const { triggerClick } = useFloatingButtonProvider();
   const [expanded, setExpanded] = useState(false);
 
-  const buttons = useMemo(() => normalizeFloatingButtons(floatingButton), [floatingButton]);
+  const buttons = useMemo(
+    () => normalizeFloatingButtons(floatingButton),
+    [floatingButton],
+  );
 
   const handleToggle = useCallback(() => {
     setExpanded((current) => !current);
   }, []);
 
-  const handleItemClick = useCallback((id: string) => {
-    setExpanded(false);
-    triggerClick(id);
-  }, [triggerClick]);
+  const handleItemClick = useCallback(
+    (id: string) => {
+      setExpanded(false);
+      triggerClick(id);
+    },
+    [triggerClick],
+  );
 
   if (buttons.length === 0) {
     return null;
@@ -55,9 +62,13 @@ export const AutoFloatingButton: React.FunctionComponent<AutoFloatingButtonProps
           <div
             key={button.id}
             className={styles.item}
-            style={{ transitionDelay: `${(expanded ? distanceFromToggle : index) * 40}ms` }}
+            style={{
+              transitionDelay: `${(expanded ? distanceFromToggle : index) * 40}ms`,
+            }}
           >
-            {button.title ? <span className={styles.itemLabel}>{button.title}</span> : null}
+            {button.title ? (
+              <span className={styles.itemLabel}>{button.title}</span>
+            ) : null}
             <FloatingButton
               size="small"
               style={{ position: 'static' }}

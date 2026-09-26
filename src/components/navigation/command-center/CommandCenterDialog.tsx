@@ -1,17 +1,14 @@
 import React, { Suspense, useEffect } from 'react';
-import { TDialogComponent } from "@/components/universals/dialog/dialog.type";
+import CommandCenterContent from '@/components/navigation/command-center/CommandCenterContent';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type { TDialogComponent } from '@/components/universals/dialog/dialog.type';
+import SingleIconButton from '@/components/universals/forms/button/SingleIconButton';
+import Loader from '@/components/universals/loader/Loader';
 import styles from './CommandCenterDialog.module.scss';
-import SingleIconButton from "@/components/universals/forms/button/SingleIconButton";
-import { DialogResult } from "@/components/universals/dialog/dialog.enum";
-import Loader from "@/components/universals/loader/Loader";
-import CommandCenterContent from "@/components/navigation/command-center/CommandCenterContent";
 
 type CommandCenterDialogType = TDialogComponent<undefined, { value: string }>;
 
-const CommandCenterDialog: CommandCenterDialogType = ({
-  value,
-  onResult,
-}) => {
+const CommandCenterDialog: CommandCenterDialogType = ({ value, onResult }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -28,10 +25,10 @@ const CommandCenterDialog: CommandCenterDialogType = ({
 
   return (
     <>
-      <div className={styles.overlay}/>
-      <div className={styles.overlayColor}/>
+      <div className={styles.overlay} />
+      <div className={styles.overlayColor} />
       <div className={styles.content}>
-        <Suspense fallback={<Loader/>}>
+        <Suspense fallback={<Loader />}>
           <CommandCenterContent />
         </Suspense>
       </div>

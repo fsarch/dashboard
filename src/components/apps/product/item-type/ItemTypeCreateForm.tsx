@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { useRouter } from "next/navigation";
-import { Form, Formik, FormikHelpers } from "formik";
-import Input from "@/components/universals/forms/Input";
-import Button from "@/components/universals/forms/Button";
-import { ItemTypeCreateDto } from "@/services/product/item-type.type";
-import { createItemType } from "@/components/apps/product/item-type/ItemTypeCreateForm.server-action";
-import Fieldset from "@/components/universals/forms/Fieldset.component";
-import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
+import { Form, Formik, type FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { createItemType } from '@/components/apps/product/item-type/ItemTypeCreateForm.server-action';
+import Button from '@/components/universals/forms/Button';
+import Fieldset from '@/components/universals/forms/Fieldset.component';
+import Input from '@/components/universals/forms/Input';
+import SimpleFieldsetRow from '@/components/universals/forms/SimpleFieldsetRow.component';
+import type { ItemTypeCreateDto } from '@/services/product/item-type.type';
 
 type ItemTypeCreateFormProps = {
   catalogId: string;
@@ -19,12 +20,18 @@ const ItemTypeCreateForm: React.FunctionComponent<ItemTypeCreateFormProps> = ({
 }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (value: ItemTypeCreateDto, helpers: FormikHelpers<ItemTypeCreateDto>) => {
-    await createItemType(catalogId, value);
+  const handleSubmit = useCallback(
+    async (
+      value: ItemTypeCreateDto,
+      helpers: FormikHelpers<ItemTypeCreateDto>,
+    ) => {
+      await createItemType(catalogId, value);
 
-    router.refresh();
-    helpers.resetForm();
-  }, [catalogId, router]);
+      router.refresh();
+      helpers.resetForm();
+    },
+    [catalogId, router],
+  );
 
   return (
     <Formik
@@ -36,17 +43,9 @@ const ItemTypeCreateForm: React.FunctionComponent<ItemTypeCreateFormProps> = ({
       <Form>
         <Fieldset>
           <SimpleFieldsetRow label="Name">
-            {(id) => (
-              <Input
-                id={id}
-                name="name"
-                type="input"
-              />
-            )}
+            {(id) => <Input id={id} name="name" type="input" />}
           </SimpleFieldsetRow>
-          <Button type="submit">
-            Erstellen
-          </Button>
+          <Button type="submit">Erstellen</Button>
         </Fieldset>
       </Form>
     </Formik>

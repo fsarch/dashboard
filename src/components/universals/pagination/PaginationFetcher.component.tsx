@@ -1,25 +1,33 @@
-"use client";
+'use client';
 
-import React, { JSX, useCallback, useEffect, useState } from 'react';
-import Pagination from "@/components/universals/pagination/Pagination.component";
-import type { PaginationResultType } from "./PaginationFetcher.type";
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import Pagination from '@/components/universals/pagination/Pagination.component';
+import type { PaginationResultType } from './PaginationFetcher.type';
 
 type PaginationRequestType = {
   skip: number;
   take: number;
 };
 
-type PaginationFetcherComponentProps<T = unknown, TQuery extends object = Record<string, never>> = {
+type PaginationFetcherComponentProps<
+  T = unknown,
+  TQuery extends object = Record<string, never>,
+> = {
   className?: string;
   initialData: PaginationResultType<T>;
-  getData: (options: PaginationRequestType & Partial<TQuery>) => Promise<PaginationResultType<T>>;
+  getData: (
+    options: PaginationRequestType & Partial<TQuery>,
+  ) => Promise<PaginationResultType<T>>;
   query?: Partial<TQuery>;
   resetDependencies?: Array<unknown>;
   loadingText?: string;
   children: (data: PaginationResultType<T>) => JSX.Element;
 };
 
-const PaginationFetcherComponent = <T, TQuery extends object = Record<string, never>>({
+const PaginationFetcherComponent = <
+  T,
+  TQuery extends object = Record<string, never>,
+>({
   className,
   initialData,
   getData,
@@ -32,41 +40,53 @@ const PaginationFetcherComponent = <T, TQuery extends object = Record<string, ne
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log('set data effect')
+    console.log('set data effect');
     setData(initialData);
   }, [initialData, ...resetDependencies]);
 
-  const loadData = useCallback(async (page: number, pageSize: number) => {
-    setLoading(true);
+  const loadData = useCallback(
+    async (page: number, pageSize: number) => {
+      setLoading(true);
 
-    try {
-      const loadedData = await getData({
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        ...query,
-      } as PaginationRequestType & Partial<TQuery>);
+      try {
+        const loadedData = await getData({
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          ...query,
+        } as PaginationRequestType & Partial<TQuery>);
 
-      setData(loadedData);
-    } catch (error) {
-      console.error('Failed to load paginated data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [getData, query]);
+        setData(loadedData);
+      } catch (error) {
+        console.error('Failed to load paginated data:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [getData, query],
+  );
 
-  const handlePageChange = useCallback((page: number) => {
-    void loadData(page, data.metadata.pageSize);
-  }, [data.metadata.pageSize, loadData]);
+  const handlePageChange = useCallback(
+    (page: number) => {
+      void loadData(page, data.metadata.pageSize);
+    },
+    [data.metadata.pageSize, loadData],
+  );
 
-  const handlePageSizeChange = useCallback((pageSize: number) => {
-    void loadData(1, pageSize);
-  }, [loadData]);
+  const handlePageSizeChange = useCallback(
+    (pageSize: number) => {
+      void loadData(1, pageSize);
+    },
+    [loadData],
+  );
 
   const hasNextPage = data.metadata.currentPage < data.metadata.totalPages;
 
   if (loading) {
     return (
-      <div className={className} style={{ padding: '2rem', textAlign: 'center' }}>
+      <div
+        className={className}
+        style={{ padding: '2rem', textAlign: 'center' }}
+      >
         {loadingText}
       </div>
     );

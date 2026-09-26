@@ -1,29 +1,45 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Moveable, { OnDrag, OnDragEnd, OnResize, OnResizeEnd, OnRotate, OnRotateEnd } from 'react-moveable';
-import { DndContext, DragEndEvent, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import Section from '@/components/universals/section/Section';
+import clsx from 'clsx';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Moveable, {
+  type OnDrag,
+  type OnDragEnd,
+  type OnResize,
+  type OnResizeEnd,
+  type OnRotate,
+  type OnRotateEnd,
+} from 'react-moveable';
+import { colors } from '@/app/_styles/colors';
+import Icon from '@/components/universals/icon/Icon.component';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
-import Icon from '@/components/universals/icon/Icon.component';
-import clsx from 'clsx';
-import {
+import Section from '@/components/universals/section/Section';
+import { resolveBindableValue } from '@/services/image-editor-server/bindable-value.utils';
+import type {
   BindableAffineMatrix,
   LayerDto,
   LayerOptions,
   ParameterDto,
 } from '@/services/image-editor-server/image-editor-server.type';
-import { resolveBindableValue } from '@/services/image-editor-server/bindable-value.utils';
-import { flattenParameterPaths } from './parameter-paths.utils';
-import { composeMatrix, decomposeMatrix, IDENTITY_MATRIX, readCssMatrix, TAffineMatrix, TLayerGeometry, toBindableAffineMatrix, toCssMatrix } from './matrix.utils';
-import LayerElement from './LayerElement.component';
-import LayerPropertiesPanel from './LayerPropertiesPanel.component';
-import LayerGeometryPanel from './LayerGeometryPanel.component';
-import TestParametersPanel from './TestParametersPanel.component';
 import AddLayerForm from './AddLayerForm.component';
+import styles from './LayerCanvasEditor.module.scss';
 import {
   deleteLayerAction,
   updateLayerGeometryAction,
@@ -33,8 +49,21 @@ import {
   updateLayerOptionsAction,
   updateLayerOrderAction,
 } from './LayerCanvasEditor.server-action';
-import { colors } from '@/app/_styles/colors';
-import styles from './LayerCanvasEditor.module.scss';
+import LayerElement from './LayerElement.component';
+import LayerGeometryPanel from './LayerGeometryPanel.component';
+import LayerPropertiesPanel from './LayerPropertiesPanel.component';
+import {
+  composeMatrix,
+  decomposeMatrix,
+  IDENTITY_MATRIX,
+  readCssMatrix,
+  type TAffineMatrix,
+  type TLayerGeometry,
+  toBindableAffineMatrix,
+  toCssMatrix,
+} from './matrix.utils';
+import { flattenParameterPaths } from './parameter-paths.utils';
+import TestParametersPanel from './TestParametersPanel.component';
 
 type LayerCanvasEditorProps = {
   projectId: string;
@@ -53,7 +82,10 @@ type LayerCanvasEditorProps = {
 // on narrow/mobile viewports.
 const MAX_CANVAS_DISPLAY_HEIGHT_RATIO = 0.7;
 
-function resolveMatrix(matrix: BindableAffineMatrix, testParameters: Record<string, unknown>): TAffineMatrix {
+function resolveMatrix(
+  matrix: BindableAffineMatrix,
+  testParameters: Record<string, unknown>,
+): TAffineMatrix {
   return {
     a: resolveBindableValue(matrix.a, testParameters) ?? IDENTITY_MATRIX.a,
     b: resolveBindableValue(matrix.b, testParameters) ?? IDENTITY_MATRIX.b,
@@ -64,14 +96,22 @@ function resolveMatrix(matrix: BindableAffineMatrix, testParameters: Record<stri
   };
 }
 
-function resolveOptions(options: LayerOptions, testParameters: Record<string, unknown>): Record<string, unknown> {
+function resolveOptions(
+  options: LayerOptions,
+  testParameters: Record<string, unknown>,
+): Record<string, unknown> {
   return Object.fromEntries(
-    Object.entries(options).map(([key, bindable]) => [key, resolveBindableValue(bindable as never, testParameters)]),
+    Object.entries(options).map(([key, bindable]) => [
+      key,
+      resolveBindableValue(bindable as never, testParameters),
+    ]),
   );
 }
 
 function isFullyConstant(matrix: BindableAffineMatrix): boolean {
-  return [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].every((v) => v.type === 'constant');
+  return [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].every(
+    (v) => v.type === 'constant',
+  );
 }
 
 // Only valid to call when isFullyConstant(matrix) - every BindableValue's
@@ -89,10 +129,14 @@ function rawConstantMatrix(matrix: BindableAffineMatrix): TAffineMatrix {
 
 function hasConstantSize(layer: LayerDto): boolean {
   const options = layer.options as Record<string, { type: string } | undefined>;
-  return options.width?.type === 'constant' && options.height?.type === 'constant';
+  return (
+    options.width?.type === 'constant' && options.height?.type === 'constant'
+  );
 }
 
-function constantSize(layer: LayerDto): { width: number; height: number } | null {
+function constantSize(
+  layer: LayerDto,
+): { width: number; height: number } | null {
   if (!hasConstantSize(layer)) return null;
   const options = layer.options as unknown as Record<string, { value: number }>;
   return { width: options.width.value, height: options.height.value };
@@ -125,7 +169,14 @@ const SortableLayerRow: React.FunctionComponent<SortableLayerRowProps> = ({
   onReorder,
   onToggleHidden,
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: layer.id,
     disabled: !isEditable,
   });
@@ -146,52 +197,65 @@ const SortableLayerRow: React.FunctionComponent<SortableLayerRowProps> = ({
       {...attributes}
     >
       <ListItem
-        left={isEditable ? (
-          <button
-            type="button"
-            className={styles.dragHandle}
-            title="Ziehen zum Sortieren"
-            onClick={(e) => e.stopPropagation()}
-            {...listeners}
-          >
-            ⠿
-          </button>
-        ) : undefined}
-        right={isEditable ? (
-          <div className={styles.rowActions}>
-            {selected && (
-              <span className={styles.selectedIcon} title="Wird bearbeitet">
-                <Icon icon="edit" />
-              </span>
-            )}
+        left={
+          isEditable ? (
             <button
               type="button"
-              className={styles.visibilityToggle}
-              onClick={(e) => { e.stopPropagation(); onToggleHidden(); }}
-              title={layer.hidden ? 'Ebene einblenden' : 'Ebene ausblenden'}
+              className={styles.dragHandle}
+              title="Ziehen zum Sortieren"
+              onClick={(e) => e.stopPropagation()}
+              {...listeners}
             >
-              <Icon icon={layer.hidden ? 'eye-slash' : 'eye'} />
+              ⠿
             </button>
-            <div className={styles.reorderButtons}>
+          ) : undefined
+        }
+        right={
+          isEditable ? (
+            <div className={styles.rowActions}>
+              {selected && (
+                <span className={styles.selectedIcon} title="Wird bearbeitet">
+                  <Icon icon="edit" />
+                </span>
+              )}
               <button
                 type="button"
-                disabled={index === 0}
-                onClick={(e) => { e.stopPropagation(); onReorder('up'); }}
-                title="Nach oben"
+                className={styles.visibilityToggle}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleHidden();
+                }}
+                title={layer.hidden ? 'Ebene einblenden' : 'Ebene ausblenden'}
               >
-                ▲
+                <Icon icon={layer.hidden ? 'eye-slash' : 'eye'} />
               </button>
-              <button
-                type="button"
-                disabled={index === rowCount - 1}
-                onClick={(e) => { e.stopPropagation(); onReorder('down'); }}
-                title="Nach unten"
-              >
-                ▼
-              </button>
+              <div className={styles.reorderButtons}>
+                <button
+                  type="button"
+                  disabled={index === 0}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onReorder('up');
+                  }}
+                  title="Nach oben"
+                >
+                  ▲
+                </button>
+                <button
+                  type="button"
+                  disabled={index === rowCount - 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onReorder('down');
+                  }}
+                  title="Nach unten"
+                >
+                  ▼
+                </button>
+              </div>
             </div>
-          </div>
-        ) : undefined}
+          ) : undefined
+        }
       >
         <span className={layer.hidden ? styles.hiddenLayerLabel : undefined}>
           {layer.order}. {layer.name} ({layer.type})
@@ -218,9 +282,13 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
   initialLayers,
   parameters,
 }) => {
-  const [layers, setLayers] = useState<LayerDto[]>([...initialLayers].sort((a, b) => a.order - b.order));
+  const [layers, setLayers] = useState<LayerDto[]>(
+    [...initialLayers].sort((a, b) => a.order - b.order),
+  );
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
-  const [testParameters, setTestParameters] = useState<Record<string, unknown>>({});
+  const [testParameters, setTestParameters] = useState<Record<string, unknown>>(
+    {},
+  );
 
   const layerRefs = useRef(new Map<string, HTMLDivElement>());
   const setLayerRef = useCallback((id: string, el: HTMLDivElement | null) => {
@@ -265,7 +333,10 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
   // column (and therefore never past 100vw, since the layout itself never
   // exceeds the viewport width).
   const canvasAreaRef = useRef<HTMLDivElement>(null);
-  const [canvasAreaSize, setCanvasAreaSize] = useState<{ width: number; height: number } | null>(null);
+  const [canvasAreaSize, setCanvasAreaSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   useEffect(() => {
     const el = canvasAreaRef.current;
@@ -283,101 +354,152 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
       // values it feeds back into (zoom -> canvas size -> back here) -
       // setting state on every sub-pixel wobble would re-render every
       // frame without ever visibly changing anything.
-      setCanvasAreaSize((prev) => (
-        prev && Math.abs(prev.width - width) < 1 && Math.abs(prev.height - height) < 1
+      setCanvasAreaSize((prev) =>
+        prev &&
+        Math.abs(prev.width - width) < 1 &&
+        Math.abs(prev.height - height) < 1
           ? prev
-          : { width, height }
-      ));
+          : { width, height },
+      );
     });
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  const parameterPaths = useMemo(() => flattenParameterPaths(parameters), [parameters]);
+  const parameterPaths = useMemo(
+    () => flattenParameterPaths(parameters),
+    [parameters],
+  );
 
   // The sidebar list shows layers frontmost-first (highest `order` at the
   // top), matching how the layer sits in the rendered image, while `layers`
   // itself stays ascending (see handleReorder above and the WYSIWYG preview
   // below, both of which rely on ascending = back-to-front paint order).
-  const displayLayers = useMemo(() => [...layers].sort((a, b) => b.order - a.order), [layers]);
+  const displayLayers = useMemo(
+    () => [...layers].sort((a, b) => b.order - a.order),
+    [layers],
+  );
 
   const selectedLayer = layers.find((l) => l.id === selectedLayerId) ?? null;
-  const selectedTarget = selectedLayerId ? layerRefs.current.get(selectedLayerId) ?? null : null;
+  const selectedTarget = selectedLayerId
+    ? (layerRefs.current.get(selectedLayerId) ?? null)
+    : null;
 
   const zoom = canvasAreaSize
     ? Math.min(
-      1,
-      canvasAreaSize.width / version.width,
-      (typeof window === 'undefined' ? Infinity : window.innerHeight * MAX_CANVAS_DISPLAY_HEIGHT_RATIO) / version.height,
-    )
-    // Before the first ResizeObserver measurement, render at a tiny scale
-    // rather than full size - avoids a one-frame flash of an oversized,
-    // overflowing canvas on first paint.
-    : 0.01;
+        1,
+        canvasAreaSize.width / version.width,
+        (typeof window === 'undefined'
+          ? Infinity
+          : window.innerHeight * MAX_CANVAS_DISPLAY_HEIGHT_RATIO) /
+          version.height,
+      )
+    : // Before the first ResizeObserver measurement, render at a tiny scale
+      // rather than full size - avoids a one-frame flash of an oversized,
+      // overflowing canvas on first paint.
+      0.01;
 
-  const updateLayerLocal = useCallback((layerId: string, patch: Partial<LayerDto>) => {
-    setLayers((prev) => prev.map((l) => (l.id === layerId ? { ...l, ...patch } : l)));
-  }, []);
+  const updateLayerLocal = useCallback(
+    (layerId: string, patch: Partial<LayerDto>) => {
+      setLayers((prev) =>
+        prev.map((l) => (l.id === layerId ? { ...l, ...patch } : l)),
+      );
+    },
+    [],
+  );
 
   /** The width/height to pivot rotation/resize around: options.width/height for shape/image/html, the live-rendered box size for text (which has no stored size). */
-  const sizeForGeometry = useCallback((layer: LayerDto): { width: number; height: number } => {
-    const constant = constantSize(layer);
-    if (constant) return constant;
-    const target = layerRefs.current.get(layer.id);
-    return { width: target?.offsetWidth ?? 0, height: target?.offsetHeight ?? 0 };
-  }, []);
+  const sizeForGeometry = useCallback(
+    (layer: LayerDto): { width: number; height: number } => {
+      const constant = constantSize(layer);
+      if (constant) return constant;
+      const target = layerRefs.current.get(layer.id);
+      return {
+        width: target?.offsetWidth ?? 0,
+        height: target?.offsetHeight ?? 0,
+      };
+    },
+    [],
+  );
 
-  const persistGeometry = useCallback(async (layerId: string, geometry: TLayerGeometry) => {
-    const matrix = composeMatrix(geometry);
-    const bindable = toBindableAffineMatrix(matrix);
-    updateLayerLocal(layerId, { transformationMatrix: bindable });
-    await updateLayerGeometryAction(projectId, versionId, layerId, bindable);
-  }, [projectId, versionId, updateLayerLocal]);
+  const persistGeometry = useCallback(
+    async (layerId: string, geometry: TLayerGeometry) => {
+      const matrix = composeMatrix(geometry);
+      const bindable = toBindableAffineMatrix(matrix);
+      updateLayerLocal(layerId, { transformationMatrix: bindable });
+      await updateLayerGeometryAction(projectId, versionId, layerId, bindable);
+    },
+    [projectId, versionId, updateLayerLocal],
+  );
 
-  const persistGeometryAndSize = useCallback(async (layerId: string, geometry: TLayerGeometry) => {
-    const layer = layers.find((l) => l.id === layerId);
-    if (!layer) return;
+  const persistGeometryAndSize = useCallback(
+    async (layerId: string, geometry: TLayerGeometry) => {
+      const layer = layers.find((l) => l.id === layerId);
+      if (!layer) return;
 
-    const matrix = composeMatrix(geometry);
-    const bindableMatrix = toBindableAffineMatrix(matrix);
-    const nextOptions = {
-      ...layer.options,
-      width: { type: 'constant', value: Math.round(geometry.width) },
-      height: { type: 'constant', value: Math.round(geometry.height) },
-    } as LayerOptions;
+      const matrix = composeMatrix(geometry);
+      const bindableMatrix = toBindableAffineMatrix(matrix);
+      const nextOptions = {
+        ...layer.options,
+        width: { type: 'constant', value: Math.round(geometry.width) },
+        height: { type: 'constant', value: Math.round(geometry.height) },
+      } as LayerOptions;
 
-    updateLayerLocal(layerId, { transformationMatrix: bindableMatrix, options: nextOptions });
-    await updateLayerGeometryAndSizeAction(projectId, versionId, layerId, bindableMatrix, nextOptions);
-  }, [projectId, versionId, layers, updateLayerLocal]);
+      updateLayerLocal(layerId, {
+        transformationMatrix: bindableMatrix,
+        options: nextOptions,
+      });
+      await updateLayerGeometryAndSizeAction(
+        projectId,
+        versionId,
+        layerId,
+        bindableMatrix,
+        nextOptions,
+      );
+    },
+    [projectId, versionId, layers, updateLayerLocal],
+  );
 
-  const handleChangeOptions = useCallback(async (layerId: string, options: LayerOptions) => {
-    updateLayerLocal(layerId, { options });
-    await updateLayerOptionsAction(projectId, versionId, layerId, options);
-  }, [projectId, versionId, updateLayerLocal]);
+  const handleChangeOptions = useCallback(
+    async (layerId: string, options: LayerOptions) => {
+      updateLayerLocal(layerId, { options });
+      await updateLayerOptionsAction(projectId, versionId, layerId, options);
+    },
+    [projectId, versionId, updateLayerLocal],
+  );
 
-  const handleChangeName = useCallback(async (layerId: string, name: string) => {
-    updateLayerLocal(layerId, { name });
-    await updateLayerNameAction(projectId, versionId, layerId, name);
-  }, [projectId, versionId, updateLayerLocal]);
+  const handleChangeName = useCallback(
+    async (layerId: string, name: string) => {
+      updateLayerLocal(layerId, { name });
+      await updateLayerNameAction(projectId, versionId, layerId, name);
+    },
+    [projectId, versionId, updateLayerLocal],
+  );
 
   // Deselect a layer being hidden - it no longer renders on the canvas
   // (see the WYSIWYG loop below), so Moveable would otherwise be left
   // attached to a target that's no longer there.
-  const handleToggleHidden = useCallback(async (layerId: string) => {
-    const layer = layers.find((l) => l.id === layerId);
-    if (!layer) return;
+  const handleToggleHidden = useCallback(
+    async (layerId: string) => {
+      const layer = layers.find((l) => l.id === layerId);
+      if (!layer) return;
 
-    const nextHidden = !layer.hidden;
-    updateLayerLocal(layerId, { hidden: nextHidden });
-    if (nextHidden && selectedLayerId === layerId) setSelectedLayerId(null);
-    await updateLayerHiddenAction(projectId, versionId, layerId, nextHidden);
-  }, [projectId, versionId, layers, selectedLayerId, updateLayerLocal]);
+      const nextHidden = !layer.hidden;
+      updateLayerLocal(layerId, { hidden: nextHidden });
+      if (nextHidden && selectedLayerId === layerId) setSelectedLayerId(null);
+      await updateLayerHiddenAction(projectId, versionId, layerId, nextHidden);
+    },
+    [projectId, versionId, layers, selectedLayerId, updateLayerLocal],
+  );
 
-  const handleDelete = useCallback(async (layerId: string) => {
-    setLayers((prev) => prev.filter((l) => l.id !== layerId));
-    setSelectedLayerId(null);
-    await deleteLayerAction(projectId, versionId, layerId);
-  }, [projectId, versionId]);
+  const handleDelete = useCallback(
+    async (layerId: string) => {
+      setLayers((prev) => prev.filter((l) => l.id !== layerId));
+      setSelectedLayerId(null);
+      await deleteLayerAction(projectId, versionId, layerId);
+    },
+    [projectId, versionId],
+  );
 
   // Renumbers layers to sequential 0..n-1 order after swapping two adjacent
   // (by current order) entries - robust even if orders were ever gappy or
@@ -392,19 +514,28 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
   // preview's DOM stacking below - only the sidebar list displays it
   // reversed (frontmost first, see `displayLayers`), so "up" in that list
   // means moving a layer towards the front, i.e. *increasing* its order.
-  const handleReorder = useCallback((layerId: string, direction: 'up' | 'down') => {
-    const sorted = [...layers].sort((a, b) => a.order - b.order);
-    const index = sorted.findIndex((l) => l.id === layerId);
-    const swapIndex = direction === 'up' ? index + 1 : index - 1;
-    if (index === -1 || swapIndex < 0 || swapIndex >= sorted.length) return;
+  const handleReorder = useCallback(
+    (layerId: string, direction: 'up' | 'down') => {
+      const sorted = [...layers].sort((a, b) => a.order - b.order);
+      const index = sorted.findIndex((l) => l.id === layerId);
+      const swapIndex = direction === 'up' ? index + 1 : index - 1;
+      if (index === -1 || swapIndex < 0 || swapIndex >= sorted.length) return;
 
-    [sorted[index], sorted[swapIndex]] = [sorted[swapIndex], sorted[index]];
-    const renumbered = sorted.map((layer, i) => ({ ...layer, order: i }));
-    const changed = renumbered.filter((layer) => layer.order !== layers.find((l) => l.id === layer.id)?.order);
+      [sorted[index], sorted[swapIndex]] = [sorted[swapIndex], sorted[index]];
+      const renumbered = sorted.map((layer, i) => ({ ...layer, order: i }));
+      const changed = renumbered.filter(
+        (layer) => layer.order !== layers.find((l) => l.id === layer.id)?.order,
+      );
 
-    setLayers(renumbered);
-    void Promise.all(changed.map((layer) => updateLayerOrderAction(projectId, versionId, layer.id, layer.order)));
-  }, [layers, projectId, versionId]);
+      setLayers(renumbered);
+      void Promise.all(
+        changed.map((layer) =>
+          updateLayerOrderAction(projectId, versionId, layer.id, layer.order),
+        ),
+      );
+    },
+    [layers, projectId, versionId],
+  );
 
   const layerListSensors = useSensors(
     // A small activation distance keeps a plain click on the row (to select
@@ -420,21 +551,33 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
   // front-to-back position; renumbering then re-sort back to ascending
   // before setLayers, since `layers` itself must stay ascending (see the
   // comment on handleReorder).
-  const handleLayerDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+  const handleLayerDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (!over || active.id === over.id) return;
 
-    const oldIndex = displayLayers.findIndex((l) => l.id === active.id);
-    const newIndex = displayLayers.findIndex((l) => l.id === over.id);
-    if (oldIndex === -1 || newIndex === -1) return;
+      const oldIndex = displayLayers.findIndex((l) => l.id === active.id);
+      const newIndex = displayLayers.findIndex((l) => l.id === over.id);
+      if (oldIndex === -1 || newIndex === -1) return;
 
-    const reorderedDisplay = arrayMove(displayLayers, oldIndex, newIndex);
-    const renumbered = reorderedDisplay.map((layer, i) => ({ ...layer, order: reorderedDisplay.length - 1 - i }));
-    const changed = renumbered.filter((layer) => layer.order !== layers.find((l) => l.id === layer.id)?.order);
+      const reorderedDisplay = arrayMove(displayLayers, oldIndex, newIndex);
+      const renumbered = reorderedDisplay.map((layer, i) => ({
+        ...layer,
+        order: reorderedDisplay.length - 1 - i,
+      }));
+      const changed = renumbered.filter(
+        (layer) => layer.order !== layers.find((l) => l.id === layer.id)?.order,
+      );
 
-    setLayers([...renumbered].sort((a, b) => a.order - b.order));
-    void Promise.all(changed.map((layer) => updateLayerOrderAction(projectId, versionId, layer.id, layer.order)));
-  }, [displayLayers, layers, projectId, versionId]);
+      setLayers([...renumbered].sort((a, b) => a.order - b.order));
+      void Promise.all(
+        changed.map((layer) =>
+          updateLayerOrderAction(projectId, versionId, layer.id, layer.order),
+        ),
+      );
+    },
+    [displayLayers, layers, projectId, versionId],
+  );
 
   // Drag deliberately does NOT go through composeMatrix/gestureGeometryRef
   // like resize/rotate do: react-moveable's own `transform` output during a
@@ -449,17 +592,28 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
     (target as HTMLElement).style.transform = transform;
   }, []);
 
-  const handleDragEnd = useCallback(({ target, isDrag }: OnDragEnd) => {
-    if (!isDrag || !selectedLayer) return;
-    const size = sizeForGeometry(selectedLayer);
-    const geometry = decomposeMatrix(readCssMatrix(target as HTMLElement), size.width, size.height);
-    void persistGeometry(selectedLayer.id, geometry);
-  }, [selectedLayer, sizeForGeometry, persistGeometry]);
+  const handleDragEnd = useCallback(
+    ({ target, isDrag }: OnDragEnd) => {
+      if (!isDrag || !selectedLayer) return;
+      const size = sizeForGeometry(selectedLayer);
+      const geometry = decomposeMatrix(
+        readCssMatrix(target as HTMLElement),
+        size.width,
+        size.height,
+      );
+      void persistGeometry(selectedLayer.id, geometry);
+    },
+    [selectedLayer, sizeForGeometry, persistGeometry],
+  );
 
   const handleResizeStart = useCallback(() => {
     if (!selectedLayer) return;
     const size = sizeForGeometry(selectedLayer);
-    gestureGeometryRef.current = decomposeMatrix(rawConstantMatrix(selectedLayer.transformationMatrix), size.width, size.height);
+    gestureGeometryRef.current = decomposeMatrix(
+      rawConstantMatrix(selectedLayer.transformationMatrix),
+      size.width,
+      size.height,
+    );
   }, [selectedLayer, sizeForGeometry]);
 
   const handleResize = useCallback(({ target, width, height }: OnResize) => {
@@ -473,67 +627,100 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
     (target as HTMLElement).style.transform = toCssMatrix(composeMatrix(next));
   }, []);
 
-  const handleResizeEnd = useCallback(({ isDrag }: OnResizeEnd) => {
-    if (!isDrag || !selectedLayer || !gestureGeometryRef.current) return;
-    void persistGeometryAndSize(selectedLayer.id, gestureGeometryRef.current);
-    gestureGeometryRef.current = null;
-  }, [selectedLayer, persistGeometryAndSize]);
+  const handleResizeEnd = useCallback(
+    ({ isDrag }: OnResizeEnd) => {
+      if (!isDrag || !selectedLayer || !gestureGeometryRef.current) return;
+      void persistGeometryAndSize(selectedLayer.id, gestureGeometryRef.current);
+      gestureGeometryRef.current = null;
+    },
+    [selectedLayer, persistGeometryAndSize],
+  );
 
   const handleRotateStart = useCallback(() => {
     if (!selectedLayer) return;
     const size = sizeForGeometry(selectedLayer);
-    gestureGeometryRef.current = decomposeMatrix(rawConstantMatrix(selectedLayer.transformationMatrix), size.width, size.height);
+    gestureGeometryRef.current = decomposeMatrix(
+      rawConstantMatrix(selectedLayer.transformationMatrix),
+      size.width,
+      size.height,
+    );
   }, [selectedLayer, sizeForGeometry]);
 
   const handleRotate = useCallback(({ target, delta }: OnRotate) => {
     const start = gestureGeometryRef.current;
     if (!start) return;
 
-    const next: TLayerGeometry = { ...start, rotationDeg: start.rotationDeg + delta };
+    const next: TLayerGeometry = {
+      ...start,
+      rotationDeg: start.rotationDeg + delta,
+    };
     gestureGeometryRef.current = next;
     (target as HTMLElement).style.transform = toCssMatrix(composeMatrix(next));
   }, []);
 
-  const handleRotateEnd = useCallback(({ isDrag }: OnRotateEnd) => {
-    if (!isDrag || !selectedLayer || !gestureGeometryRef.current) return;
-    void persistGeometry(selectedLayer.id, gestureGeometryRef.current);
-    gestureGeometryRef.current = null;
-  }, [selectedLayer, persistGeometry]);
+  const handleRotateEnd = useCallback(
+    ({ isDrag }: OnRotateEnd) => {
+      if (!isDrag || !selectedLayer || !gestureGeometryRef.current) return;
+      void persistGeometry(selectedLayer.id, gestureGeometryRef.current);
+      gestureGeometryRef.current = null;
+    },
+    [selectedLayer, persistGeometry],
+  );
 
-  const handleGeometryPanelChange = useCallback((next: TLayerGeometry) => {
-    if (!selectedLayer) return;
-    if (hasConstantSize(selectedLayer)) {
-      void persistGeometryAndSize(selectedLayer.id, next);
-    } else {
-      void persistGeometry(selectedLayer.id, next);
-    }
-  }, [selectedLayer, persistGeometry, persistGeometryAndSize]);
+  const handleGeometryPanelChange = useCallback(
+    (next: TLayerGeometry) => {
+      if (!selectedLayer) return;
+      if (hasConstantSize(selectedLayer)) {
+        void persistGeometryAndSize(selectedLayer.id, next);
+      } else {
+        void persistGeometry(selectedLayer.id, next);
+      }
+    },
+    [selectedLayer, persistGeometry, persistGeometryAndSize],
+  );
 
-  const geometryLocked = selectedLayer ? !isFullyConstant(selectedLayer.transformationMatrix) : false;
+  const geometryLocked = selectedLayer
+    ? !isFullyConstant(selectedLayer.transformationMatrix)
+    : false;
   const canResize = selectedLayer ? hasConstantSize(selectedLayer) : false;
 
   const selectedGeometry: TLayerGeometry | null = useMemo(() => {
     if (!selectedLayer || geometryLocked) return null;
     const size = sizeForGeometry(selectedLayer);
-    return decomposeMatrix(rawConstantMatrix(selectedLayer.transformationMatrix), size.width, size.height);
+    return decomposeMatrix(
+      rawConstantMatrix(selectedLayer.transformationMatrix),
+      size.width,
+      size.height,
+    );
   }, [selectedLayer, geometryLocked, sizeForGeometry]);
 
   return (
     <div ref={moveableContainerRef} style={{ position: 'relative' }}>
-      <TestParametersPanel parameters={parameters} value={testParameters} onChange={setTestParameters} />
+      <TestParametersPanel
+        parameters={parameters}
+        value={testParameters}
+        onChange={setTestParameters}
+      />
 
       {!isEditable && (
         <Section name="Hinweis" color={colors.lightRed}>
           <p className={styles.lockedNotice}>
-            Diese Version ist nicht bearbeitbar (nur die zuletzt erstellte, nicht aktive Version kann editiert werden).
-            Ebenen werden hier nur zur Ansicht angezeigt.
+            Diese Version ist nicht bearbeitbar (nur die zuletzt erstellte,
+            nicht aktive Version kann editiert werden). Ebenen werden hier nur
+            zur Ansicht angezeigt.
           </p>
         </Section>
       )}
 
       <div className={styles.layout}>
         <div ref={canvasAreaRef} className={styles.canvasArea}>
-          <div className={styles.canvasWrapper} style={{ width: version.width * zoom, height: version.height * zoom }}>
+          <div
+            className={styles.canvasWrapper}
+            style={{
+              width: version.width * zoom,
+              height: version.height * zoom,
+            }}
+          >
             <div
               className={styles.canvas}
               style={{
@@ -546,30 +733,49 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
                   layer is skipped entirely from the preview, same as the
                   actual render, not just dimmed - so what's shown here
                   never overstates what the final image will contain. */}
-              {layers.filter((layer) => !layer.hidden).map((layer) => {
-                const matrix = resolveMatrix(layer.transformationMatrix, testParameters);
-                const resolvedOptions = resolveOptions(layer.options, testParameters);
+              {layers
+                .filter((layer) => !layer.hidden)
+                .map((layer) => {
+                  const matrix = resolveMatrix(
+                    layer.transformationMatrix,
+                    testParameters,
+                  );
+                  const resolvedOptions = resolveOptions(
+                    layer.options,
+                    testParameters,
+                  );
 
-                return (
-                  <div
-                    key={layer.id}
-                    ref={(el) => setLayerRef(layer.id, el)}
-                    className={clsx(styles.layerTarget, selectedLayerId === layer.id && styles.selected, !isEditable && styles.locked)}
-                    style={{ transform: toCssMatrix(matrix) }}
-                    onClick={() => isEditable && setSelectedLayerId(layer.id)}
-                  >
-                    <LayerElement layer={layer} resolved={resolvedOptions} />
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={layer.id}
+                      ref={(el) => setLayerRef(layer.id, el)}
+                      className={clsx(
+                        styles.layerTarget,
+                        selectedLayerId === layer.id && styles.selected,
+                        !isEditable && styles.locked,
+                      )}
+                      style={{ transform: toCssMatrix(matrix) }}
+                      onClick={() => isEditable && setSelectedLayerId(layer.id)}
+                    >
+                      <LayerElement layer={layer} resolved={resolvedOptions} />
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
 
         <div className={styles.sidebar}>
           <Section name="Ebenen (Reihenfolge)">
-            <DndContext sensors={layerListSensors} collisionDetection={closestCenter} onDragEnd={handleLayerDragEnd}>
-              <SortableContext items={displayLayers.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+            <DndContext
+              sensors={layerListSensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleLayerDragEnd}
+            >
+              <SortableContext
+                items={displayLayers.map((l) => l.id)}
+                strategy={verticalListSortingStrategy}
+              >
                 <List>
                   {displayLayers.map((layer, index) => (
                     <SortableLayerRow
@@ -580,7 +786,9 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
                       selected={selectedLayerId === layer.id}
                       isEditable={isEditable}
                       onSelect={() => setSelectedLayerId(layer.id)}
-                      onReorder={(direction) => handleReorder(layer.id, direction)}
+                      onReorder={(direction) =>
+                        handleReorder(layer.id, direction)
+                      }
                       onToggleHidden={() => handleToggleHidden(layer.id)}
                     />
                   ))}
@@ -602,17 +810,26 @@ const LayerCanvasEditor: React.FunctionComponent<LayerCanvasEditorProps> = ({
             <>
               {geometryLocked && (
                 <p className={styles.lockedNotice}>
-                  Position/Rotation dieser Ebene ist an einen Parameter gebunden und kann hier nicht bearbeitet werden.
+                  Position/Rotation dieser Ebene ist an einen Parameter gebunden
+                  und kann hier nicht bearbeitet werden.
                 </p>
               )}
               {selectedGeometry && (
-                <LayerGeometryPanel geometry={selectedGeometry} hasSize={canResize} onChange={handleGeometryPanelChange} />
+                <LayerGeometryPanel
+                  geometry={selectedGeometry}
+                  hasSize={canResize}
+                  onChange={handleGeometryPanelChange}
+                />
               )}
               <LayerPropertiesPanel
                 layer={selectedLayer}
                 parameterPaths={parameterPaths}
-                onChangeName={(name) => handleChangeName(selectedLayer.id, name)}
-                onChangeOptions={(options) => handleChangeOptions(selectedLayer.id, options)}
+                onChangeName={(name) =>
+                  handleChangeName(selectedLayer.id, name)
+                }
+                onChangeOptions={(options) =>
+                  handleChangeOptions(selectedLayer.id, options)
+                }
                 onDelete={() => handleDelete(selectedLayer.id)}
               />
             </>

@@ -1,8 +1,8 @@
 // src/main.d.ts
 
-declare module "@point-of-sale/webbluetooth-receipt-printer" {
+declare module '@point-of-sale/webbluetooth-receipt-printer' {
   export interface BluetoothReceiptPrinterDevice {
-    type: "bluetooth";
+    type: 'bluetooth';
     name?: string;
     id: string;
     manufacturerName?: string;
@@ -16,17 +16,20 @@ declare module "@point-of-sale/webbluetooth-receipt-printer" {
     id: string;
   }
 
-  export type BluetoothReceiptPrinterPrintData = ArrayBufferView | ArrayBufferView[];
+  export type BluetoothReceiptPrinterPrintData =
+    | ArrayBufferView
+    | ArrayBufferView[];
 
-  declare class ReceiptPrinterDriver {
-  }
+  declare class ReceiptPrinterDriver {}
 
   class WebBluetoothReceiptPrinter extends ReceiptPrinterDriver {
     constructor();
 
     connect(): Promise<void>;
 
-    reconnect(previousDevice: BluetoothReceiptPrinterReconnectDevice): Promise<void>;
+    reconnect(
+      previousDevice: BluetoothReceiptPrinterReconnectDevice,
+    ): Promise<void>;
 
     listen(): Promise<true | undefined>;
 
@@ -34,9 +37,12 @@ declare module "@point-of-sale/webbluetooth-receipt-printer" {
 
     print(command: BluetoothReceiptPrinterPrintData): Promise<void>;
 
-    addEventListener(event: "connected", listener: (device: BluetoothReceiptPrinterDevice) => void): void;
-    addEventListener(event: "disconnected", listener: () => void): void;
-    addEventListener(event: "data", listener: (data: DataView) => void): void;
+    addEventListener(
+      event: 'connected',
+      listener: (device: BluetoothReceiptPrinterDevice) => void,
+    ): void;
+    addEventListener(event: 'disconnected', listener: () => void): void;
+    addEventListener(event: 'data', listener: (data: DataView) => void): void;
     addEventListener(event: string, listener: (...args: any[]) => void): void;
   }
 

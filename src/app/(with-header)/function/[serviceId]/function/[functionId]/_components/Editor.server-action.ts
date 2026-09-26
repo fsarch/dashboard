@@ -1,6 +1,6 @@
 'use server';
 
-import { functionService } from "@/services/function/function.service";
+import { functionService } from '@/services/function/function.service';
 
 export async function saveCode(functionId: string, code: string) {
   await functionService.setFunctionVersionCode(functionId, code);

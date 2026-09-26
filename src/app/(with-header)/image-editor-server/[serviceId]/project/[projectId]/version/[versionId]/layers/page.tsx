@@ -1,8 +1,8 @@
+import Link from 'next/link';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import Link from 'next/link';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { imageEditorServerService } from '@/services/image-editor-server/image-editor-server.service';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import LayerCanvasEditor from './_components/LayerCanvasEditor.component';
 
 export default async function LayersPage({
@@ -26,7 +26,13 @@ export default async function LayersPage({
     <DefaultPage>
       <Section name="Ebenen">
         <p>
-          <Link href={await getServiceLocalUrl(`/project/${projectId}/version/${versionId}`)}>
+          <Link
+            href={
+              await getServiceLocalUrl(
+                `/project/${projectId}/version/${versionId}`,
+              )
+            }
+          >
             &larr; Zurück zur Version
           </Link>
         </p>

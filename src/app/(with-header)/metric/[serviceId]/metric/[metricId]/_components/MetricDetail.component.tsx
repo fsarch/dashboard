@@ -1,14 +1,20 @@
 'use client';
 
-import React from 'react';
-import { TMetricDto, TMetricStatusDto } from '@/services/metric/metric.type';
 import Link from 'next/link';
-import Button from '@/components/universals/forms/Button';
-import { deleteMetricAction, restoreMetricAction } from '@/app/(with-header)/metric/[serviceId]/metric/_components/MetricActions.server-action';
-import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
-import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import {
+  deleteMetricAction,
+  restoreMetricAction,
+} from '@/app/(with-header)/metric/[serviceId]/metric/_components/MetricActions.server-action';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
+import type {
+  TMetricDto,
+  TMetricStatusDto,
+} from '@/services/metric/metric.type';
 
 type MetricDetailProps = {
   metric: TMetricDto;
@@ -16,7 +22,11 @@ type MetricDetailProps = {
   metricStatus: TMetricStatusDto | null;
 };
 
-const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serviceId, metricStatus }) => {
+const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({
+  metric,
+  serviceId,
+  metricStatus,
+}) => {
   const router = useRouter();
   const openDialog = useOpenDialog();
   const isDeleted = metric.deletionTime !== null;
@@ -67,51 +77,129 @@ const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serv
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <tbody>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               ID
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               <code>{metric.id}</code>
             </td>
           </tr>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               Name
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               {metric.name}
             </td>
           </tr>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               Metric Type ID
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               <code>{metric.metricTypeId}</code>
             </td>
           </tr>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               External ID
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               {metric.externalId || 'N/A'}
             </td>
           </tr>
           <tr>
-            <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+            <th
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+                textAlign: 'left',
+                backgroundColor: 'var(--color-background-tertiary)',
+                fontWeight: 600,
+              }}
+            >
               Creation Time
             </th>
-            <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+            <td
+              style={{
+                padding: '0.5rem',
+                border: '1px solid var(--color-border)',
+              }}
+            >
               {new Date(metric.creationTime).toLocaleString()}
             </td>
           </tr>
           {metric.deletionTime && (
             <tr>
-              <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+              <th
+                style={{
+                  padding: '0.5rem',
+                  border: '1px solid var(--color-border)',
+                  textAlign: 'left',
+                  backgroundColor: 'var(--color-background-tertiary)',
+                  fontWeight: 600,
+                }}
+              >
                 Deletion Time
               </th>
-              <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+              <td
+                style={{
+                  padding: '0.5rem',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
                 {new Date(metric.deletionTime).toLocaleString()}
               </td>
             </tr>
@@ -119,27 +207,70 @@ const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serv
           {metricStatus && (
             <>
               <tr>
-                <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+                <th
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid var(--color-border)',
+                    textAlign: 'left',
+                    backgroundColor: 'var(--color-background-tertiary)',
+                    fontWeight: 600,
+                  }}
+                >
                   Total Measurements
                 </th>
-                <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
+                <td
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid var(--color-border)',
+                  }}
+                >
                   {metricStatus.totalMeasurements}
                 </td>
               </tr>
               <tr>
-                <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+                <th
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid var(--color-border)',
+                    textAlign: 'left',
+                    backgroundColor: 'var(--color-background-tertiary)',
+                    fontWeight: 600,
+                  }}
+                >
                   First Measurement
                 </th>
-                <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
-                  {metricStatus.firstMeasurementAt ? new Date(metricStatus.firstMeasurementAt).toLocaleString() : 'N/A'}
+                <td
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid var(--color-border)',
+                  }}
+                >
+                  {metricStatus.firstMeasurementAt
+                    ? new Date(metricStatus.firstMeasurementAt).toLocaleString()
+                    : 'N/A'}
                 </td>
               </tr>
               <tr>
-                <th style={{ padding: '0.5rem', border: '1px solid var(--color-border)', textAlign: 'left', backgroundColor: 'var(--color-background-tertiary)', fontWeight: 600 }}>
+                <th
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid var(--color-border)',
+                    textAlign: 'left',
+                    backgroundColor: 'var(--color-background-tertiary)',
+                    fontWeight: 600,
+                  }}
+                >
                   Last Measurement
                 </th>
-                <td style={{ padding: '0.5rem', border: '1px solid var(--color-border)' }}>
-                  {metricStatus.lastMeasurementAt ? new Date(metricStatus.lastMeasurementAt).toLocaleString() : 'N/A'}
+                <td
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid var(--color-border)',
+                  }}
+                >
+                  {metricStatus.lastMeasurementAt
+                    ? new Date(metricStatus.lastMeasurementAt).toLocaleString()
+                    : 'N/A'}
                 </td>
               </tr>
             </>
@@ -148,38 +279,30 @@ const MetricDetail: React.FunctionComponent<MetricDetailProps> = ({ metric, serv
       </table>
 
       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <Link href={`/metric/${serviceId}/metric/${metric.id}/measurements`} passHref>
-          <Button type="button">
-            Measurements
-          </Button>
+        <Link
+          href={`/metric/${serviceId}/metric/${metric.id}/measurements`}
+          passHref
+        >
+          <Button type="button">Measurements</Button>
         </Link>
-        <Link href={`/metric/${serviceId}/metric/${metric.id}/aggregate`} passHref>
-          <Button type="button">
-            Aggregate
-          </Button>
+        <Link
+          href={`/metric/${serviceId}/metric/${metric.id}/aggregate`}
+          passHref
+        >
+          <Button type="button">Aggregate</Button>
         </Link>
         {!isDeleted && (
-          <Button
-            type="button"
-            onClick={handleDelete}
-            color="#d32f2f"
-          >
+          <Button type="button" onClick={handleDelete} color="#d32f2f">
             Löschen
           </Button>
         )}
         {isDeleted && (
-          <Button
-            type="button"
-            onClick={handleRestore}
-            color="#388e3c"
-          >
+          <Button type="button" onClick={handleRestore} color="#388e3c">
             Wiederherstellen
           </Button>
         )}
         <Link href={`/metric/${serviceId}/metric`} passHref>
-          <Button type="button">
-            Zurück zur Liste
-          </Button>
+          <Button type="button">Zurück zur Liste</Button>
         </Link>
       </div>
     </div>

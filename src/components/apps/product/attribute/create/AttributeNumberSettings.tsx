@@ -1,15 +1,11 @@
-import React from 'react';
+import type React from 'react';
 
-type AttributeNumberSettingsProps = {
+type AttributeNumberSettingsProps = {};
 
-};
-
-const AttributeNumberSettings: React.FunctionComponent<AttributeNumberSettingsProps> = () => {
-  return (
-    <div>
-Number
-    </div>
-  );
+const AttributeNumberSettings: React.FunctionComponent<
+  AttributeNumberSettingsProps
+> = () => {
+  return <div>Number</div>;
 };
 
 export default AttributeNumberSettings;

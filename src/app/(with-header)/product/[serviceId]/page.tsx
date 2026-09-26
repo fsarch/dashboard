@@ -1,10 +1,10 @@
-import { catalogService } from "@/services/product/catalog.service";
-import List from "@/components/universals/list/List";
-import ListItem from "@/components/universals/list/ListItem";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import Link from "next/link";
-import Section from "@/components/universals/section/Section";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import Link from 'next/link';
+import List from '@/components/universals/list/List';
+import ListItem from '@/components/universals/list/ListItem';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { catalogService } from '@/services/product/catalog.service';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 export default async function Home() {
   const catalogs = await catalogService.listCatalogs();
@@ -18,9 +18,7 @@ export default async function Home() {
               key={catalog.id}
               href={await getServiceLocalUrl(`/catalog/${catalog.id}`)}
             >
-              <ListItem>
-                {catalog.name}
-              </ListItem>
+              <ListItem>{catalog.name}</ListItem>
             </Link>
           ))}
         </List>

@@ -1,13 +1,13 @@
-import { imagesAdminService } from '@/services/image/images-admin.service';
-import { TagDefinitionDto } from '@/services/image/images-admin.type';
-import { IMAGE_TAG_DEFINITION_CREATE_FORM } from '@/services/image/image.forms';
+import Link from 'next/link';
+import { colors } from '@/app/_styles/colors';
+import Button from '@/components/universals/forms/Button';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import Link from 'next/link';
+import { IMAGE_TAG_DEFINITION_CREATE_FORM } from '@/services/image/image.forms';
+import { imagesAdminService } from '@/services/image/images-admin.service';
+import type { TagDefinitionDto } from '@/services/image/images-admin.type';
 import styles from './page.module.scss';
-import Button from '@/components/universals/forms/Button';
-import { colors } from "@/app/_styles/colors";
 
 export default async function TagDefinitionsPage(props: {
   params: Promise<{ serviceId: string }>;
@@ -42,7 +42,9 @@ export default async function TagDefinitionsPage(props: {
                       <code>{def.key}</code>
                     </td>
                     <td className={styles.tableCellDescription}>
-                      {def.description || <span className={styles.noDescription}>–</span>}
+                      {def.description || (
+                        <span className={styles.noDescription}>–</span>
+                      )}
                     </td>
                     <td className={styles.tableCellDate}>
                       {formatDate(def.creationTime)}
@@ -55,10 +57,7 @@ export default async function TagDefinitionsPage(props: {
                         }}
                         className={styles.deleteForm}
                       >
-                        <Button
-                          type="submit"
-                          color={colors.error}
-                        >
+                        <Button type="submit" color={colors.error}>
                           Löschen
                         </Button>
                       </form>

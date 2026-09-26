@@ -1,7 +1,6 @@
-import React from 'react';
-import ActionButtonClient
-  from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/ActionButtonClient.component";
-import { fetchService } from "@/utils/fetchService";
+import type React from 'react';
+import ActionButtonClient from '@/app/(with-header)/material-tracing/[serviceId]/_components/actions/ActionButtonClient.component';
+import { fetchService } from '@/utils/fetchService';
 
 type ActionButtonProps = {
   name: string;
@@ -16,7 +15,7 @@ const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
     'use server';
 
     const response = await fetchService(path, {
-      method: "POST",
+      method: 'POST',
     });
 
     const data = await response.json();
@@ -28,12 +27,7 @@ const ActionButton: React.FunctionComponent<ActionButtonProps> = ({
     return data.result;
   };
 
-  return (
-    <ActionButtonClient
-      onClick={handleClick}
-      name={name}
-    />
-  );
+  return <ActionButtonClient onClick={handleClick} name={name} />;
 };
 
 export default ActionButton;

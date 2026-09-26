@@ -1,6 +1,9 @@
-import type { AppDefinitionType, AppFloatingButton } from "@/constants/app.type";
-import { headers } from "next/headers";
-import { createPathMatcher } from "@/utils/app/routeMatch.utils";
+import { headers } from 'next/headers';
+import type {
+  AppDefinitionType,
+  AppFloatingButton,
+} from '@/constants/app.type';
+import { createPathMatcher } from '@/utils/app/routeMatch.utils';
 
 const getFloatingButton = async (
   config: Pick<AppDefinitionType, 'floatingButton' | 'routes'>,

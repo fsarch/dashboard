@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TEventExceptionDto } from '@/services/calendar/calendar.type';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import Pagination from '@/components/universals/pagination/Pagination.component';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import Pagination from '@/components/universals/pagination/Pagination.component';
+import type {
+  TEventExceptionDto,
+  TPaginationResultDto,
+} from '@/services/calendar/calendar.type';
 
 type ExceptionsListProps = {
   exceptions: TPaginationResultDto<TEventExceptionDto>;
@@ -30,11 +33,15 @@ const ExceptionsList: React.FunctionComponent<ExceptionsListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}/series/${seriesId}?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}/series/${seriesId}?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}/series/${seriesId}?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}/series/${seriesId}?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   if (data.length === 0) {
@@ -43,20 +50,30 @@ const ExceptionsList: React.FunctionComponent<ExceptionsListProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div style={{ border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1rem' }}>
+      <div
+        style={{
+          border: '1px solid var(--color-border)',
+          borderRadius: '8px',
+          padding: '1rem',
+        }}
+      >
         <List>
           {data.map((exception) => (
             <LinkListItem
               key={exception.id}
               href={`/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}/series/${seriesId}/exception/${exception.id}`}
             >
-              <strong>{new Date(exception.originalStart).toLocaleString()}</strong>
+              <strong>
+                {new Date(exception.originalStart).toLocaleString()}
+              </strong>
               <br />
               <small>
                 {exception.isCancelled ? 'Storniert' : ''}
                 {exception.isCancelled && exception.isMoved ? ' | ' : ''}
                 {exception.isMoved ? 'Verschoben' : ''}
-                {!exception.isCancelled && !exception.isMoved ? 'Keine Änderung' : ''}
+                {!exception.isCancelled && !exception.isMoved
+                  ? 'Keine Änderung'
+                  : ''}
               </small>
             </LinkListItem>
           ))}

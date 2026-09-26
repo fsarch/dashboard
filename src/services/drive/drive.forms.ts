@@ -1,9 +1,11 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 const folderPath = (parentId: string | null): string =>
   parentId ? `/folder/${parentId}` : '';
 
-export const FOLDER_CREATE_FORM = (parentId: string | null): TGeneratedFormDefinition => ({
+export const FOLDER_CREATE_FORM = (
+  parentId: string | null,
+): TGeneratedFormDefinition => ({
   inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
   initialValues: { name: '' },
   endpoint: {
@@ -19,13 +21,20 @@ export const FOLDER_CREATE_FORM = (parentId: string | null): TGeneratedFormDefin
   postEndpointActions: [
     {
       $type: 'redirect',
-      url: { $type: 'jsonata', value: `service.localPath & '${folderPath(parentId)}'` },
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '${folderPath(parentId)}'`,
+      },
     },
   ],
   buttons: { submitButtonText: 'Ordner erstellen' },
 });
 
-export const ASSET_RENAME_FORM = (assetId: string, currentName: string, backPath: string): TGeneratedFormDefinition => ({
+export const ASSET_RENAME_FORM = (
+  assetId: string,
+  currentName: string,
+  backPath: string,
+): TGeneratedFormDefinition => ({
   inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
   initialValues: { name: currentName },
   endpoint: {
@@ -34,7 +43,10 @@ export const ASSET_RENAME_FORM = (assetId: string, currentName: string, backPath
     body: { $type: 'jsonata', value: '{ "name": form.name }' },
   },
   postEndpointActions: [
-    { $type: 'redirect', url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` } },
+    {
+      $type: 'redirect',
+      url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` },
+    },
   ],
   buttons: { submitButtonText: 'Umbenennen' },
 });
@@ -54,11 +66,15 @@ export const GROUP_CREATE_FORM: TGeneratedFormDefinition = {
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "permissionResourceId": form.permissionResourceId }',
+      value:
+        '{ "name": form.name, "permissionResourceId": form.permissionResourceId }',
     },
   },
   postEndpointActions: [
-    { $type: 'redirect', url: { $type: 'jsonata', value: "service.localPath & '/groups'" } },
+    {
+      $type: 'redirect',
+      url: { $type: 'jsonata', value: "service.localPath & '/groups'" },
+    },
   ],
   buttons: { submitButtonText: 'Gruppe erstellen' },
 };

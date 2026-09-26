@@ -10,19 +10,34 @@
  */
 async function asyncReduce<T, U>(
   arr: ReadonlyArray<T>,
-  reducer: (acc: U, cur: T, index: number, array: ReadonlyArray<T>) => U | Promise<U>,
-  initial: U
+  reducer: (
+    acc: U,
+    cur: T,
+    index: number,
+    array: ReadonlyArray<T>,
+  ) => U | Promise<U>,
+  initial: U,
 ): Promise<U>;
 
 async function asyncReduce<T>(
   arr: ReadonlyArray<T>,
-  reducer: (acc: T, cur: T, index: number, array: ReadonlyArray<T>) => T | Promise<T>
+  reducer: (
+    acc: T,
+    cur: T,
+    index: number,
+    array: ReadonlyArray<T>,
+  ) => T | Promise<T>,
 ): Promise<T>;
 
 async function asyncReduce<T, U>(
   arr: ReadonlyArray<T>,
-  reducer: (acc: any, cur: T, index: number, array: ReadonlyArray<T>) => any | Promise<any>,
-  initial?: any
+  reducer: (
+    acc: any,
+    cur: T,
+    index: number,
+    array: ReadonlyArray<T>,
+  ) => any | Promise<any>,
+  initial?: any,
 ): Promise<any> {
   if (arr.length === 0 && initial === undefined) {
     throw new TypeError('Reduce of empty array with no initial value');

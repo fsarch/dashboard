@@ -93,4 +93,3 @@ export type EmailListParams = {
   search?: string;
   sort?: string;
 };
-

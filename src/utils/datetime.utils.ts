@@ -4,8 +4,7 @@ function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat('de-DE', {
     dateStyle: 'long',
     timeStyle: 'short',
-  })
-    .format(dateToFormat);
+  }).format(dateToFormat);
 }
 
 export const datetimeUtils = {

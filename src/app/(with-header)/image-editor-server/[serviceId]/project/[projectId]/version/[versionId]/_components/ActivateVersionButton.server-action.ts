@@ -6,6 +6,12 @@ import { imageEditorServerService } from '@/services/image-editor-server/image-e
 export const activateVersion = async (projectId: string, versionId: string) => {
   await imageEditorServerService.activateProjectVersion(projectId, versionId);
 
-  revalidatePath('/image-editor-server/[serviceId]/project/[projectId]/version/[versionId]', 'page');
-  revalidatePath('/image-editor-server/[serviceId]/project/[projectId]/version', 'page');
+  revalidatePath(
+    '/image-editor-server/[serviceId]/project/[projectId]/version/[versionId]',
+    'page',
+  );
+  revalidatePath(
+    '/image-editor-server/[serviceId]/project/[projectId]/version',
+    'page',
+  );
 };

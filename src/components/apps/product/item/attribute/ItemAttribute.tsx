@@ -1,17 +1,22 @@
-import React from 'react';
-import { AttributeDto, ImageAttributeDto } from "@/services/product/attribute.type";
-import {
+import type React from 'react';
+import ItemBooleanAttribute from '@/components/apps/product/item/attribute/types/ItemBooleanAttribute';
+import { ItemImageAttribute } from '@/components/apps/product/item/attribute/types/ItemImageAttribute';
+import ItemLinkAttribute from '@/components/apps/product/item/attribute/types/ItemLinkAttribute';
+import ItemListAttribute from '@/components/apps/product/item/attribute/types/ItemListAttribute';
+import ItemTextAttribute from '@/components/apps/product/item/attribute/types/ItemTextAttribute';
+import { AttributeType } from '@/services/product/attribute.const';
+import type {
+  AttributeDto,
+  ImageAttributeDto,
+} from '@/services/product/attribute.type';
+import type {
   ItemAttributeDto,
-  ItemBooleanAttributeDto, ItemImageAttributeDto, ItemLinkAttributeDto,
+  ItemBooleanAttributeDto,
+  ItemImageAttributeDto,
+  ItemLinkAttributeDto,
   ItemListAttributeDto,
-  ItemTextAttributeDto
-} from "@/services/product/item-attribute.type";
-import { AttributeType } from "@/services/product/attribute.const";
-import ItemTextAttribute from "@/components/apps/product/item/attribute/types/ItemTextAttribute";
-import ItemListAttribute from "@/components/apps/product/item/attribute/types/ItemListAttribute";
-import ItemLinkAttribute from "@/components/apps/product/item/attribute/types/ItemLinkAttribute";
-import ItemBooleanAttribute from "@/components/apps/product/item/attribute/types/ItemBooleanAttribute";
-import { ItemImageAttribute } from "@/components/apps/product/item/attribute/types/ItemImageAttribute";
+  ItemTextAttributeDto,
+} from '@/services/product/item-attribute.type';
 
 type ItemAttributeProps = {
   id?: string;
@@ -77,11 +82,7 @@ const ItemAttribute: React.FunctionComponent<ItemAttributeProps> = ({
     );
   }
 
-  return (
-    <div>
-
-    </div>
-  );
+  return <div></div>;
 };
 
 export default ItemAttribute;

@@ -1,25 +1,39 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { Form, Formik } from "formik";
-import TextArea from "@/components/universals/forms/TextArea";
-import Select from "@/components/universals/forms/Select";
-import Button from "@/components/universals/forms/Button";
-import { executeFunctionAction } from "./ExecuteForm.server-action";
+import { Form, Formik } from 'formik';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import Button from '@/components/universals/forms/Button';
+import Select from '@/components/universals/forms/Select';
+import TextArea from '@/components/universals/forms/TextArea';
+import { executeFunctionAction } from './ExecuteForm.server-action';
 
 type ExecuteFormProps = {
   functionId: string;
 };
 
-const ExecuteForm: React.FunctionComponent<ExecuteFormProps> = ({ functionId }) => {
-  const [result, setResult] = useState<{ success: boolean; result?: string; error?: string } | null>(null);
+const ExecuteForm: React.FunctionComponent<ExecuteFormProps> = ({
+  functionId,
+}) => {
+  const [result, setResult] = useState<{
+    success: boolean;
+    result?: string;
+    error?: string;
+  } | null>(null);
 
-  const handleSubmit = useCallback(async (values: { method: string; input: string }) => {
-    setResult(null);
+  const handleSubmit = useCallback(
+    async (values: { method: string; input: string }) => {
+      setResult(null);
 
-    const response = await executeFunctionAction(functionId, values.method, values.input);
-    setResult(response);
-  }, [functionId]);
+      const response = await executeFunctionAction(
+        functionId,
+        values.method,
+        values.input,
+      );
+      setResult(response);
+    },
+    [functionId],
+  );
 
   return (
     <>
@@ -46,14 +60,19 @@ const ExecuteForm: React.FunctionComponent<ExecuteFormProps> = ({ functionId }) 
 
           <TextArea name="input" />
 
-          <Button type="submit">
-            Execute
-          </Button>
+          <Button type="submit">Execute</Button>
         </Form>
       </Formik>
 
       {result && (
-        <div style={{ marginTop: '20px', padding: '15px', background: result.success ? '#d4edda' : '#f8d7da', borderRadius: '5px' }}>
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '15px',
+            background: result.success ? '#d4edda' : '#f8d7da',
+            borderRadius: '5px',
+          }}
+        >
           {result.success ? (
             <>
               <h4>Ausführungsergebnis:</h4>

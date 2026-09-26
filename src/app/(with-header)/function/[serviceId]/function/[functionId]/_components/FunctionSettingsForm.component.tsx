@@ -1,9 +1,9 @@
 import 'server-only';
 
-import React from 'react';
-import Section from "@/components/universals/section/Section";
-import { FunctionDto } from '@/services/function/function.type';
+import type React from 'react';
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import Section from '@/components/universals/section/Section';
+import type { FunctionDto } from '@/services/function/function.type';
 import { FUNCTION_SETTINGS_FORM } from '../_forms/function-settings.form';
 
 type FunctionSettingsFormProps = {
@@ -11,7 +11,9 @@ type FunctionSettingsFormProps = {
   serviceId: string;
 };
 
-const FunctionSettingsForm: React.FunctionComponent<FunctionSettingsFormProps> = ({ function: func, serviceId }) => {
+const FunctionSettingsForm: React.FunctionComponent<
+  FunctionSettingsFormProps
+> = ({ function: func, serviceId }) => {
   // const formDefinition = {
   //   ...FUNCTION_SETTINGS_FORM,
   //   initialValues: {
@@ -33,8 +35,13 @@ const FunctionSettingsForm: React.FunctionComponent<FunctionSettingsFormProps> =
 
       <Section name="Aktuelle Einstellungen">
         <div>
-          <p><strong>ID:</strong> {func.id}</p>
-          <p><strong>Erstellt:</strong> {new Date(func.creationTime).toLocaleString()}</p>
+          <p>
+            <strong>ID:</strong> {func.id}
+          </p>
+          <p>
+            <strong>Erstellt:</strong>{' '}
+            {new Date(func.creationTime).toLocaleString()}
+          </p>
         </div>
       </Section>
     </>

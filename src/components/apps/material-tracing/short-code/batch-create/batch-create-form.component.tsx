@@ -1,15 +1,14 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback } from 'react';
-import { Form, Formik } from "formik";
-import { base64Utils } from "@/utils/base64.utils";
-import Input from "@/components/universals/forms/Input";
-import SimpleFieldsetRow from "@/components/universals/forms/SimpleFieldsetRow.component";
-import { batchCreateShortCodes } from "./batch-create-form.server-action";
+import { Form, Formik } from 'formik';
+import type React from 'react';
+import { type PropsWithChildren, useCallback } from 'react';
+import Input from '@/components/universals/forms/Input';
+import SimpleFieldsetRow from '@/components/universals/forms/SimpleFieldsetRow.component';
+import { base64Utils } from '@/utils/base64.utils';
+import { batchCreateShortCodes } from './batch-create-form.server-action';
 
-type BatchCreateFormProps = PropsWithChildren<{
-
-}>;
+type BatchCreateFormProps = PropsWithChildren<{}>;
 
 const BatchCreateForm: React.FunctionComponent<BatchCreateFormProps> = ({
   children,
@@ -44,14 +43,9 @@ const BatchCreateForm: React.FunctionComponent<BatchCreateFormProps> = ({
   }, []);
 
   return (
-    <Formik
-      initialValues={{ amount: 1 }}
-      onSubmit={handleSubmit}
-    >
+    <Formik initialValues={{ amount: 1 }} onSubmit={handleSubmit}>
       <Form>
-        <SimpleFieldsetRow
-          label="Amount of Short Codes (max. 100)"
-        >
+        <SimpleFieldsetRow label="Amount of Short Codes (max. 100)">
           {(id) => (
             <Input
               id={id}

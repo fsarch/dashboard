@@ -1,18 +1,17 @@
-import React, { useId } from 'react';
-import {
-  TGeneratedFormSelectInput,
-} from "@/components/universals/forms/generated/GeneratedForm.type";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
-import Select from "@/components/universals/forms/Select";
-import SearchableSelect from "@/components/universals/forms/searchable-select/SearchableSelect.component";
+import type React from 'react';
+import { useId } from 'react';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import type { TGeneratedFormSelectInput } from '@/components/universals/forms/generated/GeneratedForm.type';
+import Select from '@/components/universals/forms/Select';
+import SearchableSelect from '@/components/universals/forms/searchable-select/SearchableSelect.component';
 
 type GeneratedFormSelectInputProps = {
   input: TGeneratedFormSelectInput;
 };
 
-const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInputProps> = ({
-  input,
-}) => {
+const GeneratedFormSelectInput: React.FunctionComponent<
+  GeneratedFormSelectInputProps
+> = ({ input }) => {
   const id = useId();
 
   if (input.data.$type !== 'constant') {
@@ -20,15 +19,7 @@ const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInput
   }
 
   return (
-    <FieldsetRow
-      label={(
-        <label
-          htmlFor={id}
-        >
-          {input.label}
-        </label>
-      )}
-    >
+    <FieldsetRow label={<label htmlFor={id}>{input.label}</label>}>
       {input.enableSearch ? (
         <SearchableSelect
           id={id}
@@ -36,11 +27,7 @@ const GeneratedFormSelectInput: React.FunctionComponent<GeneratedFormSelectInput
           values={input.data.value ?? []}
         />
       ) : (
-        <Select
-          id={id}
-          name={input.id}
-          values={input.data.value ?? []}
-        />
+        <Select id={id} name={input.id} values={input.data.value ?? []} />
       )}
     </FieldsetRow>
   );

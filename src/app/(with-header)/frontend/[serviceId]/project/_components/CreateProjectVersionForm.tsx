@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, type FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import Button from '@/components/universals/forms/Button';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import FileInput from '@/components/universals/forms/FileInput';
 import Input from '@/components/universals/forms/Input';
 import TextArea from '@/components/universals/forms/TextArea';
-import Button from '@/components/universals/forms/Button';
-import Section from '@/components/universals/section/Section';
-import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import ProgressBar from '@/components/universals/progress/ProgressBar.component';
-import { useRouter } from 'next/navigation';
+import Section from '@/components/universals/section/Section';
 
 type CreateProjectVersionFormProps = {
   serviceId: string;
@@ -32,46 +33,49 @@ const uploadFile = (
   file: File,
   headers: Record<string, string>,
   onProgress: (percent: number) => void,
-) => new Promise<void>((resolve, reject) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-  Object.entries(headers).forEach(([name, value]) => {
-    xhr.setRequestHeader(name, value);
+) =>
+  new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader(
+      'Content-Type',
+      file.type || 'application/octet-stream',
+    );
+    Object.entries(headers).forEach(([name, value]) => {
+      xhr.setRequestHeader(name, value);
+    });
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        onProgress((event.loaded / event.total) * 100);
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(100);
+        resolve();
+        return;
+      }
+
+      let message = `Fehler beim Hochladen (${xhr.status})`;
+      try {
+        const body = JSON.parse(xhr.responseText);
+        message = body.error ?? message;
+      } catch {
+        // Antwort war kein JSON, Standardmeldung verwenden
+      }
+      reject(new Error(message));
+    };
+
+    xhr.onerror = () => reject(new Error('Netzwerkfehler beim Hochladen'));
+
+    xhr.send(file);
   });
 
-  xhr.upload.onprogress = (event) => {
-    if (event.lengthComputable) {
-      onProgress((event.loaded / event.total) * 100);
-    }
-  };
-
-  xhr.onload = () => {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      onProgress(100);
-      resolve();
-      return;
-    }
-
-    let message = `Fehler beim Hochladen (${xhr.status})`;
-    try {
-      const body = JSON.parse(xhr.responseText);
-      message = body.error ?? message;
-    } catch {
-      // Antwort war kein JSON, Standardmeldung verwenden
-    }
-    reject(new Error(message));
-  };
-
-  xhr.onerror = () => reject(new Error('Netzwerkfehler beim Hochladen'));
-
-  xhr.send(file);
-});
-
-const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionFormProps> = ({
-  serviceId,
-  projectId,
-}) => {
+const CreateProjectVersionForm: React.FunctionComponent<
+  CreateProjectVersionFormProps
+> = ({ serviceId, projectId }) => {
   const router = useRouter();
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
@@ -86,8 +90,10 @@ const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionForm
 
       const metadataHeaders: Record<string, string> = {};
       if (values.name) metadataHeaders['X-Version-Name'] = values.name;
-      if (values.description) metadataHeaders['X-Version-Description'] = values.description;
-      if (values.externalId) metadataHeaders['X-Version-External-Id'] = values.externalId;
+      if (values.description)
+        metadataHeaders['X-Version-Description'] = values.description;
+      if (values.externalId)
+        metadataHeaders['X-Version-External-Id'] = values.externalId;
 
       try {
         await uploadFile(
@@ -101,13 +107,14 @@ const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionForm
         router.refresh();
         helpers.resetForm();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unbekannter Fehler';
+        const message =
+          error instanceof Error ? error.message : 'Unbekannter Fehler';
         helpers.setStatus({ error: message });
       } finally {
         setUploadProgress(null);
       }
     },
-    [serviceId, projectId, router]
+    [serviceId, projectId, router],
   );
 
   return (
@@ -150,9 +157,7 @@ const CreateProjectVersionForm: React.FunctionComponent<CreateProjectVersionForm
               <Input name="externalId" type="text" disabled={isSubmitting} />
             </FieldsetRow>
 
-            {uploadProgress !== null && (
-              <ProgressBar value={uploadProgress} />
-            )}
+            {uploadProgress !== null && <ProgressBar value={uploadProgress} />}
 
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Hochladen...' : 'Version erstellen'}

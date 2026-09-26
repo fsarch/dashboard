@@ -1,8 +1,9 @@
-import React, { CSSProperties, MouseEventHandler } from 'react';
 import clsx from 'clsx';
+import type React from 'react';
+import type { CSSProperties, MouseEventHandler } from 'react';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './FloatingButton.module.scss';
-import Icon from "@/components/universals/icon/Icon.component";
-import type { TIcon } from "@/components/universals/icon/Icon.type";
 
 type FloatingButtonProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -26,10 +27,7 @@ const FloatingButton: React.FunctionComponent<FloatingButtonProps> = ({
       style={style}
       onClick={onClick}
     >
-      <Icon
-        className={styles.icon}
-        icon={icon}
-      />
+      <Icon className={styles.icon} icon={icon} />
     </button>
   );
 };

@@ -1,8 +1,11 @@
-import { TJsonataExpression } from "@/components/universals/forms/generated/GeneratedForm.type";
-import jsonata from "jsonata";
+import jsonata from 'jsonata';
+import type { TJsonataExpression } from '@/components/universals/forms/generated/GeneratedForm.type';
 
-async function evaluateStringValue(value: string | TJsonataExpression, context?: Record<string, unknown>): Promise<string> {
-  if (typeof value === "string") {
+async function evaluateStringValue(
+  value: string | TJsonataExpression,
+  context?: Record<string, unknown>,
+): Promise<string> {
+  if (typeof value === 'string') {
     return value;
   }
 
@@ -11,7 +14,10 @@ async function evaluateStringValue(value: string | TJsonataExpression, context?:
   return expressionBuilder.evaluate(context);
 }
 
-async function evaluateValue(value: TJsonataExpression | undefined, context?: Record<string, unknown>): Promise<unknown> {
+async function evaluateValue(
+  value: TJsonataExpression | undefined,
+  context?: Record<string, unknown>,
+): Promise<unknown> {
   if (!value) {
     return undefined;
   }

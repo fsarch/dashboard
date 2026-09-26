@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useCallback } from 'react';
 import { faSignOut } from '@fortawesome/free-solid-svg-icons/faSignOut';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signOut } from 'next-auth/react';
+import type React from 'react';
+import { useCallback } from 'react';
 
 import Button from '@/components/universals/forms/Button';
 
@@ -21,11 +22,7 @@ const SignOutButton: React.FunctionComponent<SignOutButtonProps> = ({
   }, []);
 
   return (
-    <Button
-      type="button"
-      onClick={handleLogoutClick}
-      className={className}
-    >
+    <Button type="button" onClick={handleLogoutClick} className={className}>
       <span className={styles.content}>
         <FontAwesomeIcon icon={faSignOut} />
         <span>Abmelden</span>
@@ -35,4 +32,3 @@ const SignOutButton: React.FunctionComponent<SignOutButtonProps> = ({
 };
 
 export default SignOutButton;
-

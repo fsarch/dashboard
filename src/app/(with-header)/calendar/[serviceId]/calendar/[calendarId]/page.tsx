@@ -1,19 +1,25 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import DangerZoneDelete from '@/components/apps/calendar/DangerZoneDelete.component';
+import EventForm, {
+  type TEventFormValues,
+} from '@/components/apps/calendar/EventForm.component';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import { calendarService } from '@/services/calendar/calendar.service';
 import { CALENDAR_EDIT_FORM } from '@/services/calendar/calendar.forms';
-import { toIsoString, parseMetadataJson, loadOrNotFound } from '@/services/calendar/calendar.utils';
-import { TEventDto } from '@/services/calendar/calendar.type';
-import EventForm, { TEventFormValues } from '@/components/apps/calendar/EventForm.component';
-import DangerZoneDelete from '@/components/apps/calendar/DangerZoneDelete.component';
+import { calendarService } from '@/services/calendar/calendar.service';
+import type { TEventDto } from '@/services/calendar/calendar.type';
+import {
+  loadOrNotFound,
+  parseMetadataJson,
+  toIsoString,
+} from '@/services/calendar/calendar.utils';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import EventsList from './_components/EventsList.component';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -34,7 +40,9 @@ export default async function CalendarDetailPage({
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -45,18 +53,20 @@ export default async function CalendarDetailPage({
   const canAccessService = await uacUtils.hasAppPermission(
     EServiceType.CALENDAR,
     serviceId,
-    accessToken
+    accessToken,
   );
   if (!canAccessService) {
     return notFound();
   }
 
-  const calendar = await loadOrNotFound(calendarService.getCalendarById(calendarId, serviceId));
+  const calendar = await loadOrNotFound(
+    calendarService.getCalendarById(calendarId, serviceId),
+  );
 
   const events = await calendarService.listEvents(
     calendarId,
     { page: parseInt(page), pageSize: parseInt(pageSize) },
-    serviceId
+    serviceId,
   );
 
   async function handleDeleteCalendar() {
@@ -65,22 +75,28 @@ export default async function CalendarDetailPage({
     await calendarService.deleteCalendar(calendarId, serviceId);
   }
 
-  async function handleCreateEvent(values: TEventFormValues): Promise<TEventDto> {
+  async function handleCreateEvent(
+    values: TEventFormValues,
+  ): Promise<TEventDto> {
     'use server';
 
     if (!values.startAt) {
       throw new Error('Start ist erforderlich');
     }
 
-    return calendarService.createEvent(calendarId, {
-      title: values.title || undefined,
-      description: values.description || undefined,
-      externalId: values.externalId || undefined,
-      timezone: values.timezone || undefined,
-      startAt: toIsoString(values.startAt) as string,
-      endAt: toIsoString(values.endAt),
-      metadata: parseMetadataJson(values.metadata),
-    }, serviceId);
+    return calendarService.createEvent(
+      calendarId,
+      {
+        title: values.title || undefined,
+        description: values.description || undefined,
+        externalId: values.externalId || undefined,
+        timezone: values.timezone || undefined,
+        startAt: toIsoString(values.startAt) as string,
+        endAt: toIsoString(values.endAt),
+        metadata: parseMetadataJson(values.metadata),
+      },
+      serviceId,
+    );
   }
 
   return (

@@ -1,12 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { toggleDevMode, getDevMode } from '@/components/navigation/DevModeSwitch.server-action';
-import styles from './DevModeSwitch.module.scss';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBug } from '@fortawesome/free-solid-svg-icons';
-import clsx from "clsx";
-import Loader from "@/components/universals/loader/Loader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import {
+  getDevMode,
+  toggleDevMode,
+} from '@/components/navigation/DevModeSwitch.server-action';
+import Loader from '@/components/universals/loader/Loader';
+import styles from './DevModeSwitch.module.scss';
 
 type DevModeSwitchProps = {
   className?: string;
@@ -48,7 +52,10 @@ const DevModeSwitch: React.FunctionComponent<DevModeSwitchProps> = ({
           </div>
         </div>
       ) : null}
-      <FontAwesomeIcon icon={faBug} className={clsx(styles.icon, enabled && styles.iconEnabled )}/>
+      <FontAwesomeIcon
+        icon={faBug}
+        className={clsx(styles.icon, enabled && styles.iconEnabled)}
+      />
       <button
         type="button"
         role="switch"

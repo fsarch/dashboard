@@ -1,4 +1,4 @@
-import { fetchCustom } from "@/utils/fetchCustom";
+import { fetchCustom } from '@/utils/fetchCustom';
 import { cryptoUtils } from './crypto.utils';
 
 type ProxyRequestType = {
@@ -7,11 +7,7 @@ type ProxyRequestType = {
   addAccessToken?: boolean;
 };
 
-async function create({
-  url,
-  method,
-  addAccessToken,
-}: ProxyRequestType) {
+async function create({ url, method, addAccessToken }: ProxyRequestType) {
   const payload = await cryptoUtils.sign({
     url,
     method,

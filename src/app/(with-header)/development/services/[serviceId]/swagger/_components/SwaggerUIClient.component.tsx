@@ -12,7 +12,10 @@ type SwaggerUIClientProps = {
 
 type SwaggerUIComponent = React.ComponentType<{
   url?: string;
-  requestInterceptor?: (req: { headers?: Record<string, string>; url: string }) => { headers?: Record<string, string>; url: string };
+  requestInterceptor?: (req: {
+    headers?: Record<string, string>;
+    url: string;
+  }) => { headers?: Record<string, string>; url: string };
 }>;
 
 // Dynamically import swagger-ui-react to avoid SSR issues
@@ -21,13 +24,17 @@ const SwaggerUIClient: React.FunctionComponent<SwaggerUIClientProps> = ({
   specUrl,
   themeMode,
 }) => {
-  const [SwaggerUI, setSwaggerUI] = useState<{ Component: SwaggerUIComponent } | null>(null);
+  const [SwaggerUI, setSwaggerUI] = useState<{
+    Component: SwaggerUIComponent;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     import('swagger-ui-react')
       .then((mod) => {
-        setSwaggerUI({ Component: mod.default as unknown as SwaggerUIComponent });
+        setSwaggerUI({
+          Component: mod.default as unknown as SwaggerUIComponent,
+        });
       })
       .catch((err) => {
         setError(`Swagger UI konnte nicht geladen werden: ${err.message}`);
@@ -40,9 +47,14 @@ const SwaggerUIClient: React.FunctionComponent<SwaggerUIClientProps> = ({
         req.headers = {};
       }
 
-      const absoluteSpecUrl = new URL(specUrl, window.location.origin).toString();
+      const absoluteSpecUrl = new URL(
+        specUrl,
+        window.location.origin,
+      ).toString();
       const isSpecRequest = req.url === specUrl || req.url === absoluteSpecUrl;
-      const isAlreadyProxied = req.url.startsWith('/api/v1/development/service-proxy/');
+      const isAlreadyProxied = req.url.startsWith(
+        '/api/v1/development/service-proxy/',
+      );
 
       if (!isSpecRequest && !isAlreadyProxied) {
         const requestUrl = new URL(req.url, window.location.origin);
@@ -67,13 +79,9 @@ const SwaggerUIClient: React.FunctionComponent<SwaggerUIClientProps> = ({
 
   return (
     <div className={styles.root} data-theme-mode={themeMode}>
-      <Component
-        url={specUrl}
-        requestInterceptor={requestInterceptor}
-      />
+      <Component url={specUrl} requestInterceptor={requestInterceptor} />
     </div>
   );
 };
 
 export default SwaggerUIClient;
-

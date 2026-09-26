@@ -1,5 +1,5 @@
-import React from 'react';
-import Header from "@/components/navigation/Header";
+import type React from 'react';
+import Header from '@/components/navigation/Header';
 
 type DefaultPageHeaderProps = {
   className?: string;
@@ -12,7 +12,7 @@ const DefaultPageHeader: React.FunctionComponent<DefaultPageHeaderProps> = ({
 }) => {
   return (
     <header className={className}>
-      <Header title={title}/>
+      <Header title={title} />
     </header>
   );
 };

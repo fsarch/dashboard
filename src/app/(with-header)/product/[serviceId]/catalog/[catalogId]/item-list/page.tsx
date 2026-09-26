@@ -1,7 +1,9 @@
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import QueryableItemList from "@/components/apps/product/item/queryable-list/QueryableItemList";
+import QueryableItemList from '@/components/apps/product/item/queryable-list/QueryableItemList';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 
-function convertToArray(param: string | Array<string> | undefined): Array<string> | undefined {
+function convertToArray(
+  param: string | Array<string> | undefined,
+): Array<string> | undefined {
   if (param === undefined) {
     return undefined;
   }
@@ -25,7 +27,14 @@ function convertAttributes(searchParams: Record<string, string>) {
   return attributes;
 }
 
-export default async function Home(props: { params: Promise<{ catalogId: string; }>, searchParams: Promise<{ itemTypeId: string; 'attribute.enable': string; [key: string]: string }> }) {
+export default async function Home(props: {
+  params: Promise<{ catalogId: string }>;
+  searchParams: Promise<{
+    itemTypeId: string;
+    'attribute.enable': string;
+    [key: string]: string;
+  }>;
+}) {
   const params = await props.params;
   const searchParams = await props.searchParams;
 

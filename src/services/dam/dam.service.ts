@@ -1,5 +1,8 @@
 import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { TFolderChildren, TFolderPathEntry } from '@/services/file-server/file-server-api.type';
+import type {
+  TFolderChildren,
+  TFolderPathEntry,
+} from '@/services/file-server/file-server-api.type';
 
 // DAM-specific composition over the shared file-server-api layer - the
 // Mediathek gallery browses the same folder hierarchy as Drive, just
@@ -21,7 +24,10 @@ const getGalleryView = async (
     fileServerApiService.getFolderChildren(folderId),
   ]);
 
-  return { path: [...folder.path, { id: folder.id, name: folder.name }], ...children };
+  return {
+    path: [...folder.path, { id: folder.id, name: folder.name }],
+    ...children,
+  };
 };
 
 export const damService = {

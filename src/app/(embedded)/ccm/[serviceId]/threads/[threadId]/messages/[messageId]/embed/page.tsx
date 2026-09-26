@@ -1,31 +1,25 @@
-import { customerCommunicationService } from "@/services/customer-communication/customer-communication.service";
-import Mdx
-  from "@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/mdx.component";
-import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
-import Html
-  from "@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/html.component";
+import Html from '@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/html.component';
+import Mdx from '@/app/(embedded)/ccm/[serviceId]/threads/[threadId]/messages/[messageId]/embed/_components/mdx.component';
+import { EContentType } from '@/constants/apps/customer-communication/content-type.enum';
+import { customerCommunicationService } from '@/services/customer-communication/customer-communication.service';
 
-export default async function Home(props: { params: Promise<{ threadId: string; messageId: string }> }) {
+export default async function Home(props: {
+  params: Promise<{ threadId: string; messageId: string }>;
+}) {
   const params = await props.params;
-  const threadMessages = await customerCommunicationService.listThreadMessages(params.threadId);
+  const threadMessages = await customerCommunicationService.listThreadMessages(
+    params.threadId,
+  );
 
   const message = threadMessages.find((m) => m.id === params.messageId);
 
   if (message?.contentType?.id === EContentType.TEXT_MARKDOWN) {
-    return (
-      <Mdx content={message?.content ?? ''}/>
-    );
+    return <Mdx content={message?.content ?? ''} />;
   }
 
   if (message?.contentType?.id === EContentType.TEXT_HTML) {
-    return (
-      <Html content={message.content}/>
-    );
+    return <Html content={message.content} />;
   }
 
-  return (
-    <div>
-      unknown type
-    </div>
-  );
+  return <div>unknown type</div>;
 }

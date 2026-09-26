@@ -2,7 +2,10 @@
 
 import { revalidatePath } from 'next/cache';
 import { metricService } from '@/services/metric/metric.service';
-import { TAggregateMeasurementsDto, TAggregateResult } from '@/services/metric/metric.type';
+import type {
+  TAggregateMeasurementsDto,
+  TAggregateResult,
+} from '@/services/metric/metric.type';
 
 export type TAggregateFormState = {
   success?: boolean;
@@ -16,7 +19,7 @@ export async function aggregateMeasurementsAction(
   serviceId: string,
   metricId: string,
   prevState: TAggregateFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<TAggregateFormState> {
   try {
     const startTime = formData.get('startTime') as string;
@@ -43,7 +46,7 @@ export async function aggregateMeasurementsAction(
     const result = await metricService.aggregateMeasurements(
       metricId,
       dto,
-      serviceId
+      serviceId,
     );
 
     return {
@@ -56,7 +59,10 @@ export async function aggregateMeasurementsAction(
     console.error('Error aggregating measurements:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Ein unbekannter Fehler ist aufgetreten.',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Ein unbekannter Fehler ist aufgetreten.',
     };
   }
 }

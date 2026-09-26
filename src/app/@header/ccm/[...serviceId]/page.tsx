@@ -1,16 +1,10 @@
-import React from 'react';
-import Header from "@/components/navigation/Header";
+import type React from 'react';
+import Header from '@/components/navigation/Header';
 
-type PageProps = {
-
-};
+type PageProps = {};
 
 const Page: React.FunctionComponent<PageProps> = () => {
-  return (
-    <Header
-      title="Customer Communication Manager"
-    />
-  );
+  return <Header title="Customer Communication Manager" />;
 };
 
 export default Page;

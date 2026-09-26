@@ -1,16 +1,16 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import Link from 'next/link';
-import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { ASSET_RENAME_FORM } from '@/services/drive/drive.forms';
-import AssetThumbnail from '@/components/apps/file-server-shared/AssetThumbnail.component';
+import { redirect } from 'next/navigation';
+import { colors } from '@/app/_styles/colors';
 import AssetUploadForm from '@/components/apps/drive/upload/AssetUploadForm.component';
+import AssetThumbnail from '@/components/apps/file-server-shared/AssetThumbnail.component';
 import PermissionsSection from '@/components/apps/file-server-shared/PermissionsSection.component';
 import Button from '@/components/universals/forms/Button';
-import { colors } from '@/app/_styles/colors';
-import { redirect } from 'next/navigation';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { ASSET_RENAME_FORM } from '@/services/drive/drive.forms';
+import { fileServerApiService } from '@/services/file-server/file-server-api.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -35,7 +35,12 @@ export default async function DriveAssetPage(props: {
       <Link href={`/drive/${serviceId}${backPath}`}>← Zurück</Link>
 
       <Section name="Datei-Informationen">
-        <AssetThumbnail basePath="/drive" serviceId={serviceId} asset={asset} size={200} />
+        <AssetThumbnail
+          basePath="/drive"
+          serviceId={serviceId}
+          asset={asset}
+          size={200}
+        />
         <dl>
           <dt>Name</dt>
           <dd>{asset.name}</dd>
@@ -48,7 +53,9 @@ export default async function DriveAssetPage(props: {
         </dl>
         {asset.currentVersionId ? (
           <p>
-            <a href={`/drive/${serviceId}/asset/${assetId}/download`}>Herunterladen</a>
+            <a href={`/drive/${serviceId}/asset/${assetId}/download`}>
+              Herunterladen
+            </a>
           </p>
         ) : (
           <p>Noch kein Inhalt hochgeladen.</p>
@@ -75,13 +82,18 @@ export default async function DriveAssetPage(props: {
                 <tr key={version.id}>
                   <td>{version.versionNumber}</td>
                   <td>{formatFileSize(version.size)}</td>
-                  <td>{new Date(version.creationTime).toLocaleString('de-DE')}</td>
+                  <td>
+                    {new Date(version.creationTime).toLocaleString('de-DE')}
+                  </td>
                   <td>
                     {asset.currentVersionId !== version.id ? (
                       <form
                         action={async () => {
                           'use server';
-                          await fileServerApiService.restoreAssetVersion(assetId, version.id);
+                          await fileServerApiService.restoreAssetVersion(
+                            assetId,
+                            version.id,
+                          );
                         }}
                       >
                         <Button type="submit">Wiederherstellen</Button>
@@ -100,7 +112,13 @@ export default async function DriveAssetPage(props: {
       </Section>
 
       <Section name="Umbenennen">
-        <GeneratedForm definition={ASSET_RENAME_FORM(assetId, asset.name, `/asset/${assetId}`)} />
+        <GeneratedForm
+          definition={ASSET_RENAME_FORM(
+            assetId,
+            asset.name,
+            `/asset/${assetId}`,
+          )}
+        />
       </Section>
 
       <Section name="Löschen">
@@ -117,7 +135,11 @@ export default async function DriveAssetPage(props: {
         </form>
       </Section>
 
-      <PermissionsSection resourceType="asset" resourceId={assetId} backPath={`/asset/${assetId}`} />
+      <PermissionsSection
+        resourceType="asset"
+        resourceId={assetId}
+        backPath={`/asset/${assetId}`}
+      />
     </DefaultPage>
   );
 }

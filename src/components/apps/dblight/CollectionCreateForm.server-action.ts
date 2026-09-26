@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { dblightService } from '@/services/dblight/dblight.service';
-import { TCreateCollectionDto } from '@/services/dblight/dblight.type';
+import type { TCreateCollectionDto } from '@/services/dblight/dblight.type';
 
 export async function createCollectionAction(
   serviceId: string,

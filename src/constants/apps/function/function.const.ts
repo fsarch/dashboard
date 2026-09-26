@@ -1,48 +1,56 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const FunctionAppDefinition: AppDefinitionType = {
   name: 'Functions',
   basePath: '/function',
-  navigation: [{
-    name: 'Funktionen',
-    path: '/',
-    icon: 'layer-group',
-  }],
+  navigation: [
+    {
+      name: 'Funktionen',
+      path: '/',
+      icon: 'layer-group',
+    },
+  ],
   routes: {
     '/function/:functionId{/*path}': {
-      navigation: [{
-        name: 'Funktionen',
-        path: '/',
-        icon: 'layer-group',
-      }, {
-        name: 'Code',
-        path: {
-          $type: 'jsonata',
-          value: "'/function/' & params.functionId",
+      navigation: [
+        {
+          name: 'Funktionen',
+          path: '/',
+          icon: 'layer-group',
         },
-        icon: 'code',
-      }, {
-        name: 'Versionen',
-        path: {
-          $type: 'jsonata',
-          value: "'/function/' & params.functionId & '/versions'",
+        {
+          name: 'Code',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId",
+          },
+          icon: 'code',
         },
-        icon: 'code-branch',
-      }, {
-        name: 'Einstellungen',
-        path: {
-          $type: 'jsonata',
-          value: "'/function/' & params.functionId & '/settings'",
+        {
+          name: 'Versionen',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId & '/versions'",
+          },
+          icon: 'code-branch',
         },
-        icon: 'gear',
-      }, {
-        name: 'Executions',
-        path: {
-          $type: 'jsonata',
-          value: "'/function/' & params.functionId & '/executions'",
+        {
+          name: 'Einstellungen',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId & '/settings'",
+          },
+          icon: 'gear',
         },
-        icon: 'play',
-      }],
+        {
+          name: 'Executions',
+          path: {
+            $type: 'jsonata',
+            value: "'/function/' & params.functionId & '/executions'",
+          },
+          icon: 'play',
+        },
+      ],
     },
   },
 };

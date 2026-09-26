@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const EVENT_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -35,20 +35,23 @@ export const EVENT_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
       },
     },
   },
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "defaultScoreFactor": "", "defaultTtlSeconds": 3600, "aggregationModeId": dataSource.aggregationModes[0].id }',
+    value:
+      '{ "name": "", "defaultScoreFactor": "", "defaultTtlSeconds": 3600, "aggregationModeId": dataSource.aggregationModes[0].id }',
   },
   endpoint: {
     path: '/v1/event-types',
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "defaultScoreFactor": form.defaultScoreFactor, "defaultTtlSeconds": form.defaultTtlSeconds, "aggregationModeId": form.aggregationModeId }',
+      value:
+        '{ "name": form.name, "defaultScoreFactor": form.defaultScoreFactor, "defaultTtlSeconds": form.defaultTtlSeconds, "aggregationModeId": form.aggregationModeId }',
     },
   },
   postEndpointActions: [

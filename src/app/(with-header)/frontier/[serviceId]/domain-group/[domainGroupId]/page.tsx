@@ -1,15 +1,15 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import ListItem from '@/components/universals/list/ListItem';
-import { frontierService } from '@/services/frontier/frontier.service';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
-import { uacUtils } from '@/utils/uac.utils';
+import Button from '@/components/universals/forms/Button';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import ListItem from '@/components/universals/list/ListItem';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
+import Section from '@/components/universals/section/Section';
+import { frontierService } from '@/services/frontier/frontier.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -20,7 +20,17 @@ export default async function DomainGroupDetailPage({
 }) {
   const { domainGroupId } = await params;
 
-  const [domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies, hooks, canSeeDevResponse] = await Promise.all([
+  const [
+    domainGroup,
+    domains,
+    cachePolicies,
+    pathRules,
+    upstreamGroups,
+    corsPolicies,
+    logPolicies,
+    hooks,
+    canSeeDevResponse,
+  ] = await Promise.all([
     frontierService.getDomainGroup(domainGroupId),
     frontierService.listDomains(domainGroupId),
     frontierService.listCachePolicies(domainGroupId),
@@ -65,7 +75,9 @@ export default async function DomainGroupDetailPage({
   return (
     <DefaultPage>
       <Section name={`Domain Group: ${domainGroup.name}`}>
-        <p><strong>ID:</strong> {domainGroup.id}</p>
+        <p>
+          <strong>ID:</strong> {domainGroup.id}
+        </p>
       </Section>
 
       <div id="domains">
@@ -77,9 +89,7 @@ export default async function DomainGroupDetailPage({
           </div>
           <List>
             {domains.map((domain) => (
-              <ListItem key={domain.id}>
-                {domain.domainName}
-              </ListItem>
+              <ListItem key={domain.id}>{domain.domainName}</ListItem>
             ))}
           </List>
         </Section>
@@ -96,7 +106,11 @@ export default async function DomainGroupDetailPage({
             {cachePolicies.map(async (policy) => (
               <LinkListItem
                 key={policy.id}
-                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/cache-policy/${policy.id}`)}
+                href={
+                  await getServiceLocalUrl(
+                    `/domain-group/${domainGroupId}/cache-policy/${policy.id}`,
+                  )
+                }
               >
                 {policy.name}
               </LinkListItem>
@@ -116,7 +130,11 @@ export default async function DomainGroupDetailPage({
             {pathRules.map(async (rule) => (
               <LinkListItem
                 key={rule.id}
-                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/path-rule/${rule.id}`)}
+                href={
+                  await getServiceLocalUrl(
+                    `/domain-group/${domainGroupId}/path-rule/${rule.id}`,
+                  )
+                }
               >
                 {rule.name} ({rule.path})
               </LinkListItem>
@@ -136,7 +154,11 @@ export default async function DomainGroupDetailPage({
             {upstreamGroups.map(async (group) => (
               <LinkListItem
                 key={group.id}
-                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/upstream-group/${group.id}`)}
+                href={
+                  await getServiceLocalUrl(
+                    `/domain-group/${domainGroupId}/upstream-group/${group.id}`,
+                  )
+                }
               >
                 {group.name}
               </LinkListItem>
@@ -156,7 +178,11 @@ export default async function DomainGroupDetailPage({
             {corsPolicies.map(async (policy) => (
               <LinkListItem
                 key={policy.id}
-                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/cors-policy/${policy.id}`)}
+                href={
+                  await getServiceLocalUrl(
+                    `/domain-group/${domainGroupId}/cors-policy/${policy.id}`,
+                  )
+                }
               >
                 {policy.name}
               </LinkListItem>
@@ -176,7 +202,11 @@ export default async function DomainGroupDetailPage({
             {logPolicies.map(async (policy) => (
               <LinkListItem
                 key={policy.id}
-                href={await getServiceLocalUrl(`/domain-group/${domainGroupId}/log-policy/${policy.id}`)}
+                href={
+                  await getServiceLocalUrl(
+                    `/domain-group/${domainGroupId}/log-policy/${policy.id}`,
+                  )
+                }
               >
                 {policy.name}
               </LinkListItem>
@@ -199,7 +229,8 @@ export default async function DomainGroupDetailPage({
             <Button type="button">Hooks verwalten</Button>
           </Link>
           <p style={{ marginTop: '12px', fontSize: '0.9em', color: '#666' }}>
-            Hooks können in Path Rules als Pre- oder Post-Hooks verwendet werden.
+            Hooks können in Path Rules als Pre- oder Post-Hooks verwendet
+            werden.
           </p>
           <List>
             {hooks.map(async (hook) => (
@@ -217,10 +248,18 @@ export default async function DomainGroupDetailPage({
       {canSeeDevResponse ? (
         <DevResponseSection
           title="Domain Group Detail"
-          response={{ domainGroup, domains, cachePolicies, pathRules, upstreamGroups, corsPolicies, logPolicies, hooks }}
+          response={{
+            domainGroup,
+            domains,
+            cachePolicies,
+            pathRules,
+            upstreamGroups,
+            corsPolicies,
+            logPolicies,
+            hooks,
+          }}
         />
       ) : null}
     </DefaultPage>
   );
 }
-

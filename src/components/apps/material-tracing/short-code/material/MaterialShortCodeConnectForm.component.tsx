@@ -1,23 +1,18 @@
 import 'server-only';
 
-import React from 'react';
-import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
-import {
-  MATERIAL_SHORT_CODE_CONNECT_FORM
-} from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeConnectFrom.form";
+import type React from 'react';
+import { MATERIAL_SHORT_CODE_CONNECT_FORM } from '@/components/apps/material-tracing/short-code/material/MaterialShortCodeConnectFrom.form';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 
 type ShortCodeConnectFormProps = {
   args: Record<string, unknown>;
 };
 
-const MaterialShortCodeConnectForm: React.FunctionComponent<ShortCodeConnectFormProps> = ({
-  args,
-}) => {
+const MaterialShortCodeConnectForm: React.FunctionComponent<
+  ShortCodeConnectFormProps
+> = ({ args }) => {
   return (
-    <GeneratedForm
-      definition={MATERIAL_SHORT_CODE_CONNECT_FORM}
-      args={args}
-    />
+    <GeneratedForm definition={MATERIAL_SHORT_CODE_CONNECT_FORM} args={args} />
   );
 };
 

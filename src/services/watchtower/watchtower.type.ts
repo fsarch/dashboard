@@ -125,7 +125,12 @@ export type TAggregationModeUpdateDto = {
 };
 
 // Scope Values
-export type TScopeValueType = 'ip' | 'asn' | 'subnet' | 'browserFingerprint' | 'customFingerprint';
+export type TScopeValueType =
+  | 'ip'
+  | 'asn'
+  | 'subnet'
+  | 'browserFingerprint'
+  | 'customFingerprint';
 
 export type TScopeValueDto = {
   type: TScopeValueType;

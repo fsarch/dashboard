@@ -1,15 +1,9 @@
-import React from 'react';
+import type React from 'react';
 
-type PageProps = {
-
-};
+type PageProps = {};
 
 const Page: React.FunctionComponent<PageProps> = () => {
-  return (
-    <div>
-      CCM
-    </div>
-  );
+  return <div>CCM</div>;
 };
 
 export default Page;

@@ -1,14 +1,22 @@
-import { attributeService } from "@/services/product/attribute.service";
-import { localizationService } from "@/services/product/localization.service";
-import AttributeElementLocalization
-  from "@/components/apps/product/attribute/list/element-localization/AttributeElementLocalization";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
+import AttributeElementLocalization from '@/components/apps/product/attribute/list/element-localization/AttributeElementLocalization';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import { attributeService } from '@/services/product/attribute.service';
+import { localizationService } from '@/services/product/localization.service';
 
-export default async function Home(
-  props: { params: Promise<{ catalogId: string; attributeId: string; elementId: string; }> }
-) {
+export default async function Home(props: {
+  params: Promise<{
+    catalogId: string;
+    attributeId: string;
+    elementId: string;
+  }>;
+}) {
   const params = await props.params;
-  const attributeLocalizations = await attributeService.listAttributeElementLocalizations(params.catalogId, params.attributeId, params.elementId);
+  const attributeLocalizations =
+    await attributeService.listAttributeElementLocalizations(
+      params.catalogId,
+      params.attributeId,
+      params.elementId,
+    );
   const localizations = await localizationService.listLocalizations();
 
   return (
@@ -22,7 +30,9 @@ export default async function Home(
             attributeId={params.attributeId}
             elementId={params.elementId}
             localizationId={localization.id}
-            elementLocalization={attributeLocalizations.find(l => l.localizationId === localization.id)}
+            elementLocalization={attributeLocalizations.find(
+              (l) => l.localizationId === localization.id,
+            )}
           />
         </div>
       ))}

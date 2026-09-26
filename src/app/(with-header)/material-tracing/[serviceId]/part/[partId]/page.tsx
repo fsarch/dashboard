@@ -1,32 +1,27 @@
-import Section from "@/components/universals/section/Section";
-import { notFound } from "next/navigation";
-import { partService } from "@/services/material-tracing/part.service";
-import PartShortCodeConnectForm
-  from "@/components/apps/material-tracing/short-code/part/PartShortCodeConnectForm.component";
-import React from "react";
-import {
-  PartMaterialShortCodeConnectForm
-} from "@/components/apps/material-tracing/short-code/part/PartMaterialShortCodeConnectForm.component";
-import PartMaterialList from "@/components/apps/material-tracing/short-code/part/part-material/PartMaterialList.component";
-import {
-  PartPartShortCodeConnectForm
-} from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component";
-import PartChildrenList from "@/components/apps/material-tracing/short-code/part/part-children/PartChildrenList.component";
-import PartUpdateForm from "@/components/apps/material-tracing/part/PartInfoForm.component";
-import PartRemove
-  from "@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.component";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import PartShortCodeDeleteForm
-  from "@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component";
-import Actions from "@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component";
-import ShortCodeLinkedCard from "@/components/apps/material-tracing/short-code/ShortCodeLinkedCard.component";
-import { partTypeService } from "@/services/material-tracing/part-type.service";
+import { notFound } from 'next/navigation';
+import React from 'react';
+import Actions from '@/app/(with-header)/material-tracing/[serviceId]/_components/actions/Actions.component';
+import PartRemove from '@/app/(with-header)/material-tracing/[serviceId]/part/[partId]/_components/remove/PartRemove.component';
+import PartUpdateForm from '@/components/apps/material-tracing/part/PartInfoForm.component';
+import { PartMaterialShortCodeConnectForm } from '@/components/apps/material-tracing/short-code/part/PartMaterialShortCodeConnectForm.component';
+import { PartPartShortCodeConnectForm } from '@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.component';
+import PartShortCodeConnectForm from '@/components/apps/material-tracing/short-code/part/PartShortCodeConnectForm.component';
+import PartShortCodeDeleteForm from '@/components/apps/material-tracing/short-code/part/PartShortCodeDeleteForm.component';
+import PartChildrenList from '@/components/apps/material-tracing/short-code/part/part-children/PartChildrenList.component';
+import PartMaterialList from '@/components/apps/material-tracing/short-code/part/part-material/PartMaterialList.component';
+import ShortCodeLinkedCard from '@/components/apps/material-tracing/short-code/ShortCodeLinkedCard.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { partService } from '@/services/material-tracing/part.service';
+import { partTypeService } from '@/services/material-tracing/part-type.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 export const generateMetadata = createAutomaticMetadata();
 
-export default async function Home({ params }: Readonly<{ params: Promise<{ partId: string; }> }>) {
+export default async function Home({
+  params,
+}: Readonly<{ params: Promise<{ partId: string }> }>) {
   const part = await partService.getPart((await params).partId);
   if (!part) {
     return notFound();
@@ -35,7 +30,9 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
   const shortCodes = await partService.listShortCodes((await params).partId);
   const hasShortCode = shortCodes.length > 0;
   const partType = await partTypeService.getPartType(part.partTypeId);
-  const partTypePath = partType ? await getServiceLocalUrl(`/part-type/${partType.id}`) : '';
+  const partTypePath = partType
+    ? await getServiceLocalUrl(`/part-type/${partType.id}`)
+    : '';
 
   return (
     <DefaultPage>
@@ -52,7 +49,10 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
       </Section>
       {hasShortCode ? (
         <Section name="ShortCode">
-          <ShortCodeLinkedCard code={shortCodes[0].code} label="Verknüpfter ShortCode" />
+          <ShortCodeLinkedCard
+            code={shortCodes[0].code}
+            label="Verknüpfter ShortCode"
+          />
 
           <PartShortCodeDeleteForm
             args={{
@@ -71,29 +71,18 @@ export default async function Home({ params }: Readonly<{ params: Promise<{ part
         </Section>
       )}
       <Section name="Material per ShortCode verbinden">
-        <PartMaterialShortCodeConnectForm
-          partId={part.id}
-        />
+        <PartMaterialShortCodeConnectForm partId={part.id} />
       </Section>
       <Section name="Materials">
-        <PartMaterialList
-          partId={part.id}
-        />
+        <PartMaterialList partId={part.id} />
       </Section>
       <Section name="Part per ShortCode verbinden">
-        <PartPartShortCodeConnectForm
-          partId={part.id}
-        />
+        <PartPartShortCodeConnectForm partId={part.id} />
       </Section>
       <Section name="Parts">
-        <PartChildrenList
-          partId={part.id}
-        />
+        <PartChildrenList partId={part.id} />
       </Section>
-      <Actions
-        type="part"
-        basePath={`/v1/parts/${part.id}`}
-      />
+      <Actions type="part" basePath={`/v1/parts/${part.id}`} />
       <PartRemove
         partId={part.id}
         homeUrl={await getServiceLocalUrl('/part')}

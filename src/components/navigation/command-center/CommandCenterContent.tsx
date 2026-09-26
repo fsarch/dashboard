@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import {
+  type QueryResponseType,
   queryData,
-  QueryResponseType
-} from "@/components/navigation/command-center/server/CommandCenter.server-action";
-import Loader from "@/components/universals/loader/Loader";
-import TileList from "@/components/universals/tile-list/TileList";
-import LinkTileListItem from "@/components/universals/tile-list/LinkTileListItem";
+} from '@/components/navigation/command-center/server/CommandCenter.server-action';
+import Loader from '@/components/universals/loader/Loader';
+import LinkTileListItem from '@/components/universals/tile-list/LinkTileListItem';
+import TileList from '@/components/universals/tile-list/TileList';
 import styles from './CommandCenterContent.module.scss';
 
-type CommandCenterContentProps = {
+type CommandCenterContentProps = {};
 
-};
-
-const CommandCenterContent: React.FunctionComponent<CommandCenterContentProps> = () => {
+const CommandCenterContent: React.FunctionComponent<
+  CommandCenterContentProps
+> = () => {
   const [data, setData] = useState<QueryResponseType | null>(null);
 
   useEffect(() => {
@@ -20,9 +21,7 @@ const CommandCenterContent: React.FunctionComponent<CommandCenterContentProps> =
   }, []);
 
   if (!data) {
-    return (
-      <Loader/>
-    );
+    return <Loader />;
   }
 
   return (

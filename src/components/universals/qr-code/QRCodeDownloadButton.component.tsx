@@ -1,10 +1,11 @@
 'use client';
 
-import React, { PropsWithChildren, useCallback } from 'react';
-import { QRCodeType } from "@/components/universals/qr-code/QRCodeType.enum";
-import Button from "@/components/universals/forms/Button";
-import { generateQrCode } from "@/components/universals/qr-code/QRCode.utils";
-import { base64Utils } from "@/utils/base64.utils";
+import type React from 'react';
+import { type PropsWithChildren, useCallback } from 'react';
+import Button from '@/components/universals/forms/Button';
+import { generateQrCode } from '@/components/universals/qr-code/QRCode.utils';
+import type { QRCodeType } from '@/components/universals/qr-code/QRCodeType.enum';
+import { base64Utils } from '@/utils/base64.utils';
 
 type QrCodeDownloadButtonProps = PropsWithChildren<{
   type: QRCodeType;
@@ -12,14 +13,9 @@ type QrCodeDownloadButtonProps = PropsWithChildren<{
   open?: boolean;
 }>;
 
-
-
-const QrCodeDownloadButton: React.FunctionComponent<QrCodeDownloadButtonProps> = ({
-  children,
-  type,
-  value,
-  open,
-}) => {
+const QrCodeDownloadButton: React.FunctionComponent<
+  QrCodeDownloadButtonProps
+> = ({ children, type, value, open }) => {
   const handleClick = useCallback(async () => {
     const response = await generateQrCode({
       values: [value],
@@ -35,10 +31,7 @@ const QrCodeDownloadButton: React.FunctionComponent<QrCodeDownloadButtonProps> =
   }, [value, open]);
 
   return (
-    <Button
-      type="button"
-      onClick={handleClick}
-    >
+    <Button type="button" onClick={handleClick}>
       {children}
     </Button>
   );

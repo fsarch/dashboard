@@ -1,24 +1,27 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
-import { headers } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
 import clsx from 'clsx';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import { headers } from 'next/headers';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import TimeGridBody from '@/components/apps/calendar/TimeGridBody.component';
+import {
+  layoutDayInstances,
+  nowLinePercent,
+} from '@/components/apps/calendar/timeGrid.utils';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { calendarService } from '@/services/calendar/calendar.service';
 import {
+  dayKey,
+  dayRange,
   loadOrNotFound,
   parseDateInputValue,
-  dayRange,
-  dayKey,
   shiftDate,
 } from '@/services/calendar/calendar.utils';
-import { layoutDayInstances, nowLinePercent } from '@/components/apps/calendar/timeGrid.utils';
-import TimeGridBody from '@/components/apps/calendar/TimeGridBody.component';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import styles from './DayView.module.scss';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -39,7 +42,9 @@ export default async function DayViewPage({
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -50,13 +55,15 @@ export default async function DayViewPage({
   const canAccessService = await uacUtils.hasAppPermission(
     EServiceType.CALENDAR,
     serviceId,
-    accessToken
+    accessToken,
   );
   if (!canAccessService) {
     return notFound();
   }
 
-  const calendar = await loadOrNotFound(calendarService.getCalendarById(calendarId, serviceId));
+  const calendar = await loadOrNotFound(
+    calendarService.getCalendarById(calendarId, serviceId),
+  );
 
   const selectedDate = parseDateInputValue(dateParam) ?? new Date();
   const date = dayKey(selectedDate);
@@ -66,7 +73,7 @@ export default async function DayViewPage({
     calendarId,
     from.toISOString(),
     to.toISOString(),
-    serviceId
+    serviceId,
   );
 
   const blocks = layoutDayInstances(instances, from);
@@ -85,28 +92,42 @@ export default async function DayViewPage({
       <Section name={`Tagesansicht: ${calendar.name}`}>
         <div className={styles.header}>
           <div className={styles.nav}>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${shiftDate(date, -1)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${shiftDate(date, -1)}`}
+            >
               « Vorheriger Tag
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${dayKey(new Date())}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${dayKey(new Date())}`}
+            >
               Heute
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${shiftDate(date, 1)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${shiftDate(date, 1)}`}
+            >
               Nächster Tag »
             </Link>
           </div>
-          <div className={clsx(styles.title, isToday && styles.titleToday)}>{dateLabel}</div>
+          <div className={clsx(styles.title, isToday && styles.titleToday)}>
+            {dateLabel}
+          </div>
           <div className={styles.viewLinks}>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${date}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${date}`}
+            >
               Wochenansicht
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${date.slice(0, 7)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${date.slice(0, 7)}`}
+            >
               Monatsansicht
             </Link>
           </div>
         </div>
 
-        {instances.length === 0 ? <p className={styles.empty}>Keine Termine an diesem Tag.</p> : null}
+        {instances.length === 0 ? (
+          <p className={styles.empty}>Keine Termine an diesem Tag.</p>
+        ) : null}
 
         <div className={styles.gridWrapper}>
           <TimeGridBody

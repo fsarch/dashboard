@@ -1,5 +1,5 @@
-import { AuthOptions } from "next-auth";
-import KeycloakProvider from "next-auth/providers/keycloak";
+import type { AuthOptions } from 'next-auth';
+import KeycloakProvider from 'next-auth/providers/keycloak';
 
 export const AUTH_OPTIONS: AuthOptions = {
   providers: [
@@ -17,7 +17,7 @@ export const AUTH_OPTIONS: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({token, user, account, profile}) {
+    async jwt({ token, user, account, profile }) {
       /*console.log("Token: ");
       console.log(token);
 

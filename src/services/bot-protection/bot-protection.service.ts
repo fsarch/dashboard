@@ -1,28 +1,28 @@
-import { fetchService } from "@/utils/fetchService";
-import {
+import { fetchService } from '@/utils/fetchService';
+import type {
+  TApproveClaimDto,
   TClaimDto,
   TCreateClaimDto,
-  TApproveClaimDto,
-  TPaginationResultDto,
   TPaginationParams,
-} from "./bot-protection.type";
+  TPaginationResultDto,
+} from './bot-protection.type';
 
 // Claims
 const listClaims = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TClaimDto>> => {
   const response = await fetchService(
     `/claims?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 const getClaimById = async (
   claimId: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TClaimDto> => {
   const response = await fetchService(`/claims/${claimId}`, undefined, {
     serviceId,
@@ -32,25 +32,33 @@ const getClaimById = async (
 
 const createClaim = async (
   dto: TCreateClaimDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
-  await fetchService(`/claims`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  await fetchService(
+    `/claims`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
 };
 
 const approveClaim = async (
   claimId: string,
   dto: TApproveClaimDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
-  await fetchService(`/claims/${claimId}/_actions/approve`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(dto),
-  }, { serviceId });
+  await fetchService(
+    `/claims/${claimId}/_actions/approve`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    },
+    { serviceId },
+  );
 };
 
 export const botProtectionService = {

@@ -10,7 +10,9 @@ type AccessTokenPanelProps = {
 const AccessTokenPanel: React.FunctionComponent<AccessTokenPanelProps> = ({
   accessToken,
 }) => {
-  const [copyState, setCopyState] = React.useState<'idle' | 'success' | 'error'>('idle');
+  const [copyState, setCopyState] = React.useState<
+    'idle' | 'success' | 'error'
+  >('idle');
 
   async function handleCopy() {
     try {
@@ -26,9 +28,15 @@ const AccessTokenPanel: React.FunctionComponent<AccessTokenPanelProps> = ({
   return (
     <div>
       <div style={{ marginBottom: '12px' }}>
-        <Button type="button" onClick={handleCopy}>Access-Token kopieren</Button>
-        {copyState === 'success' ? <span style={{ marginLeft: '12px' }}>Kopiert</span> : null}
-        {copyState === 'error' ? <span style={{ marginLeft: '12px' }}>Kopieren fehlgeschlagen</span> : null}
+        <Button type="button" onClick={handleCopy}>
+          Access-Token kopieren
+        </Button>
+        {copyState === 'success' ? (
+          <span style={{ marginLeft: '12px' }}>Kopiert</span>
+        ) : null}
+        {copyState === 'error' ? (
+          <span style={{ marginLeft: '12px' }}>Kopieren fehlgeschlagen</span>
+        ) : null}
       </div>
       <pre style={{ whiteSpace: 'pre-wrap', overflowX: 'auto' }}>
         {accessToken}
@@ -38,4 +46,3 @@ const AccessTokenPanel: React.FunctionComponent<AccessTokenPanelProps> = ({
 };
 
 export default AccessTokenPanel;
-

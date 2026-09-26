@@ -1,11 +1,13 @@
-import { IconName } from "@fortawesome/fontawesome-svg-core";
+import type { IconName } from '@fortawesome/fontawesome-svg-core';
 
-export type TIcon = {
-  $type: 'layers',
-  icons: Array<{
-    $type: 'fa-icon';
-    icon: IconName;
-    transform?: string;
-    color?: string;
-  }>;
-} | IconName;
+export type TIcon =
+  | {
+      $type: 'layers';
+      icons: Array<{
+        $type: 'fa-icon';
+        icon: IconName;
+        transform?: string;
+        color?: string;
+      }>;
+    }
+  | IconName;

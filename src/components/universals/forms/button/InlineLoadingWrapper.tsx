@@ -1,7 +1,7 @@
-import React from 'react';
-import styles from "./InlineLoadingWrapper.module.scss";
-import Loader from "@/components/universals/loader/Loader";
-import clsx from "clsx";
+import clsx from 'clsx';
+import type React from 'react';
+import Loader from '@/components/universals/loader/Loader';
+import styles from './InlineLoadingWrapper.module.scss';
 
 type LoadingWrapperProps = {
   isLoading: boolean;
@@ -19,9 +19,7 @@ const InlineLoadingWrapper: React.FunctionComponent<LoadingWrapperProps> = ({
       {children}
       {isLoading && (
         <div className={styles.loader}>
-          <Loader
-            size={32}
-          />
+          <Loader size={32} />
         </div>
       )}
     </div>

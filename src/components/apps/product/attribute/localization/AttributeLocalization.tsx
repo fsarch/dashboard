@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { AttributeLocalizationDto } from "@/services/product/attribute.type";
 import { Form, Formik } from 'formik';
-import Button from "@/components/universals/forms/Button";
-import Input from "@/components/universals/forms/Input";
-import {
-  updateAttributeLocalization
-} from "@/components/apps/product/attribute/localization/AttributeLocalization.server-action";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { updateAttributeLocalization } from '@/components/apps/product/attribute/localization/AttributeLocalization.server-action';
+import Button from '@/components/universals/forms/Button';
+import Input from '@/components/universals/forms/Input';
+import type { AttributeLocalizationDto } from '@/services/product/attribute.type';
 
 type AttributeLocalizationProps = {
   catalogId: string;
@@ -17,19 +16,19 @@ type AttributeLocalizationProps = {
   attributeLocalization?: AttributeLocalizationDto;
 };
 
-const AttributeLocalization: React.FunctionComponent<AttributeLocalizationProps> = ({
-  catalogId,
-  attributeId,
-  localizationId,
-  attributeLocalization,
-}) => {
+const AttributeLocalization: React.FunctionComponent<
+  AttributeLocalizationProps
+> = ({ catalogId, attributeId, localizationId, attributeLocalization }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (values: Omit<AttributeLocalizationDto, 'id'>) => {
-    await updateAttributeLocalization(catalogId, attributeId, values);
+  const handleSubmit = useCallback(
+    async (values: Omit<AttributeLocalizationDto, 'id'>) => {
+      await updateAttributeLocalization(catalogId, attributeId, values);
 
-    router.refresh();
-  }, [catalogId, attributeId, router]);
+      router.refresh();
+    },
+    [catalogId, attributeId, router],
+  );
 
   return (
     <Formik
@@ -41,7 +40,7 @@ const AttributeLocalization: React.FunctionComponent<AttributeLocalizationProps>
       }}
     >
       <Form>
-        <Input name="name" type="input"/>
+        <Input name="name" type="input" />
         <Button type="submit">Speichern</Button>
       </Form>
     </Formik>

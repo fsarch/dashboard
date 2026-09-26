@@ -1,6 +1,7 @@
-import React, { CSSProperties } from 'react';
 import clsx from 'clsx';
 import Color from 'color';
+import type React from 'react';
+import type { CSSProperties } from 'react';
 import { getThemeConfiguration } from '@/utils/configuration.utils';
 import styles from './BackgroundOrbs.module.css';
 
@@ -19,16 +20,21 @@ type BackgroundOrbsProps = {
  * (optionally) skips the drift animation — both real GPU cost on a layer
  * that can be present on every page.
  */
-export const BackgroundOrbs: React.FunctionComponent<BackgroundOrbsProps> = async ({
-  animated = true,
-}) => {
+export const BackgroundOrbs: React.FunctionComponent<
+  BackgroundOrbsProps
+> = async ({ animated = true }) => {
   const theme = await getThemeConfiguration();
   const primaryColor = Color(theme.primaryColor.hex);
 
   const style = {
     '--orb1-rgb': primaryColor.rgb().array().join(', '),
     '--orb2-rgb': primaryColor.rotate(40).rgb().array().join(', '),
-    '--orb3-rgb': primaryColor.rotate(-40).lighten(0.15).rgb().array().join(', '),
+    '--orb3-rgb': primaryColor
+      .rotate(-40)
+      .lighten(0.15)
+      .rgb()
+      .array()
+      .join(', '),
     '--orb4-rgb': primaryColor.rotate(150).rgb().array().join(', '),
   } as CSSProperties;
 

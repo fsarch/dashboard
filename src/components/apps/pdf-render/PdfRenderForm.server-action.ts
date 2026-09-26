@@ -1,8 +1,12 @@
 'use server';
 
-import { fetchService } from "@/utils/fetchService";
-import { getCurrentServiceId, getCurrentServiceType, getDefaultServiceId } from "@/utils/configuration.utils";
-import { EServiceType } from "@/utils/configuration.type";
+import { EServiceType } from '@/utils/configuration.type';
+import {
+  getCurrentServiceId,
+  getCurrentServiceType,
+  getDefaultServiceId,
+} from '@/utils/configuration.utils';
+import { fetchService } from '@/utils/fetchService';
 
 export type TPdfRenderFormData = {
   content: {
@@ -30,15 +34,19 @@ export const renderPdf = async (data: TPdfRenderFormData) => {
     serviceId = await getDefaultServiceId(EServiceType.PDF_RENDER);
   }
 
-  const res = await fetchService('/pdf/_actions/render', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetchService(
+    '/pdf/_actions/render',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     },
-    body: JSON.stringify(data),
-  }, {
-    serviceId,
-  });
+    {
+      serviceId,
+    },
+  );
 
   if (!res.ok) {
     console.error({
@@ -47,7 +55,9 @@ export const renderPdf = async (data: TPdfRenderFormData) => {
         status: res.status,
       },
     });
-    throw new Error('invalid status code from upstream service while generating pdf');
+    throw new Error(
+      'invalid status code from upstream service while generating pdf',
+    );
   }
 
   const bodyArrayBuffer = await res.arrayBuffer();

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import Button from '@/components/universals/forms/Button';
 import { activateVersion } from './ActivateVersionButton.server-action';
 
@@ -10,7 +11,9 @@ type ActivateVersionButtonProps = {
   versionId: string;
 };
 
-const ActivateVersionButton: React.FunctionComponent<ActivateVersionButtonProps> = ({ projectId, versionId }) => {
+const ActivateVersionButton: React.FunctionComponent<
+  ActivateVersionButtonProps
+> = ({ projectId, versionId }) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 

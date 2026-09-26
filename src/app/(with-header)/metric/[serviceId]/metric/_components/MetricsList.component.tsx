@@ -1,17 +1,23 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TMetricDto } from '@/services/metric/metric.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/universals/forms/Button';
-import { deleteMetricAction, restoreMetricAction } from './MetricActions.server-action';
-import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
-import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type {
+  TMetricDto,
+  TPaginationResultDto,
+} from '@/services/metric/metric.type';
+import {
+  deleteMetricAction,
+  restoreMetricAction,
+} from './MetricActions.server-action';
 
 type MetricsListProps = {
   metrics: TPaginationResultDto<TMetricDto>;
@@ -76,45 +82,70 @@ const MetricsList: React.FunctionComponent<MetricsListProps> = ({
   const metricTypeIdParam = metricTypeId ? `&metricTypeId=${metricTypeId}` : '';
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/metric/${serviceId}/metric?page=${newPage}&pageSize=${pageSize}${metricTypeIdParam}`);
+    router.push(
+      `/metric/${serviceId}/metric?page=${newPage}&pageSize=${pageSize}${metricTypeIdParam}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/metric/${serviceId}/metric?page=1&pageSize=${newPageSize}${metricTypeIdParam}`);
+    router.push(
+      `/metric/${serviceId}/metric?page=1&pageSize=${newPageSize}${metricTypeIdParam}`,
+    );
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Link href={`/metric/${serviceId}/metric/create${metricTypeId ? `?metricTypeId=${metricTypeId}` : ''}`} passHref>
-          <Button type="button">
-            Create Metric
-          </Button>
+        <Link
+          href={`/metric/${serviceId}/metric/create${metricTypeId ? `?metricTypeId=${metricTypeId}` : ''}`}
+          passHref
+        >
+          <Button type="button">Create Metric</Button>
         </Link>
       </div>
       {data.length > 0 ? (
         <>
-          <div style={{ border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1rem' }}>
+          <div
+            style={{
+              border: '1px solid var(--color-border)',
+              borderRadius: '8px',
+              padding: '1rem',
+            }}
+          >
             <List>
               {data.map((metric) => {
                 const isMetricDeleted = metric.deletionTime !== null;
                 return (
-                  <div key={metric.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div
+                    key={metric.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                    }}
+                  >
                     <Link
                       href={`/metric/${serviceId}/metric/${metric.id}`}
-                      style={{ flex: 1, textDecoration: isMetricDeleted ? 'line-through' : 'none', opacity: isMetricDeleted ? 0.6 : 1 }}
+                      style={{
+                        flex: 1,
+                        textDecoration: isMetricDeleted
+                          ? 'line-through'
+                          : 'none',
+                        opacity: isMetricDeleted ? 0.6 : 1,
+                      }}
                     >
                       <ListItem>
                         <strong>{metric.name}</strong> - ID: {metric.id}
                         <br />
                         <small>
-                          Type: {metric.metricTypeId} |
-                          Ext-ID: {metric.externalId || 'N/A'} |
-                          Created: {new Date(metric.creationTime).toLocaleString()}
+                          Type: {metric.metricTypeId} | Ext-ID:{' '}
+                          {metric.externalId || 'N/A'} | Created:{' '}
+                          {new Date(metric.creationTime).toLocaleString()}
                           {metric.deletionTime && (
                             <>
                               <br />
-                              Deleted: {new Date(metric.deletionTime).toLocaleString()}
+                              Deleted:{' '}
+                              {new Date(metric.deletionTime).toLocaleString()}
                             </>
                           )}
                         </small>

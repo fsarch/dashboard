@@ -1,15 +1,11 @@
-import React from 'react';
+import type React from 'react';
 
-type AttributeJsonSettingsProps = {
+type AttributeJsonSettingsProps = {};
 
-};
-
-const AttributeJsonSettings: React.FunctionComponent<AttributeJsonSettingsProps> = () => {
-  return (
-    <div>
-      Json Settings
-    </div>
-  );
+const AttributeJsonSettings: React.FunctionComponent<
+  AttributeJsonSettingsProps
+> = () => {
+  return <div>Json Settings</div>;
 };
 
 export default AttributeJsonSettings;

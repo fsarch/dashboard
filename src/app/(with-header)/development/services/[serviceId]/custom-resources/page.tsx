@@ -1,18 +1,18 @@
-import { Metadata } from 'next';
-import { getAccessToken } from '@/utils/getAccessToken';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { APPS } from '@/constants/apps';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
-import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
-import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
+import { APPS } from '@/constants/apps';
 import { customResourcesUtils } from '@/utils/app/custom-resources';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const metadata: Metadata = {
   title: 'Development – Custom Resources',
@@ -22,13 +22,17 @@ type CustomResourcesPageProps = {
   params: Promise<{ serviceId: string }>;
 };
 
-export default async function CustomResourcesPage({ params }: CustomResourcesPageProps) {
+export default async function CustomResourcesPage({
+  params,
+}: CustomResourcesPageProps) {
   const { serviceId } = await params;
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const canAccessDevelopment = await uacUtils.hasPermission('dev', accessToken);
@@ -46,7 +50,9 @@ export default async function CustomResourcesPage({ params }: CustomResourcesPag
     return notFound();
   }
 
-  let resources: Awaited<ReturnType<typeof customResourcesUtils.listCustomResources>> = [];
+  let resources: Awaited<
+    ReturnType<typeof customResourcesUtils.listCustomResources>
+  > = [];
   let loadError = false;
   try {
     resources = await customResourcesUtils.listCustomResources(serviceId);
@@ -76,7 +82,10 @@ export default async function CustomResourcesPage({ params }: CustomResourcesPag
             >
               Custom Resources ({service.name ?? service.id})
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+            <AutoNavigationItem
+              href="/development/custom-resources"
+              icon="cubes"
+            >
               Custom Resources
             </AutoNavigationItem>
           </ul>
@@ -88,8 +97,9 @@ export default async function CustomResourcesPage({ params }: CustomResourcesPag
         <Section name="Custom Resources">
           {loadError && (
             <p style={{ padding: '8px', opacity: 0.6 }}>
-              Custom Resources konnten nicht geladen werden. Ist das Backend erreichbar
-              und implementiert es den Endpunkt <code>/v1/.meta/custom-resources</code>?
+              Custom Resources konnten nicht geladen werden. Ist das Backend
+              erreichbar und implementiert es den Endpunkt{' '}
+              <code>/v1/.meta/custom-resources</code>?
             </p>
           )}
           {!loadError && (
@@ -100,8 +110,7 @@ export default async function CustomResourcesPage({ params }: CustomResourcesPag
                     key={resource.id}
                     href={`/development/services/${serviceId}/custom-resources/${resource.id}`}
                   >
-                    <strong>{resource.name}</strong>
-                    {' '}
+                    <strong>{resource.name}</strong>{' '}
                     <span style={{ opacity: 0.6, fontSize: '0.85em' }}>
                       [{resource.id}] — {resource.description}
                     </span>

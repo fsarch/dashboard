@@ -1,14 +1,16 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const FUNCTION_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }],
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "" }'
+    value: '{ "name": "" }',
   },
   endpoint: {
     path: '/v1/functions',

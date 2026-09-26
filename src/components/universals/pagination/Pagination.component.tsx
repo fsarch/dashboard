@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import Button from '@/components/universals/forms/Button';
-import styles from './Pagination.module.scss';
 import selectStyles from '@/components/universals/forms/Select.module.scss';
+import styles from './Pagination.module.scss';
 
 type PaginationProps = {
   currentPage: number;
@@ -23,10 +23,14 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
   hasNextPage,
 }) => {
   const pageSizeOptions = [10, 25, 50, 100];
-  const totalPages = totalItems !== undefined
-    ? Math.max(1, Math.ceil(totalItems / pageSize))
-    : Math.max(currentPage + (hasNextPage ? 1 : 0), 1);
-  const pageOptions = Array.from({ length: totalPages }, (_, index) => index + 1);
+  const totalPages =
+    totalItems !== undefined
+      ? Math.max(1, Math.ceil(totalItems / pageSize))
+      : Math.max(currentPage + (hasNextPage ? 1 : 0), 1);
+  const pageOptions = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1,
+  );
 
   const handlePrevious = () => {
     if (currentPage > 1) {
@@ -64,7 +68,8 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
       <div className={styles.info}>
         {totalItems !== undefined ? (
           <span>
-            Zeige {startItem}-{Math.min(endItem, totalItems)} von {totalItems} Einträgen
+            Zeige {startItem}-{Math.min(endItem, totalItems)} von {totalItems}{' '}
+            Einträgen
           </span>
         ) : (
           <span>
@@ -102,11 +107,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({
           )}
         </div>
 
-        <Button
-          type="button"
-          onClick={handleNext}
-          disabled={!hasNextPage}
-        >
+        <Button type="button" onClick={handleNext} disabled={!hasNextPage}>
           Weiter
         </Button>
       </div>

@@ -1,12 +1,13 @@
 'use client';
 
-import React, { PropsWithChildren, useEffect, useRef } from 'react';
-import Link from "next/link";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
+import Link from 'next/link';
+import type React from 'react';
+import { type PropsWithChildren, useEffect, useRef } from 'react';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './AutoNavigationItem.module.scss';
-import clsx from "clsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TIcon } from "@/components/universals/icon/Icon.type";
-import Icon from "@/components/universals/icon/Icon.component";
 
 type AutoNavigationItemProps = PropsWithChildren<{
   href: string;
@@ -31,7 +32,7 @@ const AutoNavigationItem: React.FunctionComponent<AutoNavigationItemProps> = ({
       return;
     }
 
-    const isMobile = window.matchMedia("(max-width: 800px)");
+    const isMobile = window.matchMedia('(max-width: 800px)');
     if (!isMobile) {
       return;
     }
@@ -46,16 +47,8 @@ const AutoNavigationItem: React.FunctionComponent<AutoNavigationItemProps> = ({
         [styles.selected]: isSelected,
       })}
     >
-      <Link
-        href={href}
-        className={styles.link}
-      >
-        {icon ? (
-          <Icon
-            className={styles.icon}
-            icon={icon}
-          />
-        ) : null}
+      <Link href={href} className={styles.link}>
+        {icon ? <Icon className={styles.icon} icon={icon} /> : null}
         {children}
       </Link>
     </li>

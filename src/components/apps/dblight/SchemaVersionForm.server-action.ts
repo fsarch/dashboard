@@ -8,7 +8,11 @@ export async function createSchemaVersionAction(
   collectionId: string,
   schema: Record<string, unknown>,
 ): Promise<{ id: string; version: number }> {
-  const created = await dblightService.createSchemaVersion(collectionId, schema, serviceId);
+  const created = await dblightService.createSchemaVersion(
+    collectionId,
+    schema,
+    serviceId,
+  );
   revalidatePath(`/dblight/${serviceId}/collection/${collectionId}`);
   return { id: created.id, version: created.version };
 }

@@ -84,7 +84,11 @@ export type HtmlLayerOptions = {
   height: BindableValue<number>;
 };
 
-export type LayerOptions = TextLayerOptions | ImageLayerOptions | ShapeLayerOptions | HtmlLayerOptions;
+export type LayerOptions =
+  | TextLayerOptions
+  | ImageLayerOptions
+  | ShapeLayerOptions
+  | HtmlLayerOptions;
 
 export type LayerDto = {
   id: string;

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getAccessToken } from '@/utils/getAccessToken';
+import { type NextRequest, NextResponse } from 'next/server';
 import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
 import { uacUtils } from '@/utils/uac.utils';
 
 export async function GET(
@@ -36,7 +36,8 @@ export async function GET(
     try {
       const res = await fetch(`${baseUrl}${path}`, { headers });
       if (res.ok) {
-        const contentType = res.headers.get('content-type') ?? 'application/json';
+        const contentType =
+          res.headers.get('content-type') ?? 'application/json';
         const body = await res.text();
         return new NextResponse(body, {
           status: 200,
@@ -48,6 +49,8 @@ export async function GET(
     }
   }
 
-  return NextResponse.json({ error: 'No API documentation found' }, { status: 404 });
+  return NextResponse.json(
+    { error: 'No API documentation found' },
+    { status: 404 },
+  );
 }
-

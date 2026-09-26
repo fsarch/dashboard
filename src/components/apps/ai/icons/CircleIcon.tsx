@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 type CircleIconProps = {
   enableAnimation?: boolean; // Optional prop to enable/disable animation
@@ -12,19 +12,31 @@ const CircleIcon: React.FunctionComponent<CircleIconProps> = ({
   className,
 }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="1em" height="1em"
-         className={className} style={style} aria-hidden="true" focusable="false">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 220 220"
+      width="1em"
+      height="1em"
+      className={className}
+      style={style}
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs>
         {/* nutzt die von außen gesetzte 'color' */}
         <radialGradient id="donutGradient" cx="35%" cy="30%" r="75%">
-          <stop offset="0%" stopColor="var(--ai-color-background)" stopOpacity="0.9"/>
-          <stop offset="45%" stopColor="currentColor" stopOpacity="0.70"/>
-          <stop offset="100%" stopColor="currentColor" stopOpacity="1"/>
+          <stop
+            offset="0%"
+            stopColor="var(--ai-color-background)"
+            stopOpacity="0.9"
+          />
+          <stop offset="45%" stopColor="currentColor" stopOpacity="0.70" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="1" />
         </radialGradient>
 
         <mask id="donutMask">
-          <rect width="100%" height="100%" fill="white"/>
-          <circle cx="110" cy="110" r="55" fill="black"/>
+          <rect width="100%" height="100%" fill="white" />
+          <circle cx="110" cy="110" r="55" fill="black" />
         </mask>
       </defs>
 
@@ -67,16 +79,26 @@ const CircleIcon: React.FunctionComponent<CircleIconProps> = ({
           />
         )}
 
-        <circle cx="110" cy="110" r="90" fill="url(#donutGradient)" mask="url(#donutMask)"/>
+        <circle
+          cx="110"
+          cy="110"
+          r="90"
+          fill="url(#donutGradient)"
+          mask="url(#donutMask)"
+        />
 
-        <circle cx="110" cy="110" r="90"
-                fill="none"
-                stroke="var(--ai-color-secondary)"
-                strokeOpacity="0.8"
-                strokeWidth="18"
-                strokeLinecap="round"
-                strokeDasharray="90 480"
-                mask="url(#donutMask)"/>
+        <circle
+          cx="110"
+          cy="110"
+          r="90"
+          fill="none"
+          stroke="var(--ai-color-secondary)"
+          strokeOpacity="0.8"
+          strokeWidth="18"
+          strokeLinecap="round"
+          strokeDasharray="90 480"
+          mask="url(#donutMask)"
+        />
       </g>
     </svg>
   );

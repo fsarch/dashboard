@@ -1,4 +1,4 @@
-import { AttributeDto } from "@/services/product/attribute.type";
+import type { AttributeDto } from '@/services/product/attribute.type';
 
 export type ItemTypeDto = {
   id: string;
@@ -12,7 +12,7 @@ export type ItemTypeCreateDto = {
 
 export type AttributeItemTypeCreateDto = {
   isRequired: boolean;
-}
+};
 
 export type AttributeItemTypeDto = {
   id: string;
@@ -24,4 +24,4 @@ export type AttributeItemTypeDto = {
   isRequired: boolean;
 
   attribute?: AttributeDto;
-}
+};

@@ -1,6 +1,6 @@
-import { fetchService } from "@/utils/fetchService";
-import { TPartType } from "@/services/material-tracing/part-type.type";
-import type { TPaginationResult } from "./pagination.type";
+import type { TPartType } from '@/services/material-tracing/part-type.type';
+import { fetchService } from '@/utils/fetchService';
+import type { TPaginationResult } from './pagination.type';
 
 const listPartTypes = async (options?: {
   skip?: number;
@@ -43,7 +43,7 @@ const deletePartType = async (partTypeId: string): Promise<void> => {
     method: 'DELETE',
   });
   if (!partTypeResponse.ok) {
-    throw new Error('could not remove part-type')
+    throw new Error('could not remove part-type');
   }
 };
 

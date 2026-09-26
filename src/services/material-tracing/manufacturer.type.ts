@@ -8,4 +8,3 @@ export type TManufacturer = {
 export type TManufacturerCreate = {
   name: string;
 };
-

@@ -1,8 +1,8 @@
-import { fetchService } from "@/utils/fetchService";
-import { TPart } from "@/services/material-tracing/part.type";
-import { TShortCode } from "@/services/material-tracing/short-code.type";
-import { TMaterial } from "@/services/material-tracing/material.type";
-import { TPaginationResult } from "@/services/material-tracing/pagination.type";
+import type { TMaterial } from '@/services/material-tracing/material.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import type { TPart } from '@/services/material-tracing/part.type';
+import type { TShortCode } from '@/services/material-tracing/short-code.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listParts = async (options?: {
   skip?: number;
@@ -43,7 +43,9 @@ const listParts = async (options?: {
 };
 
 const getPart = async (partId: string): Promise<TPart | null> => {
-  const partResponse = await fetchService(`/v1/parts/${partId}?embed=availableAmount`);
+  const partResponse = await fetchService(
+    `/v1/parts/${partId}?embed=availableAmount`,
+  );
   if (!partResponse.ok) {
     return null;
   }
@@ -63,7 +65,9 @@ const deletePart = async (partId: string): Promise<void> => {
 };
 
 const listShortCodes = async (partId: string): Promise<Array<TShortCode>> => {
-  const partShortCodesResponse = await fetchService(`/v1/parts/${partId}/short-codes`);
+  const partShortCodesResponse = await fetchService(
+    `/v1/parts/${partId}/short-codes`,
+  );
   const partShortCodes = await partShortCodesResponse.json();
 
   return partShortCodes;
@@ -76,17 +80,29 @@ const listPartsByShortCode = async (code: string): Promise<Array<TPart>> => {
   return parts;
 };
 
-const getOrCreateMaterial = async (partId: string, materialId: string): Promise<void> => {
-  const partMaterialResponse = await fetchService(`/v1/parts/${partId}/materials/${materialId}`, {
-    method: 'PUT',
-  });
+const getOrCreateMaterial = async (
+  partId: string,
+  materialId: string,
+): Promise<void> => {
+  const partMaterialResponse = await fetchService(
+    `/v1/parts/${partId}/materials/${materialId}`,
+    {
+      method: 'PUT',
+    },
+  );
   await partMaterialResponse.json();
 };
 
-const deletePartMaterial = async (partId: string, materialId: string): Promise<void> => {
-  const partMaterialResponse = await fetchService(`/v1/parts/${partId}/materials/${materialId}`, {
-    method: 'DELETE',
-  });
+const deletePartMaterial = async (
+  partId: string,
+  materialId: string,
+): Promise<void> => {
+  const partMaterialResponse = await fetchService(
+    `/v1/parts/${partId}/materials/${materialId}`,
+    {
+      method: 'DELETE',
+    },
+  );
   if (!partMaterialResponse.ok) {
     throw new Error('could not delete part material');
   }
@@ -99,23 +115,36 @@ const listMaterials = async (partId: string): Promise<Array<TMaterial>> => {
   return materials;
 };
 
-const getOrCreatePartPart = async (partId: string, childPartId: string, amount: number): Promise<void> => {
-  const partPartResponse = await fetchService(`/v1/parts/${partId}/parts/${childPartId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+const getOrCreatePartPart = async (
+  partId: string,
+  childPartId: string,
+  amount: number,
+): Promise<void> => {
+  const partPartResponse = await fetchService(
+    `/v1/parts/${partId}/parts/${childPartId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount,
+      }),
     },
-    body: JSON.stringify({
-      amount,
-    }),
-  });
+  );
   await partPartResponse.json();
 };
 
-const deletePartPart = async (partId: string, childPartId: string): Promise<void> => {
-  const partPartResponse = await fetchService(`/v1/parts/${partId}/parts/${childPartId}`, {
-    method: 'DELETE',
-  });
+const deletePartPart = async (
+  partId: string,
+  childPartId: string,
+): Promise<void> => {
+  const partPartResponse = await fetchService(
+    `/v1/parts/${partId}/parts/${childPartId}`,
+    {
+      method: 'DELETE',
+    },
+  );
   if (!partPartResponse.ok) {
     throw new Error('could not delete part part');
   }

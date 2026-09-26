@@ -1,5 +1,5 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { TPermissionResourceType } from '@/services/file-server/file-server-api.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TPermissionResourceType } from '@/services/file-server/file-server-api.type';
 
 const RESOURCE_CONTROLLER_PATH: Record<TPermissionResourceType, string> = {
   folder: 'folders',
@@ -48,8 +48,16 @@ export const PERMISSION_GRANT_FORM = (
           { id: 'delete', value: 'delete', label: 'Löschen' },
           { id: 'download', value: 'download', label: 'Download' },
           { id: 'share', value: 'share', label: 'Teilen' },
-          { id: 'manage_permissions', value: 'manage_permissions', label: 'Berechtigungen verwalten' },
-          { id: 'edit_metadata', value: 'edit_metadata', label: 'Metadaten bearbeiten' },
+          {
+            id: 'manage_permissions',
+            value: 'manage_permissions',
+            label: 'Berechtigungen verwalten',
+          },
+          {
+            id: 'edit_metadata',
+            value: 'edit_metadata',
+            label: 'Metadaten bearbeiten',
+          },
           { id: 'approve', value: 'approve', label: 'Freigeben' },
           { id: 'publish', value: 'publish', label: 'Veröffentlichen' },
         ],
@@ -67,7 +75,10 @@ export const PERMISSION_GRANT_FORM = (
     },
   },
   postEndpointActions: [
-    { $type: 'redirect', url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` } },
+    {
+      $type: 'redirect',
+      url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` },
+    },
   ],
   buttons: { submitButtonText: 'Berechtigung erteilen' },
 });

@@ -1,7 +1,7 @@
 'use server';
 
-import { ElementLocalizationCreateDto } from "@/services/product/attribute.type";
-import { attributeService } from "@/services/product/attribute.service";
+import { attributeService } from '@/services/product/attribute.service';
+import type { ElementLocalizationCreateDto } from '@/services/product/attribute.type';
 
 export async function setAttributeElementLocalization(
   catalogId: string,
@@ -10,5 +10,11 @@ export async function setAttributeElementLocalization(
   localizationId: string,
   setDto: ElementLocalizationCreateDto,
 ) {
-  await attributeService.setAttributeElementLocalization(catalogId, attributeId, elementId, localizationId, setDto);
+  await attributeService.setAttributeElementLocalization(
+    catalogId,
+    attributeId,
+    elementId,
+    localizationId,
+    setDto,
+  );
 }

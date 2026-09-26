@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { Form, Formik } from "formik";
-import Input from "@/components/universals/forms/Input";
-import { renderPdf, TPdfRenderFormData } from "@/components/apps/pdf-render/PdfRenderForm.server-action";
-import TextArea from "@/components/universals/forms/TextArea";
-import Select from "@/components/universals/forms/Select";
-import Section from "@/components/universals/section/Section";
-import Button from "@/components/universals/forms/Button";
+import { Form, Formik } from 'formik';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import {
+  renderPdf,
+  type TPdfRenderFormData,
+} from '@/components/apps/pdf-render/PdfRenderForm.server-action';
+import Button from '@/components/universals/forms/Button';
+import Input from '@/components/universals/forms/Input';
+import Select from '@/components/universals/forms/Select';
+import TextArea from '@/components/universals/forms/TextArea';
+import Section from '@/components/universals/section/Section';
 
 type PdfRenderFormProps = {};
 
@@ -43,14 +47,12 @@ const PdfRenderForm: React.FunctionComponent<PdfRenderFormProps> = () => {
       >
         <Form>
           <Section name="Content">
-            <TextArea name="content.html"/>
+            <TextArea name="content.html" />
           </Section>
 
-          <Section
-            name="Viewport"
-          >
-            <Input name="options.viewport.width" type="input"/>
-            <Input name="options.viewport.height" type="input"/>
+          <Section name="Viewport">
+            <Input name="options.viewport.width" type="input" />
+            <Input name="options.viewport.height" type="input" />
           </Section>
 
           <Section name="Output format">
@@ -105,9 +107,7 @@ const PdfRenderForm: React.FunctionComponent<PdfRenderFormProps> = () => {
             />
           </Section>
 
-          <Button type="submit">
-            Create
-          </Button>
+          <Button type="submit">Create</Button>
         </Form>
       </Formik>
       {dataUrl ? (

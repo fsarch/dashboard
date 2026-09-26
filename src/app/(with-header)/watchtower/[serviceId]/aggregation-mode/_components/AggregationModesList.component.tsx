@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TAggregationModeDto } from '@/services/watchtower/watchtower.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type {
+  TAggregationModeDto,
+  TPaginationResultDto,
+} from '@/services/watchtower/watchtower.type';
 
 type AggregationModesListProps = {
   aggregationModes: TPaginationResultDto<TAggregationModeDto>;
@@ -15,21 +18,22 @@ type AggregationModesListProps = {
   pageSize: number;
 };
 
-const AggregationModesList: React.FunctionComponent<AggregationModesListProps> = ({
-  aggregationModes,
-  serviceId,
-  page,
-  pageSize,
-}) => {
+const AggregationModesList: React.FunctionComponent<
+  AggregationModesListProps
+> = ({ aggregationModes, serviceId, page, pageSize }) => {
   const { data, metadata } = aggregationModes;
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/watchtower/${serviceId}/aggregation-mode?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/aggregation-mode?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/watchtower/${serviceId}/aggregation-mode?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/aggregation-mode?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
@@ -43,9 +47,17 @@ const AggregationModesList: React.FunctionComponent<AggregationModesListProps> =
                 href={`/watchtower/${serviceId}/aggregation-mode/${aggregationMode.id}`}
               >
                 <ListItem>
-                  <strong>{aggregationMode.name}</strong> - Aggregation Mode Type: {aggregationMode.aggregationModeTypeId}
-                  {aggregationMode.maxFactor && <> - Max Factor: {aggregationMode.maxFactor}</>}
-                  {aggregationMode.externalId && <> - External ID: <code>{aggregationMode.externalId}</code></>}
+                  <strong>{aggregationMode.name}</strong> - Aggregation Mode
+                  Type: {aggregationMode.aggregationModeTypeId}
+                  {aggregationMode.maxFactor && (
+                    <> - Max Factor: {aggregationMode.maxFactor}</>
+                  )}
+                  {aggregationMode.externalId && (
+                    <>
+                      {' '}
+                      - External ID: <code>{aggregationMode.externalId}</code>
+                    </>
+                  )}
                 </ListItem>
               </Link>
             ))}

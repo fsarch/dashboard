@@ -1,15 +1,21 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { useField } from "formik";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
-  CreateLink, headingsPlugin, linkDialogPlugin, linkPlugin, listsPlugin, ListsToggle,
+  CreateLink,
+  headingsPlugin,
+  ListsToggle,
+  linkDialogPlugin,
+  linkPlugin,
+  listsPlugin,
   MDXEditor,
   toolbarPlugin,
-  UndoRedo
+  UndoRedo,
 } from '@mdxeditor/editor';
+import { useField } from 'formik';
+import type React from 'react';
+import { useCallback } from 'react';
 
 type MdxInputProps = {
   name: string;
@@ -24,9 +30,12 @@ const MdxInput: React.FunctionComponent<MdxInputProps> = ({
     name,
   });
 
-  const handleChange = useCallback(async (markdown: string) => {
-    await helpers.setValue(markdown);
-  }, [helpers]);
+  const handleChange = useCallback(
+    async (markdown: string) => {
+      await helpers.setValue(markdown);
+    },
+    [helpers],
+  );
 
   return (
     <MDXEditor
@@ -38,14 +47,14 @@ const MdxInput: React.FunctionComponent<MdxInputProps> = ({
         toolbarPlugin({
           toolbarContents: () => (
             <>
-              <BlockTypeSelect/>
+              <BlockTypeSelect />
               <BoldItalicUnderlineToggles />
-              <CreateLink/>
-              <ListsToggle/>
+              <CreateLink />
+              <ListsToggle />
               <UndoRedo />
             </>
-          )
-        })
+          ),
+        }),
       ]}
       className={className}
       markdown={field.value}

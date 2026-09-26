@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Form, Formik, FormikHelpers } from "formik";
-import Button from "@/components/universals/forms/Button";
-
+import { Form, Formik, type FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import MarkdownHint from '@/components/apps/customer-communication/message-list/footer/markdown-hint.component';
+import MessageInput from '@/components/apps/customer-communication/message-list/footer/message-input.component';
+import { sendMessage } from '@/components/apps/customer-communication/message-list/message-footer.server-action';
+import Button from '@/components/universals/forms/Button';
+import { EContentType } from '@/constants/apps/customer-communication/content-type.enum';
+import { useCurrentServiceId } from '@/utils/hooks/useCurrentServiceId.hook';
 import styles from './message-footer.module.scss';
-import MarkdownHint from "@/components/apps/customer-communication/message-list/footer/markdown-hint.component";
-import MessageInput from "@/components/apps/customer-communication/message-list/footer/message-input.component";
-import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
-import { sendMessage } from "@/components/apps/customer-communication/message-list/message-footer.server-action";
-import { useCurrentServiceId } from "@/utils/hooks/useCurrentServiceId.hook";
-import { useRouter } from "next/navigation";
 
 type MessageFooterProps = {
   threadId: string;
@@ -28,13 +28,19 @@ const MessageFooter: React.FunctionComponent<MessageFooterProps> = ({
 
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (values: MessageFooterValues, helpers: FormikHelpers<MessageFooterValues>) => {
-    await sendMessage(serviceId, threadId, values);
+  const handleSubmit = useCallback(
+    async (
+      values: MessageFooterValues,
+      helpers: FormikHelpers<MessageFooterValues>,
+    ) => {
+      await sendMessage(serviceId, threadId, values);
 
-    helpers.resetForm();
+      helpers.resetForm();
 
-    router.refresh();
-  }, [serviceId, threadId, router]);
+      router.refresh();
+    },
+    [serviceId, threadId, router],
+  );
 
   return (
     <Formik
@@ -47,20 +53,12 @@ const MessageFooter: React.FunctionComponent<MessageFooterProps> = ({
       <Form>
         <div className={styles.wrapper}>
           <div className={styles.inputWrapper}>
-            <MessageInput
-              className={styles.input}
-            />
-            <Button
-              className={styles.submit}
-              type="submit"
-            >
+            <MessageInput className={styles.input} />
+            <Button className={styles.submit} type="submit">
               Senden
             </Button>
           </div>
-          <MarkdownHint
-            name="contentType"
-            value={EContentType.TEXT_MARKDOWN}
-          />
+          <MarkdownHint name="contentType" value={EContentType.TEXT_MARKDOWN} />
         </div>
       </Form>
     </Formik>

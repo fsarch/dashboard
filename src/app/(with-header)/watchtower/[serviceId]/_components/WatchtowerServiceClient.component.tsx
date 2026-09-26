@@ -1,15 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
-import { TServiceConfiguration } from '@/utils/configuration.type';
+import type React from 'react';
+import { useState } from 'react';
 import Button from '@/components/universals/forms/Button';
+import type { TServiceConfiguration } from '@/utils/configuration.type';
 import styles from './WatchtowerServiceClient.module.scss';
 
 type WatchtowerServiceClientProps = {
   service: TServiceConfiguration;
 };
 
-const WatchtowerServiceClient: React.FunctionComponent<WatchtowerServiceClientProps> = ({ service }) => {
+const WatchtowerServiceClient: React.FunctionComponent<
+  WatchtowerServiceClientProps
+> = ({ service }) => {
   const [showRaw, setShowRaw] = useState(false);
 
   const entries = Object.entries(service).filter(([key]) => key !== 'type');
@@ -20,11 +23,15 @@ const WatchtowerServiceClient: React.FunctionComponent<WatchtowerServiceClientPr
         <tbody>
           <tr>
             <th>Typ</th>
-            <td><code>{service.type}</code></td>
+            <td>
+              <code>{service.type}</code>
+            </td>
           </tr>
           <tr>
             <th>ID</th>
-            <td><code>{service.id}</code></td>
+            <td>
+              <code>{service.id}</code>
+            </td>
           </tr>
           {service.name ? (
             <tr>
@@ -37,7 +44,9 @@ const WatchtowerServiceClient: React.FunctionComponent<WatchtowerServiceClientPr
             .map(([key, value]) => (
               <tr key={key}>
                 <th>{key}</th>
-                <td><code>{String(value)}</code></td>
+                <td>
+                  <code>{String(value)}</code>
+                </td>
               </tr>
             ))}
         </tbody>
@@ -50,9 +59,7 @@ const WatchtowerServiceClient: React.FunctionComponent<WatchtowerServiceClientPr
       </div>
 
       {showRaw ? (
-        <pre className={styles.raw}>
-          {JSON.stringify(service, null, 2)}
-        </pre>
+        <pre className={styles.raw}>{JSON.stringify(service, null, 2)}</pre>
       ) : null}
     </div>
   );

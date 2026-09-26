@@ -1,13 +1,16 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TMetricTypeDto } from '@/services/metric/metric.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import Button from '@/components/universals/forms/Button';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/universals/forms/Button';
+import type {
+  TMetricTypeDto,
+  TPaginationResultDto,
+} from '@/services/metric/metric.type';
 
 type MetricTypesListProps = {
   metricTypes: TPaginationResultDto<TMetricTypeDto>;
@@ -26,25 +29,33 @@ const MetricTypesList: React.FunctionComponent<MetricTypesListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/metric/${serviceId}/metric-type?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/metric/${serviceId}/metric-type?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/metric/${serviceId}/metric-type?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/metric/${serviceId}/metric-type?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Link href={`/metric/${serviceId}/metric-type/create`} passHref>
-          <Button type="button">
-            Create Metric Type
-          </Button>
+          <Button type="button">Create Metric Type</Button>
         </Link>
       </div>
       {data.length > 0 ? (
         <>
-          <div style={{ border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1rem' }}>
+          <div
+            style={{
+              border: '1px solid var(--color-border)',
+              borderRadius: '8px',
+              padding: '1rem',
+            }}
+          >
             <List>
               {data.map((metricType) => (
                 <Link
@@ -53,9 +64,14 @@ const MetricTypesList: React.FunctionComponent<MetricTypesListProps> = ({
                 >
                   <ListItem>
                     <strong>{metricType.name}</strong> - ID: {metricType.id}
-                    {metricType.externalId && <span> - Ext-ID: {metricType.externalId}</span>}
+                    {metricType.externalId && (
+                      <span> - Ext-ID: {metricType.externalId}</span>
+                    )}
                     <br />
-                    <small>Created: {new Date(metricType.creationTime).toLocaleString()}</small>
+                    <small>
+                      Created:{' '}
+                      {new Date(metricType.creationTime).toLocaleString()}
+                    </small>
                   </ListItem>
                 </Link>
               ))}

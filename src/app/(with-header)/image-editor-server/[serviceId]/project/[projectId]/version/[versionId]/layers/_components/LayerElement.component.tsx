@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { LayerDto } from '@/services/image-editor-server/image-editor-server.type';
+import type React from 'react';
+import type { LayerDto } from '@/services/image-editor-server/image-editor-server.type';
 
 type LayerElementProps = {
   layer: LayerDto;
@@ -19,7 +19,10 @@ type LayerElementProps = {
 // Puppeteer rendering pixel-for-pixel (fonts in particular may render
 // slightly differently) - the "Vorschau rendern" action on the version page
 // remains the source of truth for an exact preview.
-const LayerElement: React.FunctionComponent<LayerElementProps> = ({ layer, resolved }) => {
+const LayerElement: React.FunctionComponent<LayerElementProps> = ({
+  layer,
+  resolved,
+}) => {
   switch (layer.type) {
     case 'text':
       return (
@@ -47,7 +50,9 @@ const LayerElement: React.FunctionComponent<LayerElementProps> = ({ layer, resol
             width,
             height,
             background: (resolved.fillColor as string) || undefined,
-            border: resolved.strokeColor ? `${strokeWidth}px solid ${resolved.strokeColor}` : undefined,
+            border: resolved.strokeColor
+              ? `${strokeWidth}px solid ${resolved.strokeColor}`
+              : undefined,
             borderRadius: resolved.shape === 'ellipse' ? '50%' : 0,
             boxSizing: 'border-box',
           }}
@@ -58,13 +63,30 @@ const LayerElement: React.FunctionComponent<LayerElementProps> = ({ layer, resol
     case 'image': {
       const width = (resolved.width as number) ?? 0;
       const height = (resolved.height as number) ?? 0;
-      const image = resolved.image as { type: 'base64'; value: string } | undefined;
+      const image = resolved.image as
+        | { type: 'base64'; value: string }
+        | undefined;
 
       return image ? (
         // eslint-disable-next-line @next/next/no-img-element -- base64 layer content, not an optimizable static asset
-        <img src={`data:image/png;base64,${image.value}`} width={width} height={height} alt={layer.name} draggable={false} />
+        <img
+          src={`data:image/png;base64,${image.value}`}
+          width={width}
+          height={height}
+          alt={layer.name}
+          draggable={false}
+        />
       ) : (
-        <div style={{ width, height, background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div
+          style={{
+            width,
+            height,
+            background: '#eee',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           kein Bild
         </div>
       );
@@ -111,7 +133,13 @@ const LayerElement: React.FunctionComponent<LayerElementProps> = ({ layer, resol
         <iframe
           srcDoc={srcDoc}
           sandbox=""
-          style={{ width, height, border: 'none', pointerEvents: 'none', backgroundColor: 'transparent' }}
+          style={{
+            width,
+            height,
+            border: 'none',
+            pointerEvents: 'none',
+            backgroundColor: 'transparent',
+          }}
           title={layer.name}
         />
       );

@@ -1,54 +1,65 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const MATERIAL_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'hint',
-    $type: 'text',
-    label: 'Hinweis',
-  }, {
-    id: 'externalId',
-    $type: 'text',
-    label: 'External Id',
-  }, {
-    id: 'archiveNow',
-    $type: 'checkbox',
-    label: 'Archiviert',
-    variant: 'toggle',
-  }, {
-    id: 'materialTypeLink',
-    $type: 'link-card',
-    label: 'Materialtyp',
-    href: {
-      $type: 'jsonata',
-      value: 'args.materialType.path',
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
     },
-    views: [{
-      $type: 'paragraph',
-      text: {
-        $type: 'jsonata',
-        value: 'args.materialType.name',
-      },
-    }],
-  }, {
-    id: 'manufacturerLink',
-    $type: 'link-card',
-    label: 'Hersteller',
-    href: {
-      $type: 'jsonata',
-      value: 'args.manufacturer.path',
+    {
+      id: 'hint',
+      $type: 'text',
+      label: 'Hinweis',
     },
-    views: [{
-      $type: 'paragraph',
-      text: {
+    {
+      id: 'externalId',
+      $type: 'text',
+      label: 'External Id',
+    },
+    {
+      id: 'archiveNow',
+      $type: 'checkbox',
+      label: 'Archiviert',
+      variant: 'toggle',
+    },
+    {
+      id: 'materialTypeLink',
+      $type: 'link-card',
+      label: 'Materialtyp',
+      href: {
         $type: 'jsonata',
-        value: 'args.manufacturer.name',
+        value: 'args.materialType.path',
       },
-    }],
-  }],
+      views: [
+        {
+          $type: 'paragraph',
+          text: {
+            $type: 'jsonata',
+            value: 'args.materialType.name',
+          },
+        },
+      ],
+    },
+    {
+      id: 'manufacturerLink',
+      $type: 'link-card',
+      label: 'Hersteller',
+      href: {
+        $type: 'jsonata',
+        value: 'args.manufacturer.path',
+      },
+      views: [
+        {
+          $type: 'paragraph',
+          text: {
+            $type: 'jsonata',
+            value: 'args.manufacturer.name',
+          },
+        },
+      ],
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
     value: `{ 
@@ -64,7 +75,7 @@ export const MATERIAL_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   endpoint: {
     path: {
       $type: 'jsonata',
-      value: "'/v1/materials/' & args.material.id"
+      value: "'/v1/materials/' & args.material.id",
     },
     method: 'PATCH',
     body: {

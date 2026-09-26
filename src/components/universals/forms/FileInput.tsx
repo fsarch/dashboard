@@ -1,5 +1,6 @@
-import React, { ChangeEvent, useCallback } from 'react';
-import { Field, useField } from "formik";
+import { Field, useField } from 'formik';
+import type React from 'react';
+import { type ChangeEvent, useCallback } from 'react';
 
 type FileInputProps = {
   name: string;
@@ -22,15 +23,18 @@ const FileInput: React.FunctionComponent<FileInputProps> = ({
 }) => {
   const [field, meta, helpers] = useField(name);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? []);
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(event.target.files ?? []);
 
-    if (multiple) {
-      helpers.setValue(files);
-    } else {
-      helpers.setValue(files[0]);
-    }
-  }, [helpers, multiple]);
+      if (multiple) {
+        helpers.setValue(files);
+      } else {
+        helpers.setValue(files[0]);
+      }
+    },
+    [helpers, multiple],
+  );
 
   return (
     <input

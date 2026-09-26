@@ -1,17 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
+import { useFormikContext } from 'formik';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
 import SelectCustomResourceDialog, {
   getInstanceLabel,
-} from "@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component";
+} from '@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component';
 import {
   getCustomResourceInstanceByIdAction,
   getCustomResourceLinkHrefAction,
-} from "@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.server-action";
-import Loader from "@/components/universals/loader/Loader";
-import LinkCard, { LinkCardGroup } from "@/components/universals/link-card/LinkCard.component";
-import { useFormikContext } from "formik";
-import { DialogResult } from "@/components/universals/dialog/dialog.enum";
+} from '@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.server-action';
+import LinkCard, {
+  LinkCardGroup,
+} from '@/components/universals/link-card/LinkCard.component';
+import Loader from '@/components/universals/loader/Loader';
 import styles from './CustomResourcePickerInput.module.scss';
 
 type CustomResourcePickerInputProps = {
@@ -25,13 +28,9 @@ type CustomResourcePickerInputProps = {
 // Selbe LinkCard-Optik wie die Part->Part-Type-Querverweis-Karte
 // (GeneratedFormLinkCardInput), nur mit Stift- statt Chevron-Icon: hier führt
 // der Klick zu keiner Navigation, sondern öffnet den Auswahl-Dialog.
-const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInputProps> = ({
-  id,
-  name,
-  serviceId,
-  resourceId,
-  refValues,
-}) => {
+const CustomResourcePickerInput: React.FunctionComponent<
+  CustomResourcePickerInputProps
+> = ({ id, name, serviceId, resourceId, refValues }) => {
   const openDialog = useOpenDialog();
 
   const formik = useFormikContext<Record<string, unknown>>();
@@ -71,7 +70,12 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
     }
     let cancelled = false;
     setLoadingLabel(true);
-    getCustomResourceInstanceByIdAction(serviceId, resourceId, currentId, refValues)
+    getCustomResourceInstanceByIdAction(
+      serviceId,
+      resourceId,
+      currentId,
+      refValues,
+    )
       .then(async (instance) => {
         if (cancelled) return;
         setLabel(getInstanceLabel(instance));
@@ -79,7 +83,12 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
         // Eigener try/catch statt .catch am Gesamt-Promise: ein fehlender
         // Link soll nicht den bereits erfolgreich geladenen Namen verwerfen.
         try {
-          const resolvedHref = await getCustomResourceLinkHrefAction(serviceId, resourceId, instance, refValues);
+          const resolvedHref = await getCustomResourceLinkHrefAction(
+            serviceId,
+            resourceId,
+            instance,
+            refValues,
+          );
           if (!cancelled) setHref(resolvedHref ?? null);
         } catch {
           if (!cancelled) setHref(null);
@@ -123,7 +132,14 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
       // Wie im Nachlade-Effekt: Link erst nach der Auswahl separat auflösen,
       // damit ein Fehlschlag hier nicht Name/id der frischen Auswahl verwirft.
       try {
-        setHref(await getCustomResourceLinkHrefAction(serviceId, resourceId, instance, refValues) ?? null);
+        setHref(
+          (await getCustomResourceLinkHrefAction(
+            serviceId,
+            resourceId,
+            instance,
+            refValues,
+          )) ?? null,
+        );
       } catch {
         setHref(null);
       }
@@ -136,25 +152,26 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
           Hidden-Input: der Wert kommt bereits über currentId, das immer als
           String vorliegt (nie null) - unabhängig davon, ob das initialValues-
           jsonata des jeweiligen Formulars null selbst schon abfängt. */}
-      <input
-        id={id}
-        type="hidden"
-        name={name}
-        value={currentId}
-        readOnly
-      />
+      <input id={id} type="hidden" name={name} value={currentId} readOnly />
       {/* Stift- und Sprung-Aktion als ein gemeinsames LinkCardGroup, statt
           als zwei einzelne Karten - die Trennung zwischen beiden wird erst
           beim Hover eines der beiden Segmente sichtbar (siehe
           LinkCard.module.scss .segment/.group), im Ruhezustand wirken sie
           wie eine einzelne Karte. */}
       <LinkCardGroup>
-        <LinkCard variant="segment" onClick={handleClick} icon={faPen} className={styles.picker}>
+        <LinkCard
+          variant="segment"
+          onClick={handleClick}
+          icon={faPen}
+          className={styles.picker}
+        >
           <span className={styles.value}>
             {loadingLabel ? (
               <Loader size={14} />
+            ) : currentId ? (
+              (label ?? currentId)
             ) : (
-              currentId ? (label ?? currentId) : 'Kein Eintrag ausgewählt'
+              'Kein Eintrag ausgewählt'
             )}
           </span>
         </LinkCard>
@@ -164,7 +181,12 @@ const CustomResourcePickerInput: React.FunctionComponent<CustomResourcePickerInp
             (noch am Laden, kein Eintrag gewählt oder dessen App hat keine
             passende Route registriert, siehe AppRouteCustomResourceProvider)
             bleibt die Karte einfach abgeblendet/inaktiv statt zu verschwinden. */}
-        <LinkCard variant="segment" href={href ?? undefined} disabled={loadingLabel || !href} className={styles.jump} />
+        <LinkCard
+          variant="segment"
+          href={href ?? undefined}
+          disabled={loadingLabel || !href}
+          className={styles.jump}
+        />
       </LinkCardGroup>
     </div>
   );

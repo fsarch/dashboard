@@ -1,4 +1,4 @@
-import type { TIcon } from "@/components/universals/icon/Icon.type";
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 
 export type AutoNavigationItemType = {
   name: string;

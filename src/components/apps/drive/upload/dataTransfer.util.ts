@@ -29,12 +29,17 @@ export type TDroppedFile = {
   folderPath: string[];
 };
 
-const readAllDirectoryEntries = (reader: ReturnType<TFileSystemDirectoryEntry['createReader']>) =>
+const readAllDirectoryEntries = (
+  reader: ReturnType<TFileSystemDirectoryEntry['createReader']>,
+) =>
   new Promise<TFileSystemEntry[]>((resolve, reject) => {
     reader.readEntries(resolve, reject);
   });
 
-async function walkEntry(entry: TFileSystemEntry, folderPath: string[]): Promise<TDroppedFile[]> {
+async function walkEntry(
+  entry: TFileSystemEntry,
+  folderPath: string[],
+): Promise<TDroppedFile[]> {
   if (entry.isFile) {
     const file = await new Promise<File>((resolve, reject) => {
       (entry as TFileSystemFileEntry).file(resolve, reject);
@@ -66,16 +71,27 @@ async function walkEntry(entry: TFileSystemEntry, folderPath: string[]): Promise
 // (possibly empty) folder path. Falls back to a flat file list when the
 // File and Directory Entries API isn't available - folders are then skipped
 // silently rather than erroring.
-export async function resolveDroppedFiles(dataTransfer: DataTransfer): Promise<TDroppedFile[]> {
+export async function resolveDroppedFiles(
+  dataTransfer: DataTransfer,
+): Promise<TDroppedFile[]> {
   const items = dataTransfer.items;
-  if (!items || items.length === 0 || typeof items[0]?.webkitGetAsEntry !== 'function') {
-    return Array.from(dataTransfer.files).map((file) => ({ file, folderPath: [] }));
+  if (
+    !items ||
+    items.length === 0 ||
+    typeof items[0]?.webkitGetAsEntry !== 'function'
+  ) {
+    return Array.from(dataTransfer.files).map((file) => ({
+      file,
+      folderPath: [],
+    }));
   }
 
   const entries = Array.from(items)
     .map((item) => item.webkitGetAsEntry() as TFileSystemEntry | null)
     .filter((entry): entry is TFileSystemEntry => entry !== null);
 
-  const results = await Promise.all(entries.map((entry) => walkEntry(entry, [])));
+  const results = await Promise.all(
+    entries.map((entry) => walkEntry(entry, [])),
+  );
   return results.flat();
 }

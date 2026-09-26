@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Form, Formik } from "formik";
-import Input from "@/components/universals/forms/Input";
-import Button from "@/components/universals/forms/Button";
-import { useRouter } from "next/navigation";
-import {
-  connectPartPartShortCode,
-} from "@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.server-action";
-import QrInput from "@/components/universals/forms/QrInput";
-import Fieldset from "@/components/universals/forms/Fieldset.component";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
+import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { connectPartPartShortCode } from '@/components/apps/material-tracing/short-code/part/PartPartShortCodeConnectForm.server-action';
+import Button from '@/components/universals/forms/Button';
+import Fieldset from '@/components/universals/forms/Fieldset.component';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import Input from '@/components/universals/forms/Input';
+import QrInput from '@/components/universals/forms/QrInput';
 
 type PartPartShortCodeConnectFormProps = {
   partId: string;
@@ -21,21 +20,24 @@ type ConnectPartPartShortCodeFormData = {
   amount: string;
 };
 
-export const PartPartShortCodeConnectForm: React.FunctionComponent<PartPartShortCodeConnectFormProps> = ({
-  partId,
-}) => {
+export const PartPartShortCodeConnectForm: React.FunctionComponent<
+  PartPartShortCodeConnectFormProps
+> = ({ partId }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (value: ConnectPartPartShortCodeFormData) => {
-    await connectPartPartShortCode({
-      value: {
-        shortCode: value.shortCode,
-        amount: parseInt(value.amount, 10),
-      },
-      partId,
-    });
-    router.refresh();
-  }, [router, partId]);
+  const handleSubmit = useCallback(
+    async (value: ConnectPartPartShortCodeFormData) => {
+      await connectPartPartShortCode({
+        value: {
+          shortCode: value.shortCode,
+          amount: parseInt(value.amount, 10),
+        },
+        partId,
+      });
+      router.refresh();
+    },
+    [router, partId],
+  );
 
   return (
     <Formik
@@ -48,26 +50,15 @@ export const PartPartShortCodeConnectForm: React.FunctionComponent<PartPartShort
       <Form>
         <Fieldset>
           <FieldsetRow
-            label={(
-              <label htmlFor="part-part-short-code">ShortCode</label>
-            )}
+            label={<label htmlFor="part-part-short-code">ShortCode</label>}
           >
-            <QrInput
-              id="part-part-short-code"
-              name="shortCode"
-            />
+            <QrInput id="part-part-short-code" name="shortCode" />
           </FieldsetRow>
-          <FieldsetRow
-            label={(
-              <label htmlFor="part-part-amount">Anzahl</label>
-            )}
-          >
-            <Input id="part-part-amount" name="amount" type="number"/>
+          <FieldsetRow label={<label htmlFor="part-part-amount">Anzahl</label>}>
+            <Input id="part-part-amount" name="amount" type="number" />
           </FieldsetRow>
         </Fieldset>
-        <Button type="submit">
-          Verbinden
-        </Button>
+        <Button type="submit">Verbinden</Button>
       </Form>
     </Formik>
   );

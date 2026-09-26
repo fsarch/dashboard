@@ -1,8 +1,12 @@
-import { headers } from "next/headers";
-import { getServiceConfigurationById } from "@/utils/configuration.utils";
-import { getAccessToken } from "@/utils/getAccessToken";
+import { headers } from 'next/headers';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
 
-export async function fetchService(url: string, init?: RequestInit, options?: { serviceId: string; }): Promise<Response> {
+export async function fetchService(
+  url: string,
+  init?: RequestInit,
+  options?: { serviceId: string },
+): Promise<Response> {
   let serviceId = options?.serviceId ?? (await headers()).get('X-Service-Id');
   if (Array.isArray(serviceId)) {
     serviceId = serviceId[0];
@@ -32,7 +36,7 @@ export async function fetchService(url: string, init?: RequestInit, options?: { 
       headers: requestHeaders,
     });
 
-    console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`)
+    console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`);
 
     return res;
   } catch (error) {
@@ -42,5 +46,4 @@ export async function fetchService(url: string, init?: RequestInit, options?: { 
 
     throw error;
   }
-
 }

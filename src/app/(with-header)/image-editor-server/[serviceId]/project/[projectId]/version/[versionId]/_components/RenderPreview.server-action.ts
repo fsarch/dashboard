@@ -7,10 +7,18 @@ export const renderVersionPreview = async (
   versionId: string,
   parameters: Record<string, unknown>,
 ) => {
-  const result = await imageEditorServerService.renderProjectVersion(projectId, versionId, parameters);
+  const result = await imageEditorServerService.renderProjectVersion(
+    projectId,
+    versionId,
+    parameters,
+  );
 
   if (!result.ok) {
-    return { ok: false as const, status: result.status, message: result.message };
+    return {
+      ok: false as const,
+      status: result.status,
+      message: result.message,
+    };
   }
 
   return { ok: true as const, base64: result.base64 };

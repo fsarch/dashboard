@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { TAggregationModeReadDto } from '@/services/watchtower/watchtower.type';
+import type React from 'react';
+import type { TAggregationModeReadDto } from '@/services/watchtower/watchtower.type';
 import styles from './AggregationModeDetail.module.scss';
 
 type AggregationModeDetailProps = {
@@ -9,17 +9,18 @@ type AggregationModeDetailProps = {
   serviceId: string;
 };
 
-const AggregationModeDetail: React.FunctionComponent<AggregationModeDetailProps> = ({
-  aggregationMode,
-  serviceId,
-}) => {
+const AggregationModeDetail: React.FunctionComponent<
+  AggregationModeDetailProps
+> = ({ aggregationMode, serviceId }) => {
   return (
     <div className={styles.root}>
       <table className={styles.table}>
         <tbody>
           <tr>
             <th>ID</th>
-            <td><code>{aggregationMode.id}</code></td>
+            <td>
+              <code>{aggregationMode.id}</code>
+            </td>
           </tr>
           <tr>
             <th>Name</th>
@@ -31,7 +32,9 @@ const AggregationModeDetail: React.FunctionComponent<AggregationModeDetailProps>
           </tr>
           <tr>
             <th>Aggregation Mode Type ID</th>
-            <td><code>{aggregationMode.aggregationModeTypeId}</code></td>
+            <td>
+              <code>{aggregationMode.aggregationModeTypeId}</code>
+            </td>
           </tr>
           {aggregationMode.maxFactor && (
             <tr>
@@ -42,7 +45,9 @@ const AggregationModeDetail: React.FunctionComponent<AggregationModeDetailProps>
           {aggregationMode.externalId && (
             <tr>
               <th>External ID</th>
-              <td><code>{aggregationMode.externalId}</code></td>
+              <td>
+                <code>{aggregationMode.externalId}</code>
+              </td>
             </tr>
           )}
           <tr>

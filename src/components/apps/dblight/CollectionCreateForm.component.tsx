@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import { Form, Formik, type FormikHelpers } from 'formik';
 import dynamic from 'next/dynamic';
-import { Form, Formik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/universals/forms/Button';
-import Input from '@/components/universals/forms/Input';
+import type React from 'react';
+import { useCallback } from 'react';
 import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
 import AlertDialog from '@/components/universals/dialogs/alert/AlertDialog.component';
+import Button from '@/components/universals/forms/Button';
+import Input from '@/components/universals/forms/Input';
 import { createCollectionAction } from './CollectionCreateForm.server-action';
 
 // See RecordForm.component.tsx for why this must be `ssr: false`: eagerly
@@ -39,9 +40,9 @@ type CollectionCreateFormProps = {
   serviceId: string;
 };
 
-const CollectionCreateForm: React.FunctionComponent<CollectionCreateFormProps> = ({
-  serviceId,
-}) => {
+const CollectionCreateForm: React.FunctionComponent<
+  CollectionCreateFormProps
+> = ({ serviceId }) => {
   const router = useRouter();
   const openDialog = useOpenDialog();
 
@@ -98,9 +99,7 @@ const CollectionCreateForm: React.FunctionComponent<CollectionCreateFormProps> =
           <JsonEditor name="schema" />
         </div>
         <div>
-          <Button type="submit">
-            Collection erstellen
-          </Button>
+          <Button type="submit">Collection erstellen</Button>
         </div>
       </Form>
     </Formik>

@@ -1,26 +1,31 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
-import { headers } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
 import clsx from 'clsx';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import { headers } from 'next/headers';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import TimeGridBody, {
+  type TTimeGridBodyColumn,
+} from '@/components/apps/calendar/TimeGridBody.component';
+import {
+  layoutDayInstances,
+  nowLinePercent,
+} from '@/components/apps/calendar/timeGrid.utils';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { calendarService } from '@/services/calendar/calendar.service';
+import type { TExpandedEventDto } from '@/services/calendar/calendar.type';
 import {
+  dayKey,
+  endOfWeekSunday,
   loadOrNotFound,
   parseDateInputValue,
-  startOfWeekMonday,
-  endOfWeekSunday,
-  dayKey,
   shiftDate,
+  startOfWeekMonday,
 } from '@/services/calendar/calendar.utils';
-import { layoutDayInstances, nowLinePercent } from '@/components/apps/calendar/timeGrid.utils';
-import TimeGridBody, { TTimeGridBodyColumn } from '@/components/apps/calendar/TimeGridBody.component';
-import { TExpandedEventDto } from '@/services/calendar/calendar.type';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import styles from './WeekView.module.scss';
 
 export const generateMetadata = createAutomaticMetadata();
@@ -41,7 +46,9 @@ export default async function WeekViewPage({
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -52,13 +59,15 @@ export default async function WeekViewPage({
   const canAccessService = await uacUtils.hasAppPermission(
     EServiceType.CALENDAR,
     serviceId,
-    accessToken
+    accessToken,
   );
   if (!canAccessService) {
     return notFound();
   }
 
-  const calendar = await loadOrNotFound(calendarService.getCalendarById(calendarId, serviceId));
+  const calendar = await loadOrNotFound(
+    calendarService.getCalendarById(calendarId, serviceId),
+  );
 
   const selectedDate = parseDateInputValue(dateParam) ?? new Date();
   const date = dayKey(selectedDate);
@@ -70,7 +79,7 @@ export default async function WeekViewPage({
     calendarId,
     weekStart.toISOString(),
     weekEnd.toISOString(),
-    serviceId
+    serviceId,
   );
 
   const instancesByDay = new Map<string, TExpandedEventDto[]>();
@@ -82,7 +91,11 @@ export default async function WeekViewPage({
   }
 
   const days: Date[] = [];
-  for (let cursor = new Date(weekStart); cursor <= weekEnd; cursor.setDate(cursor.getDate() + 1)) {
+  for (
+    let cursor = new Date(weekStart);
+    cursor <= weekEnd;
+    cursor.setDate(cursor.getDate() + 1)
+  ) {
     days.push(new Date(cursor));
   }
 
@@ -104,22 +117,32 @@ export default async function WeekViewPage({
       <Section name={`Wochenansicht: ${calendar.name}`}>
         <div className={styles.header}>
           <div className={styles.nav}>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${shiftDate(date, -7)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${shiftDate(date, -7)}`}
+            >
               « Vorige Woche
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${dayKey(new Date())}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${dayKey(new Date())}`}
+            >
               Diese Woche
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${shiftDate(date, 7)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/week?date=${shiftDate(date, 7)}`}
+            >
               Nächste Woche »
             </Link>
           </div>
           <div className={styles.title}>{weekLabel}</div>
           <div className={styles.viewLinks}>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${date}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${date}`}
+            >
               Tagesansicht
             </Link>
-            <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${date.slice(0, 7)}`}>
+            <Link
+              href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${date.slice(0, 7)}`}
+            >
               Monatsansicht
             </Link>
           </div>
@@ -136,10 +159,14 @@ export default async function WeekViewPage({
                   <Link
                     key={key}
                     href={`/calendar/${serviceId}/calendar/${calendarId}/day?date=${key}`}
-                    className={clsx(styles.dayHeader, isToday && styles.dayHeaderToday)}
+                    className={clsx(
+                      styles.dayHeader,
+                      isToday && styles.dayHeaderToday,
+                    )}
                   >
-                    <span className={styles.dayHeaderName}>{day.toLocaleDateString('de-DE', { weekday: 'short' })}</span>
-                    {' '}
+                    <span className={styles.dayHeaderName}>
+                      {day.toLocaleDateString('de-DE', { weekday: 'short' })}
+                    </span>{' '}
                     {day.getDate()}.{day.getMonth() + 1}.
                   </Link>
                 );

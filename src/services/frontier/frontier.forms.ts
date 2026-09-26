@@ -1,10 +1,22 @@
-import {
+import type {
   TGeneratedFormDefinition,
   TGeneratedFormInput,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { CachePolicyDto, CorsPolicyDto, HookDto, LogPolicyDto, PathRuleDto, UpstreamDto, UpstreamGroupDto } from '@/services/frontier/frontier.type';
+import type {
+  CachePolicyDto,
+  CorsPolicyDto,
+  HookDto,
+  LogPolicyDto,
+  PathRuleDto,
+  UpstreamDto,
+  UpstreamGroupDto,
+} from '@/services/frontier/frontier.type';
 
-const createStringArrayInput = (id: string, label: string, itemLabel: string): TGeneratedFormInput => ({
+const createStringArrayInput = (
+  id: string,
+  label: string,
+  itemLabel: string,
+): TGeneratedFormInput => ({
   id,
   $type: 'nested-form',
   label,
@@ -12,14 +24,17 @@ const createStringArrayInput = (id: string, label: string, itemLabel: string): T
   addInitialValues: {
     value: '',
   },
-  inputs: [{
-    id: 'value',
-    $type: 'text',
-    label: itemLabel,
-  }],
+  inputs: [
+    {
+      id: 'value',
+      $type: 'text',
+      label: itemLabel,
+    },
+  ],
 });
 
-const mapStringArrayToNestedForm = (values: string[] = []) => values.map((value) => ({ value }));
+const mapStringArrayToNestedForm = (values: string[] = []) =>
+  values.map((value) => ({ value }));
 
 const FRONTIER_CACHE_POLICY_BODY = `{
   "name": form.name,
@@ -49,93 +64,123 @@ const FRONTIER_PATH_RULE_BODY = `{
   "postHookId": form.postHookId ? form.postHookId : undefined
 }`;
 
-const FRONTIER_CACHE_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
-  id: 'name',
-  $type: 'text',
-  label: 'Name',
-}, {
-  id: 'enableCacheTags',
-  $type: 'checkbox',
-  label: 'Cache-Tags aktivieren',
-}, {
-  id: 'cacheTagsHeader',
-  $type: 'text',
-  label: 'Cache-Tags Header',
-}, {
-  id: 'defaultTTL',
-  $type: 'number',
-  label: 'Standard-TTL (Sekunden)',
-}, {
-  id: 'minTTL',
-  $type: 'number',
-  label: 'Min-TTL (Sekunden)',
-}, {
-  id: 'maxTTL',
-  $type: 'number',
-  label: 'Max-TTL (Sekunden)',
-}, createStringArrayInput('divergenceCookies', 'Divergence Cookies', 'Cookie'), createStringArrayInput('divergenceHeaders', 'Divergence Headers', 'Header'), createStringArrayInput('divergenceQueryParameters', 'Divergence Query Parameters', 'Query-Parameter'), {
-  id: 'enableStaleWhileError',
-  $type: 'checkbox',
-  label: 'Stale While Error aktivieren',
-}, {
-  id: 'staleWhileErrorTime',
-  $type: 'number',
-  label: 'Stale While Error Zeit (Sekunden)',
-}, {
-  id: 'enableStaleWhileRevalidate',
-  $type: 'checkbox',
-  label: 'Stale While Revalidate aktivieren',
-}, {
-  id: 'staleWhileRevalidateTime',
-  $type: 'number',
-  label: 'Stale While Revalidate Zeit (Sekunden)',
-}];
-
-export const FRONTIER_DOMAIN_GROUP_CREATE_FORM: TGeneratedFormDefinition = {
-  inputs: [{
+const FRONTIER_CACHE_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [
+  {
     id: 'name',
     $type: 'text',
     label: 'Name',
-  }],
+  },
+  {
+    id: 'enableCacheTags',
+    $type: 'checkbox',
+    label: 'Cache-Tags aktivieren',
+  },
+  {
+    id: 'cacheTagsHeader',
+    $type: 'text',
+    label: 'Cache-Tags Header',
+  },
+  {
+    id: 'defaultTTL',
+    $type: 'number',
+    label: 'Standard-TTL (Sekunden)',
+  },
+  {
+    id: 'minTTL',
+    $type: 'number',
+    label: 'Min-TTL (Sekunden)',
+  },
+  {
+    id: 'maxTTL',
+    $type: 'number',
+    label: 'Max-TTL (Sekunden)',
+  },
+  createStringArrayInput('divergenceCookies', 'Divergence Cookies', 'Cookie'),
+  createStringArrayInput('divergenceHeaders', 'Divergence Headers', 'Header'),
+  createStringArrayInput(
+    'divergenceQueryParameters',
+    'Divergence Query Parameters',
+    'Query-Parameter',
+  ),
+  {
+    id: 'enableStaleWhileError',
+    $type: 'checkbox',
+    label: 'Stale While Error aktivieren',
+  },
+  {
+    id: 'staleWhileErrorTime',
+    $type: 'number',
+    label: 'Stale While Error Zeit (Sekunden)',
+  },
+  {
+    id: 'enableStaleWhileRevalidate',
+    $type: 'checkbox',
+    label: 'Stale While Revalidate aktivieren',
+  },
+  {
+    id: 'staleWhileRevalidateTime',
+    $type: 'number',
+    label: 'Stale While Revalidate Zeit (Sekunden)',
+  },
+];
+
+export const FRONTIER_DOMAIN_GROUP_CREATE_FORM: TGeneratedFormDefinition = {
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    },
+  ],
   initialValues: { name: '' },
   endpoint: {
     path: '/v1/domain-groups',
     method: 'POST',
     body: { $type: 'jsonata', value: 'form' },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: "service.localPath & '/domain-group/' & response.body.id",
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: "service.localPath & '/domain-group/' & response.body.id",
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'Domain Group erstellen' },
 };
 
-export const FRONTIER_DOMAIN_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
-  inputs: [{
-    id: 'domainName',
-    $type: 'text',
-    label: 'Domain-Name',
-  }],
+export const FRONTIER_DOMAIN_CREATE_FORM = (
+  domainGroupId: string,
+): TGeneratedFormDefinition => ({
+  inputs: [
+    {
+      id: 'domainName',
+      $type: 'text',
+      label: 'Domain-Name',
+    },
+  ],
   initialValues: { domainName: '' },
   endpoint: {
     path: `/v1/domain-groups/${domainGroupId}/domain`,
     method: 'POST',
     body: { $type: 'jsonata', value: 'form' },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}'`,
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}'`,
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'Domain erstellen' },
 });
 
-export const FRONTIER_CACHE_POLICY_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
+export const FRONTIER_CACHE_POLICY_CREATE_FORM = (
+  domainGroupId: string,
+): TGeneratedFormDefinition => ({
   inputs: FRONTIER_CACHE_POLICY_INPUTS,
   initialValues: {
     name: '',
@@ -157,13 +202,15 @@ export const FRONTIER_CACHE_POLICY_CREATE_FORM = (domainGroupId: string): TGener
     method: 'POST',
     body: { $type: 'jsonata', value: FRONTIER_CACHE_POLICY_BODY },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}'`,
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}'`,
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'Cache Policy erstellen' },
 });
 
@@ -181,9 +228,15 @@ export function FRONTIER_CACHE_POLICY_UPDATE_FORM(
       defaultTTL: cachePolicy.defaultTTL,
       minTTL: cachePolicy.minTTL,
       maxTTL: cachePolicy.maxTTL,
-      divergenceCookies: mapStringArrayToNestedForm(cachePolicy.divergenceCookies),
-      divergenceHeaders: mapStringArrayToNestedForm(cachePolicy.divergenceHeaders),
-      divergenceQueryParameters: mapStringArrayToNestedForm(cachePolicy.divergenceQueryParameters),
+      divergenceCookies: mapStringArrayToNestedForm(
+        cachePolicy.divergenceCookies,
+      ),
+      divergenceHeaders: mapStringArrayToNestedForm(
+        cachePolicy.divergenceHeaders,
+      ),
+      divergenceQueryParameters: mapStringArrayToNestedForm(
+        cachePolicy.divergenceQueryParameters,
+      ),
       enableStaleWhileError: cachePolicy.enableStaleWhileError,
       staleWhileErrorTime: cachePolicy.staleWhileErrorTime,
       enableStaleWhileRevalidate: cachePolicy.enableStaleWhileRevalidate,
@@ -194,85 +247,99 @@ export function FRONTIER_CACHE_POLICY_UPDATE_FORM(
       method: 'PATCH',
       body: { $type: 'jsonata', value: FRONTIER_CACHE_POLICY_BODY },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/domain-group/${domainGroupId}/cache-policy/${cachePolicyId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/domain-group/${domainGroupId}/cache-policy/${cachePolicyId}'`,
+        },
       },
-    }],
+    ],
     buttons: { submitButtonText: 'Cache Policy aktualisieren' },
   };
 }
 
-export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'path',
-    $type: 'text',
-    label: 'Pfad-Muster',
-  }, {
-    id: 'order',
-    $type: 'number',
-    label: 'Reihenfolge',
-  }, {
-    id: 'cachePolicyId',
-    $type: 'select',
-    label: 'Cache Policy',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'cachePolicies',
+export const FRONTIER_PATH_RULE_CREATE_FORM = (
+  domainGroupId: string,
+): TGeneratedFormDefinition => ({
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
     },
-  }, {
-    id: 'upstreamGroupId',
-    $type: 'select',
-    label: 'Upstream Group',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'upstreamGroups',
+    {
+      id: 'path',
+      $type: 'text',
+      label: 'Pfad-Muster',
     },
-  }, {
-    id: 'corsPolicyId',
-    $type: 'select',
-    label: 'CORS Policy (optional)',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'corsPolicies',
+    {
+      id: 'order',
+      $type: 'number',
+      label: 'Reihenfolge',
     },
-  }, {
-    id: 'logPolicyId',
-    $type: 'select',
-    label: 'Log Policy (optional)',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'logPolicies',
+    {
+      id: 'cachePolicyId',
+      $type: 'select',
+      label: 'Cache Policy',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'cachePolicies',
+      },
     },
-  }, {
-    id: 'preHookId',
-    $type: 'select',
-    label: 'Pre Hook (optional)',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'hooks',
+    {
+      id: 'upstreamGroupId',
+      $type: 'select',
+      label: 'Upstream Group',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'upstreamGroups',
+      },
     },
-  }, {
-    id: 'postHookId',
-    $type: 'select',
-    label: 'Post Hook (optional)',
-    enableSearch: true,
-    data: {
-      $type: 'datasource',
-      value: 'hooks',
+    {
+      id: 'corsPolicyId',
+      $type: 'select',
+      label: 'CORS Policy (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'corsPolicies',
+      },
     },
-  }],
+    {
+      id: 'logPolicyId',
+      $type: 'select',
+      label: 'Log Policy (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'logPolicies',
+      },
+    },
+    {
+      id: 'preHookId',
+      $type: 'select',
+      label: 'Pre Hook (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'hooks',
+      },
+    },
+    {
+      id: 'postHookId',
+      $type: 'select',
+      label: 'Post Hook (optional)',
+      enableSearch: true,
+      data: {
+        $type: 'datasource',
+        value: 'hooks',
+      },
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
     value: `{
@@ -292,13 +359,15 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
     method: 'POST',
     body: { $type: 'jsonata', value: FRONTIER_PATH_RULE_BODY },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}'`,
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}'`,
+      },
     },
-  }],
+  ],
   dataSources: {
     cachePolicies: {
       $type: 'fetch',
@@ -324,7 +393,8 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
       },
     },
     logPolicies: {
@@ -333,7 +403,8 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
       },
     },
     hooks: {
@@ -342,7 +413,8 @@ export const FRONTIER_PATH_RULE_CREATE_FORM = (domainGroupId: string): TGenerate
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
       },
     },
   },
@@ -355,73 +427,83 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
   pathRule: PathRuleDto,
 ): TGeneratedFormDefinition {
   return {
-    inputs: [{
-      id: 'name',
-      $type: 'text',
-      label: 'Name',
-    }, {
-      id: 'path',
-      $type: 'text',
-      label: 'Pfad-Muster',
-    }, {
-      id: 'order',
-      $type: 'number',
-      label: 'Reihenfolge',
-    }, {
-      id: 'cachePolicyId',
-      $type: 'select',
-      label: 'Cache Policy',
-      enableSearch: true,
-      data: {
-        $type: 'datasource',
-        value: 'cachePolicies',
+    inputs: [
+      {
+        id: 'name',
+        $type: 'text',
+        label: 'Name',
       },
-    }, {
-      id: 'upstreamGroupId',
-      $type: 'select',
-      label: 'Upstream Group',
-      enableSearch: true,
-      data: {
-        $type: 'datasource',
-        value: 'upstreamGroups',
+      {
+        id: 'path',
+        $type: 'text',
+        label: 'Pfad-Muster',
       },
-    }, {
-      id: 'corsPolicyId',
-      $type: 'select',
-      label: 'CORS Policy (optional)',
-      enableSearch: true,
-      data: {
-        $type: 'datasource',
-        value: 'corsPolicies',
+      {
+        id: 'order',
+        $type: 'number',
+        label: 'Reihenfolge',
       },
-    }, {
-      id: 'logPolicyId',
-      $type: 'select',
-      label: 'Log Policy (optional)',
-      enableSearch: true,
-      data: {
-        $type: 'datasource',
-        value: 'logPolicies',
+      {
+        id: 'cachePolicyId',
+        $type: 'select',
+        label: 'Cache Policy',
+        enableSearch: true,
+        data: {
+          $type: 'datasource',
+          value: 'cachePolicies',
+        },
       },
-    }, {
-      id: 'preHookId',
-      $type: 'select',
-      label: 'Pre Hook (optional)',
-      enableSearch: true,
-      data: {
-        $type: 'datasource',
-        value: 'hooks',
+      {
+        id: 'upstreamGroupId',
+        $type: 'select',
+        label: 'Upstream Group',
+        enableSearch: true,
+        data: {
+          $type: 'datasource',
+          value: 'upstreamGroups',
+        },
       },
-    }, {
-      id: 'postHookId',
-      $type: 'select',
-      label: 'Post Hook (optional)',
-      enableSearch: true,
-      data: {
-        $type: 'datasource',
-        value: 'hooks',
+      {
+        id: 'corsPolicyId',
+        $type: 'select',
+        label: 'CORS Policy (optional)',
+        enableSearch: true,
+        data: {
+          $type: 'datasource',
+          value: 'corsPolicies',
+        },
       },
-    }],
+      {
+        id: 'logPolicyId',
+        $type: 'select',
+        label: 'Log Policy (optional)',
+        enableSearch: true,
+        data: {
+          $type: 'datasource',
+          value: 'logPolicies',
+        },
+      },
+      {
+        id: 'preHookId',
+        $type: 'select',
+        label: 'Pre Hook (optional)',
+        enableSearch: true,
+        data: {
+          $type: 'datasource',
+          value: 'hooks',
+        },
+      },
+      {
+        id: 'postHookId',
+        $type: 'select',
+        label: 'Post Hook (optional)',
+        enableSearch: true,
+        data: {
+          $type: 'datasource',
+          value: 'hooks',
+        },
+      },
+    ],
     initialValues: {
       name: pathRule.name,
       path: pathRule.path,
@@ -438,13 +520,15 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
       method: 'PATCH',
       body: { $type: 'jsonata', value: FRONTIER_PATH_RULE_BODY },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/domain-group/${domainGroupId}/path-rule/${pathRuleId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/domain-group/${domainGroupId}/path-rule/${pathRuleId}'`,
+        },
       },
-    }],
+    ],
     dataSources: {
       cachePolicies: {
         $type: 'fetch',
@@ -470,7 +554,8 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         method: 'GET',
         transformResponse: {
           $type: 'jsonata',
-          value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+          value:
+            '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
         },
       },
       logPolicies: {
@@ -479,7 +564,8 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         method: 'GET',
         transformResponse: {
           $type: 'jsonata',
-          value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+          value:
+            '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
         },
       },
       hooks: {
@@ -488,7 +574,8 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
         method: 'GET',
         transformResponse: {
           $type: 'jsonata',
-          value: '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
+          value:
+            '{ "body": [{"id": "", "value": "", "label": "(keine)"}, body.{ "id": id, "value": id, "label": name }] }',
         },
       },
     },
@@ -496,25 +583,31 @@ export function FRONTIER_PATH_RULE_UPDATE_FORM(
   };
 }
 
-export const FRONTIER_UPSTREAM_GROUP_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }],
+export const FRONTIER_UPSTREAM_GROUP_CREATE_FORM = (
+  domainGroupId: string,
+): TGeneratedFormDefinition => ({
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
+    },
+  ],
   initialValues: { name: '' },
   endpoint: {
     path: `/v1/domain-groups/${domainGroupId}/upstream-groups`,
     method: 'POST',
     body: { $type: 'jsonata', value: 'form' },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/' & response.body.id`,
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/' & response.body.id`,
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'Upstream Group erstellen' },
 });
 
@@ -524,11 +617,13 @@ export function FRONTIER_UPSTREAM_GROUP_UPDATE_FORM(
   upstreamGroup: UpstreamGroupDto,
 ): TGeneratedFormDefinition {
   return {
-    inputs: [{
-      id: 'name',
-      $type: 'text',
-      label: 'Name',
-    }],
+    inputs: [
+      {
+        id: 'name',
+        $type: 'text',
+        label: 'Name',
+      },
+    ],
     initialValues: {
       name: upstreamGroup.name,
     },
@@ -537,95 +632,45 @@ export function FRONTIER_UPSTREAM_GROUP_UPDATE_FORM(
       method: 'PATCH',
       body: { $type: 'jsonata', value: 'form' },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+        },
       },
-    }],
+    ],
     buttons: { submitButtonText: 'Upstream Group aktualisieren' },
   };
 }
 
-export const FRONTIER_UPSTREAM_CREATE_FORM = (domainGroupId: string, upstreamGroupId: string): TGeneratedFormDefinition => ({
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'host',
-    $type: 'text',
-    label: 'Host',
-  }, {
-    id: 'port',
-    $type: 'number',
-    label: 'Port',
-  }, {
-    id: 'path',
-    $type: 'text',
-    label: 'Pfad',
-  }, {
-    id: 'protocol',
-    $type: 'select',
-    label: 'Protokoll',
-    data: {
-      $type: 'constant',
-      value: [
-        { id: 'http', value: 'http', label: 'HTTP' },
-        { id: 'https', value: 'https', label: 'HTTPS' },
-      ],
-    },
-  }, {
-    id: 'sslOptions',
-    $type: 'nested-form',
-    label: 'SSL-Optionen',
-    inputs: [{
-      id: 'sslVerify',
-      $type: 'checkbox',
-      label: 'SSL-Zertifikat prüfen',
-    }],
-  }],
-  initialValues: { name: '', host: '', port: 80, path: '/', protocol: 'http', sslOptions: { sslVerify: true } },
-  endpoint: {
-    path: `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`,
-    method: 'POST',
-    body: { $type: 'jsonata', value: 'form' },
-  },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
-    },
-  }],
-  buttons: { submitButtonText: 'Upstream erstellen' },
-});
-
-export function FRONTIER_UPSTREAM_UPDATE_FORM(
+export const FRONTIER_UPSTREAM_CREATE_FORM = (
   domainGroupId: string,
   upstreamGroupId: string,
-  upstreamId: string,
-  upstream: UpstreamDto,
-): TGeneratedFormDefinition {
-  return {
-    inputs: [{
+): TGeneratedFormDefinition => ({
+  inputs: [
+    {
       id: 'name',
       $type: 'text',
       label: 'Name',
-    }, {
+    },
+    {
       id: 'host',
       $type: 'text',
       label: 'Host',
-    }, {
+    },
+    {
       id: 'port',
       $type: 'number',
       label: 'Port',
-    }, {
+    },
+    {
       id: 'path',
       $type: 'text',
       label: 'Pfad',
-    }, {
+    },
+    {
       id: 'protocol',
       $type: 'select',
       label: 'Protokoll',
@@ -636,53 +681,144 @@ export function FRONTIER_UPSTREAM_UPDATE_FORM(
           { id: 'https', value: 'https', label: 'HTTPS' },
         ],
       },
-    }, {
+    },
+    {
       id: 'sslOptions',
       $type: 'nested-form',
       label: 'SSL-Optionen',
-      inputs: [{
-        id: 'sslVerify',
-        $type: 'checkbox',
-        label: 'SSL-Zertifikat prüfen',
-      }],
-    }],
+      inputs: [
+        {
+          id: 'sslVerify',
+          $type: 'checkbox',
+          label: 'SSL-Zertifikat prüfen',
+        },
+      ],
+    },
+  ],
+  initialValues: {
+    name: '',
+    host: '',
+    port: 80,
+    path: '/',
+    protocol: 'http',
+    sslOptions: { sslVerify: true },
+  },
+  endpoint: {
+    path: `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream`,
+    method: 'POST',
+    body: { $type: 'jsonata', value: 'form' },
+  },
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+      },
+    },
+  ],
+  buttons: { submitButtonText: 'Upstream erstellen' },
+});
+
+export function FRONTIER_UPSTREAM_UPDATE_FORM(
+  domainGroupId: string,
+  upstreamGroupId: string,
+  upstreamId: string,
+  upstream: UpstreamDto,
+): TGeneratedFormDefinition {
+  return {
+    inputs: [
+      {
+        id: 'name',
+        $type: 'text',
+        label: 'Name',
+      },
+      {
+        id: 'host',
+        $type: 'text',
+        label: 'Host',
+      },
+      {
+        id: 'port',
+        $type: 'number',
+        label: 'Port',
+      },
+      {
+        id: 'path',
+        $type: 'text',
+        label: 'Pfad',
+      },
+      {
+        id: 'protocol',
+        $type: 'select',
+        label: 'Protokoll',
+        data: {
+          $type: 'constant',
+          value: [
+            { id: 'http', value: 'http', label: 'HTTP' },
+            { id: 'https', value: 'https', label: 'HTTPS' },
+          ],
+        },
+      },
+      {
+        id: 'sslOptions',
+        $type: 'nested-form',
+        label: 'SSL-Optionen',
+        inputs: [
+          {
+            id: 'sslVerify',
+            $type: 'checkbox',
+            label: 'SSL-Zertifikat prüfen',
+          },
+        ],
+      },
+    ],
     initialValues: {
       name: upstream.name,
       host: upstream.host,
       port: upstream.port,
       path: upstream.path,
       protocol: upstream.protocol ?? 'http',
-      sslOptions: upstream.sslOptions ? { sslVerify: upstream.sslOptions.sslVerify ?? true } : { sslVerify: true },
+      sslOptions: upstream.sslOptions
+        ? { sslVerify: upstream.sslOptions.sslVerify ?? true }
+        : { sslVerify: true },
     },
     endpoint: {
       path: `/v1/domain-groups/${domainGroupId}/upstream-groups/${upstreamGroupId}/upstream/${upstreamId}`,
       method: 'PATCH',
       body: { $type: 'jsonata', value: 'form' },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/domain-group/${domainGroupId}/upstream-group/${upstreamGroupId}'`,
+        },
       },
-    }],
+    ],
     buttons: { submitButtonText: 'Upstream aktualisieren' },
   };
 }
 
-const FRONTIER_CORS_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
-  id: 'name',
-  $type: 'text',
-  label: 'Name',
-}, {
-  id: 'enabled',
-  $type: 'checkbox',
-  label: 'CORS aktivieren',
-}, {
-  id: 'allowCredentials',
-  $type: 'checkbox',
-  label: 'Credentials erlauben',
-}, createStringArrayInput('allowedOrigins', 'Erlaubte Origins', 'Origin')];
+const FRONTIER_CORS_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [
+  {
+    id: 'name',
+    $type: 'text',
+    label: 'Name',
+  },
+  {
+    id: 'enabled',
+    $type: 'checkbox',
+    label: 'CORS aktivieren',
+  },
+  {
+    id: 'allowCredentials',
+    $type: 'checkbox',
+    label: 'Credentials erlauben',
+  },
+  createStringArrayInput('allowedOrigins', 'Erlaubte Origins', 'Origin'),
+];
 
 const FRONTIER_CORS_POLICY_BODY = `{
   "name": form.name,
@@ -691,7 +827,9 @@ const FRONTIER_CORS_POLICY_BODY = `{
   "allowedOrigins": $reduce(form.allowedOrigins, function($acc, $item) { $append($acc, $item.value) }, [])
 }`;
 
-export const FRONTIER_CORS_POLICY_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
+export const FRONTIER_CORS_POLICY_CREATE_FORM = (
+  domainGroupId: string,
+): TGeneratedFormDefinition => ({
   inputs: FRONTIER_CORS_POLICY_INPUTS,
   initialValues: {
     name: '',
@@ -704,13 +842,15 @@ export const FRONTIER_CORS_POLICY_CREATE_FORM = (domainGroupId: string): TGenera
     method: 'POST',
     body: { $type: 'jsonata', value: FRONTIER_CORS_POLICY_BODY },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}/cors-policy/' & response.body.id`,
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/cors-policy/' & response.body.id`,
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'CORS Policy erstellen' },
 });
 
@@ -725,37 +865,45 @@ export function FRONTIER_CORS_POLICY_UPDATE_FORM(
       name: corsPolicy.name,
       enabled: corsPolicy.enabled ?? true,
       allowCredentials: corsPolicy.allowCredentials ?? false,
-      allowedOrigins: mapStringArrayToNestedForm(corsPolicy.allowedOrigins ?? []),
+      allowedOrigins: mapStringArrayToNestedForm(
+        corsPolicy.allowedOrigins ?? [],
+      ),
     },
     endpoint: {
       path: `/v1/domain-groups/${domainGroupId}/cors-policies/${corsPolicyId}`,
       method: 'PATCH',
       body: { $type: 'jsonata', value: FRONTIER_CORS_POLICY_BODY },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/domain-group/${domainGroupId}/cors-policy/${corsPolicyId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/domain-group/${domainGroupId}/cors-policy/${corsPolicyId}'`,
+        },
       },
-    }],
+    ],
     buttons: { submitButtonText: 'CORS Policy aktualisieren' },
   };
 }
 
-const FRONTIER_LOG_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [{
-  id: 'name',
-  $type: 'text',
-  label: 'Name',
-}, {
-  id: 'enabled',
-  $type: 'checkbox',
-  label: 'Logging aktivieren',
-}, {
-  id: 'retentionTimeSeconds',
-  $type: 'number',
-  label: 'Retention (Sekunden)',
-}];
+const FRONTIER_LOG_POLICY_INPUTS: TGeneratedFormDefinition['inputs'] = [
+  {
+    id: 'name',
+    $type: 'text',
+    label: 'Name',
+  },
+  {
+    id: 'enabled',
+    $type: 'checkbox',
+    label: 'Logging aktivieren',
+  },
+  {
+    id: 'retentionTimeSeconds',
+    $type: 'number',
+    label: 'Retention (Sekunden)',
+  },
+];
 
 const FRONTIER_LOG_POLICY_BODY = `{
   "name": form.name,
@@ -763,7 +911,9 @@ const FRONTIER_LOG_POLICY_BODY = `{
   "retentionTimeSeconds": form.retentionTimeSeconds
 }`;
 
-export const FRONTIER_LOG_POLICY_CREATE_FORM = (domainGroupId: string): TGeneratedFormDefinition => ({
+export const FRONTIER_LOG_POLICY_CREATE_FORM = (
+  domainGroupId: string,
+): TGeneratedFormDefinition => ({
   inputs: FRONTIER_LOG_POLICY_INPUTS,
   initialValues: {
     name: '',
@@ -775,13 +925,15 @@ export const FRONTIER_LOG_POLICY_CREATE_FORM = (domainGroupId: string): TGenerat
     method: 'POST',
     body: { $type: 'jsonata', value: FRONTIER_LOG_POLICY_BODY },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: `service.localPath & '/domain-group/${domainGroupId}/log-policy/' & response.body.id`,
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/domain-group/${domainGroupId}/log-policy/' & response.body.id`,
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'Log Policy erstellen' },
 });
 
@@ -802,13 +954,15 @@ export function FRONTIER_LOG_POLICY_UPDATE_FORM(
       method: 'PATCH',
       body: { $type: 'jsonata', value: FRONTIER_LOG_POLICY_BODY },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/domain-group/${domainGroupId}/log-policy/${logPolicyId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/domain-group/${domainGroupId}/log-policy/${logPolicyId}'`,
+        },
       },
-    }],
+    ],
     buttons: { submitButtonText: 'Log Policy aktualisieren' },
   };
 }
@@ -820,15 +974,18 @@ const FRONTIER_HOOK_BODY = `{
   "functionId": form.functionId
 }`;
 
-const FRONTIER_HOOK_INPUTS: TGeneratedFormDefinition['inputs'] = [{
-  id: 'name',
-  $type: 'text',
-  label: 'Name',
-}, {
-  id: 'functionId',
-  $type: 'text',
-  label: 'Function ID',
-}];
+const FRONTIER_HOOK_INPUTS: TGeneratedFormDefinition['inputs'] = [
+  {
+    id: 'name',
+    $type: 'text',
+    label: 'Name',
+  },
+  {
+    id: 'functionId',
+    $type: 'text',
+    label: 'Function ID',
+  },
+];
 
 export const FRONTIER_HOOK_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: FRONTIER_HOOK_INPUTS,
@@ -838,13 +995,15 @@ export const FRONTIER_HOOK_CREATE_FORM: TGeneratedFormDefinition = {
     method: 'POST',
     body: { $type: 'jsonata', value: FRONTIER_HOOK_BODY },
   },
-  postEndpointActions: [{
-    $type: 'redirect',
-    url: {
-      $type: 'jsonata',
-      value: "service.localPath & '/hook/' & response.body.id",
+  postEndpointActions: [
+    {
+      $type: 'redirect',
+      url: {
+        $type: 'jsonata',
+        value: "service.localPath & '/hook/' & response.body.id",
+      },
     },
-  }],
+  ],
   buttons: { submitButtonText: 'Hook erstellen' },
 };
 
@@ -863,14 +1022,15 @@ export function FRONTIER_HOOK_UPDATE_FORM(
       method: 'PATCH',
       body: { $type: 'jsonata', value: FRONTIER_HOOK_BODY },
     },
-    postEndpointActions: [{
-      $type: 'redirect',
-      url: {
-        $type: 'jsonata',
-        value: `service.localPath & '/hook/${hookId}'`,
+    postEndpointActions: [
+      {
+        $type: 'redirect',
+        url: {
+          $type: 'jsonata',
+          value: `service.localPath & '/hook/${hookId}'`,
+        },
       },
-    }],
+    ],
     buttons: { submitButtonText: 'Hook aktualisieren' },
   };
 }
-

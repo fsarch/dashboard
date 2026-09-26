@@ -4,7 +4,7 @@ export type DataTableAuthDto = {
   username: string;
 
   password: string;
-}
+};
 
 export type DataTableFetchBaseQueryDto = {
   type: 'fetch';
@@ -12,19 +12,19 @@ export type DataTableFetchBaseQueryDto = {
   url: string;
 
   auth: DataTableAuthDto;
-}
+};
 
 export type DataTableConstantValueDataSourceDto = {
   value: string | number;
 
   label: string;
-}
+};
 
 export type DataTableConstantDataSourceDto = {
   type: 'constant';
 
   values: Array<DataTableConstantValueDataSourceDto>;
-}
+};
 
 export type DataTableBaseMappingDto = {
   name: string;
@@ -34,7 +34,7 @@ export type DataTableBaseMappingDto = {
   isIdentifier: boolean;
 
   isEditable: boolean;
-}
+};
 
 export type DataTableUuidMappingDto = DataTableBaseMappingDto & {
   type: 'uuid';
@@ -44,29 +44,29 @@ export type DataTableSelectMappingDto = DataTableBaseMappingDto & {
   type: 'select';
 
   dataSource: DataTableConstantDataSourceDto;
-}
+};
 
 export type DataTableStringMappingDto = DataTableBaseMappingDto & {
   type: 'string';
-}
+};
 
 export type DataTableIntegerMappingDto = DataTableBaseMappingDto & {
   type: 'integer';
-}
+};
 
 export type DataTableDateTimeMappingDto = DataTableBaseMappingDto & {
   type: 'date-time';
-}
+};
 
 export type DataTableDecimalInputDto = {
   type: 'input';
-}
+};
 
 export type DataTableDecimalPercentageColoredStepDto = {
   color: string;
 
   value: number;
-}
+};
 
 export type DataTableDecimalPercentageColoredDto = {
   type: 'percentage-colored';
@@ -74,15 +74,16 @@ export type DataTableDecimalPercentageColoredDto = {
   maxValue: number;
 
   steps: Array<DataTableDecimalPercentageColoredStepDto>;
-}
+};
 
 export type DataTableDecimalMappingDto = DataTableBaseMappingDto & {
   type: 'decimal';
 
   display?: DataTableDecimalInputDto | DataTableDecimalPercentageColoredDto;
-}
+};
 
-export type DataTableMappingDtoType = DataTableUuidMappingDto
+export type DataTableMappingDtoType =
+  | DataTableUuidMappingDto
   | DataTableSelectMappingDto
   | DataTableStringMappingDto
   | DataTableIntegerMappingDto
@@ -95,4 +96,4 @@ export type DataTableDto = {
   name: string;
 
   mapping: Array<DataTableMappingDtoType>;
-}
+};

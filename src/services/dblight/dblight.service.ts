@@ -1,5 +1,5 @@
 import { fetchService } from '@/utils/fetchService';
-import {
+import type {
   TCollectionDto,
   TCreateCollectionDto,
   TDbApiErrorBody,
@@ -21,7 +21,9 @@ async function parseResponse<T>(response: Response): Promise<T> {
 
   if (!response.ok) {
     const errorBody = body as TDbApiErrorBody | undefined;
-    throw new Error(errorBody?.message ?? `request failed with status ${response.status}`);
+    throw new Error(
+      errorBody?.message ?? `request failed with status ${response.status}`,
+    );
   }
 
   return body as T;
@@ -29,13 +31,22 @@ async function parseResponse<T>(response: Response): Promise<T> {
 
 // Collections
 
-const listCollections = async (serviceId: string): Promise<Array<TCollectionDto>> => {
+const listCollections = async (
+  serviceId: string,
+): Promise<Array<TCollectionDto>> => {
   const response = await fetchService('/collections', undefined, { serviceId });
   return parseResponse(response);
 };
 
-const getCollection = async (collectionId: string, serviceId: string): Promise<TCollectionDto> => {
-  const response = await fetchService(`/collections/${collectionId}`, undefined, { serviceId });
+const getCollection = async (
+  collectionId: string,
+  serviceId: string,
+): Promise<TCollectionDto> => {
+  const response = await fetchService(
+    `/collections/${collectionId}`,
+    undefined,
+    { serviceId },
+  );
   return parseResponse(response);
 };
 
@@ -55,7 +66,10 @@ const createCollection = async (
   return parseResponse(response);
 };
 
-const deleteCollection = async (collectionId: string, serviceId: string): Promise<void> => {
+const deleteCollection = async (
+  collectionId: string,
+  serviceId: string,
+): Promise<void> => {
   const response = await fetchService(
     `/collections/${collectionId}`,
     { method: 'DELETE' },

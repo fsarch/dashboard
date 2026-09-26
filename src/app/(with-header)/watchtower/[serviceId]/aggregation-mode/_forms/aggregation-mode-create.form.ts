@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const AGGREGATION_MODE_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -35,20 +35,23 @@ export const AGGREGATION_MODE_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
+        value:
+          '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
       },
     },
   },
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": "", "aggregationModeTypeId": dataSource.aggregationModeTypes[0].id, "maxFactor": null, "externalId": null }',
+    value:
+      '{ "name": "", "aggregationModeTypeId": dataSource.aggregationModeTypes[0].id, "maxFactor": null, "externalId": null }',
   },
   endpoint: {
     path: '/v1/aggregation-modes',
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "aggregationModeTypeId": form.aggregationModeTypeId, "maxFactor": form.maxFactor, "externalId": form.externalId }',
+      value:
+        '{ "name": form.name, "aggregationModeTypeId": form.aggregationModeTypeId, "maxFactor": form.maxFactor, "externalId": form.externalId }',
     },
   },
   postEndpointActions: [

@@ -1,76 +1,90 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const CalendarAppDefinition: AppDefinitionType = {
   name: 'Calendar',
   basePath: '/calendar',
-  navigation: [{
-    name: 'Kalender',
-    path: '/',
-    icon: 'calendar-days',
-  }],
+  navigation: [
+    {
+      name: 'Kalender',
+      path: '/',
+      icon: 'calendar-days',
+    },
+  ],
   routes: {
     '/calendar/:calendarId{/*path}': {
-      navigation: [{
-        name: 'Zurück zu Kalendern',
-        path: '/',
-        icon: 'arrow-left',
-      }, {
-        name: 'Events',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId",
+      navigation: [
+        {
+          name: 'Zurück zu Kalendern',
+          path: '/',
+          icon: 'arrow-left',
         },
-        icon: 'list',
-      }, {
-        name: 'Termine',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId & '/instances'",
+        {
+          name: 'Events',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId",
+          },
+          icon: 'list',
         },
-        icon: 'calendar-week',
-      }, {
-        name: 'Tagesansicht',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId & '/day'",
+        {
+          name: 'Termine',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/instances'",
+          },
+          icon: 'calendar-week',
         },
-        icon: 'calendar-day',
-      }, {
-        name: 'Wochenansicht',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId & '/week'",
+        {
+          name: 'Tagesansicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/day'",
+          },
+          icon: 'calendar-day',
         },
-        icon: 'calendar-week',
-      }, {
-        name: 'Monatsansicht',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId & '/month'",
+        {
+          name: 'Wochenansicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/week'",
+          },
+          icon: 'calendar-week',
         },
-        icon: 'table-cells',
-      }],
+        {
+          name: 'Monatsansicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId & '/month'",
+          },
+          icon: 'table-cells',
+        },
+      ],
     },
     '/calendar/:calendarId/event/:eventId{/*path}': {
-      navigation: [{
-        name: 'Zurück zu Kalendern',
-        path: '/',
-        icon: 'arrow-left',
-      }, {
-        name: 'Events',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId",
+      navigation: [
+        {
+          name: 'Zurück zu Kalendern',
+          path: '/',
+          icon: 'arrow-left',
         },
-        icon: 'list',
-      }, {
-        name: 'Event',
-        path: {
-          $type: 'jsonata',
-          value: "'/calendar/' & params.calendarId & '/event/' & params.eventId",
+        {
+          name: 'Events',
+          path: {
+            $type: 'jsonata',
+            value: "'/calendar/' & params.calendarId",
+          },
+          icon: 'list',
         },
-        icon: 'calendar-day',
-      }],
+        {
+          name: 'Event',
+          path: {
+            $type: 'jsonata',
+            value:
+              "'/calendar/' & params.calendarId & '/event/' & params.eventId",
+          },
+          icon: 'calendar-day',
+        },
+      ],
     },
   },
 };

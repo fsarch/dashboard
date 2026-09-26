@@ -1,38 +1,32 @@
-import React from 'react';
-import { TGeneratedNestedForm } from "@/components/universals/forms/generated/GeneratedForm.type";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
-import Fieldset from "@/components/universals/forms/Fieldset.component";
-import type { TRenderGeneratedFormInputsFunc } from "@/components/universals/forms/generated/renderGeneratedFormInputs";
-import styles from './GeneratedFormNestedForm.module.scss';
+import type React from 'react';
+import Fieldset from '@/components/universals/forms/Fieldset.component';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import type { TGeneratedNestedForm } from '@/components/universals/forms/generated/GeneratedForm.type';
 import {
   NestedFormContextProvider,
-  useNestedFormContext
-} from "@/components/universals/forms/generated/inputs/nested/nested-form.context";
+  useNestedFormContext,
+} from '@/components/universals/forms/generated/inputs/nested/nested-form.context';
+import type { TRenderGeneratedFormInputsFunc } from '@/components/universals/forms/generated/renderGeneratedFormInputs';
+import styles from './GeneratedFormNestedForm.module.scss';
 
 type GeneratedNestedFormSingleProps = {
   input: TGeneratedNestedForm;
   renderFormInputs: TRenderGeneratedFormInputsFunc;
 };
 
-export const GeneratedNestedFormSingle: React.FunctionComponent<GeneratedNestedFormSingleProps> = ({
-  input,
-  renderFormInputs,
-}) => {
+export const GeneratedNestedFormSingle: React.FunctionComponent<
+  GeneratedNestedFormSingleProps
+> = ({ input, renderFormInputs }) => {
   const nestedFormContext = useNestedFormContext();
 
   return (
     <FieldsetRow label={input.label}>
       <div className={styles.fieldsetWrapper}>
-        <div
-          className={styles.itemWrapper}
-        >
+        <div className={styles.itemWrapper}>
           <div className={styles.itemHeadlineWrapper}>
-            <div className={styles.itemHeadline}>
-            </div>
+            <div className={styles.itemHeadline}></div>
           </div>
-          <Fieldset
-            className={styles.fieldset}
-          >
+          <Fieldset className={styles.fieldset}>
             <NestedFormContextProvider
               value={{ path: [...nestedFormContext.path, input.id] }}
             >

@@ -1,17 +1,14 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import Section from "@/components/universals/section/Section";
-import { useOpenDeleteDialog } from "@/components/universals/dialogs/confirm/useOpenDeleteDialog";
-import { useRouter } from "next/navigation";
-import { DialogResult } from "@/components/universals/dialog/dialog.enum";
-import Button from "@/components/universals/forms/Button";
-import {
-  removeManufacturer
-} from "@/app/(with-header)/material-tracing/[serviceId]/manufacturer/[manufacturerId]/_components/remove/ManufacturerRemove.server-action";
-import {
-  removeMaterialType
-} from "@/app/(with-header)/material-tracing/[serviceId]/material-type/[materialTypeId]/_components/remove/MaterialTypeRemove.server-action";
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { removeManufacturer } from '@/app/(with-header)/material-tracing/[serviceId]/manufacturer/[manufacturerId]/_components/remove/ManufacturerRemove.server-action';
+import { removeMaterialType } from '@/app/(with-header)/material-tracing/[serviceId]/material-type/[materialTypeId]/_components/remove/MaterialTypeRemove.server-action';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import { useOpenDeleteDialog } from '@/components/universals/dialogs/confirm/useOpenDeleteDialog';
+import Button from '@/components/universals/forms/Button';
+import Section from '@/components/universals/section/Section';
 
 type MaterialTypeRemoveProps = {
   materialTypeId: string;
@@ -40,15 +37,8 @@ const MaterialTypeRemove: React.FunctionComponent<MaterialTypeRemoveProps> = ({
   }, [materialTypeId, homeUrl]);
 
   return (
-    <Section
-      name="Danger Zone"
-      color="#FF0000"
-    >
-      <Button
-        type="button"
-        onClick={handleDeleteClick}
-        color="#BB0000"
-      >
+    <Section name="Danger Zone" color="#FF0000">
+      <Button type="button" onClick={handleDeleteClick} color="#BB0000">
         MaterialType löschen
       </Button>
     </Section>

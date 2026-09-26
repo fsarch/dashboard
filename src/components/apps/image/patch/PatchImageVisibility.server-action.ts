@@ -1,9 +1,12 @@
 'use server';
 
-import { imagesAdminService } from "@/services/image/images-admin.service";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
+import { imagesAdminService } from '@/services/image/images-admin.service';
 
-export const patchImageVisibility = async (imageId: string, isPublic: boolean) => {
+export const patchImageVisibility = async (
+  imageId: string,
+  isPublic: boolean,
+) => {
   await imagesAdminService.patchImage(imageId, { isPublic });
 
   // Revalidate the image detail page and list page to show updated visibility

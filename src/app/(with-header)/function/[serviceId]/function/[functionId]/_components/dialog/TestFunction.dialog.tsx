@@ -1,29 +1,24 @@
+import { Editor } from '@monaco-editor/react';
 import React, { useCallback, useState } from 'react';
-import { TDialogComponent } from "@/components/universals/dialog/dialog.type";
-import { DialogResult } from "@/components/universals/dialog/dialog.enum";
-import Dialog from "@/components/universals/dialog/dialog.component";
-import Button from "@/components/universals/forms/Button";
-import { Editor } from "@monaco-editor/react";
-import {
-  executeFunction
-} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.server-action";
+import { colors } from '@/app/_styles/colors';
+import { executeFunction } from '@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.server-action';
+import type { TestFunctionResultType } from '@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.type';
+import TestFunctionResult from '@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunctionResult.component';
+import Dialog from '@/components/universals/dialog/dialog.component';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type { TDialogComponent } from '@/components/universals/dialog/dialog.type';
+import Button from '@/components/universals/forms/Button';
+import IconActionButton from '@/components/universals/forms/button/IconActionButton';
 import styles from './TestFunction.module.scss';
-import IconActionButton from "@/components/universals/forms/button/IconActionButton";
-import TestFunctionResult
-  from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunctionResult.component";
-import {
-  TestFunctionResultType
-} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.type";
-import { colors } from "@/app/_styles/colors";
 
-type TestFunctionDialogType = TDialogComponent<{ functionId: string; versionId: string; }, void>;
+type TestFunctionDialogType = TDialogComponent<
+  { functionId: string; versionId: string },
+  void
+>;
 
 const DEFAULT_VALUE = '[\n\t"Hello World"\n]';
 
-const TestFunctionDialog: TestFunctionDialogType = ({
-  value,
-  onResult,
-}) => {
+const TestFunctionDialog: TestFunctionDialogType = ({ value, onResult }) => {
   const [requestArgs, setRequestArgs] = useState<string>(DEFAULT_VALUE);
   const [result, setResult] = useState<TestFunctionResultType | null>(null);
 
@@ -34,25 +29,26 @@ const TestFunctionDialog: TestFunctionDialogType = ({
     }
 
     const response = await executeFunction(value.functionId, value.versionId, {
-      args
+      args,
     });
 
     setResult(response);
   }, [value.versionId, value.functionId]);
 
-  const handleChange = useCallback((value: string | undefined) => {
-    if (!value) {
-      return;
-    }
+  const handleChange = useCallback(
+    (value: string | undefined) => {
+      if (!value) {
+        return;
+      }
 
-    setRequestArgs(value);
-  }, [setRequestArgs]);
+      setRequestArgs(value);
+    },
+    [setRequestArgs],
+  );
 
   return (
     <Dialog>
-      <div
-        className={styles.editorWrapper}
-      >
+      <div className={styles.editorWrapper}>
         <Editor
           defaultLanguage="json"
           defaultValue={DEFAULT_VALUE}
@@ -62,14 +58,8 @@ const TestFunctionDialog: TestFunctionDialogType = ({
           theme="vs-dark"
         />
       </div>
-      {result ? (
-        <TestFunctionResult
-          result={result}
-        />
-      ) : null}
-      <div
-        className={styles.buttonWrapper}
-      >
+      {result ? <TestFunctionResult result={result} /> : null}
+      <div className={styles.buttonWrapper}>
         <IconActionButton
           type="button"
           onClick={handleRunTest}

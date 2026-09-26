@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { TEventTypeDto } from '@/services/watchtower/watchtower.type';
+import type React from 'react';
+import type { TEventTypeDto } from '@/services/watchtower/watchtower.type';
 import styles from './EventTypeDetail.module.scss';
 
 type EventTypeDetailProps = {
@@ -9,14 +9,19 @@ type EventTypeDetailProps = {
   serviceId: string;
 };
 
-const EventTypeDetail: React.FunctionComponent<EventTypeDetailProps> = ({ eventType, serviceId }) => {
+const EventTypeDetail: React.FunctionComponent<EventTypeDetailProps> = ({
+  eventType,
+  serviceId,
+}) => {
   return (
     <div className={styles.root}>
       <table className={styles.table}>
         <tbody>
           <tr>
             <th>ID</th>
-            <td><code>{eventType.id}</code></td>
+            <td>
+              <code>{eventType.id}</code>
+            </td>
           </tr>
           <tr>
             <th>Name</th>
@@ -33,17 +38,23 @@ const EventTypeDetail: React.FunctionComponent<EventTypeDetailProps> = ({ eventT
           {eventType.aggregationModeId && (
             <tr>
               <th>Aggregation Mode ID</th>
-              <td><code>{eventType.aggregationModeId}</code></td>
+              <td>
+                <code>{eventType.aggregationModeId}</code>
+              </td>
             </tr>
           )}
         </tbody>
       </table>
       <p className={styles.hint}>
-        Events mit diesem Typ werden mit dem Score Factor <code>{eventType.defaultScoreFactor}</code>
-        bewertet und bleiben für <code>{eventType.defaultTtlSeconds}</code> Sekunden aktiv.
+        Events mit diesem Typ werden mit dem Score Factor{' '}
+        <code>{eventType.defaultScoreFactor}</code>
+        bewertet und bleiben für <code>{eventType.defaultTtlSeconds}</code>{' '}
+        Sekunden aktiv.
         {eventType.aggregationModeId && (
           <>
-            {' Die Ereignisse werden mit Aggregation Mode <code>{eventType.aggregationModeId}</code> aggregiert.'}
+            {
+              ' Die Ereignisse werden mit Aggregation Mode <code>{eventType.aggregationModeId}</code> aggregiert.'
+            }
           </>
         )}
       </p>

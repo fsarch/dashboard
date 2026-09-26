@@ -1,16 +1,16 @@
-import { Metadata } from 'next';
-import { getConfiguration } from '@/utils/configuration.utils';
-import { getAccessToken } from '@/utils/getAccessToken';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
-import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
-import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
+import { getConfiguration } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const metadata: Metadata = {
   title: 'Development – Services',
@@ -21,7 +21,9 @@ export default async function DevelopmentServicesPage() {
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const canAccessDevelopment = await uacUtils.hasPermission('dev', accessToken);
@@ -41,10 +43,17 @@ export default async function DevelopmentServicesPage() {
             <AutoNavigationItem href="/development" icon="wrench">
               Access Token
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/services" isSelected icon="server">
+            <AutoNavigationItem
+              href="/development/services"
+              isSelected
+              icon="server"
+            >
               Services
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+            <AutoNavigationItem
+              href="/development/custom-resources"
+              icon="cubes"
+            >
               Custom Resources
             </AutoNavigationItem>
           </ul>
@@ -60,8 +69,7 @@ export default async function DevelopmentServicesPage() {
                 key={service.id}
                 href={`/development/services/${service.id}`}
               >
-                <strong>{service.name ?? service.id}</strong>
-                {' '}
+                <strong>{service.name ?? service.id}</strong>{' '}
                 <span style={{ opacity: 0.6, fontSize: '0.85em' }}>
                   [{service.type}] — {service.id}
                 </span>
@@ -78,4 +86,3 @@ export default async function DevelopmentServicesPage() {
     </div>
   );
 }
-

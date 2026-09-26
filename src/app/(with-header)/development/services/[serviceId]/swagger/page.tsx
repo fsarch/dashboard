@@ -1,15 +1,18 @@
-import { Metadata } from 'next';
-import { getAccessToken } from '@/utils/getAccessToken';
+import Color from 'color';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById, getThemeConfiguration } from '@/utils/configuration.utils';
+import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
-import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
-import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import {
+  getServiceConfigurationById,
+  getThemeConfiguration,
+} from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import SwaggerUIClient from './_components/SwaggerUIClient.component';
-import Color from 'color';
 
 export const metadata: Metadata = {
   title: 'Development – Swagger UI',
@@ -26,7 +29,9 @@ export default async function SwaggerPage({ params }: SwaggerPageProps) {
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const canAccessDevelopment = await uacUtils.hasPermission('dev', accessToken);
@@ -40,7 +45,9 @@ export default async function SwaggerPage({ params }: SwaggerPageProps) {
   }
 
   const theme = await getThemeConfiguration();
-  const themeMode: 'light' | 'dark' = Color(theme.backgroundColor.hex).isDark() ? 'dark' : 'light';
+  const themeMode: 'light' | 'dark' = Color(theme.backgroundColor.hex).isDark()
+    ? 'dark'
+    : 'light';
 
   return (
     <div className={styles.root}>
@@ -79,4 +86,3 @@ export default async function SwaggerPage({ params }: SwaggerPageProps) {
     </div>
   );
 }
-

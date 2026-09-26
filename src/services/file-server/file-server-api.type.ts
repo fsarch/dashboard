@@ -15,9 +15,21 @@ export type TPaginationResult<T> = {
   metadata: TPaginationMetadata;
 };
 
-export type TAssetType = 'file' | 'image' | 'video' | 'audio' | 'document' | 'archive' | 'other';
+export type TAssetType =
+  | 'file'
+  | 'image'
+  | 'video'
+  | 'audio'
+  | 'document'
+  | 'archive'
+  | 'other';
 
-export type TMetadataDataType = 'string' | 'number' | 'boolean' | 'date' | 'enum';
+export type TMetadataDataType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'date'
+  | 'enum';
 
 export type TPermissionResourceType = 'folder' | 'asset' | 'collection';
 

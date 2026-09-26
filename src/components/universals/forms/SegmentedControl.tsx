@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import clsx from 'clsx';
+import type React from 'react';
 import styles from './SegmentedControl.module.scss';
 
 export type SegmentedControlOption<T extends string> = {
@@ -42,7 +42,11 @@ function SegmentedControl<T extends string>({
   'aria-label': ariaLabel,
 }: SegmentedControlProps<T>) {
   return (
-    <div className={clsx(styles.root, className)} role="radiogroup" aria-label={ariaLabel}>
+    <div
+      className={clsx(styles.root, className)}
+      role="radiogroup"
+      aria-label={ariaLabel}
+    >
       {options.map((option) => {
         const isSelected = option.value === value;
 

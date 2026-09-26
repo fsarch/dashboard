@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import type React from 'react';
+import { useCallback } from 'react';
 
 import styles from './SearchableSelectItem.module.scss';
 
@@ -13,20 +14,15 @@ type SearchableSelectItemProps = {
   onClick: (value: SearchableSelectItemValueType) => void;
 };
 
-const SearchableSelectItem: React.FunctionComponent<SearchableSelectItemProps> = ({
-  value,
-  onClick,
-}) => {
+const SearchableSelectItem: React.FunctionComponent<
+  SearchableSelectItemProps
+> = ({ value, onClick }) => {
   const handleClick = useCallback(() => {
     onClick(value);
   }, [onClick, value]);
 
   return (
-    <div
-      onClick={handleClick}
-      className={styles.root}
-      tabIndex={0}
-    >
+    <div onClick={handleClick} className={styles.root} tabIndex={0}>
       {value.label}
     </div>
   );

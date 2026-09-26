@@ -1,16 +1,16 @@
-import { Metadata } from 'next';
-import { getAccessToken } from '@/utils/getAccessToken';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
-import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
-import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
 import { customResourcesUtils } from '@/utils/app/custom-resources';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const metadata: Metadata = {
   title: 'Development – Custom Resources',
@@ -20,7 +20,9 @@ export default async function GlobalCustomResourcesPage() {
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const canAccessDevelopment = await uacUtils.hasPermission('dev', accessToken);
@@ -28,7 +30,8 @@ export default async function GlobalCustomResourcesPage() {
     return notFound();
   }
 
-  const definitions = await customResourcesUtils.listAllCustomResourceDefinitions();
+  const definitions =
+    await customResourcesUtils.listAllCustomResourceDefinitions();
 
   return (
     <div className={styles.root}>
@@ -42,7 +45,11 @@ export default async function GlobalCustomResourcesPage() {
             <AutoNavigationItem href="/development/services" icon="server">
               Services
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" isSelected icon="cubes">
+            <AutoNavigationItem
+              href="/development/custom-resources"
+              isSelected
+              icon="cubes"
+            >
               Custom Resources
             </AutoNavigationItem>
           </ul>
@@ -58,8 +65,9 @@ export default async function GlobalCustomResourcesPage() {
                 key={`${appType}.${resource.id}`}
                 href={`/development/custom-resources/${appType}/${resource.id}`}
               >
-                <strong>{appType}.{resource.id}</strong>
-                {' '}
+                <strong>
+                  {appType}.{resource.id}
+                </strong>{' '}
                 <span style={{ opacity: 0.6, fontSize: '0.85em' }}>
                   {resource.name} — {resource.description}
                 </span>

@@ -1,10 +1,9 @@
-import React from 'react';
-import { TMessage } from "@/services/customer-communication/customer-communication.type";
-
+import clsx from 'clsx';
+import type React from 'react';
+import Content from '@/components/apps/customer-communication/message-list/message/content/content.component';
+import { EContentType } from '@/constants/apps/customer-communication/content-type.enum';
+import type { TMessage } from '@/services/customer-communication/customer-communication.type';
 import styles from './message.module.scss';
-import clsx from "clsx";
-import Content from "@/components/apps/customer-communication/message-list/message/content/content.component";
-import { EContentType } from "@/constants/apps/customer-communication/content-type.enum";
 
 type MessageProps = {
   message: TMessage;
@@ -43,7 +42,7 @@ const Message: React.FunctionComponent<MessageProps> = ({
           day: 'numeric',
           hour: 'numeric',
           minute: 'numeric',
-          second: 'numeric'
+          second: 'numeric',
         })}
       </div>
     </div>

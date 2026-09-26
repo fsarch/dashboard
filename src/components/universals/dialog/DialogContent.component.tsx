@@ -1,5 +1,6 @@
-import React, { PropsWithChildren } from 'react';
 import clsx from 'clsx';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import styles from './DialogContent.module.scss';
 
 type DialogContentProps = PropsWithChildren<{
@@ -16,7 +17,13 @@ const DialogContent: React.FunctionComponent<DialogContentProps> = ({
   className,
   enableBottomPadding = true,
 }) => (
-  <div className={clsx(styles.root, !enableBottomPadding && styles.noBottomPadding, className)}>
+  <div
+    className={clsx(
+      styles.root,
+      !enableBottomPadding && styles.noBottomPadding,
+      className,
+    )}
+  >
     {children}
   </div>
 );

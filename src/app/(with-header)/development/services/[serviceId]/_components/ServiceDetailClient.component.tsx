@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { TServiceConfiguration } from '@/utils/configuration.type';
-import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
+import type React from 'react';
+import { useState } from 'react';
+import Button from '@/components/universals/forms/Button';
+import type { TServiceConfiguration } from '@/utils/configuration.type';
 import styles from './ServiceDetailClient.module.scss';
 
 type ServiceDetailClientProps = {
@@ -11,10 +12,9 @@ type ServiceDetailClientProps = {
   supportsCustomResources: boolean;
 };
 
-const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = ({
-  service,
-  supportsCustomResources,
-}) => {
+const ServiceDetailClient: React.FunctionComponent<
+  ServiceDetailClientProps
+> = ({ service, supportsCustomResources }) => {
   const [showRaw, setShowRaw] = useState(false);
 
   const entries = Object.entries(service).filter(([key]) => key !== 'type');
@@ -25,11 +25,15 @@ const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = (
         <tbody>
           <tr>
             <th>Typ</th>
-            <td><code>{service.type}</code></td>
+            <td>
+              <code>{service.type}</code>
+            </td>
           </tr>
           <tr>
             <th>ID</th>
-            <td><code>{service.id}</code></td>
+            <td>
+              <code>{service.id}</code>
+            </td>
           </tr>
           {service.name ? (
             <tr>
@@ -42,23 +46,27 @@ const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = (
             .map(([key, value]) => (
               <tr key={key}>
                 <th>{key}</th>
-                <td><code>{String(value)}</code></td>
+                <td>
+                  <code>{String(value)}</code>
+                </td>
               </tr>
             ))}
         </tbody>
       </table>
 
       <div className={styles.actions}>
-        <Link href={`/development/services/${service.id}/swagger`} prefetch={false}>
-          <Button type="button">
-            Swagger UI öffnen
-          </Button>
+        <Link
+          href={`/development/services/${service.id}/swagger`}
+          prefetch={false}
+        >
+          <Button type="button">Swagger UI öffnen</Button>
         </Link>
         {supportsCustomResources && (
-          <Link href={`/development/services/${service.id}/custom-resources`} prefetch={false}>
-            <Button type="button">
-              Custom Resources anzeigen
-            </Button>
+          <Link
+            href={`/development/services/${service.id}/custom-resources`}
+            prefetch={false}
+          >
+            <Button type="button">Custom Resources anzeigen</Button>
           </Link>
         )}
         <Button type="button" onClick={() => setShowRaw(!showRaw)}>
@@ -67,13 +75,10 @@ const ServiceDetailClient: React.FunctionComponent<ServiceDetailClientProps> = (
       </div>
 
       {showRaw ? (
-        <pre className={styles.raw}>
-          {JSON.stringify(service, null, 2)}
-        </pre>
+        <pre className={styles.raw}>{JSON.stringify(service, null, 2)}</pre>
       ) : null}
     </div>
   );
 };
 
 export default ServiceDetailClient;
-

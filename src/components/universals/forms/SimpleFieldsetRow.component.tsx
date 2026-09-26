@@ -1,5 +1,6 @@
-import React, { useId } from 'react';
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
+import type React from 'react';
+import { useId } from 'react';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 
 type SimpleFieldsetRowProps = {
   label: React.ReactNode;
@@ -8,16 +9,12 @@ type SimpleFieldsetRowProps = {
 
 const SimpleFieldsetRow: React.FunctionComponent<SimpleFieldsetRowProps> = ({
   children,
-  label
+  label,
 }) => {
   const id = useId();
 
   return (
-    <FieldsetRow
-      label={(
-        <label htmlFor={id}>{label}</label>
-      )}
-    >
+    <FieldsetRow label={<label htmlFor={id}>{label}</label>}>
       {children(id)}
     </FieldsetRow>
   );

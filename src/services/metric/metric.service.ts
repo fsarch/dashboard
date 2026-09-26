@@ -1,36 +1,36 @@
-import { fetchService } from "@/utils/fetchService";
-import {
-  TMetricTypeDto,
-  TMetricDto,
-  TMetricStatusDto,
-  TMeasurementDto,
+import { fetchService } from '@/utils/fetchService';
+import type {
   TAggregateMeasurementsDto,
   TAggregateResult,
-  TPaginationResultDto,
-  TPaginationParams,
-  TMetricsQueryParams,
-  TMeasurementsQueryParams,
-  TCreateMetricTypeDto,
   TCreateMetricDto,
-} from "./metric.type";
+  TCreateMetricTypeDto,
+  TMeasurementDto,
+  TMeasurementsQueryParams,
+  TMetricDto,
+  TMetricStatusDto,
+  TMetricsQueryParams,
+  TMetricTypeDto,
+  TPaginationParams,
+  TPaginationResultDto,
+} from './metric.type';
 
 // Metric Types
 
 export const listMetricTypes = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TMetricTypeDto>> => {
   const response = await fetchService(
     `/metric-types?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 export const getMetricTypeById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TMetricTypeDto> => {
   const response = await fetchService(`/metric-types/${id}`, undefined, {
     serviceId,
@@ -40,7 +40,7 @@ export const getMetricTypeById = async (
 
 export const createMetricType = async (
   dto: TCreateMetricTypeDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TMetricTypeDto> => {
   const response = await fetchService(
     `/metric-types`,
@@ -49,7 +49,7 @@ export const createMetricType = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
@@ -58,21 +58,24 @@ export const createMetricType = async (
 
 export const listMetrics = async (
   params: TMetricsQueryParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TMetricDto>> => {
-  const metricTypeIdParam = params.metricTypeId ? `&metricTypeId=${params.metricTypeId}` : '';
-  const isDeletedParam = params.isDeleted !== undefined ? `&isDeleted=${params.isDeleted}` : '';
+  const metricTypeIdParam = params.metricTypeId
+    ? `&metricTypeId=${params.metricTypeId}`
+    : '';
+  const isDeletedParam =
+    params.isDeleted !== undefined ? `&isDeleted=${params.isDeleted}` : '';
   const response = await fetchService(
     `/metrics?page=${params.page}&pageSize=${params.pageSize}${metricTypeIdParam}${isDeletedParam}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 export const getMetricById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TMetricDto> => {
   const response = await fetchService(`/metrics/${id}`, undefined, {
     serviceId,
@@ -82,7 +85,7 @@ export const getMetricById = async (
 
 export const getMetricStatus = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TMetricStatusDto> => {
   const response = await fetchService(`/metrics/${id}/status`, undefined, {
     serviceId,
@@ -92,7 +95,7 @@ export const getMetricStatus = async (
 
 export const createMetric = async (
   dto: TCreateMetricDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TMetricDto> => {
   const response = await fetchService(
     `/metrics`,
@@ -101,34 +104,34 @@ export const createMetric = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
 
 export const deleteMetric = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
   await fetchService(
     `/metrics/${id}`,
     {
       method: 'DELETE',
     },
-    { serviceId }
+    { serviceId },
   );
 };
 
 export const restoreMetric = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
   await fetchService(
     `/metrics/${id}/_actions/restore`,
     {
       method: 'POST',
     },
-    { serviceId }
+    { serviceId },
   );
 };
 
@@ -137,12 +140,12 @@ export const restoreMetric = async (
 export const listMeasurements = async (
   metricId: string,
   params: TMeasurementsQueryParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TMeasurementDto>> => {
   const response = await fetchService(
     `/metrics/${metricId}/measurements?limit=${params.limit}&offset=${params.offset}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };
@@ -150,14 +153,14 @@ export const listMeasurements = async (
 export const getMeasurementById = async (
   metricId: string,
   measurementId: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TMeasurementDto> => {
   // Note: The OpenAPI spec doesn't have a GET /measurements/{id} endpoint
   // This would need to be implemented if needed
   const response = await fetchService(
     `/metrics/${metricId}/measurements`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   const result = await response.json();
   return result.data.find((m: TMeasurementDto) => m.metricId === measurementId);
@@ -168,7 +171,7 @@ export const getMeasurementById = async (
 export const aggregateMeasurements = async (
   metricId: string,
   dto: TAggregateMeasurementsDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TAggregateResult> => {
   const response = await fetchService(
     `/metrics/${metricId}/measurements/_actions/aggregate`,
@@ -177,7 +180,7 @@ export const aggregateMeasurements = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return response.json();
 };

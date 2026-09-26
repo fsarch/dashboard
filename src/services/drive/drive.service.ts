@@ -1,5 +1,8 @@
 import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { TFolderChildren, TFolderPathEntry } from '@/services/file-server/file-server-api.type';
+import type {
+  TFolderChildren,
+  TFolderPathEntry,
+} from '@/services/file-server/file-server-api.type';
 
 // Drive-specific composition over the shared file-server-api layer: a folder
 // view needs both the breadcrumb (only available per-folder via GET
@@ -21,7 +24,10 @@ const getFolderView = async (
     fileServerApiService.getFolderChildren(folderId),
   ]);
 
-  return { path: [...folder.path, { id: folder.id, name: folder.name }], ...children };
+  return {
+    path: [...folder.path, { id: folder.id, name: folder.name }],
+    ...children,
+  };
 };
 
 export const driveService = {

@@ -1,4 +1,5 @@
-import React, { MouseEventHandler } from 'react';
+import type React from 'react';
+import type { MouseEventHandler } from 'react';
 
 type DataTableMenuProps = {
   onApplyClick: MouseEventHandler<HTMLButtonElement>;
@@ -11,12 +12,8 @@ const DataTableMenu: React.FunctionComponent<DataTableMenuProps> = ({
 }) => {
   return (
     <div>
-      <button onClick={onApplyClick}>
-        Apply
-      </button>
-      <button onClick={onRevertClick}>
-        Revert
-      </button>
+      <button onClick={onApplyClick}>Apply</button>
+      <button onClick={onRevertClick}>Revert</button>
     </div>
   );
 };

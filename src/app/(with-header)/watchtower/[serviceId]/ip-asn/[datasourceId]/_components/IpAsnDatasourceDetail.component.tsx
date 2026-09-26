@@ -1,12 +1,16 @@
 'use client';
 
-import React from 'react';
-import { TIpAsnDatasourceDto, TPaginationResultDto, TIpAsnDataDto } from '@/services/watchtower/watchtower.type';
-import styles from './IpAsnDatasourceDetail.module.scss';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import { useRouter } from 'next/navigation';
+import type {
+  TIpAsnDataDto,
+  TIpAsnDatasourceDto,
+  TPaginationResultDto,
+} from '@/services/watchtower/watchtower.type';
+import styles from './IpAsnDatasourceDetail.module.scss';
 
 type IpAsnDatasourceDetailProps = {
   datasource: TIpAsnDatasourceDto;
@@ -17,23 +21,22 @@ type IpAsnDatasourceDetailProps = {
   pageSize: number;
 };
 
-const IpAsnDatasourceDetail: React.FunctionComponent<IpAsnDatasourceDetailProps> = ({
-  datasource,
-  ipAsnData,
-  serviceId,
-  datasourceId,
-  page,
-  pageSize,
-}) => {
+const IpAsnDatasourceDetail: React.FunctionComponent<
+  IpAsnDatasourceDetailProps
+> = ({ datasource, ipAsnData, serviceId, datasourceId, page, pageSize }) => {
   const { data, metadata } = ipAsnData;
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/watchtower/${serviceId}/ip-asn/${datasourceId}?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/ip-asn/${datasourceId}?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/watchtower/${serviceId}/ip-asn/${datasourceId}?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/ip-asn/${datasourceId}?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
@@ -43,7 +46,9 @@ const IpAsnDatasourceDetail: React.FunctionComponent<IpAsnDatasourceDetailProps>
           <tbody>
             <tr>
               <th>ID</th>
-              <td><code>{datasource.id}</code></td>
+              <td>
+                <code>{datasource.id}</code>
+              </td>
             </tr>
             <tr>
               <th>Name</th>
@@ -52,7 +57,9 @@ const IpAsnDatasourceDetail: React.FunctionComponent<IpAsnDatasourceDetailProps>
             {datasource.externalId && (
               <tr>
                 <th>Externe ID</th>
-                <td><code>{datasource.externalId}</code></td>
+                <td>
+                  <code>{datasource.externalId}</code>
+                </td>
               </tr>
             )}
           </tbody>
@@ -67,11 +74,20 @@ const IpAsnDatasourceDetail: React.FunctionComponent<IpAsnDatasourceDetailProps>
               {data.map((item) => (
                 <ListItem key={item.id}>
                   <div className={styles.dataItem}>
-                    <div><strong>Prefix:</strong> <code>{item.prefix}</code></div>
-                    <div><strong>ASN:</strong> {item.asn}</div>
-                    <div><strong>Organisation:</strong> {item.asnOrganization}</div>
+                    <div>
+                      <strong>Prefix:</strong> <code>{item.prefix}</code>
+                    </div>
+                    <div>
+                      <strong>ASN:</strong> {item.asn}
+                    </div>
+                    <div>
+                      <strong>Organisation:</strong> {item.asnOrganization}
+                    </div>
                     {item.externalId && (
-                      <div><strong>Externe ID:</strong> <code>{item.externalId}</code></div>
+                      <div>
+                        <strong>Externe ID:</strong>{' '}
+                        <code>{item.externalId}</code>
+                      </div>
                     )}
                   </div>
                 </ListItem>

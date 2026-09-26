@@ -1,28 +1,31 @@
-import { fetchService } from "@/utils/fetchService";
-import {
+import { fetchService } from '@/utils/fetchService';
+import { CalendarApiError } from './calendar.errors';
+import type {
   TCalendarDto,
   TCreateCalendarDto,
-  TEventDto,
   TCreateEventDto,
-  TEventSeriesDto,
-  TCreateEventSeriesDto,
-  TEventExceptionDto,
   TCreateEventExceptionDto,
+  TCreateEventSeriesDto,
+  TEventDto,
+  TEventExceptionDto,
+  TEventSeriesDto,
   TExpandedEventDto,
-  TPaginationResultDto,
   TPaginationParams,
-} from "./calendar.type";
-import { normalizePaginationResult, unwrapEnvelope } from "./calendar.utils";
-import { CalendarApiError } from "./calendar.errors";
+  TPaginationResultDto,
+} from './calendar.type';
+import { normalizePaginationResult, unwrapEnvelope } from './calendar.utils';
 
 // Reads a single-entity JSON response. Throws CalendarApiError instead of silently returning
 // the (non-DTO-shaped) error body on a non-2xx response - callers can catch this and e.g. call
 // notFound() for a 404, rather than rendering a form full of empty fields.
-async function readEntity<T>(response: Response, resourceName: string): Promise<T> {
+async function readEntity<T>(
+  response: Response,
+  resourceName: string,
+): Promise<T> {
   if (!response.ok) {
     throw new CalendarApiError(
       `${resourceName} request failed with ${response.status} ${response.statusText}`,
-      response.status
+      response.status,
     );
   }
 
@@ -33,17 +36,17 @@ async function readEntity<T>(response: Response, resourceName: string): Promise<
 
 export const listCalendars = async (
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TCalendarDto>> => {
   const response = await fetchService(
     `/calendars?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   if (!response.ok) {
     throw new CalendarApiError(
       `Calendars request failed with ${response.status} ${response.statusText}`,
-      response.status
+      response.status,
     );
   }
   return normalizePaginationResult<TCalendarDto>(await response.json(), params);
@@ -51,7 +54,7 @@ export const listCalendars = async (
 
 export const getCalendarById = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TCalendarDto> => {
   const response = await fetchService(`/calendars/${id}`, undefined, {
     serviceId,
@@ -61,7 +64,7 @@ export const getCalendarById = async (
 
 export const createCalendar = async (
   dto: TCreateCalendarDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TCalendarDto> => {
   const response = await fetchService(
     '/calendars',
@@ -70,7 +73,7 @@ export const createCalendar = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TCalendarDto>(response, 'Create calendar');
 };
@@ -78,7 +81,7 @@ export const createCalendar = async (
 export const updateCalendar = async (
   id: string,
   dto: Partial<TCreateCalendarDto>,
-  serviceId: string
+  serviceId: string,
 ): Promise<TCalendarDto> => {
   const response = await fetchService(
     `/calendars/${id}`,
@@ -87,14 +90,14 @@ export const updateCalendar = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TCalendarDto>(response, `Update calendar ${id}`);
 };
 
 export const deleteCalendar = async (
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
   await fetchService(`/calendars/${id}`, { method: 'DELETE' }, { serviceId });
 };
@@ -104,17 +107,17 @@ export const deleteCalendar = async (
 export const listEvents = async (
   calendarId: string,
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TEventDto>> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   if (!response.ok) {
     throw new CalendarApiError(
       `Events request failed with ${response.status} ${response.statusText}`,
-      response.status
+      response.status,
     );
   }
   return normalizePaginationResult<TEventDto>(await response.json(), params);
@@ -123,12 +126,12 @@ export const listEvents = async (
 export const getEventById = async (
   calendarId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${id}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventDto>(response, `Event ${id}`);
 };
@@ -136,7 +139,7 @@ export const getEventById = async (
 export const createEvent = async (
   calendarId: string,
   dto: TCreateEventDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events`,
@@ -145,7 +148,7 @@ export const createEvent = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventDto>(response, 'Create event');
 };
@@ -154,7 +157,7 @@ export const updateEvent = async (
   calendarId: string,
   id: string,
   dto: Partial<TCreateEventDto>,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${id}`,
@@ -163,7 +166,7 @@ export const updateEvent = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventDto>(response, `Update event ${id}`);
 };
@@ -171,12 +174,12 @@ export const updateEvent = async (
 export const deleteEvent = async (
   calendarId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
   await fetchService(
     `/calendars/${calendarId}/events/${id}`,
     { method: 'DELETE' },
-    { serviceId }
+    { serviceId },
   );
 };
 
@@ -186,17 +189,17 @@ export const listEventInstances = async (
   calendarId: string,
   from: string,
   to: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TExpandedEventDto[]> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/instances?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   if (!response.ok) {
     throw new CalendarApiError(
       `Event instances request failed with ${response.status} ${response.statusText}`,
-      response.status
+      response.status,
     );
   }
   const body = unwrapEnvelope<unknown>(await response.json());
@@ -209,32 +212,35 @@ export const listSeries = async (
   calendarId: string,
   eventId: string,
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TEventSeriesDto>> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   if (!response.ok) {
     throw new CalendarApiError(
       `Series request failed with ${response.status} ${response.statusText}`,
-      response.status
+      response.status,
     );
   }
-  return normalizePaginationResult<TEventSeriesDto>(await response.json(), params);
+  return normalizePaginationResult<TEventSeriesDto>(
+    await response.json(),
+    params,
+  );
 };
 
 export const getSeriesById = async (
   calendarId: string,
   eventId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventSeriesDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${id}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventSeriesDto>(response, `Series ${id}`);
 };
@@ -243,7 +249,7 @@ export const createSeries = async (
   calendarId: string,
   eventId: string,
   dto: TCreateEventSeriesDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventSeriesDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series`,
@@ -252,7 +258,7 @@ export const createSeries = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventSeriesDto>(response, 'Create series');
 };
@@ -262,7 +268,7 @@ export const updateSeries = async (
   eventId: string,
   id: string,
   dto: Partial<TCreateEventSeriesDto>,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventSeriesDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${id}`,
@@ -271,7 +277,7 @@ export const updateSeries = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventSeriesDto>(response, `Update series ${id}`);
 };
@@ -280,12 +286,12 @@ export const deleteSeries = async (
   calendarId: string,
   eventId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
   await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${id}`,
     { method: 'DELETE' },
-    { serviceId }
+    { serviceId },
   );
 };
 
@@ -296,20 +302,23 @@ export const listExceptions = async (
   eventId: string,
   seriesId: string,
   params: TPaginationParams,
-  serviceId: string
+  serviceId: string,
 ): Promise<TPaginationResultDto<TEventExceptionDto>> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${seriesId}/exceptions?page=${params.page}&pageSize=${params.pageSize}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   if (!response.ok) {
     throw new CalendarApiError(
       `Exceptions request failed with ${response.status} ${response.statusText}`,
-      response.status
+      response.status,
     );
   }
-  return normalizePaginationResult<TEventExceptionDto>(await response.json(), params);
+  return normalizePaginationResult<TEventExceptionDto>(
+    await response.json(),
+    params,
+  );
 };
 
 export const getExceptionById = async (
@@ -317,12 +326,12 @@ export const getExceptionById = async (
   eventId: string,
   seriesId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventExceptionDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${seriesId}/exceptions/${id}`,
     undefined,
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventExceptionDto>(response, `Exception ${id}`);
 };
@@ -332,7 +341,7 @@ export const createException = async (
   eventId: string,
   seriesId: string,
   dto: TCreateEventExceptionDto,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventExceptionDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${seriesId}/exceptions`,
@@ -341,7 +350,7 @@ export const createException = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventExceptionDto>(response, 'Create exception');
 };
@@ -352,7 +361,7 @@ export const updateException = async (
   seriesId: string,
   id: string,
   dto: Partial<TCreateEventExceptionDto>,
-  serviceId: string
+  serviceId: string,
 ): Promise<TEventExceptionDto> => {
   const response = await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${seriesId}/exceptions/${id}`,
@@ -361,7 +370,7 @@ export const updateException = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     },
-    { serviceId }
+    { serviceId },
   );
   return readEntity<TEventExceptionDto>(response, `Update exception ${id}`);
 };
@@ -371,12 +380,12 @@ export const deleteException = async (
   eventId: string,
   seriesId: string,
   id: string,
-  serviceId: string
+  serviceId: string,
 ): Promise<void> => {
   await fetchService(
     `/calendars/${calendarId}/events/${eventId}/series/${seriesId}/exceptions/${id}`,
     { method: 'DELETE' },
-    { serviceId }
+    { serviceId },
   );
 };
 

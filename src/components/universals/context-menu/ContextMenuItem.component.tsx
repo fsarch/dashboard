@@ -1,7 +1,8 @@
-import React, { PropsWithChildren } from 'react';
 import clsx from 'clsx';
-import Icon from "@/components/universals/icon/Icon.component";
-import { TIcon } from "@/components/universals/icon/Icon.type";
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './ContextMenuItem.module.scss';
 
 type ContextMenuItemProps = PropsWithChildren<{

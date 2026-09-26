@@ -1,7 +1,7 @@
-import React from 'react';
-import { TSectionView } from "@/components/apps/custom-app/custom-app.type";
-import type { TRenderViewsFunc } from "@/components/apps/custom-app/views/View.component";
-import Section from "@/components/universals/section/Section";
+import type React from 'react';
+import type { TSectionView } from '@/components/apps/custom-app/custom-app.type';
+import type { TRenderViewsFunc } from '@/components/apps/custom-app/views/View.component';
+import Section from '@/components/universals/section/Section';
 
 type SectionViewProps = {
   view: TSectionView;
@@ -17,9 +17,7 @@ export const SectionView: React.FunctionComponent<SectionViewProps> = async ({
   context,
 }) => {
   return (
-    <Section
-      name={view.label}
-    >
+    <Section name={view.label}>
       {await renderViews(view.views, { dataSource, context })}
     </Section>
   );

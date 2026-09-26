@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getAccessToken } from '@/utils/getAccessToken';
+import { type NextRequest, NextResponse } from 'next/server';
 import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
 import { uacUtils } from '@/utils/uac.utils';
 
 const BLOCKED_REQUEST_HEADERS = new Set([
@@ -21,7 +21,9 @@ function resolveTargetUrl(targetPath: string, serviceBaseUrl: string): URL {
     throw new Error('target must be an absolute path');
   }
 
-  const normalizedBase = serviceBaseUrl.endsWith('/') ? serviceBaseUrl : `${serviceBaseUrl}/`;
+  const normalizedBase = serviceBaseUrl.endsWith('/')
+    ? serviceBaseUrl
+    : `${serviceBaseUrl}/`;
   return new URL(targetPath, normalizedBase);
 }
 
@@ -48,7 +50,10 @@ async function proxyRequest(
 
   const targetPath = req.nextUrl.searchParams.get('target');
   if (!targetPath) {
-    return NextResponse.json({ error: 'Missing target query parameter' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Missing target query parameter' },
+      { status: 400 },
+    );
   }
 
   let targetUrl: URL;
@@ -92,32 +97,51 @@ async function proxyRequest(
   });
 }
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
 
-export async function OPTIONS(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function OPTIONS(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
 
-export async function HEAD(req: NextRequest, { params }: { params: Promise<{ serviceId: string }> }) {
+export async function HEAD(
+  req: NextRequest,
+  { params }: { params: Promise<{ serviceId: string }> },
+) {
   return proxyRequest(req, params);
 }
-
-

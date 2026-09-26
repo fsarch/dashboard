@@ -1,29 +1,34 @@
-import { getServiceConfigurationById } from "@/utils/configuration.utils";
-import { customAppUtils } from "@/components/apps/custom-app/custom-app.utils";
-import { PageNotFoundError } from "next/dist/shared/lib/utils";
-import CustomAppViewComponent from "@/components/apps/custom-app/CustomAppView.component";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import { CustomAppDefaultPage } from "@/components/universals/page/CustomAppDefaultPage.component";
+import { PageNotFoundError } from 'next/dist/shared/lib/utils';
+import CustomAppViewComponent from '@/components/apps/custom-app/CustomAppView.component';
+import { customAppUtils } from '@/components/apps/custom-app/custom-app.utils';
+import { CustomAppDefaultPage } from '@/components/universals/page/CustomAppDefaultPage.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
 
-export default async function Home({ params, searchParams }: Readonly<{ params: Promise<{ serviceId: string; view: string }>; searchParams: Promise<Record<string, string>> }>) {
+export default async function Home({
+  params,
+  searchParams,
+}: Readonly<{
+  params: Promise<{ serviceId: string; view: string }>;
+  searchParams: Promise<Record<string, string>>;
+}>) {
   const customApp = await getServiceConfigurationById((await params).serviceId);
 
-  const customAppConfig = await customAppUtils.getCustomAppConfig((await params).serviceId);
+  const customAppConfig = await customAppUtils.getCustomAppConfig(
+    (await params).serviceId,
+  );
   if (!customAppConfig || !customApp || customApp.type !== 'custom-app') {
     throw new PageNotFoundError('');
   }
 
   const viewString = (await params).view;
-  const view = customAppConfig.views.find(v => v.id === viewString);
+  const view = customAppConfig.views.find((v) => v.id === viewString);
   if (!view) {
     throw new PageNotFoundError('view not found');
   }
 
   return (
-    <CustomAppDefaultPage
-      config={customAppConfig}
-      view={viewString}
-    >
+    <CustomAppDefaultPage config={customAppConfig} view={viewString}>
       <CustomAppViewComponent
         view={view}
         app={customApp}

@@ -1,14 +1,17 @@
 'use client';
 
-import React from 'react';
-import { TScopeDto } from '@/services/watchtower/watchtower.type';
+import type React from 'react';
+import type { TScopeDto } from '@/services/watchtower/watchtower.type';
 
 type ScopeDetailProps = {
   scope: TScopeDto;
   serviceId: string;
 };
 
-const ScopeDetail: React.FunctionComponent<ScopeDetailProps> = ({ scope, serviceId }) => {
+const ScopeDetail: React.FunctionComponent<ScopeDetailProps> = ({
+  scope,
+  serviceId,
+}) => {
   return (
     <div>
       <table>

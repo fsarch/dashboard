@@ -1,29 +1,27 @@
 'use client';
 
-import React, { useCallback, useRef, KeyboardEvent } from 'react';
-import MonacoEditor, { Monaco } from '@monaco-editor/react';
+import loader from '@monaco-editor/loader';
+import MonacoEditor, { type Monaco } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
-import dynamic from "next/dynamic";
-import loader from '@monaco-editor/loader';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { type KeyboardEvent, useCallback, useRef } from 'react';
+import { colors } from '@/app/_styles/colors';
+import TestFunctionDialog from '@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.dialog';
 import {
   publishCode,
-  saveCode
-} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/Editor.server-action";
-import { useRouter } from "next/navigation";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
-import TestFunctionDialog
-  from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/dialog/TestFunction.dialog";
+  saveCode,
+} from '@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/Editor.server-action';
+import { API_EXTRA_LIBS } from '@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/editor-types/definitions.generated';
+import Badge from '@/components/universals/badge/badge.component';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import IconActionButton from '@/components/universals/forms/button/IconActionButton';
+import IconButton from '@/components/universals/forms/button/IconButton';
+import InlineLoadingWrapper from '@/components/universals/forms/button/InlineLoadingWrapper';
+import { useLoadingState } from '@/components/universals/forms/button/useLoadingState';
 import styles from './Editor.module.scss';
-import IconButton from "@/components/universals/forms/button/IconButton";
-import IconActionButton from "@/components/universals/forms/button/IconActionButton";
-import Badge from "@/components/universals/badge/badge.component";
-import { colors } from "@/app/_styles/colors";
-import { useLoadingState } from "@/components/universals/forms/button/useLoadingState";
-import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
-import {
-  API_EXTRA_LIBS,
-} from "@/app/(with-header)/function/[serviceId]/function/[functionId]/_components/editor-types/definitions.generated";
 
 loader.config({
   monaco,
@@ -55,7 +53,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
     valueRef.current = value;
   }, []);
 
-  const handleSaveIntern = useCallback(async () =>  {
+  const handleSaveIntern = useCallback(async () => {
     const code = valueRef.current;
 
     if (code === null) {
@@ -68,7 +66,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
 
   const router = useRouter();
 
-  const handlePublish = useCallback(async () =>  {
+  const handlePublish = useCallback(async () => {
     const code = valueRef.current;
     if (code !== null) {
       await saveCode(functionId, code);
@@ -89,34 +87,37 @@ const Editor: React.FunctionComponent<EditorProps> = ({
     openDialog(TestFunctionDialog, {
       versionId,
       functionId,
-    })
+    });
   }, [functionId, versionId, openDialog]);
 
-  const handleMount = useCallback((editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
-    editor.onDidFocusEditorText(() => {
-      monaco.languages.typescript.javascriptDefaults.setExtraLibs([
-        {
-          content: `
+  const handleMount = useCallback(
+    (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+      editor.onDidFocusEditorText(() => {
+        monaco.languages.typescript.javascriptDefaults.setExtraLibs([
+          {
+            content: `
             declare interface FsArchApi {
             }
         
             declare var fsarch: FsArchApi;
           `,
-          filePath: 'api.d.ts',
-        },
-        ...API_EXTRA_LIBS,
-        {
-          // content: `
-          // declare interface FsArchApi {
-          //    pdf: FsArchApiCatalog.${API_SERVICES['pdf-server']};
-          // }
-          // `,
-          content: apiType,
-          filePath: 'custom-api.d.ts',
-        },
-      ]);
-    });
-  }, []);
+            filePath: 'api.d.ts',
+          },
+          ...API_EXTRA_LIBS,
+          {
+            // content: `
+            // declare interface FsArchApi {
+            //    pdf: FsArchApiCatalog.${API_SERVICES['pdf-server']};
+            // }
+            // `,
+            content: apiType,
+            filePath: 'custom-api.d.ts',
+          },
+        ]);
+      });
+    },
+    [],
+  );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (readOnly) {
@@ -131,19 +132,12 @@ const Editor: React.FunctionComponent<EditorProps> = ({
       event.preventDefault();
       handleSave();
     }
-  }
+  };
 
   return (
-    <div
-      className={styles.root}
-      onKeyDown={handleKeyDown}
-    >
-      <div
-        className={styles.toolbar}
-      >
-        <div
-          className={styles.toolbarGroup}
-        >
+    <div className={styles.root} onKeyDown={handleKeyDown}>
+      <div className={styles.toolbar}>
+        <div className={styles.toolbarGroup}>
           {readOnly ? (
             <Badge color={colors.lightBlue}>Nur Ansicht</Badge>
           ) : (
@@ -169,9 +163,7 @@ const Editor: React.FunctionComponent<EditorProps> = ({
         </div>
         <div className={styles.space} />
         {!readOnly && (
-          <div
-            className={styles.toolbarGroup}
-          >
+          <div className={styles.toolbarGroup}>
             <IconActionButton
               type="button"
               onClick={handlePublish}

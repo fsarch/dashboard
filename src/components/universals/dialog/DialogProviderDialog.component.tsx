@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { TReducerDialog } from "@/components/universals/dialog/DialogProvider.reducer";
-import { TDialogResult } from "@/components/universals/dialog/dialog.type";
-import { DialogOverlayColorContext } from "@/components/universals/dialog/DialogOverlayColor.context";
+import type React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { DialogOverlayColorContext } from '@/components/universals/dialog/DialogOverlayColor.context';
+import type { TReducerDialog } from '@/components/universals/dialog/DialogProvider.reducer';
+import type { TDialogResult } from '@/components/universals/dialog/dialog.type';
 import styles from './DialogProviderDialog.module.scss';
 
 type DialogProviderDialogProps = {
@@ -9,16 +10,15 @@ type DialogProviderDialogProps = {
   onResult: (id: string, result: TDialogResult<unknown>) => void;
 };
 
-const DialogProviderDialog: React.FunctionComponent<DialogProviderDialogProps> = ({
-  value,
-  onResult,
-}) => {
-  const handleResult = useCallback((result: TDialogResult<unknown>) => {
-    onResult(
-      value.id,
-      result,
-    );
-  }, [value?.id, onResult]);
+const DialogProviderDialog: React.FunctionComponent<
+  DialogProviderDialogProps
+> = ({ value, onResult }) => {
+  const handleResult = useCallback(
+    (result: TDialogResult<unknown>) => {
+      onResult(value.id, result);
+    },
+    [value?.id, onResult],
+  );
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -41,10 +41,7 @@ const DialogProviderDialog: React.FunctionComponent<DialogProviderDialogProps> =
   return (
     <dialog ref={dialogRef} className={styles.root}>
       <DialogOverlayColorContext value={value.color}>
-        <Component
-          value={value.value}
-          onResult={handleResult}
-        />
+        <Component value={value.value} onResult={handleResult} />
       </DialogOverlayColorContext>
     </dialog>
   );

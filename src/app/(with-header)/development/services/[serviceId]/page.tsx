@@ -1,15 +1,15 @@
-import { Metadata } from 'next';
-import { getAccessToken } from '@/utils/getAccessToken';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { APPS } from '@/constants/apps';
+import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
-import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
-import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
+import { APPS } from '@/constants/apps';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import ServiceDetailClient from './_components/ServiceDetailClient.component';
 
 export const metadata: Metadata = {
@@ -20,14 +20,18 @@ type ServiceDetailPageProps = {
   params: Promise<{ serviceId: string }>;
 };
 
-export default async function ServiceDetailPage({ params }: ServiceDetailPageProps) {
+export default async function ServiceDetailPage({
+  params,
+}: ServiceDetailPageProps) {
   const { serviceId } = await params;
 
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const canAccessDevelopment = await uacUtils.hasPermission('dev', accessToken);
@@ -40,7 +44,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
     return notFound();
   }
 
-  const supportsCustomResources = APPS[service.type]?.supportsCustomResources ?? false;
+  const supportsCustomResources =
+    APPS[service.type]?.supportsCustomResources ?? false;
 
   return (
     <div className={styles.root}>
@@ -51,10 +56,17 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
             <AutoNavigationItem href="/development" icon="wrench">
               Access Token
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/services" isSelected icon="server">
+            <AutoNavigationItem
+              href="/development/services"
+              isSelected
+              icon="server"
+            >
               Services
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+            <AutoNavigationItem
+              href="/development/custom-resources"
+              icon="cubes"
+            >
               Custom Resources
             </AutoNavigationItem>
           </ul>
@@ -64,10 +76,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       </nav>
       <main className={styles.main}>
         <Section name={`Service: ${service.name ?? service.id}`}>
-          <ServiceDetailClient service={service} supportsCustomResources={supportsCustomResources} />
+          <ServiceDetailClient
+            service={service}
+            supportsCustomResources={supportsCustomResources}
+          />
         </Section>
       </main>
     </div>
   );
 }
-

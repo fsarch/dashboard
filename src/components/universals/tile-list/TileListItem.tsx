@@ -1,9 +1,8 @@
-import React from 'react';
-
+import clsx from 'clsx';
+import type React from 'react';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './tile-list-item.module.scss';
-import Icon from "@/components/universals/icon/Icon.component";
-import { TIcon } from "@/components/universals/icon/Icon.type";
-import clsx from "clsx";
 
 type TileListItemProps = {
   name: string;
@@ -24,17 +23,15 @@ const TileListItem: React.FunctionComponent<TileListItemProps> = ({
     <div
       className={clsx(styles.root, transparent && styles.rootTransparent)}
       style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+        backgroundImage: backgroundImage
+          ? `url(${backgroundImage})`
+          : undefined,
       }}
       onContextMenu={onContextMenu}
     >
       {icon ? (
-        <div
-          className={styles.icon}
-        >
-          <Icon
-            icon={icon}
-          />
+        <div className={styles.icon}>
+          <Icon icon={icon} />
         </div>
       ) : null}
       <div className={styles.name}>{name}</div>

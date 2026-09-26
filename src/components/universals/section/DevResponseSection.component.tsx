@@ -12,8 +12,13 @@ const DevResponseSection: React.FunctionComponent<DevResponseSectionProps> = ({
   title,
   response,
 }) => {
-  const [copyState, setCopyState] = React.useState<'idle' | 'success' | 'error'>('idle');
-  const responseAsJson = React.useMemo(() => JSON.stringify(response, null, 2), [response]);
+  const [copyState, setCopyState] = React.useState<
+    'idle' | 'success' | 'error'
+  >('idle');
+  const responseAsJson = React.useMemo(
+    () => JSON.stringify(response, null, 2),
+    [response],
+  );
 
   async function handleCopy() {
     try {

@@ -1,22 +1,19 @@
-import React, { PropsWithChildren } from 'react';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import styles from './FieldsetRow.module.scss';
 
 type FieldsetRowProps = PropsWithChildren<{
-  label: React.ReactNode
+  label: React.ReactNode;
 }>;
 
 const FieldsetRow: React.FunctionComponent<FieldsetRowProps> = ({
   children,
-  label
+  label,
 }) => {
   return (
     <div className={styles.root}>
-      <div className={styles.label}>
-        {label}
-      </div>
-      <div className={styles.children}>
-        {children}
-      </div>
+      <div className={styles.label}>{label}</div>
+      <div className={styles.children}>{children}</div>
     </div>
   );
 };

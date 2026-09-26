@@ -1,12 +1,9 @@
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren } from 'react';
+import ShortCodeScanFloatingButtonListener from '@/components/apps/material-tracing/floating-button/ShortCodeScanFloatingButtonListener.component';
 import styles from './layout.module.scss';
-import ShortCodeScanFloatingButtonListener
-  from "@/components/apps/material-tracing/floating-button/ShortCodeScanFloatingButtonListener.component";
 
 export default async function RootLayout(props: PropsWithChildren) {
-  const {
-    children,
-  } = props;
+  const { children } = props;
 
   return (
     <div className={styles.root}>

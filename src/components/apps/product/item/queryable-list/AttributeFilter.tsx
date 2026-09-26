@@ -1,7 +1,7 @@
-import React from 'react';
-import { attributeService } from "@/services/product/attribute.service";
-import { AttributeType } from "@/services/product/attribute.const";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
+import type React from 'react';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import { AttributeType } from '@/services/product/attribute.const';
+import { attributeService } from '@/services/product/attribute.service';
 
 type AttributeFilterProps = {
   catalogId: string;
@@ -19,14 +19,29 @@ const AttributeFilter: React.FunctionComponent<AttributeFilterProps> = async ({
       {attributes.map((attribute) => {
         if (attribute.attributeTypeId === AttributeType.BOOLEAN) {
           return (
-            <FieldsetRow label={(<label><input type="checkbox" name={`attribute.enable`} value={attribute.id} defaultChecked={!!activeAttributeFilters[attribute.id]}/>&nbsp;{attribute.name}</label>)} key={attribute.id}>
+            <FieldsetRow
+              label={
+                <label>
+                  <input
+                    type="checkbox"
+                    name={`attribute.enable`}
+                    value={attribute.id}
+                    defaultChecked={!!activeAttributeFilters[attribute.id]}
+                  />
+                  &nbsp;{attribute.name}
+                </label>
+              }
+              key={attribute.id}
+            >
               <div>
                 <label>
                   <input
                     type="radio"
                     name={`attribute.filter.${attribute.id}`}
                     value="true"
-                    defaultChecked={activeAttributeFilters[attribute.id] === 'true'}
+                    defaultChecked={
+                      activeAttributeFilters[attribute.id] === 'true'
+                    }
                   />
                   TRUE
                 </label>
@@ -37,7 +52,9 @@ const AttributeFilter: React.FunctionComponent<AttributeFilterProps> = async ({
                     type="radio"
                     name={`attribute.filter.${attribute.id}`}
                     value="false"
-                    defaultChecked={activeAttributeFilters[attribute.id] === 'false'}
+                    defaultChecked={
+                      activeAttributeFilters[attribute.id] === 'false'
+                    }
                   />
                   FALSE
                 </label>

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useCurrentServiceId } from "@/utils/hooks/useCurrentServiceId.hook";
+import clsx from 'clsx';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useCurrentServiceId } from '@/utils/hooks/useCurrentServiceId.hook';
 import styles from './markdown-content.module.scss';
-import clsx from "clsx";
 
 type MarkdownContentProps = {
   className?: string;
@@ -31,7 +32,7 @@ const MarkdownContent: React.FunctionComponent<MarkdownContentProps> = ({
         return;
       }
 
-      console.log('update height', event.data.payload)
+      console.log('update height', event.data.payload);
       setHeight(event.data.payload);
     };
     window.addEventListener('message', handler);

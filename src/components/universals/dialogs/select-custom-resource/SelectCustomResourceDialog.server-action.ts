@@ -1,11 +1,18 @@
 'use server';
 
-import { customResourceLinksUtils, customResourcesUtils, TCustomResourceDefinition } from '@/utils/app/custom-resources';
-import { EServiceType } from '@/utils/configuration.type';
+import {
+  customResourceLinksUtils,
+  customResourcesUtils,
+  type TCustomResourceDefinition,
+} from '@/utils/app/custom-resources';
+import type { EServiceType } from '@/utils/configuration.type';
 
-export const listCustomResourceCapableServicesAction = async (appType?: EServiceType) => customResourcesUtils.listCapableServices(appType);
+export const listCustomResourceCapableServicesAction = async (
+  appType?: EServiceType,
+) => customResourcesUtils.listCapableServices(appType);
 
-export const listCustomResourceTypesAction = async (serviceId: string) => customResourcesUtils.listCustomResources(serviceId);
+export const listCustomResourceTypesAction = async (serviceId: string) =>
+  customResourcesUtils.listCustomResources(serviceId);
 
 export const listCustomResourceInstancesAction = async (
   serviceId: string,
@@ -16,7 +23,12 @@ export const listCustomResourceInstancesAction = async (
   if (!resource.apiRoutes.list) {
     throw new Error('this custom resource type has no list route');
   }
-  return customResourcesUtils.list(serviceId, resource.apiRoutes.list, options, refValues);
+  return customResourcesUtils.list(
+    serviceId,
+    resource.apiRoutes.list,
+    options,
+    refValues,
+  );
 };
 
 export const getCustomResourceInstanceAction = async (
@@ -28,7 +40,12 @@ export const getCustomResourceInstanceAction = async (
   if (!resource.apiRoutes.get) {
     throw new Error('this custom resource type has no get route');
   }
-  return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId, refValues);
+  return customResourcesUtils.get(
+    serviceId,
+    resource.apiRoutes.get,
+    instanceId,
+    refValues,
+  );
 };
 
 // Wie getCustomResourceInstanceAction, aber für Aufrufer, die nur die
@@ -41,14 +58,22 @@ export const getCustomResourceInstanceByIdAction = async (
   instanceId: string,
   refValues: Record<string, string> = {},
 ) => {
-  const resource = await customResourcesUtils.getCustomResourceById(serviceId, resourceId);
+  const resource = await customResourcesUtils.getCustomResourceById(
+    serviceId,
+    resourceId,
+  );
   if (!resource) {
     throw new Error(`custom resource "${resourceId}" not found`);
   }
   if (!resource.apiRoutes.get) {
     throw new Error('this custom resource type has no get route');
   }
-  return customResourcesUtils.get(serviceId, resource.apiRoutes.get, instanceId, refValues);
+  return customResourcesUtils.get(
+    serviceId,
+    resource.apiRoutes.get,
+    instanceId,
+    refValues,
+  );
 };
 
 // Für den "Rücksprung"-Chevron (CustomResourcePickerInput): liefert den Link
@@ -61,7 +86,13 @@ export const getCustomResourceLinkHrefAction = async (
   resourceId: string,
   instance: unknown,
   refValues: Record<string, string> = {},
-) => customResourceLinksUtils.buildHref(serviceId, resourceId, instance, refValues);
+) =>
+  customResourceLinksUtils.buildHref(
+    serviceId,
+    resourceId,
+    instance,
+    refValues,
+  );
 
 export const searchCustomResourceInstancesAction = async (
   serviceId: string,
@@ -73,5 +104,11 @@ export const searchCustomResourceInstancesAction = async (
   if (!resource.apiRoutes.search) {
     throw new Error('this custom resource type has no search route');
   }
-  return customResourcesUtils.search(serviceId, resource.apiRoutes.search, query, options, refValues);
+  return customResourcesUtils.search(
+    serviceId,
+    resource.apiRoutes.search,
+    query,
+    options,
+    refValues,
+  );
 };

@@ -1,18 +1,19 @@
-import React from 'react';
-import { TListView, TListViewItem } from "@/components/apps/custom-app/custom-app.type";
-import List from "@/components/universals/list/List";
-import CustomAppListViewItem from "@/components/apps/custom-app/views/list/CustomAppListViewItem.component";
+import type React from 'react';
+import type {
+  TListView,
+  TListViewItem,
+} from '@/components/apps/custom-app/custom-app.type';
+import CustomAppListViewItem from '@/components/apps/custom-app/views/list/CustomAppListViewItem.component';
+import List from '@/components/universals/list/List';
 
 type CustomAppListViewProps = {
   view: TListView;
   dataSource: Record<string, unknown>;
 };
 
-const CustomAppListView: React.FunctionComponent<CustomAppListViewProps> = async ({
-  dataSource,
-  view,
-}) => {
-
+const CustomAppListView: React.FunctionComponent<
+  CustomAppListViewProps
+> = async ({ dataSource, view }) => {
   if (view.data.$type === 'datasource') {
     view.data = {
       $type: 'constant',
@@ -23,11 +24,7 @@ const CustomAppListView: React.FunctionComponent<CustomAppListViewProps> = async
   return (
     <List>
       {(view.data.value as Array<TListViewItem>).map((item) => (
-        <CustomAppListViewItem
-          key={item.id}
-          item={item}
-          click={view.click}
-        />
+        <CustomAppListViewItem key={item.id} item={item} click={view.click} />
       ))}
     </List>
   );

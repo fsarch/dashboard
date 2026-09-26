@@ -1,12 +1,12 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import ListItem from '@/components/universals/list/ListItem';
 import Link from 'next/link';
-import { fetchService } from '@/utils/fetchService';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { colors } from '@/app/_styles/colors';
 import Badge from '@/components/universals/badge/badge.component';
+import List from '@/components/universals/list/List';
+import ListItem from '@/components/universals/list/ListItem';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { fetchService } from '@/utils/fetchService';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import CreateProjectVersionForm from '../../_components/CreateProjectVersionForm';
 import styles from './page.module.scss';
 
@@ -27,12 +27,18 @@ const getProject = async (projectId: string): Promise<ProjectDto> => {
   return response.json();
 };
 
-const listProjectVersions = async (projectId: string): Promise<ProjectVersionDto[]> => {
+const listProjectVersions = async (
+  projectId: string,
+): Promise<ProjectVersionDto[]> => {
   const response = await fetchService(`/v1/projects/${projectId}/versions`);
   return response.json();
 };
 
-export default async function ProjectVersionListPage({ params }: { params: Promise<{ serviceId: string; projectId: string }> }) {
+export default async function ProjectVersionListPage({
+  params,
+}: {
+  params: Promise<{ serviceId: string; projectId: string }>;
+}) {
   const { serviceId, projectId } = await params;
   const [project, versions] = await Promise.all([
     getProject(projectId),
@@ -44,19 +50,32 @@ export default async function ProjectVersionListPage({ params }: { params: Promi
       <Section name="Versionen">
         <List>
           {versions.map(async (version) => (
-            <Link key={version.id} href={await getServiceLocalUrl(`/project/${projectId}/version/${version.id}`)}>
+            <Link
+              key={version.id}
+              href={
+                await getServiceLocalUrl(
+                  `/project/${projectId}/version/${version.id}`,
+                )
+              }
+            >
               <ListItem>
                 <div className={styles.versionHeaderRow}>
-                  <span>{version.name || version.id} - {version.creationTime}</span>
+                  <span>
+                    {version.name || version.id} - {version.creationTime}
+                  </span>
                   {version.id === project.currentVersionId && (
                     <Badge color={colors.lightGreen}>aktiv</Badge>
                   )}
                 </div>
                 {version.description && (
-                  <div className={styles.versionDescription}>{version.description}</div>
+                  <div className={styles.versionDescription}>
+                    {version.description}
+                  </div>
                 )}
                 {version.externalId && (
-                  <div className={styles.versionExternalId}>{version.externalId}</div>
+                  <div className={styles.versionExternalId}>
+                    {version.externalId}
+                  </div>
                 )}
               </ListItem>
             </Link>

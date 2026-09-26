@@ -1,7 +1,7 @@
-import { fetchService } from "@/utils/fetchService";
-import { TMaterial } from "@/services/material-tracing/material.type";
-import { TShortCode } from "@/services/material-tracing/short-code.type";
-import { TPaginationResult } from "@/services/material-tracing/pagination.type";
+import type { TMaterial } from '@/services/material-tracing/material.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import type { TShortCode } from '@/services/material-tracing/short-code.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listMaterials = async (options?: {
   skip?: number;
@@ -31,8 +31,12 @@ const listMaterials = async (options?: {
   return await materialsResponse.json();
 };
 
-const listShortCodes = async (materialId: string): Promise<Array<TShortCode>> => {
-  const materialShortCodesResponse = await fetchService(`/v1/materials/${materialId}/short-codes`);
+const listShortCodes = async (
+  materialId: string,
+): Promise<Array<TShortCode>> => {
+  const materialShortCodesResponse = await fetchService(
+    `/v1/materials/${materialId}/short-codes`,
+  );
   const materialShortCodes = await materialShortCodesResponse.json();
 
   return materialShortCodes;
@@ -45,8 +49,12 @@ const getMaterial = async (materialId: string): Promise<TMaterial> => {
   return material;
 };
 
-const listMaterialsByShortCode = async (code: string): Promise<Array<TMaterial>> => {
-  const materialsResponse = await fetchService(`/v1/short-codes/${code}/materials`);
+const listMaterialsByShortCode = async (
+  code: string,
+): Promise<Array<TMaterial>> => {
+  const materialsResponse = await fetchService(
+    `/v1/short-codes/${code}/materials`,
+  );
   const materials = await materialsResponse.json();
 
   return materials;

@@ -8,7 +8,9 @@ export type TestFunctionErrorResultType = {
   error: {
     message: string;
     stack: string;
-  }
+  };
 };
 
-export type TestFunctionResultType = TestFunctionSuccessResultType | TestFunctionErrorResultType;
+export type TestFunctionResultType =
+  | TestFunctionSuccessResultType
+  | TestFunctionErrorResultType;

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
+import type React from 'react';
+import { useCallback } from 'react';
 import './monaco-setup';
 import MonacoEditor from '@monaco-editor/react';
 
@@ -33,7 +34,14 @@ const JsonEditor: React.FunctionComponent<JsonEditorProps> = ({
   );
 
   return (
-    <div style={{ height, border: '1px solid var(--color-border)', borderRadius: '8px', overflow: 'hidden' }}>
+    <div
+      style={{
+        height,
+        border: '1px solid var(--color-border)',
+        borderRadius: '8px',
+        overflow: 'hidden',
+      }}
+    >
       <MonacoEditor
         height="100%"
         defaultLanguage="json"

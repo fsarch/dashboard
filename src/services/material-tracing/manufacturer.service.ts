@@ -1,6 +1,6 @@
-import { fetchService } from "@/utils/fetchService";
-import { TManufacturer } from "@/services/material-tracing/manufacturer.type";
-import { TPaginationResult } from "@/services/material-tracing/pagination.type";
+import type { TManufacturer } from '@/services/material-tracing/manufacturer.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listManufacturers = async (options?: {
   skip?: number;
@@ -25,17 +25,24 @@ const listManufacturers = async (options?: {
   return await manufacturersResponse.json();
 };
 
-const getManufacturer = async (manufacturerId: string): Promise<TManufacturer> => {
-  const manufacturerResponse = await fetchService(`/v1/manufacturers/${manufacturerId}`);
+const getManufacturer = async (
+  manufacturerId: string,
+): Promise<TManufacturer> => {
+  const manufacturerResponse = await fetchService(
+    `/v1/manufacturers/${manufacturerId}`,
+  );
   const manufacturer = await manufacturerResponse.json();
 
   return manufacturer;
 };
 
 const deleteManufacturer = async (manufacturerId: string): Promise<void> => {
-  const manufacturerResponse = await fetchService(`/v1/manufacturers/${manufacturerId}`, {
-    method: 'DELETE',
-  });
+  const manufacturerResponse = await fetchService(
+    `/v1/manufacturers/${manufacturerId}`,
+    {
+      method: 'DELETE',
+    },
+  );
   if (!manufacturerResponse) {
     throw new Error('could not remove manufacturer');
   }

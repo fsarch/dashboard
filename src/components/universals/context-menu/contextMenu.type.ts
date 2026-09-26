@@ -1,4 +1,4 @@
-import React from "react";
+import type React from 'react';
 
 export type TContextMenuComponent<TInput> = React.FC<{
   value: TInput;

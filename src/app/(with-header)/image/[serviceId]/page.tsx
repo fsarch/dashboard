@@ -1,15 +1,15 @@
-import List from "@/components/universals/list/List";
-import ListItem from "@/components/universals/list/ListItem";
-import { imagesAdminService } from "@/services/image/images-admin.service";
-import { ImageDto } from "@/services/image/images-admin.type";
-import ImageUploadForm from "@/components/apps/image/upload/ImageUploadForm";
-import ImagePaginationClient from "@/components/apps/image/ImagePaginationClient.component";
-import styles from "./page.module.scss";
-import Badge from "@/components/universals/badge/badge.component";
-import { colors } from "@/app/_styles/colors";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import { createAutomaticMetadata } from "@/utils/createAutomaticMetadata";
-import Link from "next/link";
+import Link from 'next/link';
+import { colors } from '@/app/_styles/colors';
+import ImagePaginationClient from '@/components/apps/image/ImagePaginationClient.component';
+import ImageUploadForm from '@/components/apps/image/upload/ImageUploadForm';
+import Badge from '@/components/universals/badge/badge.component';
+import List from '@/components/universals/list/List';
+import ListItem from '@/components/universals/list/ListItem';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import { imagesAdminService } from '@/services/image/images-admin.service';
+import type { ImageDto } from '@/services/image/images-admin.type';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import styles from './page.module.scss';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -48,7 +48,9 @@ export default async function ImageListPage(props: {
   // Parse search params
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
   const limit = searchParams.limit ? parseInt(searchParams.limit) : 25;
-  const isPublic = searchParams.isPublic ? searchParams.isPublic === 'true' : undefined;
+  const isPublic = searchParams.isPublic
+    ? searchParams.isPublic === 'true'
+    : undefined;
   const tagFilter = searchParams.tag ? searchParams.tag.split(',') : undefined;
 
   // Fetch images with embed=tags for showing tags in list

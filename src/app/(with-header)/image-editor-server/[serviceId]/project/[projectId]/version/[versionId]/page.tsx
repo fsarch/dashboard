@@ -1,13 +1,13 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
 import Link from 'next/link';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import { colors } from '@/app/_styles/colors';
 import Badge from '@/components/universals/badge/badge.component';
-import UpdateVersionForm from './_components/UpdateVersionForm.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { imageEditorServerService } from '@/services/image-editor-server/image-editor-server.service';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import ActivateVersionButton from './_components/ActivateVersionButton.component';
 import RenderPreview from './_components/RenderPreview.component';
-import { imageEditorServerService } from '@/services/image-editor-server/image-editor-server.service';
+import UpdateVersionForm from './_components/UpdateVersionForm.component';
 
 export default async function VersionDetailPage({
   params,
@@ -29,26 +29,49 @@ export default async function VersionDetailPage({
     <DefaultPage>
       <Section name="Version">
         <p>
-          <Link href={await getServiceLocalUrl(`/project/${projectId}/version`)}>
+          <Link
+            href={await getServiceLocalUrl(`/project/${projectId}/version`)}
+          >
             &larr; Zurück zu Versionen
           </Link>
         </p>
         <h2>
-          {version.id}
-          {' '}
+          {version.id}{' '}
           {version.isActive && <Badge color={colors.lightGreen}>aktiv</Badge>}
-          {!version.isActive && isLatest && <Badge color={colors.lightBlue}>Entwurf</Badge>}
-          {!version.isActive && !isLatest && <Badge color={colors.contrastNormal}>historisch</Badge>}
+          {!version.isActive && isLatest && (
+            <Badge color={colors.lightBlue}>Entwurf</Badge>
+          )}
+          {!version.isActive && !isLatest && (
+            <Badge color={colors.contrastNormal}>historisch</Badge>
+          )}
         </h2>
-        <p>{version.width}&times;{version.height}px</p>
-        {version.externalId && <p>External Id: <code>{version.externalId}</code></p>}
+        <p>
+          {version.width}&times;{version.height}px
+        </p>
+        {version.externalId && (
+          <p>
+            External Id: <code>{version.externalId}</code>
+          </p>
+        )}
         <p>Erstellt: {version.creationTime}</p>
         <p>
-          <Link href={await getServiceLocalUrl(`/project/${projectId}/version/${versionId}/parameter`)}>
+          <Link
+            href={
+              await getServiceLocalUrl(
+                `/project/${projectId}/version/${versionId}/parameter`,
+              )
+            }
+          >
             Parameter verwalten &rarr;
           </Link>
           {' | '}
-          <Link href={await getServiceLocalUrl(`/project/${projectId}/version/${versionId}/layers`)}>
+          <Link
+            href={
+              await getServiceLocalUrl(
+                `/project/${projectId}/version/${versionId}/layers`,
+              )
+            }
+          >
             Ebenen bearbeiten &rarr;
           </Link>
         </p>

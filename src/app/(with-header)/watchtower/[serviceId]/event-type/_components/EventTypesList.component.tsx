@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TEventTypeDto } from '@/services/watchtower/watchtower.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type {
+  TEventTypeDto,
+  TPaginationResultDto,
+} from '@/services/watchtower/watchtower.type';
 
 type EventTypesListProps = {
   eventTypes: TPaginationResultDto<TEventTypeDto>;
@@ -25,11 +28,15 @@ const EventTypesList: React.FunctionComponent<EventTypesListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/watchtower/${serviceId}/event-type?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/event-type?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/watchtower/${serviceId}/event-type?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/event-type?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
@@ -43,9 +50,15 @@ const EventTypesList: React.FunctionComponent<EventTypesListProps> = ({
                 href={`/watchtower/${serviceId}/event-type/${eventType.id}`}
               >
                 <ListItem>
-                  <strong>{eventType.name}</strong> - Score Factor: {eventType.defaultScoreFactor}, TTL: {eventType.defaultTtlSeconds}s
+                  <strong>{eventType.name}</strong> - Score Factor:{' '}
+                  {eventType.defaultScoreFactor}, TTL:{' '}
+                  {eventType.defaultTtlSeconds}s
                   {eventType.aggregationModeId && (
-                    <> - Aggregation Mode: <code>{eventType.aggregationModeId}</code></>
+                    <>
+                      {' '}
+                      - Aggregation Mode:{' '}
+                      <code>{eventType.aggregationModeId}</code>
+                    </>
                   )}
                 </ListItem>
               </Link>

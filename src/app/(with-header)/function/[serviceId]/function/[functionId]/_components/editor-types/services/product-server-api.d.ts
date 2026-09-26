@@ -15,7 +15,7 @@ namespace FsArchApiCatalog {
         id: string;
         attributeTypeId: string;
         externalId?: string;
-      }
+      };
     }>;
   };
 
@@ -38,7 +38,10 @@ namespace FsArchApiCatalog {
      * @param attributeId
      * @param options
      */
-    listByAttributeId(attributeId: string, options?: ListAttributeElementsOptions);
+    listByAttributeId(
+      attributeId: string,
+      options?: ListAttributeElementsOptions,
+    );
   }
 
   interface ProductAttributeApi {

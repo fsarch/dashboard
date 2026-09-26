@@ -1,8 +1,22 @@
-import { BindableAffineMatrix } from '@/services/image-editor-server/image-editor-server.type';
+import type { BindableAffineMatrix } from '@/services/image-editor-server/image-editor-server.type';
 
-export type TAffineMatrix = { a: number; b: number; c: number; d: number; e: number; f: number };
+export type TAffineMatrix = {
+  a: number;
+  b: number;
+  c: number;
+  d: number;
+  e: number;
+  f: number;
+};
 
-export const IDENTITY_MATRIX: TAffineMatrix = { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 };
+export const IDENTITY_MATRIX: TAffineMatrix = {
+  a: 1,
+  b: 0,
+  c: 0,
+  d: 1,
+  e: 0,
+  f: 0,
+};
 
 export function toCssMatrix({ a, b, c, d, e, f }: TAffineMatrix): string {
   return `matrix(${a}, ${b}, ${c}, ${d}, ${e}, ${f})`;
@@ -34,11 +48,15 @@ export function readCssMatrix(target: HTMLElement): TAffineMatrix {
     return IDENTITY_MATRIX;
   }
 
-  const [a, b, c, d, e, f] = match[1].split(',').map((value) => parseFloat(value.trim()));
+  const [a, b, c, d, e, f] = match[1]
+    .split(',')
+    .map((value) => parseFloat(value.trim()));
   return { a, b, c, d, e, f };
 }
 
-export function toBindableAffineMatrix(matrix: TAffineMatrix): BindableAffineMatrix {
+export function toBindableAffineMatrix(
+  matrix: TAffineMatrix,
+): BindableAffineMatrix {
   return {
     a: { type: 'constant', value: matrix.a },
     b: { type: 'constant', value: matrix.b },
@@ -85,7 +103,13 @@ export type TLayerGeometry = {
  * simpler translation-only matrices used elsewhere (e.g. freshly created
  * layers, whose transformationMatrix starts as the identity + translate).
  */
-export function composeMatrix({ x, y, rotationDeg, width, height }: TLayerGeometry): TAffineMatrix {
+export function composeMatrix({
+  x,
+  y,
+  rotationDeg,
+  width,
+  height,
+}: TLayerGeometry): TAffineMatrix {
   const rad = (rotationDeg * Math.PI) / 180;
   const cos = Math.cos(rad);
   const sin = Math.sin(rad);
@@ -111,7 +135,11 @@ export function composeMatrix({ x, y, rotationDeg, width, height }: TLayerGeomet
  * expected to live in options.width/height, never in the matrix - see
  * requirements.md).
  */
-export function decomposeMatrix(matrix: TAffineMatrix, width: number, height: number): TLayerGeometry {
+export function decomposeMatrix(
+  matrix: TAffineMatrix,
+  width: number,
+  height: number,
+): TLayerGeometry {
   const rotationRad = Math.atan2(matrix.b, matrix.a);
   const cos = Math.cos(rotationRad);
   const sin = Math.sin(rotationRad);

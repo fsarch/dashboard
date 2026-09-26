@@ -1,16 +1,16 @@
 import 'server-only';
-import React from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import React from 'react';
 
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
-import Section from '@/components/universals/section/Section';
-import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
-import { EServiceType } from '@/utils/configuration.type';
-import { getServiceConfigurations } from '@/utils/configuration.utils';
+import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
+import Section from '@/components/universals/section/Section';
 import { APPS } from '@/constants/apps';
+import type { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurations } from '@/utils/configuration.utils';
 
 type ServiceSelectionPageProps = {
   serviceType: EServiceType;
@@ -28,7 +28,10 @@ const ServiceSelectionPage = async ({
 
   return (
     <div>
-      <DefaultPageHeader className={styles.header} title={APPS[serviceType].name} />
+      <DefaultPageHeader
+        className={styles.header}
+        title={APPS[serviceType].name}
+      />
       <main className={styles.main}>
         <Section name="Services">
           {services.length > 0 ? (
@@ -49,4 +52,3 @@ const ServiceSelectionPage = async ({
 };
 
 export default ServiceSelectionPage;
-

@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { APPS } from "@/constants/apps";
+import { type NextRequest, NextResponse } from 'next/server';
+import { APPS } from '@/constants/apps';
 
 const basePaths = Object.values(APPS).map((s) => s.basePath.substring(1));
-const SERVICE_ID_REGEX = new RegExp(`^\\/(${basePaths.join('|')})\\/([^\\/]*)(\\/.*)?`);
+const SERVICE_ID_REGEX = new RegExp(
+  `^\\/(${basePaths.join('|')})\\/([^\\/]*)(\\/.*)?`,
+);
 
 export async function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);

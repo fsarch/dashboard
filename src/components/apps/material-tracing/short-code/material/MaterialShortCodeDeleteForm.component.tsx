@@ -1,8 +1,6 @@
-import React from 'react';
-import GeneratedForm from "@/components/universals/forms/generated/GeneratedForm.component";
-import {
-  MATERIAL_SHORT_CODE_DELETE_FORM
-} from "@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteFrom.form";
+import type React from 'react';
+import { MATERIAL_SHORT_CODE_DELETE_FORM } from '@/components/apps/material-tracing/short-code/material/MaterialShortCodeDeleteFrom.form';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import 'server-only';
 
 type ShortCodeDeleteFormProps = {
@@ -12,14 +10,11 @@ type ShortCodeDeleteFormProps = {
   };
 };
 
-const MaterialShortCodeDeleteForm: React.FunctionComponent<ShortCodeDeleteFormProps> = ({
-  args,
-}) => {
+const MaterialShortCodeDeleteForm: React.FunctionComponent<
+  ShortCodeDeleteFormProps
+> = ({ args }) => {
   return (
-    <GeneratedForm
-      definition={MATERIAL_SHORT_CODE_DELETE_FORM}
-      args={args}
-    />
+    <GeneratedForm definition={MATERIAL_SHORT_CODE_DELETE_FORM} args={args} />
   );
 };
 

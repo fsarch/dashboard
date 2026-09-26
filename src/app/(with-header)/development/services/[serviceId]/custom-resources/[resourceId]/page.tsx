@@ -1,16 +1,16 @@
-import { Metadata } from 'next';
-import { getAccessToken } from '@/utils/getAccessToken';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { APPS } from '@/constants/apps';
+import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
+import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
 import styles from '@/components/universals/page/DefaultPage.module.scss';
 import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
-import AutoNavigationItem from '@/components/universals/page/AutoNavigationItem.component';
-import autoNavigationStyles from '@/components/universals/page/AutoNavigation.module.scss';
 import Section from '@/components/universals/section/Section';
+import { APPS } from '@/constants/apps';
 import { customResourcesUtils } from '@/utils/app/custom-resources';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 import CustomResourceDetail from './_components/CustomResourceDetail.component';
 
 export const metadata: Metadata = {
@@ -21,13 +21,17 @@ type CustomResourceDetailPageProps = {
   params: Promise<{ serviceId: string; resourceId: string }>;
 };
 
-export default async function CustomResourceDetailPage({ params }: CustomResourceDetailPageProps) {
+export default async function CustomResourceDetailPage({
+  params,
+}: CustomResourceDetailPageProps) {
   const { serviceId, resourceId } = await params;
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const canAccessDevelopment = await uacUtils.hasPermission('dev', accessToken);
@@ -46,7 +50,10 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
 
   let resource;
   try {
-    resource = await customResourcesUtils.getCustomResourceById(serviceId, resourceId);
+    resource = await customResourcesUtils.getCustomResourceById(
+      serviceId,
+      resourceId,
+    );
   } catch {
     return notFound();
   }
@@ -76,7 +83,10 @@ export default async function CustomResourceDetailPage({ params }: CustomResourc
             >
               Custom Resources ({service.name ?? service.id})
             </AutoNavigationItem>
-            <AutoNavigationItem href="/development/custom-resources" icon="cubes">
+            <AutoNavigationItem
+              href="/development/custom-resources"
+              icon="cubes"
+            >
               Custom Resources
             </AutoNavigationItem>
           </ul>

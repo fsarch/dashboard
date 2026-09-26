@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { TScopeTypeReadDto } from '@/services/watchtower/watchtower.type';
+import type React from 'react';
+import type { TScopeTypeReadDto } from '@/services/watchtower/watchtower.type';
 import styles from './ScopeTypeDetail.module.scss';
 
 type ScopeTypeDetailProps = {
@@ -9,14 +9,19 @@ type ScopeTypeDetailProps = {
   serviceId: string;
 };
 
-const ScopeTypeDetail: React.FunctionComponent<ScopeTypeDetailProps> = ({ scopeType, serviceId }) => {
+const ScopeTypeDetail: React.FunctionComponent<ScopeTypeDetailProps> = ({
+  scopeType,
+  serviceId,
+}) => {
   return (
     <div className={styles.root}>
       <table className={styles.table}>
         <tbody>
           <tr>
             <th>ID</th>
-            <td><code>{scopeType.id}</code></td>
+            <td>
+              <code>{scopeType.id}</code>
+            </td>
           </tr>
           <tr>
             <th>Name</th>
@@ -24,7 +29,9 @@ const ScopeTypeDetail: React.FunctionComponent<ScopeTypeDetailProps> = ({ scopeT
           </tr>
           <tr>
             <th>Key</th>
-            <td><code>{scopeType.key}</code></td>
+            <td>
+              <code>{scopeType.key}</code>
+            </td>
           </tr>
           <tr>
             <th>Score Factor</th>
@@ -37,39 +44,59 @@ const ScopeTypeDetail: React.FunctionComponent<ScopeTypeDetailProps> = ({ scopeT
           {scopeType.externalId && (
             <tr>
               <th>Externe ID</th>
-              <td><code>{scopeType.externalId}</code></td>
+              <td>
+                <code>{scopeType.externalId}</code>
+              </td>
             </tr>
           )}
 
           {scopeType.ipScopeType && (
             <>
               <tr>
-                <th colSpan={2} className={styles.sectionHeader}>IP Scope Type Konfiguration</th>
+                <th colSpan={2} className={styles.sectionHeader}>
+                  IP Scope Type Konfiguration
+                </th>
               </tr>
               <tr>
                 <th>Auto ASN Creation</th>
-                <td>{scopeType.ipScopeType.enableAutoAsnCreation ? 'Aktiviert' : 'Deaktiviert'}</td>
+                <td>
+                  {scopeType.ipScopeType.enableAutoAsnCreation
+                    ? 'Aktiviert'
+                    : 'Deaktiviert'}
+                </td>
               </tr>
               {scopeType.ipScopeType.autoAsnScopeTypeId && (
                 <tr>
                   <th>Auto ASN Scope Type</th>
-                  <td><code>{scopeType.ipScopeType.autoAsnScopeTypeId}</code></td>
+                  <td>
+                    <code>{scopeType.ipScopeType.autoAsnScopeTypeId}</code>
+                  </td>
                 </tr>
               )}
               {scopeType.ipScopeType.autoAsnIpAsnDatasourceId && (
                 <tr>
                   <th>Auto ASN Datasource</th>
-                  <td><code>{scopeType.ipScopeType.autoAsnIpAsnDatasourceId}</code></td>
+                  <td>
+                    <code>
+                      {scopeType.ipScopeType.autoAsnIpAsnDatasourceId}
+                    </code>
+                  </td>
                 </tr>
               )}
               <tr>
                 <th>Auto Subnet Creation</th>
-                <td>{scopeType.ipScopeType.enableAutoSubnetCreation ? 'Aktiviert' : 'Deaktiviert'}</td>
+                <td>
+                  {scopeType.ipScopeType.enableAutoSubnetCreation
+                    ? 'Aktiviert'
+                    : 'Deaktiviert'}
+                </td>
               </tr>
               {scopeType.ipScopeType.autoSubnetScopeTypeId && (
                 <tr>
                   <th>Auto Subnet Scope Type</th>
-                  <td><code>{scopeType.ipScopeType.autoSubnetScopeTypeId}</code></td>
+                  <td>
+                    <code>{scopeType.ipScopeType.autoSubnetScopeTypeId}</code>
+                  </td>
                 </tr>
               )}
               {scopeType.ipScopeType.autoSubnetIp4SubnetMask !== null && (

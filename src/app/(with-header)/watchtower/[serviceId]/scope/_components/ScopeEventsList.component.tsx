@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TEventScopeDto } from '@/services/watchtower/watchtower.type';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import { useRouter } from 'next/navigation';
+import type {
+  TEventScopeDto,
+  TPaginationResultDto,
+} from '@/services/watchtower/watchtower.type';
 
 type ScopeEventsListProps = {
   events: TPaginationResultDto<TEventScopeDto>;
@@ -26,11 +29,15 @@ const ScopeEventsList: React.FunctionComponent<ScopeEventsListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/watchtower/${serviceId}/scope/${scopeId}?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/scope/${scopeId}?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/watchtower/${serviceId}/scope/${scopeId}?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/scope/${scopeId}?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
@@ -40,11 +47,16 @@ const ScopeEventsList: React.FunctionComponent<ScopeEventsListProps> = ({
           <List>
             {data.map((eventScope) => (
               <ListItem key={eventScope.id}>
-                <strong>{eventScope.eventType.name}</strong> - Score Factor: {eventScope.event.scoreFactor}
+                <strong>{eventScope.eventType.name}</strong> - Score Factor:{' '}
+                {eventScope.event.scoreFactor}
                 <br />
                 Created: {new Date(eventScope.creationTime).toLocaleString()}
                 {eventScope.deletionTime && (
-                  <span> - Deleted: {new Date(eventScope.deletionTime).toLocaleString()}</span>
+                  <span>
+                    {' '}
+                    - Deleted:{' '}
+                    {new Date(eventScope.deletionTime).toLocaleString()}
+                  </span>
                 )}
                 {eventScope.event.externalId && (
                   <span> - Event Ext-ID: {eventScope.event.externalId}</span>

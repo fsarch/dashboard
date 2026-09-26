@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react';
-import List from "@/components/universals/list/List";
-import LinkListItem from "@/components/universals/list/LinkListItem";
-import Badge from "@/components/universals/badge/badge.component";
-import { datetimeUtils } from "@/utils/datetime.utils";
-import PaginationFetcherComponent from "@/components/universals/pagination/PaginationFetcher.component";
-import { PaginationResultType } from "@/components/universals/pagination/PaginationFetcher.type";
-import { TPaginationResultDto } from "@/services/email/email.type";
-import { EmailListItemWithUrl } from "@/app/(with-header)/email/[serviceId]/account/[accountId]/emails.server-action";
+import type React from 'react';
+import type { EmailListItemWithUrl } from '@/app/(with-header)/email/[serviceId]/account/[accountId]/emails.server-action';
+import Badge from '@/components/universals/badge/badge.component';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import PaginationFetcherComponent from '@/components/universals/pagination/PaginationFetcher.component';
+import type { PaginationResultType } from '@/components/universals/pagination/PaginationFetcher.type';
+import type { TPaginationResultDto } from '@/services/email/email.type';
+import { datetimeUtils } from '@/utils/datetime.utils';
 
 const PAGE_SIZE = 25;
 
@@ -73,7 +73,11 @@ const EmailsList: React.FunctionComponent<EmailsListProps> = ({
             <LinkListItem
               key={email.id}
               href={email.url}
-              right={email.creationTime ? <Badge>{datetimeUtils.formatDate(email.creationTime)}</Badge> : null}
+              right={
+                email.creationTime ? (
+                  <Badge>{datetimeUtils.formatDate(email.creationTime)}</Badge>
+                ) : null
+              }
             >
               {email.subject}
             </LinkListItem>

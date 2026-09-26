@@ -1,10 +1,9 @@
 'use client';
 
-import React, { PropsWithChildren } from 'react';
-import {
-  TCustomAppClickHandlerFunc,
-} from "@/components/apps/custom-app/custom-app.type";
-import { customAppClientUtils } from "@/components/apps/custom-app/custom-app-client.utils";
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
+import type { TCustomAppClickHandlerFunc } from '@/components/apps/custom-app/custom-app.type';
+import { customAppClientUtils } from '@/components/apps/custom-app/custom-app-client.utils';
 
 type ClientButtonViewProps = PropsWithChildren<{
   onClick: TCustomAppClickHandlerFunc;
@@ -16,11 +15,7 @@ const ClientButtonView: React.FunctionComponent<ClientButtonViewProps> = ({
 }) => {
   const handleClick = customAppClientUtils.useClickHandler(onClick);
 
-  return (
-    <button onClick={handleClick}>
-      {children}
-    </button>
-  );
+  return <button onClick={handleClick}>{children}</button>;
 };
 
 export default ClientButtonView;

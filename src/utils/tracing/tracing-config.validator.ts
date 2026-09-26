@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export const TRACING_CONSOLE_EXPORTER_CONFIG_VALIDATOR = Joi.object({
   type: Joi.string().valid('console').required(),

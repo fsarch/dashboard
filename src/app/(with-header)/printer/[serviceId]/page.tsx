@@ -1,11 +1,11 @@
-import List from "@/components/universals/list/List";
-import ListItem from "@/components/universals/list/ListItem";
-import Link from "next/link";
-import { getServiceLocalUrl } from "@/utils/getServiceLocalUrl";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import { printerService } from "@/services/printer/printer.service";
-import Section from "@/components/universals/section/Section";
-import { PrinterCreateForm } from "@/components/apps/printer/PrinterCreateForm.component";
+import Link from 'next/link';
+import { PrinterCreateForm } from '@/components/apps/printer/PrinterCreateForm.component';
+import List from '@/components/universals/list/List';
+import ListItem from '@/components/universals/list/ListItem';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { printerService } from '@/services/printer/printer.service';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 
 export default async function Home() {
   const printers = await printerService.listPrinters();
@@ -19,15 +19,13 @@ export default async function Home() {
               key={printer.id}
               href={await getServiceLocalUrl(`/printer/${printer.id}`)}
             >
-              <ListItem>
-                {printer.name}
-              </ListItem>
+              <ListItem>{printer.name}</ListItem>
             </Link>
           ))}
         </List>
       </Section>
       <Section name="Create Printer">
-        <PrinterCreateForm/>
+        <PrinterCreateForm />
       </Section>
     </DefaultPage>
   );

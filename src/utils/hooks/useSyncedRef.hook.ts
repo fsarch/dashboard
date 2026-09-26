@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
 export function useSyncedRef<T>(value: T) {
   const ref = useRef<T>(value);

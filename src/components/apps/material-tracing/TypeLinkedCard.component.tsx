@@ -1,6 +1,6 @@
-import React from 'react';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import type React from 'react';
 import LinkCard from '@/components/universals/link-card/LinkCard.component';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import styles from './TypeLinkedCard.module.scss';
 
 type TypeLinkedCardProps = {
@@ -22,4 +22,3 @@ const TypeLinkedCard: React.FunctionComponent<TypeLinkedCardProps> = async ({
 };
 
 export default TypeLinkedCard;
-

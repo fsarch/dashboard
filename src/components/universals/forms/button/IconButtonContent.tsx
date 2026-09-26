@@ -1,6 +1,7 @@
-import React, { PropsWithChildren } from 'react';
-import Icon from "@/components/universals/icon/Icon.component";
-import { TIcon } from "@/components/universals/icon/Icon.type";
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './IconButtonContent.module.scss';
 
 type IconButtonContentProps = PropsWithChildren<{
@@ -13,7 +14,7 @@ const IconButtonContent: React.FunctionComponent<IconButtonContentProps> = ({
 }) => {
   return (
     <span className={styles.root}>
-      <Icon icon={icon}/>
+      <Icon icon={icon} />
       {children}
     </span>
   );

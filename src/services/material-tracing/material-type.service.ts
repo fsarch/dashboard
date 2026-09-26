@@ -1,6 +1,6 @@
-import { fetchService } from "@/utils/fetchService";
-import { TMaterialType } from "@/services/material-tracing/material-type.type";
-import { TPaginationResult } from "@/services/material-tracing/pagination.type";
+import type { TMaterialType } from '@/services/material-tracing/material-type.type';
+import type { TPaginationResult } from '@/services/material-tracing/pagination.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listMaterialTypes = async (options?: {
   skip?: number;
@@ -29,16 +29,23 @@ const listMaterialTypes = async (options?: {
   const materialTypesResponse = await fetchService(url.pathname + url.search);
   return await materialTypesResponse.json();
 };
-const getMaterialType = async (materialTypeId: string): Promise<TMaterialType> => {
-  const materialTypeRespose = await fetchService(`/v1/material-types/${materialTypeId}`);
+const getMaterialType = async (
+  materialTypeId: string,
+): Promise<TMaterialType> => {
+  const materialTypeRespose = await fetchService(
+    `/v1/material-types/${materialTypeId}`,
+  );
   const materialType = await materialTypeRespose.json();
 
   return materialType;
 };
 const deleteMaterialType = async (materialTypeId: string): Promise<void> => {
-  const materialTypeRespose = await fetchService(`/v1/material-types/${materialTypeId}`, {
-    method: 'DELETE',
-  });
+  const materialTypeRespose = await fetchService(
+    `/v1/material-types/${materialTypeId}`,
+    {
+      method: 'DELETE',
+    },
+  );
 
   if (!materialTypeRespose.ok) {
     throw new Error('could not delete materialType');

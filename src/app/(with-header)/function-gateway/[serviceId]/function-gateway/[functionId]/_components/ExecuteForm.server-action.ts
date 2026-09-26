@@ -1,12 +1,12 @@
 'use server';
 
-import { functionGatewayService } from "@/services/function-gateway/function-gateway.service";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
+import { functionGatewayService } from '@/services/function-gateway/function-gateway.service';
 
 export const executeFunctionAction = async (
   functionId: string,
   method: string = 'GET',
-  input?: string
+  input?: string,
 ) => {
   try {
     const parsedInput = input ? JSON.parse(input) : undefined;

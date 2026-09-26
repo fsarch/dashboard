@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { getServiceConfigurations } from '@/utils/configuration.utils';
 import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurations } from '@/utils/configuration.utils';
 
 export default async function DblightHome() {
   const services = await getServiceConfigurations(EServiceType.DBLIGHT);

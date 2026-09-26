@@ -14,7 +14,11 @@ export const PUT = async (
   const { uploadId } = await params;
   const contentType = request.headers.get('content-type');
 
-  const upload = await fileServerApiService.uploadContent(uploadId, request.body!, contentType);
+  const upload = await fileServerApiService.uploadContent(
+    uploadId,
+    request.body!,
+    contentType,
+  );
 
   return NextResponse.json(upload);
 };

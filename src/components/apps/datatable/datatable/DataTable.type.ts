@@ -1,4 +1,4 @@
-import { DataTableMappingDtoType } from "@/services/datatable/datatable.type";
+import type { DataTableMappingDtoType } from '@/services/datatable/datatable.type';
 
 export type DataTableValue = {
   key: string;

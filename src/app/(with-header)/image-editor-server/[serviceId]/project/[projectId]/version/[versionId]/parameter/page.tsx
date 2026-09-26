@@ -1,10 +1,10 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
+import Link from 'next/link';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
-import Link from 'next/link';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
 import { imageEditorServerService } from '@/services/image-editor-server/image-editor-server.service';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
 import CreateParameterForm from './_components/CreateParameterForm.component';
 
 const TYPE_LABELS: Record<string, string> = {
@@ -20,8 +20,13 @@ export default async function ParameterListPage({
   params: Promise<{ serviceId: string; projectId: string; versionId: string }>;
 }) {
   const { projectId, versionId } = await params;
-  const parameters = await imageEditorServerService.listParameters(projectId, versionId);
-  const parametersById = new Map(parameters.map((parameter) => [parameter.id, parameter]));
+  const parameters = await imageEditorServerService.listParameters(
+    projectId,
+    versionId,
+  );
+  const parametersById = new Map(
+    parameters.map((parameter) => [parameter.id, parameter]),
+  );
 
   return (
     <DefaultPage>
@@ -30,15 +35,21 @@ export default async function ParameterListPage({
           {parameters.map(async (parameter) => (
             <Link
               key={parameter.id}
-              href={await getServiceLocalUrl(`/project/${projectId}/version/${versionId}/parameter/${parameter.id}`)}
+              href={
+                await getServiceLocalUrl(
+                  `/project/${projectId}/version/${versionId}/parameter/${parameter.id}`,
+                )
+              }
             >
               <ListItem>
                 <span>
-                  {parameter.parentId ? `${parametersById.get(parameter.parentId)?.name ?? '?'}.` : ''}
+                  {parameter.parentId
+                    ? `${parametersById.get(parameter.parentId)?.name ?? '?'}.`
+                    : ''}
                   {parameter.name}
-                </span>
-                {' '}
-                ({TYPE_LABELS[parameter.type] ?? parameter.type}{parameter.required ? ', Pflichtfeld' : ''})
+                </span>{' '}
+                ({TYPE_LABELS[parameter.type] ?? parameter.type}
+                {parameter.required ? ', Pflichtfeld' : ''})
               </ListItem>
             </Link>
           ))}

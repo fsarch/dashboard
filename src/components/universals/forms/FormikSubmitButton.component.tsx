@@ -1,9 +1,10 @@
 'use client';
 
-import React, { PropsWithChildren } from 'react';
-import Button from "@/components/universals/forms/Button";
-import { useFormikContext } from "formik";
-import InlineLoadingWrapper from "@/components/universals/forms/button/InlineLoadingWrapper";
+import { useFormikContext } from 'formik';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
+import Button from '@/components/universals/forms/Button';
+import InlineLoadingWrapper from '@/components/universals/forms/button/InlineLoadingWrapper';
 
 type FormikSubmitButtonProps = PropsWithChildren<{
   className?: string;
@@ -19,11 +20,7 @@ const FormikSubmitButton: React.FunctionComponent<FormikSubmitButtonProps> = ({
 
   return (
     <InlineLoadingWrapper isLoading={isSubmitting} className={className}>
-      <Button
-        type="submit"
-        className={buttonClassName}
-        disabled={isSubmitting}
-      >
+      <Button type="submit" className={buttonClassName} disabled={isSubmitting}>
         {children}
       </Button>
     </InlineLoadingWrapper>

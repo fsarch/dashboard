@@ -1,11 +1,10 @@
-import React from 'react';
-import { itemService } from "@/services/product/item.service";
-import { notFound } from "next/navigation";
-import { itemTypeService } from "@/services/product/item-type.service";
-import ItemTypeItemList from "@/components/apps/product/item/ItemTypeItemList";
-import { ItemDto } from "@/services/product/item.type";
-import QueryableItemListFilterSection
-  from "@/components/apps/product/item/queryable-list/QueryableItemListFilterSection";
+import { notFound } from 'next/navigation';
+import type React from 'react';
+import ItemTypeItemList from '@/components/apps/product/item/ItemTypeItemList';
+import QueryableItemListFilterSection from '@/components/apps/product/item/queryable-list/QueryableItemListFilterSection';
+import { itemService } from '@/services/product/item.service';
+import type { ItemDto } from '@/services/product/item.type';
+import { itemTypeService } from '@/services/product/item-type.service';
 
 type ItemListProps = {
   catalogId: string;
@@ -26,12 +25,15 @@ const QueryableItemList: React.FunctionComponent<ItemListProps> = async ({
     return notFound();
   }
 
-  const itemsByItemType = items.reduce((acc, value) => {
-    acc[value.itemTypeId] ||= [];
-    acc[value.itemTypeId].push(value);
+  const itemsByItemType = items.reduce(
+    (acc, value) => {
+      acc[value.itemTypeId] ||= [];
+      acc[value.itemTypeId].push(value);
 
-    return acc;
-  }, {} as Record<string, Array<ItemDto>>);
+      return acc;
+    },
+    {} as Record<string, Array<ItemDto>>,
+  );
 
   const itemTypes = await itemTypeService.listItemTypes(catalogId);
 

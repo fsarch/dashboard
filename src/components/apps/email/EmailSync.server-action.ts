@@ -1,7 +1,7 @@
 'use server';
 
-import { emailService } from "@/services/email/email.service";
-import { useOpenDialog } from "@/components/universals/dialog/DialogProvider.context";
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { emailService } from '@/services/email/email.service';
 
 export async function syncEmailsAction(accountId: string) {
   try {
@@ -11,11 +11,13 @@ export async function syncEmailsAction(accountId: string) {
       message: 'Emails erfolgreich synchronisiert',
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Synchronisierung fehlgeschlagen';
+    const message =
+      error instanceof Error
+        ? error.message
+        : 'Synchronisierung fehlgeschlagen';
     return {
       success: false,
       message,
     };
   }
 }
-

@@ -1,19 +1,25 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import { frontierService } from '@/services/frontier/frontier.service';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Button from '@/components/universals/forms/Button';
 import Link from 'next/link';
-import { uacUtils } from '@/utils/uac.utils';
+import Button from '@/components/universals/forms/Button';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
+import Section from '@/components/universals/section/Section';
+import { frontierService } from '@/services/frontier/frontier.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
 export default async function FrontierServicePage() {
-  const [domainGroups, hooks, domainGroupCreateLink, hookCreateLink, canSeeDevResponse] = await Promise.all([
+  const [
+    domainGroups,
+    hooks,
+    domainGroupCreateLink,
+    hookCreateLink,
+    canSeeDevResponse,
+  ] = await Promise.all([
     frontierService.listDomainGroups(),
     frontierService.listHooks(),
     getServiceLocalUrl('/domain-group/create'),
@@ -40,7 +46,7 @@ export default async function FrontierServicePage() {
           ))}
         </List>
       </Section>
-      
+
       <Section name="Hooks">
         <div style={{ marginBottom: '16px' }}>
           <Link href={hookCreateLink}>
@@ -58,7 +64,7 @@ export default async function FrontierServicePage() {
           ))}
         </List>
       </Section>
-      
+
       {canSeeDevResponse ? (
         <>
           <DevResponseSection title="Domain Groups" response={domainGroups} />
@@ -68,4 +74,3 @@ export default async function FrontierServicePage() {
     </DefaultPage>
   );
 }
-

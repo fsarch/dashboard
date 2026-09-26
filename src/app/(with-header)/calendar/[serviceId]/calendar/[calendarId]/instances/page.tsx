@@ -1,25 +1,25 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import Button from '@/components/universals/forms/Button';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import Button from '@/components/universals/forms/Button';
 import { calendarService } from '@/services/calendar/calendar.service';
+import type { TExpandedEventDto } from '@/services/calendar/calendar.type';
 import {
+  currentMonthRange,
   loadOrNotFound,
+  monthToRange,
   toDatetimeLocalValue,
   toMonthInputValue,
-  monthToRange,
-  currentMonthRange,
 } from '@/services/calendar/calendar.utils';
-import { TExpandedEventDto } from '@/services/calendar/calendar.type';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -39,7 +39,9 @@ export default async function EventInstancesPage({
 
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -50,13 +52,15 @@ export default async function EventInstancesPage({
   const canAccessService = await uacUtils.hasAppPermission(
     EServiceType.CALENDAR,
     serviceId,
-    accessToken
+    accessToken,
   );
   if (!canAccessService) {
     return notFound();
   }
 
-  const calendar = await loadOrNotFound(calendarService.getCalendarById(calendarId, serviceId));
+  const calendar = await loadOrNotFound(
+    calendarService.getCalendarById(calendarId, serviceId),
+  );
 
   let from: Date;
   let to: Date;
@@ -69,17 +73,24 @@ export default async function EventInstancesPage({
     const range = (month && monthToRange(month)) || currentMonthRange();
     from = range.from;
     to = range.to;
-    activeMonth = month && monthToRange(month) ? month : toMonthInputValue(from);
+    activeMonth =
+      month && monthToRange(month) ? month : toMonthInputValue(from);
   }
 
-  const hasValidRange = !Number.isNaN(from.getTime()) && !Number.isNaN(to.getTime()) && from <= to;
+  const hasValidRange =
+    !Number.isNaN(from.getTime()) && !Number.isNaN(to.getTime()) && from <= to;
 
   const instances = hasValidRange
-    ? await calendarService.listEventInstances(calendarId, from.toISOString(), to.toISOString(), serviceId)
+    ? await calendarService.listEventInstances(
+        calendarId,
+        from.toISOString(),
+        to.toISOString(),
+        serviceId,
+      )
     : [];
 
   const sortedInstances = [...instances].sort(
-    (a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
+    (a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime(),
   );
 
   return (
@@ -92,7 +103,9 @@ export default async function EventInstancesPage({
           <Link href={`/calendar/${serviceId}/calendar/${calendarId}/week`}>
             Wochenansicht
           </Link>
-          <Link href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${activeMonth || toMonthInputValue(from)}`}>
+          <Link
+            href={`/calendar/${serviceId}/calendar/${calendarId}/month?month=${activeMonth || toMonthInputValue(from)}`}
+          >
             Monatsansicht
           </Link>
         </div>
@@ -104,14 +117,24 @@ export default async function EventInstancesPage({
             <div>
               <label htmlFor="month">Monat</label>
               <br />
-              <input id="month" name="month" type="month" defaultValue={activeMonth} />
+              <input
+                id="month"
+                name="month"
+                type="month"
+                defaultValue={activeMonth}
+              />
             </div>
             <Button type="submit">Anzeigen</Button>
           </form>
 
           <form
             method="GET"
-            style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', flexWrap: 'wrap' }}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+            }}
           >
             <div>
               <label htmlFor="from">Von</label>
@@ -120,7 +143,9 @@ export default async function EventInstancesPage({
                 id="from"
                 name="from"
                 type="datetime-local"
-                defaultValue={toDatetimeLocalValue(hasValidRange ? from.toISOString() : undefined)}
+                defaultValue={toDatetimeLocalValue(
+                  hasValidRange ? from.toISOString() : undefined,
+                )}
                 required
               />
             </div>
@@ -131,7 +156,9 @@ export default async function EventInstancesPage({
                 id="to"
                 name="to"
                 type="datetime-local"
-                defaultValue={toDatetimeLocalValue(hasValidRange ? to.toISOString() : undefined)}
+                defaultValue={toDatetimeLocalValue(
+                  hasValidRange ? to.toISOString() : undefined,
+                )}
                 required
               />
             </div>
@@ -160,7 +187,9 @@ export default async function EventInstancesPage({
                 <br />
                 <small>
                   {new Date(instance.startAt).toLocaleString()}
-                  {instance.endAt ? ` – ${new Date(instance.endAt).toLocaleString()}` : ''}
+                  {instance.endAt
+                    ? ` – ${new Date(instance.endAt).toLocaleString()}`
+                    : ''}
                   {instance.timezone ? ` (${instance.timezone})` : ''}
                 </small>
                 {instance.description ? (

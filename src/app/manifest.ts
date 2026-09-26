@@ -1,5 +1,5 @@
-import type { MetadataRoute } from 'next'
-import { getThemeConfiguration } from "@/utils/configuration.utils";
+import type { MetadataRoute } from 'next';
+import { getThemeConfiguration } from '@/utils/configuration.utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,5 +26,5 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
         type: 'image/png',
       },
     ],
-  }
+  };
 }

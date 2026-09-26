@@ -1,17 +1,18 @@
-import React, { useId } from 'react';
-import { useField } from "formik";
-import { TGeneratedFormTextAreaInput } from "@/components/universals/forms/generated/GeneratedForm.type";
+import { useField } from 'formik';
+import type React from 'react';
+import { useId } from 'react';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
-import { nestedFormUtils } from "@/components/universals/forms/generated/inputs/nested/nested-form.utils";
+import type { TGeneratedFormTextAreaInput } from '@/components/universals/forms/generated/GeneratedForm.type';
+import { nestedFormUtils } from '@/components/universals/forms/generated/inputs/nested/nested-form.utils';
 import styles from './GeneratedFormTextAreaInput.module.scss';
 
 type GeneratedFormTextAreaInputProps = {
   input: TGeneratedFormTextAreaInput;
 };
 
-const GeneratedFormTextAreaInput: React.FunctionComponent<GeneratedFormTextAreaInputProps> = ({
-  input,
-}) => {
+const GeneratedFormTextAreaInput: React.FunctionComponent<
+  GeneratedFormTextAreaInputProps
+> = ({ input }) => {
   const id = useId();
   const name = nestedFormUtils.useInputName(input.id);
   // initialValues can come back from the API as `null` (an unset optional
@@ -21,11 +22,7 @@ const GeneratedFormTextAreaInput: React.FunctionComponent<GeneratedFormTextAreaI
   const [field] = useField<string | null | undefined>(name);
 
   return (
-    <FieldsetRow
-      label={(
-        <label htmlFor={id}>{input.label}</label>
-      )}
-    >
+    <FieldsetRow label={<label htmlFor={id}>{input.label}</label>}>
       <textarea
         {...field}
         id={id}
@@ -38,4 +35,3 @@ const GeneratedFormTextAreaInput: React.FunctionComponent<GeneratedFormTextAreaI
 };
 
 export default GeneratedFormTextAreaInput;
-

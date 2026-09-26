@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
+import { config } from '@fortawesome/fontawesome-svg-core';
+import type { Metadata } from 'next';
+import ContextMenuProvider from '@/components/universals/context-menu/ContextMenuProvider.component';
+import DialogProvider from '@/components/universals/dialog/DialogProvider.component';
+import FloatingButtonProvider from '@/components/universals/floating-button/FloatingButtonProvider.component';
 import styles from './layout.module.scss';
-import DialogProvider from "@/components/universals/dialog/DialogProvider.component";
-import FloatingButtonProvider from "@/components/universals/floating-button/FloatingButtonProvider.component";
-import ContextMenuProvider from "@/components/universals/context-menu/ContextMenuProvider.component";
-import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
-config.autoAddCss = false
+config.autoAddCss = false;
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: 'Dashboard',
   robots: {
     index: false,
     follow: false,
@@ -17,36 +17,28 @@ export const metadata: Metadata = {
 };
 
 type LayoutProps = {
-  children?: React.ReactNode
-}
+  children?: React.ReactNode;
+};
 
 type LayoutPropsExtended = {
-  children?: React.ReactNode
+  children?: React.ReactNode;
   header: React.ReactNode;
   navigation: React.ReactNode;
-}
+};
 
-export default async function RootLayout(props: LayoutProps | LayoutPropsExtended) {
-  const {
-    children,
-    header,
-    navigation,
-  } = props as LayoutPropsExtended;
+export default async function RootLayout(
+  props: LayoutProps | LayoutPropsExtended,
+) {
+  const { children, header, navigation } = props as LayoutPropsExtended;
 
   return (
     <FloatingButtonProvider>
       <DialogProvider>
         <ContextMenuProvider>
           <div className={styles.root}>
-            <div className={styles.header}>
-              {header}
-            </div>
-            <div className={styles.navigation}>
-              {navigation}
-            </div>
-            <div className={styles.content}>
-              {children}
-            </div>
+            <div className={styles.header}>{header}</div>
+            <div className={styles.navigation}>{navigation}</div>
+            <div className={styles.content}>{children}</div>
           </div>
         </ContextMenuProvider>
       </DialogProvider>

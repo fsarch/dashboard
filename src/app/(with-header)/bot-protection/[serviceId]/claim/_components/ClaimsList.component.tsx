@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TClaimDto } from '@/services/bot-protection/bot-protection.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type {
+  TClaimDto,
+  TPaginationResultDto,
+} from '@/services/bot-protection/bot-protection.type';
 
 type ClaimsListProps = {
   claims: TPaginationResultDto<TClaimDto>;
@@ -25,11 +28,15 @@ const ClaimsList: React.FunctionComponent<ClaimsListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/bot-protection/${serviceId}/claim?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/bot-protection/${serviceId}/claim?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/bot-protection/${serviceId}/claim?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/bot-protection/${serviceId}/claim?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   const formatDate = (dateString: string | null): string => {
@@ -49,13 +56,19 @@ const ClaimsList: React.FunctionComponent<ClaimsListProps> = ({
               >
                 <ListItem>
                   <strong>ID: {claim.id}</strong>
-                  {claim.externalId && <span> - Ext-ID: {claim.externalId}</span>}
+                  {claim.externalId && (
+                    <span> - Ext-ID: {claim.externalId}</span>
+                  )}
                   <br />
                   Difficulty: {claim.difficulty}
-                  {claim.duration && <span> - Duration: {claim.duration}s</span>}
+                  {claim.duration && (
+                    <span> - Duration: {claim.duration}s</span>
+                  )}
                   <br />
                   Created: {formatDate(claim.creationTime)}
-                  {claim.deletionTime && <span> - Deleted: {formatDate(claim.deletionTime)}</span>}
+                  {claim.deletionTime && (
+                    <span> - Deleted: {formatDate(claim.deletionTime)}</span>
+                  )}
                 </ListItem>
               </Link>
             ))}

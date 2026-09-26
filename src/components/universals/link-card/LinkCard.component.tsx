@@ -1,8 +1,12 @@
-import React, { PropsWithChildren } from 'react';
-import Link from 'next/link';
-import clsx from 'clsx';
+import {
+  faChevronRight,
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import clsx from 'clsx';
+import Link from 'next/link';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import styles from './LinkCard.module.scss';
 
 type LinkCardProps = PropsWithChildren<{
@@ -38,11 +42,19 @@ const LinkCard: React.FunctionComponent<LinkCardProps> = ({
   disabled = false,
   children,
 }) => {
-  const rootClassName = clsx(styles.root, variant === 'segment' && styles.segment, disabled && styles.disabled, className);
+  const rootClassName = clsx(
+    styles.root,
+    variant === 'segment' && styles.segment,
+    disabled && styles.disabled,
+    className,
+  );
   // Ohne children (z. B. der reine Sprung-Chevron neben einer anderen
   // LinkCard) keinen (leeren) content-Span rendern - sonst zieht dessen
   // gap zum Icon unnötigen Leerraum vor das Icon.
-  const content = children != null ? <span className={styles.content}>{children}</span> : null;
+  const content =
+    children != null ? (
+      <span className={styles.content}>{children}</span>
+    ) : null;
 
   if (!disabled && href) {
     return (
@@ -55,7 +67,11 @@ const LinkCard: React.FunctionComponent<LinkCardProps> = ({
 
   if (!disabled && onClick) {
     return (
-      <button type="button" onClick={onClick} className={clsx(rootClassName, styles.button)}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={clsx(rootClassName, styles.button)}
+      >
         {content}
         <FontAwesomeIcon icon={icon} className={styles.chevron} />
       </button>
@@ -75,9 +91,8 @@ export default LinkCard;
 // Gemeinsame Umrandung/Hintergrund für mehrere LinkCard-Segmente (variant
 // 'segment'), die zusammen optisch wie eine einzelne Karte wirken sollen
 // (siehe CustomResourcePickerInput: Stift- und Sprung-Aktion in einer Karte).
-export const LinkCardGroup: React.FunctionComponent<PropsWithChildren<{ className?: string }>> = ({
-  className,
-  children,
-}) => (
+export const LinkCardGroup: React.FunctionComponent<
+  PropsWithChildren<{ className?: string }>
+> = ({ className, children }) => (
   <div className={clsx(styles.group, className)}>{children}</div>
 );

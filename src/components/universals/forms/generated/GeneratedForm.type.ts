@@ -1,4 +1,4 @@
-import type { TView } from "@/components/apps/custom-app/custom-app.type";
+import type { TView } from '@/components/apps/custom-app/custom-app.type';
 
 /**
  * Base type for all GeneratedForm inputs.
@@ -18,53 +18,53 @@ export type TGeneratedFormTextInputButton = {
 
 export type TGeneratedFormTextInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'text' for text inputs */
-  $type: 'text',
+  $type: 'text';
   /** Optional buttons to display with the text input (e.g., QR scanner) */
   buttons?: Array<TGeneratedFormTextInputButton>;
   /** Whether the input is enabled and editable */
-  isEnabled?: boolean,
+  isEnabled?: boolean;
 };
 
 export type TGeneratedFormTextAreaInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'textarea' for multiline text inputs */
-  $type: 'textarea',
+  $type: 'textarea';
   /** Whether the input is enabled and editable */
-  isEnabled?: boolean,
+  isEnabled?: boolean;
 };
 
 export type TGeneratedFormPasswordInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'password' for password inputs */
-  $type: 'password',
+  $type: 'password';
   /** Whether the input is enabled and editable */
-  isEnabled?: boolean,
+  isEnabled?: boolean;
 };
 
 export type TGeneratedFormColorInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'color' for color picker inputs */
-  $type: 'color',
+  $type: 'color';
   /** Whether the input is enabled and editable */
-  isEnabled?: boolean,
+  isEnabled?: boolean;
 };
 
 export type TGeneratedFormTimeInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'time' for time inputs */
-  $type: 'time',
+  $type: 'time';
   /** Whether the input is enabled and editable */
-  isEnabled?: boolean,
+  isEnabled?: boolean;
 };
 
 export type TGeneratedFormNumberInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'number' for numeric inputs */
-  $type: 'number',
+  $type: 'number';
   /** Whether the input is enabled and editable */
-  isEnabled?: boolean,
+  isEnabled?: boolean;
 };
 
 export type TGeneratedFormSelectConstantData = {
   /** Data type identifier - always 'constant' for static data */
   $type: 'constant';
   /** Array of select options with id, value (must be string), and label */
-  value: Array<{ id: string; value: string; label: string; }>;
+  value: Array<{ id: string; value: string; label: string }>;
 };
 
 /**
@@ -80,10 +80,12 @@ export type TGeneratedFormSelectInput = TGeneratedFormBaseInput & {
   /** Enable search functionality for large dropdown lists */
   enableSearch?: boolean;
   /** Data source for select options - can be a datasource reference or constant values */
-  data: {
-    $type: 'datasource';
-    value: string;
-  } | TGeneratedFormSelectConstantData;
+  data:
+    | {
+        $type: 'datasource';
+        value: string;
+      }
+    | TGeneratedFormSelectConstantData;
 };
 
 export type TGeneratedFormStringConstantData = {
@@ -97,10 +99,12 @@ export type TGeneratedFormImageServerUploadInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'image-server-upload' for image upload inputs */
   $type: 'image-server-upload';
   /** Image server admin URL - can be from a datasource or constant */
-  imageServerAdminUrl: {
-    $type: 'datasource';
-    value: string;
-  } | TGeneratedFormStringConstantData;
+  imageServerAdminUrl:
+    | {
+        $type: 'datasource';
+        value: string;
+      }
+    | TGeneratedFormStringConstantData;
   /** JSONata expression to transform the upload response - MUST return object with { body: ... } */
   transformResponse: TJsonataExpression;
   /** Preferred capture method: 'environment' or 'user' */
@@ -150,16 +154,17 @@ export type TGeneratedFormCheckboxInput = TGeneratedFormBaseInput & {
  * schreibt (siehe CustomResourcePickerInput.tsx / QrInput.tsx für das
  * gleiche Muster mit einem Code-Scanner-Dialog).
  */
-export type TGeneratedFormCustomResourcePickerInput = TGeneratedFormBaseInput & {
-  /** Input type identifier - always 'custom-resource-picker' */
-  $type: 'custom-resource-picker';
-  /** Service-ID (services[].id in config.yml) des Custom-Resource-Backends */
-  serviceId: string;
-  /** ID der Custom-Resource-Definition (siehe GET /v1/.meta/custom-resources) */
-  resourceId: string;
-  /** Vorbelegte $system.crd-Referenzwerte, damit der Dialog diese nicht selbst per Auswahlschritt abfragen muss */
-  refValues?: Record<string, string>;
-};
+export type TGeneratedFormCustomResourcePickerInput =
+  TGeneratedFormBaseInput & {
+    /** Input type identifier - always 'custom-resource-picker' */
+    $type: 'custom-resource-picker';
+    /** Service-ID (services[].id in config.yml) des Custom-Resource-Backends */
+    serviceId: string;
+    /** ID der Custom-Resource-Definition (siehe GET /v1/.meta/custom-resources) */
+    resourceId: string;
+    /** Vorbelegte $system.crd-Referenzwerte, damit der Dialog diese nicht selbst per Auswahlschritt abfragen muss */
+    refValues?: Record<string, string>;
+  };
 
 export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'link-card' for link card inputs */
@@ -171,10 +176,25 @@ export type TGeneratedFormLinkCardInput = TGeneratedFormBaseInput & {
 };
 
 /** Union type of all supported input types */
-export type TGeneratedFormInput = TGeneratedFormTextInput | TGeneratedFormTextAreaInput | TGeneratedFormPasswordInput | TGeneratedFormColorInput | TGeneratedFormSelectInput | TGeneratedFormImageServerUploadInput | TGeneratedFormFileUploadInput | TGeneratedNestedForm | TGeneratedFormTimeInput | TGeneratedFormNumberInput | TGeneratedFormCheckboxInput | TGeneratedFormLinkCardInput | TGeneratedFormCustomResourcePickerInput;
+export type TGeneratedFormInput =
+  | TGeneratedFormTextInput
+  | TGeneratedFormTextAreaInput
+  | TGeneratedFormPasswordInput
+  | TGeneratedFormColorInput
+  | TGeneratedFormSelectInput
+  | TGeneratedFormImageServerUploadInput
+  | TGeneratedFormFileUploadInput
+  | TGeneratedNestedForm
+  | TGeneratedFormTimeInput
+  | TGeneratedFormNumberInput
+  | TGeneratedFormCheckboxInput
+  | TGeneratedFormLinkCardInput
+  | TGeneratedFormCustomResourcePickerInput;
 
 /** Initial values for the form - can be a JSONata expression or a static object */
-export type TGeneratedFormInitialValues = { $type: 'jsonata', value: string } | Record<string, unknown>;
+export type TGeneratedFormInitialValues =
+  | { $type: 'jsonata'; value: string }
+  | Record<string, unknown>;
 
 export type TJsonataExpression = {
   /** Expression type identifier - always 'jsonata' */
@@ -194,7 +214,7 @@ export type TJsonataExpression = {
  */
 export type TGeneratedFormDataSource = {
   /** Data source type identifier - always 'fetch' for API calls */
-  $type: 'fetch',
+  $type: 'fetch';
   /** Relative path to the service API endpoint */
   path: string | TJsonataExpression;
   /** HTTP method for the request (usually 'GET') */
@@ -214,13 +234,13 @@ export type TGeneratedFormEndpoint = {
   body?: TJsonataExpression;
   /** Optional additional request headers */
   headers?: Record<string, string>;
-}
+};
 
 export type TGeneratedFormAction = {
   /** Action type - currently only 'redirect' is supported */
-  $type: 'redirect',
+  $type: 'redirect';
   /** Redirect URL - can be a constant string or JSONata expression using form data */
-  url: TGeneratedFormStringConstantData | TJsonataExpression,
+  url: TGeneratedFormStringConstantData | TJsonataExpression;
 };
 
 export type TSubmitButtonsFormDefinition = {
@@ -271,18 +291,20 @@ type TDataSourceResponseDebugInfo = {
   body: {
     rawJson: unknown;
   };
-  transformation?: {
-    isError: false;
-    expression: string;
-    input: TDataSourceJsonataResponse;
-    output: TDataSourceJsonataResponse;
-  } | {
-    isError: true;
-    expression: string;
-    input: TDataSourceJsonataResponse;
-    error: unknown;
-  };
-}
+  transformation?:
+    | {
+        isError: false;
+        expression: string;
+        input: TDataSourceJsonataResponse;
+        output: TDataSourceJsonataResponse;
+      }
+    | {
+        isError: true;
+        expression: string;
+        input: TDataSourceJsonataResponse;
+        error: unknown;
+      };
+};
 
 export type TEvaluationDebugInfo = {
   dataSourceResponses: Record<string, TDataSourceResponseDebugInfo>;

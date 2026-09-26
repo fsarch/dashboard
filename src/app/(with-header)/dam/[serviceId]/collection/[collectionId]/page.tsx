@@ -1,15 +1,18 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import Link from 'next/link';
-import Button from '@/components/universals/forms/Button';
-import { colors } from '@/app/_styles/colors';
 import { redirect } from 'next/navigation';
-import { fileServerApiService } from '@/services/file-server/file-server-api.service';
-import { COLLECTION_ADD_ASSET_FORM, COLLECTION_RENAME_FORM } from '@/services/dam/dam.forms';
+import { colors } from '@/app/_styles/colors';
 import AssetGallery from '@/components/apps/dam/AssetGallery.component';
 import PermissionsSection from '@/components/apps/file-server-shared/PermissionsSection.component';
+import Button from '@/components/universals/forms/Button';
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import {
+  COLLECTION_ADD_ASSET_FORM,
+  COLLECTION_RENAME_FORM,
+} from '@/services/dam/dam.forms';
+import { fileServerApiService } from '@/services/file-server/file-server-api.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -28,7 +31,12 @@ export default async function DamCollectionPage(props: {
 
       <Section name={collection.name}>
         {assets.data.length > 0 ? (
-          <AssetGallery serviceId={serviceId} path={[]} folders={[]} assets={assets.data} />
+          <AssetGallery
+            serviceId={serviceId}
+            path={[]}
+            folders={[]}
+            assets={assets.data}
+          />
         ) : (
           <p>Diese Sammlung enthält noch keine Assets.</p>
         )}
@@ -43,7 +51,10 @@ export default async function DamCollectionPage(props: {
                 <form
                   action={async () => {
                     'use server';
-                    await fileServerApiService.removeAssetFromCollection(collectionId, asset.id);
+                    await fileServerApiService.removeAssetFromCollection(
+                      collectionId,
+                      asset.id,
+                    );
                   }}
                   style={{ display: 'inline' }}
                 >
@@ -58,11 +69,15 @@ export default async function DamCollectionPage(props: {
       </Section>
 
       <Section name="Asset hinzufügen">
-        <GeneratedForm definition={COLLECTION_ADD_ASSET_FORM(collectionId, serviceId)} />
+        <GeneratedForm
+          definition={COLLECTION_ADD_ASSET_FORM(collectionId, serviceId)}
+        />
       </Section>
 
       <Section name="Umbenennen">
-        <GeneratedForm definition={COLLECTION_RENAME_FORM(collectionId, collection.name)} />
+        <GeneratedForm
+          definition={COLLECTION_RENAME_FORM(collectionId, collection.name)}
+        />
       </Section>
 
       <Section name="Löschen">

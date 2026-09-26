@@ -1,17 +1,17 @@
-import { fetchService } from "@/utils/fetchService";
-import {
+import type {
   ImageDto,
-  TagDefinitionDto,
-  PaginationResultDto,
   ListImagesOptions,
-} from "@/services/image/images-admin.type";
-import { ServerLogger } from "@/utils/ServerLogger";
-import { fetchCustom } from "@/utils/fetchCustom";
+  PaginationResultDto,
+  TagDefinitionDto,
+} from '@/services/image/images-admin.type';
+import { fetchCustom } from '@/utils/fetchCustom';
+import { fetchService } from '@/utils/fetchService';
+import { ServerLogger } from '@/utils/ServerLogger';
 
 const serverLogger = new ServerLogger('ImageServerAdminService');
 
 const listImages = async (
-  options?: ListImagesOptions
+  options?: ListImagesOptions,
 ): Promise<PaginationResultDto<ImageDto>> => {
   const queryParams = new URLSearchParams();
 
@@ -32,7 +32,7 @@ const listImages = async (
   }
 
   const imagesResponse = await fetchService(
-    `/v1/admin/images?${queryParams.toString()}`
+    `/v1/admin/images?${queryParams.toString()}`,
   );
   const result = await imagesResponse.json();
 
@@ -44,7 +44,10 @@ const getImageById = async (imageId: string): Promise<ImageDto> => {
   return response.json();
 };
 
-const patchImage = async (imageId: string, data: { isPublic?: boolean; }): Promise<ImageDto> => {
+const patchImage = async (
+  imageId: string,
+  data: { isPublic?: boolean },
+): Promise<ImageDto> => {
   const response = await fetchService(`/v1/admin/images/${imageId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -72,12 +75,9 @@ const createTagDefinition = async (data: {
 };
 
 const deleteTagDefinition = async (tagDefinitionId: string): Promise<void> => {
-  await fetchService(
-    `/v1/admin/images/tags/definitions/${tagDefinitionId}`,
-    {
-      method: 'DELETE',
-    }
-  );
+  await fetchService(`/v1/admin/images/tags/definitions/${tagDefinitionId}`, {
+    method: 'DELETE',
+  });
 };
 
 // Bild-Tags
@@ -88,7 +88,7 @@ const listImageTags = async (imageId: string): Promise<string[]> => {
 
 const addImageTag = async (
   imageId: string,
-  data: { key: string; value: string }
+  data: { key: string; value: string },
 ): Promise<string> => {
   const response = await fetchService(`/v1/admin/images/${imageId}/tags`, {
     method: 'POST',
@@ -98,32 +98,45 @@ const addImageTag = async (
   return response.json();
 };
 
-const deleteImageTag = async (imageId: string, tagValue: string): Promise<void> => {
+const deleteImageTag = async (
+  imageId: string,
+  tagValue: string,
+): Promise<void> => {
   await fetchService(
     `/v1/admin/images/${imageId}/tags/${encodeURIComponent(tagValue)}`,
     {
       method: 'DELETE',
-    }
+    },
   );
 };
 
-const getRawById = async (imageId: string, options: { size?: number; } = {}): Promise<ArrayBuffer> => {
+const getRawById = async (
+  imageId: string,
+  options: { size?: number } = {},
+): Promise<ArrayBuffer> => {
   const queryParams = new URLSearchParams();
   if (options.size) {
     queryParams.set('size', options.size.toString());
   }
 
-  const imagesResponse = await fetchService(`/v1/admin/images/${imageId}/raw?${queryParams}`, {
-    headers: {
-      'Accept': 'image/png',
+  const imagesResponse = await fetchService(
+    `/v1/admin/images/${imageId}/raw?${queryParams}`,
+    {
+      headers: {
+        Accept: 'image/png',
+      },
     },
-  });
+  );
   const image = await imagesResponse.arrayBuffer();
 
   return image;
 };
 
-const uploadImage = async (options: { data: Buffer; name?: string; isPublic?: boolean; }): Promise<void> => {
+const uploadImage = async (options: {
+  data: Buffer;
+  name?: string;
+  isPublic?: boolean;
+}): Promise<void> => {
   const headers: Record<string, string> = {};
   if (options.name) {
     headers['x-path'] = options.name;
@@ -132,17 +145,25 @@ const uploadImage = async (options: { data: Buffer; name?: string; isPublic?: bo
     headers['x-visibility'] = options.isPublic ? 'public' : 'private';
   }
 
-  const imagesResponse = await fetchService(`/v1/admin/images/_actions/upload`, {
-    method: 'POST',
-    headers,
-    body: new Uint8Array(options.data).buffer,
-  });
+  const imagesResponse = await fetchService(
+    `/v1/admin/images/_actions/upload`,
+    {
+      method: 'POST',
+      headers,
+      body: new Uint8Array(options.data).buffer,
+    },
+  );
   if (!imagesResponse.ok) {
     throw new Error('invalid response');
   }
 };
 
-const uploadImageByUrl = async (options: { imageServerUrl: string; data: Buffer; name?: string; isPublic?: boolean; }): Promise<{ id: string }> => {
+const uploadImageByUrl = async (options: {
+  imageServerUrl: string;
+  data: Buffer;
+  name?: string;
+  isPublic?: boolean;
+}): Promise<{ id: string }> => {
   const headers: Record<string, string> = {};
   if (options.name) {
     headers['x-path'] = options.name;
@@ -151,11 +172,14 @@ const uploadImageByUrl = async (options: { imageServerUrl: string; data: Buffer;
     headers['x-visibility'] = options.isPublic ? 'public' : 'private';
   }
 
-  const imagesResponse = await fetchCustom(`${options.imageServerUrl}/v1/admin/images/_actions/upload`, {
-    method: 'POST',
-    headers,
-    body: new Uint8Array(options.data).buffer,
-  });
+  const imagesResponse = await fetchCustom(
+    `${options.imageServerUrl}/v1/admin/images/_actions/upload`,
+    {
+      method: 'POST',
+      headers,
+      body: new Uint8Array(options.data).buffer,
+    },
+  );
   if (!imagesResponse.ok) {
     serverLogger.error('failed to upload image by url', {
       imageServerUrl: options.imageServerUrl,

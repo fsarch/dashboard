@@ -5,18 +5,21 @@ export type TAction = {
 };
 
 export type TActionResponse = {
-  actions: Array<{
-    $type: 'show-modal';
-    value: {
-      $type: 'binary';
-      base64: string;
-      mimeType: string;
-    };
-  } | {
-    $type: 'dialog';
-    value: {
-      $type: 'confirm';
-      text: string;
-    };
-  }>;
+  actions: Array<
+    | {
+        $type: 'show-modal';
+        value: {
+          $type: 'binary';
+          base64: string;
+          mimeType: string;
+        };
+      }
+    | {
+        $type: 'dialog';
+        value: {
+          $type: 'confirm';
+          text: string;
+        };
+      }
+  >;
 };

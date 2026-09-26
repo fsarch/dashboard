@@ -1,7 +1,7 @@
-import { createContext, useContext } from "react";
-import WebUSBReceiptPrinter from '@point-of-sale/webusb-receipt-printer';
-import WebBluetoothReceiptPrinter from '@point-of-sale/webbluetooth-receipt-printer';
+import type WebBluetoothReceiptPrinter from '@point-of-sale/webbluetooth-receipt-printer';
 import type { BluetoothReceiptPrinterDevice } from '@point-of-sale/webbluetooth-receipt-printer';
+import type WebUSBReceiptPrinter from '@point-of-sale/webusb-receipt-printer';
+import { createContext, useContext } from 'react';
 
 export type TUSBPrinterDevice = {
   type: 'usb';

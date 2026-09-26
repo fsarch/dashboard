@@ -1,5 +1,8 @@
-import { fetchService } from "@/utils/fetchService";
-import { LocalizationCreateDto, LocalizationDto } from "@/services/product/localization.type";
+import type {
+  LocalizationCreateDto,
+  LocalizationDto,
+} from '@/services/product/localization.type';
+import { fetchService } from '@/utils/fetchService';
 
 const listLocalizations = async (): Promise<Array<LocalizationDto>> => {
   const localizationResponse = await fetchService(`/v1/localizations`);

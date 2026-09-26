@@ -1,8 +1,10 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import { TDialog } from '@/components/universals/dialog/DialogProvider.context';
+import {
+  type TDialog,
+  useOpenDialog,
+} from '@/components/universals/dialog/DialogProvider.context';
 import ConfirmDialogComponent from './ConfirmDialog.component';
 
 export type TOpenDeleteDialogValue = {
@@ -22,15 +24,18 @@ const DELETE_OVERLAY_COLOR = 'rgba(187, 0, 0, 0.12)';
 export const useOpenDeleteDialog = () => {
   const openDialog = useOpenDialog();
 
-  return useCallback((value: TOpenDeleteDialogValue): TDialog<void> => {
-    return openDialog(
-      ConfirmDialogComponent,
-      {
-        text: value.text,
-        successButtonText: value.successButtonText ?? 'Löschen',
-        successButtonColor: DELETE_BUTTON_COLOR,
-      },
-      { color: DELETE_OVERLAY_COLOR },
-    );
-  }, [openDialog]);
+  return useCallback(
+    (value: TOpenDeleteDialogValue): TDialog<void> => {
+      return openDialog(
+        ConfirmDialogComponent,
+        {
+          text: value.text,
+          successButtonText: value.successButtonText ?? 'Löschen',
+          successButtonColor: DELETE_BUTTON_COLOR,
+        },
+        { color: DELETE_OVERLAY_COLOR },
+      );
+    },
+    [openDialog],
+  );
 };

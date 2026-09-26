@@ -1,10 +1,10 @@
-import React from 'react';
-import Fieldset from "@/components/universals/forms/Fieldset.component";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
-import Button from "@/components/universals/forms/Button";
-import Section from "@/components/universals/section/Section";
-import { ItemTypeDto } from "@/services/product/item-type.type";
-import AttributeFilter from "@/components/apps/product/item/queryable-list/AttributeFilter";
+import type React from 'react';
+import AttributeFilter from '@/components/apps/product/item/queryable-list/AttributeFilter';
+import Button from '@/components/universals/forms/Button';
+import Fieldset from '@/components/universals/forms/Fieldset.component';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import Section from '@/components/universals/section/Section';
+import type { ItemTypeDto } from '@/services/product/item-type.type';
 
 type QueryableItemListFilterSectionProps = {
   itemTypes: Array<ItemTypeDto>;
@@ -13,12 +13,9 @@ type QueryableItemListFilterSectionProps = {
   attributes?: Record<string, string>;
 };
 
-const QueryableItemListFilterSection: React.FunctionComponent<QueryableItemListFilterSectionProps> = ({
-  catalogId,
-  itemTypes,
-  filteredItemTypeIds,
-  attributes,
-}) => {
+const QueryableItemListFilterSection: React.FunctionComponent<
+  QueryableItemListFilterSectionProps
+> = ({ catalogId, itemTypes, filteredItemTypeIds, attributes }) => {
   return (
     <Section name="Suchfilter">
       <form method="GET">
@@ -27,7 +24,12 @@ const QueryableItemListFilterSection: React.FunctionComponent<QueryableItemListF
             {itemTypes.map(({ id, name }) => (
               <div key={id}>
                 <label>
-                  <input type="checkbox" name="itemTypeId" value={id} defaultChecked={filteredItemTypeIds?.includes(id)}/>
+                  <input
+                    type="checkbox"
+                    name="itemTypeId"
+                    value={id}
+                    defaultChecked={filteredItemTypeIds?.includes(id)}
+                  />
                   {name}
                 </label>
               </div>
@@ -39,9 +41,7 @@ const QueryableItemListFilterSection: React.FunctionComponent<QueryableItemListF
           />
         </Fieldset>
 
-        <Button type="submit">
-          Suchen
-        </Button>
+        <Button type="submit">Suchen</Button>
       </form>
     </Section>
   );

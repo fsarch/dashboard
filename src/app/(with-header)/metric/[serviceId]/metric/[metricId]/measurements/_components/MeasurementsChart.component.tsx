@@ -1,17 +1,17 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
 } from 'recharts';
-import { TMeasurementDto } from '@/services/metric/metric.type';
+import type { TMeasurementDto } from '@/services/metric/metric.type';
 
 type MeasurementsChartProps = {
   data: TMeasurementDto[];
@@ -28,7 +28,9 @@ const formatChartData = (measurements: TMeasurementDto[]) => {
   }));
 };
 
-const MeasurementsChart: React.FunctionComponent<MeasurementsChartProps> = ({ data }) => {
+const MeasurementsChart: React.FunctionComponent<MeasurementsChartProps> = ({
+  data,
+}) => {
   const chartData = formatChartData(data);
 
   return (
@@ -57,7 +59,10 @@ const MeasurementsChart: React.FunctionComponent<MeasurementsChartProps> = ({ da
             tick={{ fill: 'var(--color-text)', fontSize: 12 }}
             tickLine={false}
             axisLine={{ stroke: 'var(--color-border)' }}
-            domain={[(dataMin: number) => Math.min(0, dataMin - 1), (dataMax: number) => dataMax + 1]}
+            domain={[
+              (dataMin: number) => Math.min(0, dataMin - 1),
+              (dataMax: number) => dataMax + 1,
+            ]}
           />
           <Tooltip
             contentStyle={{
@@ -68,9 +73,7 @@ const MeasurementsChart: React.FunctionComponent<MeasurementsChartProps> = ({ da
             }}
             labelStyle={{ color: 'var(--color-text)' }}
           />
-          <Legend
-            wrapperStyle={{ color: 'var(--color-text)' }}
-          />
+          <Legend wrapperStyle={{ color: 'var(--color-text)' }} />
           <Line
             type="monotone"
             dataKey="value"

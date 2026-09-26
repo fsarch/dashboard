@@ -1,5 +1,5 @@
-import React from 'react';
 import clsx from 'clsx';
+import type React from 'react';
 import styles from './ProgressBar.module.scss';
 
 type ProgressBarProps = {
@@ -24,10 +24,7 @@ const ProgressBar: React.FunctionComponent<ProgressBarProps> = ({
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <div
-          className={styles.fill}
-          style={{ width: `${clampedValue}%` }}
-        />
+        <div className={styles.fill} style={{ width: `${clampedValue}%` }} />
       </div>
       <div className={styles.label}>
         {label ?? `${Math.round(clampedValue)}%`}

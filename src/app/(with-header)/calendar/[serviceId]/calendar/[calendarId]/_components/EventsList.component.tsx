@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TEventDto } from '@/services/calendar/calendar.type';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import Pagination from '@/components/universals/pagination/Pagination.component';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import Pagination from '@/components/universals/pagination/Pagination.component';
+import type {
+  TEventDto,
+  TPaginationResultDto,
+} from '@/services/calendar/calendar.type';
 
 type EventsListProps = {
   events: TPaginationResultDto<TEventDto>;
@@ -26,11 +29,15 @@ const EventsList: React.FunctionComponent<EventsListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/calendar/${serviceId}/calendar/${calendarId}?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/calendar/${serviceId}/calendar/${calendarId}?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/calendar/${serviceId}/calendar/${calendarId}?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/calendar/${serviceId}/calendar/${calendarId}?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   if (data.length === 0) {
@@ -39,7 +46,13 @@ const EventsList: React.FunctionComponent<EventsListProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div style={{ border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1rem' }}>
+      <div
+        style={{
+          border: '1px solid var(--color-border)',
+          borderRadius: '8px',
+          padding: '1rem',
+        }}
+      >
         <List>
           {data.map((event) => (
             <LinkListItem
@@ -50,7 +63,9 @@ const EventsList: React.FunctionComponent<EventsListProps> = ({
               <br />
               <small>
                 {new Date(event.startAt).toLocaleString()}
-                {event.endAt ? ` – ${new Date(event.endAt).toLocaleString()}` : ''}
+                {event.endAt
+                  ? ` – ${new Date(event.endAt).toLocaleString()}`
+                  : ''}
                 {event.timezone ? ` (${event.timezone})` : ''}
               </small>
               {event.description ? (

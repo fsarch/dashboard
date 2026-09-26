@@ -1,5 +1,5 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
-import { TMetadataDataType } from '@/services/file-server/file-server-api.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TMetadataDataType } from '@/services/file-server/file-server-api.type';
 
 export const COLLECTION_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
@@ -21,7 +21,10 @@ export const COLLECTION_CREATE_FORM: TGeneratedFormDefinition = {
   buttons: { submitButtonText: 'Sammlung erstellen' },
 };
 
-export const COLLECTION_RENAME_FORM = (collectionId: string, currentName: string): TGeneratedFormDefinition => ({
+export const COLLECTION_RENAME_FORM = (
+  collectionId: string,
+  currentName: string,
+): TGeneratedFormDefinition => ({
   inputs: [{ id: 'name', $type: 'text', label: 'Name' }],
   initialValues: { name: currentName },
   endpoint: {
@@ -32,7 +35,10 @@ export const COLLECTION_RENAME_FORM = (collectionId: string, currentName: string
   postEndpointActions: [
     {
       $type: 'redirect',
-      url: { $type: 'jsonata', value: `service.localPath & '/collection/${collectionId}'` },
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/collection/${collectionId}'`,
+      },
     },
   ],
   buttons: { submitButtonText: 'Umbenennen' },
@@ -53,13 +59,19 @@ export const COLLECTION_ADD_ASSET_FORM = (
   ],
   initialValues: { assetId: '' },
   endpoint: {
-    path: { $type: 'jsonata', value: `'/v1/collections/${collectionId}/assets/' & form.assetId` },
+    path: {
+      $type: 'jsonata',
+      value: `'/v1/collections/${collectionId}/assets/' & form.assetId`,
+    },
     method: 'POST',
   },
   postEndpointActions: [
     {
       $type: 'redirect',
-      url: { $type: 'jsonata', value: `service.localPath & '/collection/${collectionId}'` },
+      url: {
+        $type: 'jsonata',
+        value: `service.localPath & '/collection/${collectionId}'`,
+      },
     },
   ],
   buttons: { submitButtonText: 'Zur Sammlung hinzufügen' },
@@ -74,7 +86,10 @@ export const TAG_CREATE_FORM: TGeneratedFormDefinition = {
     body: { $type: 'jsonata', value: '{ "key": form.key }' },
   },
   postEndpointActions: [
-    { $type: 'redirect', url: { $type: 'jsonata', value: "service.localPath & '/tags'" } },
+    {
+      $type: 'redirect',
+      url: { $type: 'jsonata', value: "service.localPath & '/tags'" },
+    },
   ],
   buttons: { submitButtonText: 'Tag erstellen' },
 };
@@ -121,7 +136,12 @@ export const METADATA_DEFINITION_CREATE_FORM: TGeneratedFormDefinition = {
       label: 'Enum-Werte (kommagetrennt, nur bei Datentyp "Enum")',
     },
   ],
-  initialValues: { key: '', dataType: 'string', appliesToType: '', enumValues: '' },
+  initialValues: {
+    key: '',
+    dataType: 'string',
+    appliesToType: '',
+    enumValues: '',
+  },
   endpoint: {
     path: '/v1/metadata-definitions',
     method: 'POST',
@@ -134,13 +154,19 @@ export const METADATA_DEFINITION_CREATE_FORM: TGeneratedFormDefinition = {
   postEndpointActions: [
     {
       $type: 'redirect',
-      url: { $type: 'jsonata', value: "service.localPath & '/metadata-definitions'" },
+      url: {
+        $type: 'jsonata',
+        value: "service.localPath & '/metadata-definitions'",
+      },
     },
   ],
   buttons: { submitButtonText: 'Metadaten-Definition erstellen' },
 };
 
-export const ASSET_ADD_TAG_FORM = (assetId: string, backPath: string): TGeneratedFormDefinition => ({
+export const ASSET_ADD_TAG_FORM = (
+  assetId: string,
+  backPath: string,
+): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'tagId',
@@ -158,16 +184,23 @@ export const ASSET_ADD_TAG_FORM = (assetId: string, backPath: string): TGenerate
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": [body.data.{ "id": id, "value": id, "label": key }] }',
+        value:
+          '{ "body": [body.data.{ "id": id, "value": id, "label": key }] }',
       },
     },
   },
   endpoint: {
-    path: { $type: 'jsonata', value: `'/v1/assets/${assetId}/tags/' & form.tagId` },
+    path: {
+      $type: 'jsonata',
+      value: `'/v1/assets/${assetId}/tags/' & form.tagId`,
+    },
     method: 'POST',
   },
   postEndpointActions: [
-    { $type: 'redirect', url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` } },
+    {
+      $type: 'redirect',
+      url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` },
+    },
   ],
   buttons: { submitButtonText: 'Tag hinzufügen' },
 });
@@ -178,24 +211,33 @@ export const ASSET_SET_METADATA_FORM = (
   dataType: TMetadataDataType,
   backPath: string,
 ): TGeneratedFormDefinition => ({
-  inputs: [{
-    id: 'value',
-    $type: 'text',
-    label: dataType === 'number' ? 'Wert (Dezimaltrennzeichen "," oder ".")' : 'Wert',
-  }],
+  inputs: [
+    {
+      id: 'value',
+      $type: 'text',
+      label:
+        dataType === 'number'
+          ? 'Wert (Dezimaltrennzeichen "," oder ".")'
+          : 'Wert',
+    },
+  ],
   initialValues: { value: '' },
   endpoint: {
     path: `/v1/assets/${assetId}/metadata/${definitionId}`,
     method: 'PUT',
     body: {
       $type: 'jsonata',
-      value: dataType === 'number'
-        ? '{ "value": $replace(form.value, ",", ".") }'
-        : '{ "value": form.value }',
+      value:
+        dataType === 'number'
+          ? '{ "value": $replace(form.value, ",", ".") }'
+          : '{ "value": form.value }',
     },
   },
   postEndpointActions: [
-    { $type: 'redirect', url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` } },
+    {
+      $type: 'redirect',
+      url: { $type: 'jsonata', value: `service.localPath & '${backPath}'` },
+    },
   ],
   buttons: { submitButtonText: 'Speichern' },
 });

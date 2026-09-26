@@ -1,14 +1,14 @@
-import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
-import Section from '@/components/universals/section/Section';
+import Link from 'next/link';
+import Button from '@/components/universals/forms/Button';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
-import { frontierService } from '@/services/frontier/frontier.service';
-import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import Button from '@/components/universals/forms/Button';
-import Link from 'next/link';
-import { uacUtils } from '@/utils/uac.utils';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import DevResponseSection from '@/components/universals/section/DevResponseSection.component';
+import Section from '@/components/universals/section/Section';
+import { frontierService } from '@/services/frontier/frontier.service';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -35,9 +35,7 @@ export default async function DomainListPage({
         </div>
         <List>
           {domains.map((domain) => (
-            <ListItem key={domain.id}>
-              {domain.domainName}
-            </ListItem>
+            <ListItem key={domain.id}>{domain.domainName}</ListItem>
           ))}
         </List>
       </Section>
@@ -47,4 +45,3 @@ export default async function DomainListPage({
     </DefaultPage>
   );
 }
-

@@ -1,24 +1,35 @@
+import { headers } from 'next/headers';
+import { jsonataUtils } from '@/components/apps/custom-app/jsonata.utils';
+import type { AutoNavigationItemType } from '@/components/universals/page/AutoNavigation.type';
+import type {
+  AppDefinitionType,
+  AppNavigation,
+  AppNavigationItem,
+} from '@/constants/app.type';
+import { createPathMatcher } from '@/utils/app/routeMatch.utils';
 
-import type { AppDefinitionType, AppNavigation, AppNavigationItem } from "@/constants/app.type";
-import { headers } from "next/headers";
-import { AutoNavigationItemType } from "@/components/universals/page/AutoNavigation.type";
-import { jsonataUtils } from "@/components/apps/custom-app/jsonata.utils";
-import { createPathMatcher } from "@/utils/app/routeMatch.utils";
-
-const selectNavigation = (data: { navigation?: Array<AppNavigationItem>; navigations?: Array<AppNavigation> }, position: 'sidebar' | 'sidebar-bottom') => {
-  let navigations: Array<AppNavigationItem> | undefined = undefined;
+const selectNavigation = (
+  data: {
+    navigation?: Array<AppNavigationItem>;
+    navigations?: Array<AppNavigation>;
+  },
+  position: 'sidebar' | 'sidebar-bottom',
+) => {
+  let navigations: Array<AppNavigationItem> | undefined;
   // when position is sidebar, use the old navigation definition for backward compatibility
   if (position === 'sidebar') {
     navigations = data.navigation;
   }
   // search navigation by position
-  const foundNavigation = data.navigations?.find((nav) => nav.position === position)?.items;
+  const foundNavigation = data.navigations?.find(
+    (nav) => nav.position === position,
+  )?.items;
   if (foundNavigation) {
     navigations = foundNavigation;
   }
 
   return navigations;
-}
+};
 
 const getNavigationItems = async (
   config: Pick<AppDefinitionType, 'navigations' | 'navigation' | 'routes'>,
@@ -44,28 +55,30 @@ const getNavigationItems = async (
   }
 
   if (!navigations) {
-    return undefined
+    return undefined;
   }
 
-  return Promise.all(navigations.map(async (item): Promise<AutoNavigationItemType> => {
-    const path = await jsonataUtils.evaluateStringValue(item.path, {
-      params: matchedRouteParams,
-    });
+  return Promise.all(
+    navigations.map(async (item): Promise<AutoNavigationItemType> => {
+      const path = await jsonataUtils.evaluateStringValue(item.path, {
+        params: matchedRouteParams,
+      });
 
-    if (!serviceRoute) {
+      if (!serviceRoute) {
+        return {
+          ...item,
+          path,
+          isSelected: false,
+        };
+      }
+
       return {
         ...item,
         path,
-        isSelected: false,
+        isSelected: serviceRoute.localeCompare(path) === 0,
       };
-    }
-
-    return {
-      ...item,
-      path,
-      isSelected: serviceRoute.localeCompare(path) === 0,
-    };
-  }));
+    }),
+  );
 };
 
 export const navigationUtils = {

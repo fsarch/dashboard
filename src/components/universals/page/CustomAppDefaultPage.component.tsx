@@ -1,13 +1,14 @@
-import React, { PropsWithChildren } from 'react';
-import { getCurrentServiceBaseConfiguration } from "@/utils/configuration.utils";
-import { AutoNavigation } from "@/components/universals/page/AutoNavigation.component";
-import styles from './DefaultPage.module.scss';
-import { match } from 'path-to-regexp';
-import memoize from 'lodash.memoize';
 import clsx from 'clsx';
-import DefaultPageHeader from "@/components/universals/page/DefaultPageHeader.component";
-import { TCustomAppConfig } from "@/components/apps/custom-app/custom-app.type";
-import { navigationUtils } from "@/utils/app/navigation.utils";
+import memoize from 'lodash.memoize';
+import { match } from 'path-to-regexp';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
+import type { TCustomAppConfig } from '@/components/apps/custom-app/custom-app.type';
+import { AutoNavigation } from '@/components/universals/page/AutoNavigation.component';
+import DefaultPageHeader from '@/components/universals/page/DefaultPageHeader.component';
+import { navigationUtils } from '@/utils/app/navigation.utils';
+import { getCurrentServiceBaseConfiguration } from '@/utils/configuration.utils';
+import styles from './DefaultPage.module.scss';
 
 type CustomAppDefaultPageProps = PropsWithChildren<{
   className?: string;
@@ -19,12 +20,9 @@ const createPathMatcher = memoize((route: string) => {
   return match(route);
 });
 
-export const CustomAppDefaultPage: React.FunctionComponent<CustomAppDefaultPageProps> = async ({
-  children,
-  className,
-  config,
-  view,
-}) => {
+export const CustomAppDefaultPage: React.FunctionComponent<
+  CustomAppDefaultPageProps
+> = async ({ children, className, config, view }) => {
   let baseConfiguration;
   try {
     baseConfiguration = await getCurrentServiceBaseConfiguration();
@@ -32,8 +30,14 @@ export const CustomAppDefaultPage: React.FunctionComponent<CustomAppDefaultPageP
     return children;
   }
 
-  const navigations = await navigationUtils.getNavigationItems(config, 'sidebar');
-  const bottomNavigations = await navigationUtils.getNavigationItems(config, 'sidebar-bottom');
+  const navigations = await navigationUtils.getNavigationItems(
+    config,
+    'sidebar',
+  );
+  const bottomNavigations = await navigationUtils.getNavigationItems(
+    config,
+    'sidebar-bottom',
+  );
 
   return (
     <div className={clsx(className, styles.root)}>
@@ -43,15 +47,10 @@ export const CustomAppDefaultPage: React.FunctionComponent<CustomAppDefaultPageP
       />
       {navigations ? (
         <nav className={styles.navigation}>
-          <AutoNavigation
-            items={navigations}
-            bottomItems={bottomNavigations}
-          />
+          <AutoNavigation items={navigations} bottomItems={bottomNavigations} />
         </nav>
       ) : null}
-      <main className={styles.main}>
-        {children}
-      </main>
+      <main className={styles.main}>{children}</main>
     </div>
   );
 };

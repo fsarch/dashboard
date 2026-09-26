@@ -1,26 +1,33 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Form, Formik, FormikHelpers } from "formik";
-import Button from "@/components/universals/forms/Button";
-import Input from "@/components/universals/forms/Input";
-import { useRouter } from "next/navigation";
-import { CreateCatalogDto } from "@/services/product/catalog.type";
-import { createCatalog } from "@/components/apps/product/catalog/CatalogCreateForm.server-action";
+import { Form, Formik, type FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { createCatalog } from '@/components/apps/product/catalog/CatalogCreateForm.server-action';
+import Button from '@/components/universals/forms/Button';
+import Input from '@/components/universals/forms/Input';
+import type { CreateCatalogDto } from '@/services/product/catalog.type';
 
-type CatalogCreateFormProps = {
-};
+type CatalogCreateFormProps = {};
 
-const CatalogCreateForm: React.FunctionComponent<CatalogCreateFormProps> = ({
-}) => {
+const CatalogCreateForm: React.FunctionComponent<
+  CatalogCreateFormProps
+> = ({}) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (value: CreateCatalogDto, helpers: FormikHelpers<CreateCatalogDto>) => {
-    await createCatalog(value);
+  const handleSubmit = useCallback(
+    async (
+      value: CreateCatalogDto,
+      helpers: FormikHelpers<CreateCatalogDto>,
+    ) => {
+      await createCatalog(value);
 
-    router.refresh();
-    helpers.resetForm();
-  }, [router]);
+      router.refresh();
+      helpers.resetForm();
+    },
+    [router],
+  );
 
   return (
     <Formik
@@ -30,10 +37,8 @@ const CatalogCreateForm: React.FunctionComponent<CatalogCreateFormProps> = ({
       }}
     >
       <Form>
-        <Input name="name" type="input"/>
-        <Button type="submit">
-          Erstellen
-        </Button>
+        <Input name="name" type="input" />
+        <Button type="submit">Erstellen</Button>
       </Form>
     </Formik>
   );

@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TScopeTypeDto } from '@/services/watchtower/watchtower.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type {
+  TPaginationResultDto,
+  TScopeTypeDto,
+} from '@/services/watchtower/watchtower.type';
 
 type ScopeTypesListProps = {
   scopeTypes: TPaginationResultDto<TScopeTypeDto>;
@@ -25,11 +28,15 @@ const ScopeTypesList: React.FunctionComponent<ScopeTypesListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/watchtower/${serviceId}/scope-type?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/scope-type?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/watchtower/${serviceId}/scope-type?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/scope-type?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
@@ -43,7 +50,8 @@ const ScopeTypesList: React.FunctionComponent<ScopeTypesListProps> = ({
                 href={`/watchtower/${serviceId}/scope-type/${scopeType.id}`}
               >
                 <ListItem>
-                  <strong>{scopeType.name}</strong> ({scopeType.key}) - Score Factor: {scopeType.scoreFactor}
+                  <strong>{scopeType.name}</strong> ({scopeType.key}) - Score
+                  Factor: {scopeType.scoreFactor}
                 </ListItem>
               </Link>
             ))}

@@ -1,10 +1,14 @@
-import { printerService } from "@/services/printer/printer.service";
-import { DefaultPage } from "@/components/universals/page/DefaultPage.component";
-import Section from "@/components/universals/section/Section";
-import Link from "next/link";
-import Button from "@/components/universals/forms/Button";
+import Link from 'next/link';
+import Button from '@/components/universals/forms/Button';
+import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
+import Section from '@/components/universals/section/Section';
+import { printerService } from '@/services/printer/printer.service';
 
-export default async function Home({ params }: { params: Promise<{ printerId: string, serviceId: string }> }) {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ printerId: string; serviceId: string }>;
+}) {
   const { printerId, serviceId } = await params;
   const printer = await printerService.getPrinter(printerId);
 
@@ -13,9 +17,7 @@ export default async function Home({ params }: { params: Promise<{ printerId: st
       <Section name="Printer Details">
         <p>{printer.name}</p>
         <Link href={`/printer/${serviceId}/printer/${printerId}/jobs`}>
-          <Button type="button">
-            Jobs anzeigen
-          </Button>
+          <Button type="button">Jobs anzeigen</Button>
         </Link>
       </Section>
     </DefaultPage>

@@ -1,9 +1,15 @@
-export { initializeTracing, shutdownTracing, registerShutdownHandler, getTracer, withSpan } from "./tracing";
 export type {
   TTracingConfiguration,
-  TTracingSamplerType,
-  TTracingExporterConfiguration,
   TTracingConsoleExporterConfiguration,
-  TTracingOtlpHttpExporterConfiguration,
+  TTracingExporterConfiguration,
   TTracingOtlpGrpcExporterConfiguration,
-} from "@/utils/configuration.type";
+  TTracingOtlpHttpExporterConfiguration,
+  TTracingSamplerType,
+} from '@/utils/configuration.type';
+export {
+  getTracer,
+  initializeTracing,
+  registerShutdownHandler,
+  shutdownTracing,
+  withSpan,
+} from './tracing';

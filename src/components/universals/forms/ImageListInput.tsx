@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { useField } from "formik";
-import { ImageInput } from "@/components/universals/forms/ImageInput";
-import TileListItem from "@/components/universals/tile-list/TileListItem";
+import { useField } from 'formik';
+import type React from 'react';
+import { ImageInput } from '@/components/universals/forms/ImageInput';
+import TileListItem from '@/components/universals/tile-list/TileListItem';
 import styles from './ImageListInput.module.scss';
 
 type ImageInputProps = {
@@ -34,9 +34,7 @@ export const ImageListInput: React.FunctionComponent<ImageInputProps> = ({
         name={hasValue ? '' : 'Upload Image'}
         backgroundImage={field.value?.imageUrl}
         icon={hasValue ? undefined : 'upload'}
-      >
-
-      </TileListItem>
+      ></TileListItem>
       <ImageInput
         className={styles.input}
         name={`${name}.$blob`}

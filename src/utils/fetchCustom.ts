@@ -1,6 +1,9 @@
-import { getAccessToken } from "@/utils/getAccessToken";
+import { getAccessToken } from '@/utils/getAccessToken';
 
-export async function fetchCustom(url: string, init?: RequestInit): Promise<Response> {
+export async function fetchCustom(
+  url: string,
+  init?: RequestInit,
+): Promise<Response> {
   const requestHeaders = new Headers(init?.headers);
 
   if (!requestHeaders.has('Authorization')) {
@@ -15,7 +18,7 @@ export async function fetchCustom(url: string, init?: RequestInit): Promise<Resp
     headers: requestHeaders,
   });
 
-  console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`)
+  console.debug(`[${init?.method || 'GET'}] ${res.url} - ${res.status}`);
 
   return res;
 }

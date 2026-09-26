@@ -1,10 +1,13 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
-import { aggregateMeasurementsAction, TAggregateFormState } from './AggregateForm.server-action';
 import Button from '@/components/universals/forms/Button';
 import styles from './AggregateForm.module.scss';
+import {
+  aggregateMeasurementsAction,
+  type TAggregateFormState,
+} from './AggregateForm.server-action';
 import AggregateResultChart from './AggregateResultChart.component';
 
 type AggregateFormProps = {
@@ -29,12 +32,15 @@ const AggregateForm: React.FunctionComponent<AggregateFormProps> = ({
   metricName,
 }) => {
   const [state, formAction] = useFormState<TAggregateFormState, FormData>(
-    (prevState, formData) => aggregateMeasurementsAction(serviceId, metricId, prevState, formData),
-    {}
+    (prevState, formData) =>
+      aggregateMeasurementsAction(serviceId, metricId, prevState, formData),
+    {},
   );
 
   const now = new Date();
-  const defaultStartTime = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
+  const defaultStartTime = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 16);
   const defaultEndTime = now.toISOString().slice(0, 16);
 
   return (
@@ -76,7 +82,12 @@ const AggregateForm: React.FunctionComponent<AggregateFormProps> = ({
 
         <div className={styles.field}>
           <label htmlFor="aggregation">Aggregation *</label>
-          <select id="aggregation" name="aggregation" defaultValue="avg" required>
+          <select
+            id="aggregation"
+            name="aggregation"
+            defaultValue="avg"
+            required
+          >
             <option value="avg">Average (avg)</option>
             <option value="sum">Sum</option>
             <option value="min">Minimum</option>

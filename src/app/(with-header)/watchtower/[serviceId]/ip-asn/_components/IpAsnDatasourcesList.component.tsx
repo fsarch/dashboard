@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TIpAsnDatasourceDto } from '@/services/watchtower/watchtower.type';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
 import List from '@/components/universals/list/List';
 import ListItem from '@/components/universals/list/ListItem';
 import Pagination from '@/components/universals/pagination/Pagination.component';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type {
+  TIpAsnDatasourceDto,
+  TPaginationResultDto,
+} from '@/services/watchtower/watchtower.type';
 
 type IpAsnDatasourcesListProps = {
   datasources: TPaginationResultDto<TIpAsnDatasourceDto>;
@@ -15,21 +18,22 @@ type IpAsnDatasourcesListProps = {
   pageSize: number;
 };
 
-const IpAsnDatasourcesList: React.FunctionComponent<IpAsnDatasourcesListProps> = ({
-  datasources,
-  serviceId,
-  page,
-  pageSize,
-}) => {
+const IpAsnDatasourcesList: React.FunctionComponent<
+  IpAsnDatasourcesListProps
+> = ({ datasources, serviceId, page, pageSize }) => {
   const { data, metadata } = datasources;
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/watchtower/${serviceId}/ip-asn?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/ip-asn?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/watchtower/${serviceId}/ip-asn?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/watchtower/${serviceId}/ip-asn?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   return (
@@ -43,7 +47,8 @@ const IpAsnDatasourcesList: React.FunctionComponent<IpAsnDatasourcesListProps> =
                 href={`/watchtower/${serviceId}/ip-asn/${datasource.id}`}
               >
                 <ListItem>
-                  <strong>{datasource.name}</strong> {datasource.externalId ? `(${datasource.externalId})` : null}
+                  <strong>{datasource.name}</strong>{' '}
+                  {datasource.externalId ? `(${datasource.externalId})` : null}
                 </ListItem>
               </Link>
             ))}

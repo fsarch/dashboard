@@ -1,14 +1,14 @@
-import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
-import { getAccessToken } from '@/utils/getAccessToken';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { uacUtils } from '@/utils/uac.utils';
-import { getServiceConfigurationById } from '@/utils/configuration.utils';
-import { EServiceType } from '@/utils/configuration.type';
+import RecordsList from '@/components/apps/dblight/RecordsList.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
 import { dblightService } from '@/services/dblight/dblight.service';
-import RecordsList from '@/components/apps/dblight/RecordsList.component';
+import { EServiceType } from '@/utils/configuration.type';
+import { getServiceConfigurationById } from '@/utils/configuration.utils';
+import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { uacUtils } from '@/utils/uac.utils';
 
 export const generateMetadata = createAutomaticMetadata();
 
@@ -17,14 +17,19 @@ type RecordsPageProps = {
   searchParams: Promise<{ cursor?: string }>;
 };
 
-export default async function RecordsPage({ params, searchParams }: RecordsPageProps) {
+export default async function RecordsPage({
+  params,
+  searchParams,
+}: RecordsPageProps) {
   const { serviceId, collectionId } = await params;
   const { cursor } = await searchParams;
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
     const callbackUrl = (await headers()).get('X-Original-URL') || '/';
-    return redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    return redirect(
+      `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+    );
   }
 
   const service = await getServiceConfigurationById(serviceId);
@@ -41,13 +46,24 @@ export default async function RecordsPage({ params, searchParams }: RecordsPageP
     return notFound();
   }
 
-  const collection = await dblightService.getCollection(collectionId, serviceId);
-  const page = await dblightService.listRecords(collectionId, { cursor, limit: 25 }, serviceId);
+  const collection = await dblightService.getCollection(
+    collectionId,
+    serviceId,
+  );
+  const page = await dblightService.listRecords(
+    collectionId,
+    { cursor, limit: 25 },
+    serviceId,
+  );
 
   return (
     <DefaultPage>
       <Section name={`Einträge: ${collection.name}`}>
-        <RecordsList page={page} serviceId={serviceId} collectionId={collectionId} />
+        <RecordsList
+          page={page}
+          serviceId={serviceId}
+          collectionId={collectionId}
+        />
       </Section>
     </DefaultPage>
   );

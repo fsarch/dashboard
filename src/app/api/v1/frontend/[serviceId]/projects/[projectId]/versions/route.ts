@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { fetchService } from '@/utils/fetchService';
+import { type NextRequest, NextResponse } from 'next/server';
 import { authUtils } from '@/utils/auth.utils';
+import { fetchService } from '@/utils/fetchService';
 
 /**
  * Nimmt den Datei-Upload direkt vom Browser entgegen (statt über eine Server Action),
@@ -16,13 +16,18 @@ export async function POST(
   const { serviceId, projectId } = await params;
 
   const body = await req.arrayBuffer();
-  const contentType = req.headers.get('content-type') || 'application/octet-stream';
+  const contentType =
+    req.headers.get('content-type') || 'application/octet-stream';
 
   // Optional version metadata, passed through from the browser to the
   // frontend-service unchanged - see VERSION_*_HEADER in frontend-server's
   // src/constants/app-constants.ts.
   const metadataHeaders: Record<string, string> = {};
-  for (const headerName of ['x-version-name', 'x-version-description', 'x-version-external-id']) {
+  for (const headerName of [
+    'x-version-name',
+    'x-version-description',
+    'x-version-external-id',
+  ]) {
     const value = req.headers.get(headerName);
     if (value) {
       metadataHeaders[headerName] = value;

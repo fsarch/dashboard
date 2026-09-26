@@ -1,30 +1,29 @@
 'use client';
 
-import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import ContextMenuItem from '@/components/universals/context-menu/ContextMenuItem.component';
-import { TContextMenuComponent } from '@/components/universals/context-menu/contextMenu.type';
-import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
-import { useOpenDeleteDialog } from '@/components/universals/dialogs/confirm/useOpenDeleteDialog';
-import { DialogResult } from '@/components/universals/dialog/dialog.enum';
-import PromptDialog from '@/components/universals/dialogs/prompt/PromptDialog.component';
-import SelectCustomResourceDialog from '@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component';
-import { TFolder } from '@/services/file-server/file-server-api.type';
+import React, { useCallback } from 'react';
 import {
   deleteDriveFolder,
   moveDriveFolder,
   renameDriveFolder,
 } from '@/components/apps/drive/context-menu/DriveTileContextMenu.server-actions';
+import ContextMenuItem from '@/components/universals/context-menu/ContextMenuItem.component';
+import type { TContextMenuComponent } from '@/components/universals/context-menu/contextMenu.type';
+import { useOpenDialog } from '@/components/universals/dialog/DialogProvider.context';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import { useOpenDeleteDialog } from '@/components/universals/dialogs/confirm/useOpenDeleteDialog';
+import PromptDialog from '@/components/universals/dialogs/prompt/PromptDialog.component';
+import SelectCustomResourceDialog from '@/components/universals/dialogs/select-custom-resource/SelectCustomResourceDialog.component';
+import type { TFolder } from '@/services/file-server/file-server-api.type';
 
 type FolderTileContextMenuValue = {
   serviceId: string;
   folder: TFolder;
 };
 
-const FolderTileContextMenu: TContextMenuComponent<FolderTileContextMenuValue> = ({
-  value,
-  close,
-}) => {
+const FolderTileContextMenu: TContextMenuComponent<
+  FolderTileContextMenuValue
+> = ({ value, close }) => {
   const openDialog = useOpenDialog();
   const openDeleteDialog = useOpenDeleteDialog();
   const router = useRouter();

@@ -1,84 +1,99 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const FrontierAppDefinition: AppDefinitionType = {
   name: 'Frontier',
   basePath: '/frontier',
-  navigation: [{
-    name: 'Domain Groups',
-    path: '/',
-    icon: 'layer-group',
-  }, {
-    name: 'Hooks',
-    path: '/hook',
-    icon: 'code',
-  }],
+  navigation: [
+    {
+      name: 'Domain Groups',
+      path: '/',
+      icon: 'layer-group',
+    },
+    {
+      name: 'Hooks',
+      path: '/hook',
+      icon: 'code',
+    },
+  ],
   routes: {
     '/domain-group/:domainGroupId{/*path}': {
-      navigation: [{
-        name: 'Zu den Domain Groups',
-        path: '/',
-        icon: 'arrow-left',
-      }, {
-        name: 'Übersicht',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId",
+      navigation: [
+        {
+          name: 'Zu den Domain Groups',
+          path: '/',
+          icon: 'arrow-left',
         },
-        icon: 'layer-group',
-      }, {
-        name: 'Domains',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/domain'",
+        {
+          name: 'Übersicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId",
+          },
+          icon: 'layer-group',
         },
-        icon: 'globe',
-      }, {
-        name: 'Cache Policies',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/cache-policy'",
+        {
+          name: 'Domains',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/domain'",
+          },
+          icon: 'globe',
         },
-        icon: 'database',
-      }, {
-        name: 'Path Rules',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/path-rule'",
+        {
+          name: 'Cache Policies',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/cache-policy'",
+          },
+          icon: 'database',
         },
-        icon: 'route',
-      }, {
-        name: 'CORS Policies',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/cors-policy'",
+        {
+          name: 'Path Rules',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/path-rule'",
+          },
+          icon: 'route',
         },
-        icon: 'shield-halved',
-      }, {
-        name: 'Log Policies',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/log-policy'",
+        {
+          name: 'CORS Policies',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/cors-policy'",
+          },
+          icon: 'shield-halved',
         },
-        icon: 'file-lines',
-      }, {
-        name: 'Request Logs',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/request-log'",
+        {
+          name: 'Log Policies',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/log-policy'",
+          },
+          icon: 'file-lines',
         },
-        icon: 'list-check',
-      }, {
-        name: 'Upstream Groups',
-        path: {
-          $type: 'jsonata',
-          value: "'/domain-group/' & params.domainGroupId & '/upstream-group'",
+        {
+          name: 'Request Logs',
+          path: {
+            $type: 'jsonata',
+            value: "'/domain-group/' & params.domainGroupId & '/request-log'",
+          },
+          icon: 'list-check',
         },
-        icon: 'server',
-      }, {
-        name: 'Hooks',
-        path: '/hook',
-        icon: 'code',
-      }],
+        {
+          name: 'Upstream Groups',
+          path: {
+            $type: 'jsonata',
+            value:
+              "'/domain-group/' & params.domainGroupId & '/upstream-group'",
+          },
+          icon: 'server',
+        },
+        {
+          name: 'Hooks',
+          path: '/hook',
+          icon: 'code',
+        },
+      ],
     },
   },
 };

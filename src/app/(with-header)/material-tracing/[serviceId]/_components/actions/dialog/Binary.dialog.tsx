@@ -1,16 +1,16 @@
 import React from 'react';
-import { TDialogComponent } from "@/components/universals/dialog/dialog.type";
-import Dialog from "@/components/universals/dialog/dialog.component";
+import Dialog from '@/components/universals/dialog/dialog.component';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type { TDialogComponent } from '@/components/universals/dialog/dialog.type';
+import Button from '@/components/universals/forms/Button';
 import styles from './Binary.module.scss';
-import { DialogResult } from "@/components/universals/dialog/dialog.enum";
-import Button from "@/components/universals/forms/Button";
 
-type BinaryDialogProps = TDialogComponent<{ type: 'binary'; base64: string; mimeType: string; }, undefined>;
+type BinaryDialogProps = TDialogComponent<
+  { type: 'binary'; base64: string; mimeType: string },
+  undefined
+>;
 
-const BinaryDialog: BinaryDialogProps = ({
-  value,
-  onResult,
-}) => {
+const BinaryDialog: BinaryDialogProps = ({ value, onResult }) => {
   return (
     <Dialog>
       <div>

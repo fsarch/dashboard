@@ -1,19 +1,22 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import {
-  BarChart,
   Bar,
-  LineChart,
+  BarChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
 } from 'recharts';
-import { TAggregateResult, TAggregatedMeasurementDto } from '@/services/metric/metric.type';
+import type {
+  TAggregatedMeasurementDto,
+  TAggregateResult,
+} from '@/services/metric/metric.type';
 
 type AggregateResultChartProps = {
   result: TAggregateResult;
@@ -22,11 +25,13 @@ type AggregateResultChartProps = {
 };
 
 // Konvertiere die Aggregationsergebnisse in ein für recharts kompatibles Format
-const formatChartData = (result: TAggregateResult): Array<{ 
-  time: string; 
-  value: number; 
-  startTime: string; 
-  endTime: string 
+const formatChartData = (
+  result: TAggregateResult,
+): Array<{
+  time: string;
+  value: number;
+  startTime: string;
+  endTime: string;
 }> => {
   if (Array.isArray(result)) {
     return result.map((item: TAggregatedMeasurementDto) => ({
@@ -44,11 +49,16 @@ const formatTimeLabel = (startTime: string, endTime: string): string => {
   const start = new Date(startTime);
   const end = new Date(endTime);
   const diffHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-  
+
   if (diffHours <= 24) {
-    return start.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    return start.toLocaleString([], {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   }
-  
+
   return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
 };
 
@@ -57,28 +67,34 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div style={{
-        backgroundColor: 'var(--color-background-secondary)',
-        border: '1px solid var(--color-border)',
-        borderRadius: '8px',
-        padding: '0.5rem',
-        color: 'var(--color-text)',
-      }}>
-        <p style={{ margin: 0 }}><strong>{label}</strong></p>
+      <div
+        style={{
+          backgroundColor: 'var(--color-background-secondary)',
+          border: '1px solid var(--color-border)',
+          borderRadius: '8px',
+          padding: '0.5rem',
+          color: 'var(--color-text)',
+        }}
+      >
+        <p style={{ margin: 0 }}>
+          <strong>{label}</strong>
+        </p>
         <p style={{ margin: '0.25rem 0' }}>Value: {data.value}</p>
-        <p style={{ margin: '0.25rem 0' }}>Start: {new Date(data.startTime).toLocaleString()}</p>
-        <p style={{ margin: '0.25rem 0' }}>End: {new Date(data.endTime).toLocaleString()}</p>
+        <p style={{ margin: '0.25rem 0' }}>
+          Start: {new Date(data.startTime).toLocaleString()}
+        </p>
+        <p style={{ margin: '0.25rem 0' }}>
+          End: {new Date(data.endTime).toLocaleString()}
+        </p>
       </div>
     );
   }
   return null;
 };
 
-const AggregateResultChart: React.FunctionComponent<AggregateResultChartProps> = ({
-  result,
-  aggregationType,
-  interval,
-}) => {
+const AggregateResultChart: React.FunctionComponent<
+  AggregateResultChartProps
+> = ({ result, aggregationType, interval }) => {
   const chartData = formatChartData(result);
 
   if (chartData.length === 0) {
@@ -89,10 +105,15 @@ const AggregateResultChart: React.FunctionComponent<AggregateResultChartProps> =
 
   return (
     <div style={{ width: '100%', height: 400, marginTop: '1rem' }}>
-      <h4>Aggregationsergebnis als Diagramm ({aggregationType} per {interval})</h4>
+      <h4>
+        Aggregationsergebnis als Diagramm ({aggregationType} per {interval})
+      </h4>
       <ResponsiveContainer width="100%" height="100%">
         {isCountAggregation ? (
-          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
             <XAxis
               dataKey="time"
@@ -112,7 +133,10 @@ const AggregateResultChart: React.FunctionComponent<AggregateResultChartProps> =
             <Bar dataKey="value" fill="#8884d8" name="Count" />
           </BarChart>
         ) : (
-          <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <LineChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
             <XAxis
               dataKey="time"

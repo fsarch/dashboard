@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import * as monaco from 'monaco-editor';
 import loader from '@monaco-editor/loader';
 import { Editor } from '@monaco-editor/react';
-import { TDialogComponent } from '@/components/universals/dialog/dialog.type';
-import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import * as monaco from 'monaco-editor';
+import React, { useCallback, useState } from 'react';
 import Dialog from '@/components/universals/dialog/dialog.component';
+import { DialogResult } from '@/components/universals/dialog/dialog.enum';
+import type { TDialogComponent } from '@/components/universals/dialog/dialog.type';
 import Button from '@/components/universals/forms/Button';
 import styles from './CodeEditorDialog.module.scss';
 
@@ -55,15 +55,28 @@ const CodeEditorDialog: CodeEditorDialogType = ({ value, onResult }) => {
           height="100%"
           width="100%"
           theme="vs-dark"
-          options={{ readOnly: value.readOnly, domReadOnly: value.readOnly, minimap: { enabled: false } }}
+          options={{
+            readOnly: value.readOnly,
+            domReadOnly: value.readOnly,
+            minimap: { enabled: false },
+          }}
         />
       </div>
       <div className={styles.buttons}>
-        <Button type="button" onClick={() => onResult({ status: DialogResult.CANCEL })}>
+        <Button
+          type="button"
+          onClick={() => onResult({ status: DialogResult.CANCEL })}
+        >
           Abbrechen
         </Button>
         {!value.readOnly && (
-          <Button type="button" color="#2F609F" onClick={() => onResult({ status: DialogResult.SUCCESS, value: code })}>
+          <Button
+            type="button"
+            color="#2F609F"
+            onClick={() =>
+              onResult({ status: DialogResult.SUCCESS, value: code })
+            }
+          >
             Übernehmen
           </Button>
         )}

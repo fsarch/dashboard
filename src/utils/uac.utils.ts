@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import type {
   EServiceType,
   TUacComparisonOperator,
@@ -5,7 +6,6 @@ import type {
   TUacMapping,
   TUacPermission,
 } from './configuration.type';
-import { cookies } from "next/headers";
 
 type TDecodedJwtPayload = Record<string, unknown>;
 
@@ -29,18 +29,20 @@ function decodeJwtPayload(accessToken: string): TDecodedJwtPayload | null {
 }
 
 function getValueByPath(payload: TDecodedJwtPayload, path: string): unknown {
-  return path
-    .split('.')
-    .reduce<unknown>((currentValue, key) => {
-      if (currentValue === null || typeof currentValue !== 'object') {
-        return undefined;
-      }
+  return path.split('.').reduce<unknown>((currentValue, key) => {
+    if (currentValue === null || typeof currentValue !== 'object') {
+      return undefined;
+    }
 
-      return (currentValue as Record<string, unknown>)[key];
-    }, payload);
+    return (currentValue as Record<string, unknown>)[key];
+  }, payload);
 }
 
-function evaluateOperator(pathValue: unknown, expectedValue: string, operator: TUacComparisonOperator): boolean {
+function evaluateOperator(
+  pathValue: unknown,
+  expectedValue: string,
+  operator: TUacComparisonOperator,
+): boolean {
   if (operator === 'includes') {
     if (Array.isArray(pathValue)) {
       return pathValue.some((value) => `${value}` === expectedValue);
@@ -65,7 +67,11 @@ function getMapPathTokens(pathValue: unknown): string[] {
     return pathValue.map((value) => `${value}`);
   }
 
-  if (typeof pathValue === 'string' || typeof pathValue === 'number' || typeof pathValue === 'boolean') {
+  if (
+    typeof pathValue === 'string' ||
+    typeof pathValue === 'number' ||
+    typeof pathValue === 'boolean'
+  ) {
     return [`${pathValue}`];
   }
 
@@ -76,7 +82,10 @@ function getMapPathTokens(pathValue: unknown): string[] {
   return [];
 }
 
-function resolveMapPermissions(pathValue: unknown, mapMappings: TUacMapMapping['mappings']): TUacPermission[] {
+function resolveMapPermissions(
+  pathValue: unknown,
+  mapMappings: TUacMapMapping['mappings'],
+): TUacPermission[] {
   const mapKeys = new Set(getMapPathTokens(pathValue));
 
   const permissions: TUacPermission[] = [];
@@ -89,7 +98,10 @@ function resolveMapPermissions(pathValue: unknown, mapMappings: TUacMapMapping['
   return permissions;
 }
 
-function isMappingMatch(payload: TDecodedJwtPayload, mapping: TUacMapping): boolean {
+function isMappingMatch(
+  payload: TDecodedJwtPayload,
+  mapping: TUacMapping,
+): boolean {
   const pathValue = getValueByPath(payload, mapping.path);
   if (mapping.operator === 'map') {
     return resolveMapPermissions(pathValue, mapping.mappings).length > 0;
@@ -98,7 +110,10 @@ function isMappingMatch(payload: TDecodedJwtPayload, mapping: TUacMapping): bool
   return evaluateOperator(pathValue, mapping.value, mapping.operator);
 }
 
-function resolvePermissionsFromMapping(payload: TDecodedJwtPayload, mapping: TUacMapping): TUacPermission[] {
+function resolvePermissionsFromMapping(
+  payload: TDecodedJwtPayload,
+  mapping: TUacMapping,
+): TUacPermission[] {
   const pathValue = getValueByPath(payload, mapping.path);
 
   if (mapping.operator === 'map') {
@@ -112,8 +127,14 @@ function resolvePermissionsFromMapping(payload: TDecodedJwtPayload, mapping: TUa
   return [];
 }
 
-function isAppPermission(permission: TUacPermission): permission is Extract<TUacPermission, { type: 'app' }> {
-  return typeof permission === 'object' && permission !== null && permission.type === 'app';
+function isAppPermission(
+  permission: TUacPermission,
+): permission is Extract<TUacPermission, { type: 'app' }> {
+  return (
+    typeof permission === 'object' &&
+    permission !== null &&
+    permission.type === 'app'
+  );
 }
 
 function hasMatchingAppPermission(
@@ -122,8 +143,10 @@ function hasMatchingAppPermission(
   serviceId: string,
 ): boolean {
   return appPermissions.some((permission) => {
-    const isMatchingType = permission.value.type === '*' || permission.value.type === serviceType;
-    const isMatchingId = permission.value.id === '*' || permission.value.id === serviceId;
+    const isMatchingType =
+      permission.value.type === '*' || permission.value.type === serviceType;
+    const isMatchingId =
+      permission.value.id === '*' || permission.value.id === serviceId;
 
     return isMatchingType && isMatchingId;
   });
@@ -134,7 +157,7 @@ async function getPermissions(accessToken?: string): Promise<string[]> {
   const { getAccessToken } = await import('./getAccessToken');
 
   const configuration = await getConfiguration();
-  const token = accessToken ?? await getAccessToken();
+  const token = accessToken ?? (await getAccessToken());
 
   if (!configuration.uac || !token) {
     return [];
@@ -157,12 +180,14 @@ async function getPermissions(accessToken?: string): Promise<string[]> {
   return [...permissions];
 }
 
-async function getAppPermissions(accessToken?: string): Promise<Array<Extract<TUacPermission, { type: 'app' }>>> {
+async function getAppPermissions(
+  accessToken?: string,
+): Promise<Array<Extract<TUacPermission, { type: 'app' }>>> {
   const { getConfiguration } = await import('./configuration.utils');
   const { getAccessToken } = await import('./getAccessToken');
 
   const configuration = await getConfiguration();
-  const token = accessToken ?? await getAccessToken();
+  const token = accessToken ?? (await getAccessToken());
 
   if (!configuration.uac || !token) {
     return [];
@@ -173,7 +198,10 @@ async function getAppPermissions(accessToken?: string): Promise<Array<Extract<TU
     return [];
   }
 
-  const appPermissionsByKey = new Map<string, Extract<TUacPermission, { type: 'app' }>>();
+  const appPermissionsByKey = new Map<
+    string,
+    Extract<TUacPermission, { type: 'app' }>
+  >();
   for (const mapping of configuration.uac.mappings) {
     for (const permission of resolvePermissionsFromMapping(payload, mapping)) {
       if (isAppPermission(permission)) {
@@ -186,12 +214,15 @@ async function getAppPermissions(accessToken?: string): Promise<Array<Extract<TU
   return [...appPermissionsByKey.values()];
 }
 
-async function hasPermission(permission: string, accessToken?: string): Promise<boolean> {
+async function hasPermission(
+  permission: string,
+  accessToken?: string,
+): Promise<boolean> {
   return (await getPermissions(accessToken)).includes(permission);
 }
 
 async function isDeveloper(accessToken?: string): Promise<boolean> {
-  if (!await hasPermission('dev', accessToken)) {
+  if (!(await hasPermission('dev', accessToken))) {
     return false;
   }
 
@@ -200,7 +231,11 @@ async function isDeveloper(accessToken?: string): Promise<boolean> {
   return devModeCookie?.value === 'true';
 }
 
-async function hasAppPermission(serviceType: EServiceType, serviceId: string, accessToken?: string): Promise<boolean> {
+async function hasAppPermission(
+  serviceType: EServiceType,
+  serviceId: string,
+  accessToken?: string,
+): Promise<boolean> {
   const { getConfiguration } = await import('./configuration.utils');
 
   const configuration = await getConfiguration();
@@ -208,7 +243,11 @@ async function hasAppPermission(serviceType: EServiceType, serviceId: string, ac
     return true;
   }
 
-  return hasMatchingAppPermission(await getAppPermissions(accessToken), serviceType, serviceId);
+  return hasMatchingAppPermission(
+    await getAppPermissions(accessToken),
+    serviceType,
+    serviceId,
+  );
 }
 
 export const uacUtils = {
@@ -227,4 +266,3 @@ export const uacUtils = {
   hasAppPermission,
   isDeveloper,
 };
-

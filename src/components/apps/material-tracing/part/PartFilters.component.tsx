@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Form, Formik, useFormikContext } from 'formik';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import type React from 'react';
+import { useEffect, useMemo } from 'react';
 import SearchInput from '@/components/universals/forms/SearchInput.component';
 import SearchableSelect from '@/components/universals/forms/searchable-select/SearchableSelect.component';
 
@@ -50,22 +51,33 @@ const PartTypeUrlSync: React.FunctionComponent<PartTypeUrlSyncProps> = ({
 
     router.replace(newUrl);
     router.refresh();
-  }, [pathname, router, searchParamsValue, selectedPartTypeId, values.partTypeId]);
+  }, [
+    pathname,
+    router,
+    searchParamsValue,
+    selectedPartTypeId,
+    values.partTypeId,
+  ]);
 
   return null;
 };
 
-const PartFilters: React.FunctionComponent<PartFiltersProps> = ({ partTypes }) => {
+const PartFilters: React.FunctionComponent<PartFiltersProps> = ({
+  partTypes,
+}) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const selectedPartTypeId = searchParams.get('partTypeId') || '';
   const partTypeOptions = useMemo(
-    () => [{ value: '', label: 'All part types' }, ...partTypes.map((partType) => ({
-      id: partType.id,
-      value: partType.id,
-      label: partType.name,
-    }))],
+    () => [
+      { value: '', label: 'All part types' },
+      ...partTypes.map((partType) => ({
+        id: partType.id,
+        value: partType.id,
+        label: partType.name,
+      })),
+    ],
     [partTypes],
   );
 
@@ -78,10 +90,7 @@ const PartFilters: React.FunctionComponent<PartFiltersProps> = ({ partTypes }) =
         onSubmit={() => undefined}
       >
         <Form>
-          <SearchableSelect
-            name="partTypeId"
-            values={partTypeOptions}
-          />
+          <SearchableSelect name="partTypeId" values={partTypeOptions} />
           <PartTypeUrlSync
             pathname={pathname}
             searchParamsValue={searchParams.toString()}
@@ -94,5 +103,3 @@ const PartFilters: React.FunctionComponent<PartFiltersProps> = ({ partTypes }) =
 };
 
 export default PartFilters;
-
-

@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
 import { Form, Formik, useFormikContext } from 'formik';
 import { useRouter } from 'next/navigation';
-import Input from '@/components/universals/forms/Input';
-import Button from '@/components/universals/forms/Button';
+import type React from 'react';
+import { useState } from 'react';
 import RRuleBuilder from '@/components/apps/calendar/RRuleBuilder.component';
-import { TEventSeriesDto } from '@/services/calendar/calendar.type';
+import Button from '@/components/universals/forms/Button';
+import Input from '@/components/universals/forms/Input';
+import type { TEventSeriesDto } from '@/services/calendar/calendar.type';
 
 export type TSeriesFormValues = {
   externalId: string;
@@ -57,29 +58,57 @@ const SeriesForm: React.FunctionComponent<SeriesFormProps> = ({
         router.refresh();
       }
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : String(submitError));
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : String(submitError),
+      );
     }
   };
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      <Form style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '640px' }}>
+      <Form
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.75rem',
+          maxWidth: '640px',
+        }}
+      >
         <div>
           <label htmlFor="series-externalId">Externe ID</label>
           <Input id="series-externalId" name="externalId" type="text" />
         </div>
         <div>
           <label htmlFor="series-timezone">Zeitzone *</label>
-          <Input id="series-timezone" name="timezone" type="text" placeholder="Europe/Berlin" required />
+          <Input
+            id="series-timezone"
+            name="timezone"
+            type="text"
+            placeholder="Europe/Berlin"
+            required
+          />
         </div>
         <div>
           <label htmlFor="series-rrule">RRULE *</label>
-          <Input id="series-rrule" name="rrule" type="text" placeholder="FREQ=WEEKLY;BYDAY=MO,WE,FR" required />
+          <Input
+            id="series-rrule"
+            name="rrule"
+            type="text"
+            placeholder="FREQ=WEEKLY;BYDAY=MO,WE,FR"
+            required
+          />
         </div>
         <RRuleField />
         <div>
           <label htmlFor="series-validFrom">Gültig ab *</label>
-          <Input id="series-validFrom" name="validFrom" type="datetime-local" required />
+          <Input
+            id="series-validFrom"
+            name="validFrom"
+            type="datetime-local"
+            required
+          />
         </div>
         <div>
           <label htmlFor="series-validTo">Gültig bis</label>

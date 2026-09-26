@@ -1,12 +1,16 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Base64Image, BindableValue } from '@/services/image-editor-server/image-editor-server.type';
-import { TFlattenedParameterPath } from './parameter-paths.utils';
+import type React from 'react';
+import { useCallback } from 'react';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
 import SegmentedControl from '@/components/universals/forms/SegmentedControl';
+import type {
+  Base64Image,
+  BindableValue,
+} from '@/services/image-editor-server/image-editor-server.type';
 import formControls from './FormControls.module.scss';
 import styles from './LayerCanvasEditor.module.scss';
+import type { TFlattenedParameterPath } from './parameter-paths.utils';
 
 type ImageBindableFieldProps = {
   label: string;
@@ -40,20 +44,29 @@ const ImageBindableField: React.FunctionComponent<ImageBindableFieldProps> = ({
 }) => {
   const isVariable = value?.type === 'variable';
 
-  const handleModeChange = useCallback((mode: 'constant' | 'variable') => {
-    if (mode === 'variable') {
-      onChange({ type: 'variable', value: compatibleParameters[0]?.path ?? '' });
-    } else {
-      onChange({ type: 'constant', value: { type: 'base64', value: '' } });
-    }
-  }, [onChange, compatibleParameters]);
+  const handleModeChange = useCallback(
+    (mode: 'constant' | 'variable') => {
+      if (mode === 'variable') {
+        onChange({
+          type: 'variable',
+          value: compatibleParameters[0]?.path ?? '',
+        });
+      } else {
+        onChange({ type: 'constant', value: { type: 'base64', value: '' } });
+      }
+    },
+    [onChange, compatibleParameters],
+  );
 
-  const handleFileChange = useCallback(async (files: FileList | null) => {
-    const file = files?.[0];
-    if (!file) return;
-    const base64 = await readFileAsBase64(file);
-    onChange({ type: 'constant', value: { type: 'base64', value: base64 } });
-  }, [onChange]);
+  const handleFileChange = useCallback(
+    async (files: FileList | null) => {
+      const file = files?.[0];
+      if (!file) return;
+      const base64 = await readFileAsBase64(file);
+      onChange({ type: 'constant', value: { type: 'base64', value: base64 } });
+    },
+    [onChange],
+  );
 
   return (
     <FieldsetRow label={label}>
@@ -63,22 +76,42 @@ const ImageBindableField: React.FunctionComponent<ImageBindableFieldProps> = ({
           onChange={handleModeChange}
           options={[
             { value: 'constant', label: 'Konstante' },
-            { value: 'variable', label: 'Parameter', disabled: compatibleParameters.length === 0 },
+            {
+              value: 'variable',
+              label: 'Parameter',
+              disabled: compatibleParameters.length === 0,
+            },
           ]}
         />
 
         {isVariable ? (
-          <select className={formControls.selectInput} value={value?.value as string ?? ''} onChange={(e) => onChange({ type: 'variable', value: e.target.value })}>
+          <select
+            className={formControls.selectInput}
+            value={(value?.value as string) ?? ''}
+            onChange={(e) =>
+              onChange({ type: 'variable', value: e.target.value })
+            }
+          >
             {compatibleParameters.map((parameter) => (
-              <option key={parameter.path} value={parameter.path}>{parameter.label}</option>
+              <option key={parameter.path} value={parameter.path}>
+                {parameter.label}
+              </option>
             ))}
           </select>
         ) : (
           <>
-            <input type="file" accept="image/*" onChange={(e) => handleFileChange(e.target.files)} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e.target.files)}
+            />
             {value?.type === 'constant' && value.value.value && (
               // eslint-disable-next-line @next/next/no-img-element -- base64 preview thumbnail, not an optimizable static asset
-              <img src={`data:image/png;base64,${value.value.value}`} alt="Vorschau" style={{ maxHeight: 40, marginLeft: 8 }} />
+              <img
+                src={`data:image/png;base64,${value.value.value}`}
+                alt="Vorschau"
+                style={{ maxHeight: 40, marginLeft: 8 }}
+              />
             )}
           </>
         )}

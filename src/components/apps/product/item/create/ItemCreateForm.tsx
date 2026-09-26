@@ -1,17 +1,18 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { ItemTypeDto } from "@/services/product/item-type.type";
-import { Form, Formik, FormikHelpers } from "formik";
-import { ItemCreateDto } from "@/services/product/item.type";
-import Input from '@/components/universals/forms/Input';
+import { Form, Formik, type FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { createItem } from '@/components/apps/product/item/create/ItemCreateForm.server-action';
 import Button from '@/components/universals/forms/Button';
-import Select from "@/components/universals/forms/Select";
-import { createItem } from "@/components/apps/product/item/create/ItemCreateForm.server-action";
-import { useRouter } from "next/navigation";
-import Fieldset from "@/components/universals/forms/Fieldset.component";
-import FieldsetRow from "@/components/universals/forms/FieldsetRow.component";
+import Fieldset from '@/components/universals/forms/Fieldset.component';
+import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
+import Input from '@/components/universals/forms/Input';
+import Select from '@/components/universals/forms/Select';
 import SimpleFieldsetRow from '@/components/universals/forms/SimpleFieldsetRow.component';
+import type { ItemCreateDto } from '@/services/product/item.type';
+import type { ItemTypeDto } from '@/services/product/item-type.type';
 
 type ItemCreateFormProps = {
   catalogId: string;
@@ -26,16 +27,19 @@ const ItemCreateForm: React.FunctionComponent<ItemCreateFormProps> = ({
 }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (values: ItemCreateDto, helpers: FormikHelpers<ItemCreateDto>) => {
-    await createItem(catalogId, {
-      ...values,
-      parentItemId,
-    });
+  const handleSubmit = useCallback(
+    async (values: ItemCreateDto, helpers: FormikHelpers<ItemCreateDto>) => {
+      await createItem(catalogId, {
+        ...values,
+        parentItemId,
+      });
 
-    helpers.resetForm();
+      helpers.resetForm();
 
-    router.refresh();
-  }, [catalogId, router, parentItemId]);
+      router.refresh();
+    },
+    [catalogId, router, parentItemId],
+  );
 
   return (
     <Formik
@@ -48,14 +52,7 @@ const ItemCreateForm: React.FunctionComponent<ItemCreateFormProps> = ({
       <Form>
         <Fieldset>
           <SimpleFieldsetRow label="Name">
-            {(id) => (
-              <Input
-                id={id}
-                name="name"
-                type="input"
-                required
-              />
-            )}
+            {(id) => <Input id={id} name="name" type="input" required />}
           </SimpleFieldsetRow>
           <SimpleFieldsetRow label="Item-Type">
             {(id) => (

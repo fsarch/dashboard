@@ -1,48 +1,58 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
-  inputs: [{
-    id: 'name',
-    $type: 'text',
-    label: 'Name',
-  }, {
-    id: 'amount',
-    $type: 'text',
-    label: 'Anzahl',
-  }, {
-    id: 'availableAmount',
-    $type: 'text',
-    label: 'Verfügbare Anzahl',
-    isEnabled: false,
-  }, {
-    id: 'externalId',
-    $type: 'text',
-    label: 'External Id',
-  }, {
-    id: 'hint',
-    $type: 'text',
-    label: 'Hinweis',
-  }, {
-    id: 'archiveNow',
-    $type: 'checkbox',
-    label: 'Archiviert',
-    variant: 'toggle',
-  }, {
-    id: 'partTypeLink',
-    $type: 'link-card',
-    label: 'Parttype',
-    href: {
-      $type: 'jsonata',
-      value: 'args.partType.path',
+  inputs: [
+    {
+      id: 'name',
+      $type: 'text',
+      label: 'Name',
     },
-    views: [{
-      $type: 'paragraph',
-      text: {
+    {
+      id: 'amount',
+      $type: 'text',
+      label: 'Anzahl',
+    },
+    {
+      id: 'availableAmount',
+      $type: 'text',
+      label: 'Verfügbare Anzahl',
+      isEnabled: false,
+    },
+    {
+      id: 'externalId',
+      $type: 'text',
+      label: 'External Id',
+    },
+    {
+      id: 'hint',
+      $type: 'text',
+      label: 'Hinweis',
+    },
+    {
+      id: 'archiveNow',
+      $type: 'checkbox',
+      label: 'Archiviert',
+      variant: 'toggle',
+    },
+    {
+      id: 'partTypeLink',
+      $type: 'link-card',
+      label: 'Parttype',
+      href: {
         $type: 'jsonata',
-        value: 'args.partType.name',
+        value: 'args.partType.path',
       },
-    }],
-  }],
+      views: [
+        {
+          $type: 'paragraph',
+          text: {
+            $type: 'jsonata',
+            value: 'args.partType.name',
+          },
+        },
+      ],
+    },
+  ],
   initialValues: {
     $type: 'jsonata',
     value: `{ 
@@ -60,7 +70,7 @@ export const PART_UPDATE_FORM_DEFINITION: TGeneratedFormDefinition = {
   endpoint: {
     path: {
       $type: 'jsonata',
-      value: "'/v1/parts/' & args.part.id"
+      value: "'/v1/parts/' & args.part.id",
     },
     method: 'PATCH',
     body: {

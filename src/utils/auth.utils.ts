@@ -1,5 +1,5 @@
-import { getAccessToken } from "@/utils/getAccessToken";
-import { forbidden } from "next/navigation";
+import { forbidden } from 'next/navigation';
+import { getAccessToken } from '@/utils/getAccessToken';
 
 async function requireAuth() {
   const accessToken = await getAccessToken();

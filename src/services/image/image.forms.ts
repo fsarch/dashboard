@@ -1,6 +1,4 @@
-import {
-  TGeneratedFormDefinition,
-} from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const IMAGE_TAG_DEFINITION_CREATE_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -39,7 +37,9 @@ export const IMAGE_TAG_DEFINITION_CREATE_FORM: TGeneratedFormDefinition = {
   buttons: { submitButtonText: 'Tag-Definition erstellen' },
 };
 
-export const IMAGE_TAG_CREATE_FORM = (imageId: string): TGeneratedFormDefinition => ({
+export const IMAGE_TAG_CREATE_FORM = (
+  imageId: string,
+): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'key',
@@ -56,7 +56,8 @@ export const IMAGE_TAG_CREATE_FORM = (imageId: string): TGeneratedFormDefinition
   ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "key": dataSource.tagDefinitions[0] ? dataSource.tagDefinitions[0].value : "", "value": "" }',
+    value:
+      '{ "key": dataSource.tagDefinitions[0] ? dataSource.tagDefinitions[0].value : "", "value": "" }',
   },
   dataSources: {
     tagDefinitions: {

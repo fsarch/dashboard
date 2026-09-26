@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { TClaimDto } from '@/services/bot-protection/bot-protection.type';
 import Link from 'next/link';
+import type React from 'react';
+import type { TClaimDto } from '@/services/bot-protection/bot-protection.type';
 
 type ClaimDetailProps = {
   claim: TClaimDto;

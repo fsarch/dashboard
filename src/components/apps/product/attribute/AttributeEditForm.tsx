@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { AttributeDto } from "@/services/product/attribute.type";
-import { Form, Formik } from "formik";
+import { Form, Formik } from 'formik';
+import type React from 'react';
+import { useCallback } from 'react';
+import Button from '@/components/universals/forms/Button';
 import Input from '@/components/universals/forms/Input';
-import Button from "@/components/universals/forms/Button";
+import type { AttributeDto } from '@/services/product/attribute.type';
 import AttributeSettings from './create/AttributeSettings';
 
 type AttributeProps = {
@@ -21,19 +22,10 @@ const AttributeEditForm: React.FunctionComponent<AttributeProps> = ({
   }, []);
 
   return (
-    <Formik
-      initialValues={attribute}
-      onSubmit={handleChange}
-    >
+    <Formik initialValues={attribute} onSubmit={handleChange}>
       <Form>
-        <Input
-          type="input"
-          name="name"
-          disabled
-        />
-        <AttributeSettings
-          catalogId={catalogId}
-        />
+        <Input type="input" name="name" disabled />
+        <AttributeSettings catalogId={catalogId} />
         <Button type="submit">Speichern</Button>
       </Form>
     </Formik>

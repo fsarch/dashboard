@@ -18,7 +18,12 @@ export class ServerLogger {
     return data;
   }
 
-  private formatOutput(level: string, message: any, data?: any, section?: string) {
+  private formatOutput(
+    level: string,
+    message: any,
+    data?: any,
+    section?: string,
+  ) {
     const output = {
       level,
       section: section || this.section || undefined,
@@ -71,7 +76,9 @@ export class ServerLogger {
 
     // verbose mappt auf trace/debug
     if ((console as any).trace) {
-      (console as any).trace(this.formatOutput('trace', message, data, context));
+      (console as any).trace(
+        this.formatOutput('trace', message, data, context),
+      );
     } else {
       console.debug(this.formatOutput('trace', message, data, context));
     }

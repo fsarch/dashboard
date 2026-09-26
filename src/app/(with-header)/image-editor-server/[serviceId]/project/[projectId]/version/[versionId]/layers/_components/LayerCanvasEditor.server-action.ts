@@ -2,27 +2,37 @@
 
 import { revalidatePath } from 'next/cache';
 import { imageEditorServerService } from '@/services/image-editor-server/image-editor-server.service';
-import { BindableAffineMatrix, LayerDto, LayerOptions, LayerType } from '@/services/image-editor-server/image-editor-server.type';
+import type {
+  BindableAffineMatrix,
+  LayerDto,
+  LayerOptions,
+  LayerType,
+} from '@/services/image-editor-server/image-editor-server.type';
 
-const PAGE_PATH = '/image-editor-server/[serviceId]/project/[projectId]/version/[versionId]/layers';
+const PAGE_PATH =
+  '/image-editor-server/[serviceId]/project/[projectId]/version/[versionId]/layers';
 
 export const createLayerAction = async (
   projectId: string,
   versionId: string,
   data: { name: string; type: LayerType; order: number },
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.createLayer(projectId, versionId, {
-    ...data,
-    transformationMatrix: {
-      a: { type: 'constant', value: 1 },
-      b: { type: 'constant', value: 0 },
-      c: { type: 'constant', value: 0 },
-      d: { type: 'constant', value: 1 },
-      e: { type: 'constant', value: 0 },
-      f: { type: 'constant', value: 0 },
+  const layer = await imageEditorServerService.createLayer(
+    projectId,
+    versionId,
+    {
+      ...data,
+      transformationMatrix: {
+        a: { type: 'constant', value: 1 },
+        b: { type: 'constant', value: 0 },
+        c: { type: 'constant', value: 0 },
+        d: { type: 'constant', value: 1 },
+        e: { type: 'constant', value: 0 },
+        f: { type: 'constant', value: 0 },
+      },
+      options: defaultOptionsForType(data.type),
     },
-    options: defaultOptionsForType(data.type),
-  });
+  );
 
   revalidatePath(PAGE_PATH, 'page');
   return layer;
@@ -38,7 +48,12 @@ export const updateLayerGeometryAction = async (
   layerId: string,
   transformationMatrix: BindableAffineMatrix,
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { transformationMatrix });
+  const layer = await imageEditorServerService.updateLayer(
+    projectId,
+    versionId,
+    layerId,
+    { transformationMatrix },
+  );
   revalidatePath(PAGE_PATH, 'page');
   return layer;
 };
@@ -49,7 +64,12 @@ export const updateLayerOptionsAction = async (
   layerId: string,
   options: LayerOptions,
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { options });
+  const layer = await imageEditorServerService.updateLayer(
+    projectId,
+    versionId,
+    layerId,
+    { options },
+  );
   revalidatePath(PAGE_PATH, 'page');
   return layer;
 };
@@ -65,7 +85,12 @@ export const updateLayerGeometryAndSizeAction = async (
   transformationMatrix: BindableAffineMatrix,
   options: LayerOptions,
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { transformationMatrix, options });
+  const layer = await imageEditorServerService.updateLayer(
+    projectId,
+    versionId,
+    layerId,
+    { transformationMatrix, options },
+  );
   revalidatePath(PAGE_PATH, 'page');
   return layer;
 };
@@ -76,7 +101,12 @@ export const updateLayerOrderAction = async (
   layerId: string,
   order: number,
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { order });
+  const layer = await imageEditorServerService.updateLayer(
+    projectId,
+    versionId,
+    layerId,
+    { order },
+  );
   revalidatePath(PAGE_PATH, 'page');
   return layer;
 };
@@ -87,7 +117,12 @@ export const updateLayerHiddenAction = async (
   layerId: string,
   hidden: boolean,
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { hidden });
+  const layer = await imageEditorServerService.updateLayer(
+    projectId,
+    versionId,
+    layerId,
+    { hidden },
+  );
   revalidatePath(PAGE_PATH, 'page');
   return layer;
 };
@@ -98,12 +133,21 @@ export const updateLayerNameAction = async (
   layerId: string,
   name: string,
 ): Promise<LayerDto> => {
-  const layer = await imageEditorServerService.updateLayer(projectId, versionId, layerId, { name });
+  const layer = await imageEditorServerService.updateLayer(
+    projectId,
+    versionId,
+    layerId,
+    { name },
+  );
   revalidatePath(PAGE_PATH, 'page');
   return layer;
 };
 
-export const deleteLayerAction = async (projectId: string, versionId: string, layerId: string): Promise<void> => {
+export const deleteLayerAction = async (
+  projectId: string,
+  versionId: string,
+  layerId: string,
+): Promise<void> => {
   await imageEditorServerService.deleteLayer(projectId, versionId, layerId);
   revalidatePath(PAGE_PATH, 'page');
 };
@@ -111,7 +155,8 @@ export const deleteLayerAction = async (projectId: string, versionId: string, la
 // 1x1 transparent PNG - the smallest possible valid PNG, used purely as a
 // visible starting point for a freshly added image layer until the admin
 // uploads a real one via the properties panel.
-const PLACEHOLDER_IMAGE_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+const PLACEHOLDER_IMAGE_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
 
 function defaultOptionsForType(type: LayerType): LayerOptions {
   switch (type) {
@@ -124,7 +169,10 @@ function defaultOptionsForType(type: LayerType): LayerOptions {
       };
     case 'image':
       return {
-        image: { type: 'constant', value: { type: 'base64', value: PLACEHOLDER_IMAGE_BASE64 } },
+        image: {
+          type: 'constant',
+          value: { type: 'base64', value: PLACEHOLDER_IMAGE_BASE64 },
+        },
         width: { type: 'constant', value: 100 },
         height: { type: 'constant', value: 100 },
       };

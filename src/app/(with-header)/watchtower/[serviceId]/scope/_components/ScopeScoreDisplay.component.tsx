@@ -1,13 +1,15 @@
 'use client';
 
-import React from 'react';
-import { TScoreCalculationResultDto } from '@/services/watchtower/watchtower.type';
+import type React from 'react';
+import type { TScoreCalculationResultDto } from '@/services/watchtower/watchtower.type';
 
 type ScopeScoreDisplayProps = {
   scoreResult: TScoreCalculationResultDto;
 };
 
-const ScopeScoreDisplay: React.FunctionComponent<ScopeScoreDisplayProps> = ({ scoreResult }) => {
+const ScopeScoreDisplay: React.FunctionComponent<ScopeScoreDisplayProps> = ({
+  scoreResult,
+}) => {
   const { scopeScores, finalRisk } = scoreResult;
 
   // Find the scope score (there should be only one since we're calculating for a single scope)
@@ -36,7 +38,7 @@ const ScopeScoreDisplay: React.FunctionComponent<ScopeScoreDisplayProps> = ({ sc
           </tr>
         </tbody>
       </table>
-      
+
       {scopeScore.eventTypeScores.length > 0 && (
         <>
           <h4>Event Type Scores</h4>

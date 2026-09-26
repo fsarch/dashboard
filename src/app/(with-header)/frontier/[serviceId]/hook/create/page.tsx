@@ -1,6 +1,6 @@
+import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { DefaultPage } from '@/components/universals/page/DefaultPage.component';
 import Section from '@/components/universals/section/Section';
-import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
 import { FRONTIER_HOOK_CREATE_FORM } from '@/services/frontier/frontier.forms';
 import { createAutomaticMetadata } from '@/utils/createAutomaticMetadata';
 

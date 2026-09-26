@@ -1,5 +1,5 @@
-import { getServerSession } from "next-auth";
-import { AUTH_OPTIONS } from "@/constants/auth-options";
+import { getServerSession } from 'next-auth';
+import { AUTH_OPTIONS } from '@/constants/auth-options';
 
 export async function getAccessToken(): Promise<string | undefined> {
   const session = await getServerSession({

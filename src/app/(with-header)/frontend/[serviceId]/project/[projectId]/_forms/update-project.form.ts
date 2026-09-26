@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
   inputs: [
@@ -33,13 +33,15 @@ export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": body.{ "id": id, "value": id, "label": id & \' (\' & creationTime & \')\' } }',
+        value:
+          '{ "body": body.{ "id": id, "value": id, "label": id & \' (\' & creationTime & \')\' } }',
       },
     },
   },
   initialValues: {
     $type: 'jsonata',
-    value: '{ "name": args.project.name, "description": args.project.description, "currentVersionId": args.project.currentVersionId }',
+    value:
+      '{ "name": args.project.name, "description": args.project.description, "currentVersionId": args.project.currentVersionId }',
   },
   endpoint: {
     path: {
@@ -49,7 +51,8 @@ export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
     method: 'PATCH',
     body: {
       $type: 'jsonata',
-      value: '{ "name": form.name, "description": form.description, "currentVersionId": form.currentVersionId != \'\' ? form.currentVersionId }',
+      value:
+        '{ "name": form.name, "description": form.description, "currentVersionId": form.currentVersionId != \'\' ? form.currentVersionId }',
     },
   },
   buttons: {

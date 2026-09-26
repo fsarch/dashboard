@@ -1,22 +1,19 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
+import { setAttributeElementLocalization } from '@/components/apps/product/attribute/list/element-localization/AttributeElementLocalization.server-action';
+import { updateAttributeLocalization } from '@/components/apps/product/attribute/localization/AttributeLocalization.server-action';
+import Button from '@/components/universals/forms/Button';
+import Input from '@/components/universals/forms/Input';
+import TextArea from '@/components/universals/forms/TextArea';
 import {
   AttributeLocalizationDto,
-  ElementLocalizationCreateDto,
-  ElementLocalizationDto
-} from "@/services/product/attribute.type";
-import { useRouter } from "next/navigation";
-import {
-  updateAttributeLocalization
-} from "@/components/apps/product/attribute/localization/AttributeLocalization.server-action";
-import { Form, Formik } from "formik";
-import Input from "@/components/universals/forms/Input";
-import Button from "@/components/universals/forms/Button";
-import TextArea from "@/components/universals/forms/TextArea";
-import {
-  setAttributeElementLocalization
-} from "@/components/apps/product/attribute/list/element-localization/AttributeElementLocalization.server-action";
+  type ElementLocalizationCreateDto,
+  type ElementLocalizationDto,
+} from '@/services/product/attribute.type';
 
 type AttributeElementLocalizationProps = {
   catalogId: string;
@@ -26,7 +23,9 @@ type AttributeElementLocalizationProps = {
   elementLocalization?: ElementLocalizationDto;
 };
 
-const AttributeElementLocalization: React.FunctionComponent<AttributeElementLocalizationProps> = ({
+const AttributeElementLocalization: React.FunctionComponent<
+  AttributeElementLocalizationProps
+> = ({
   catalogId,
   attributeId,
   elementId,
@@ -35,11 +34,20 @@ const AttributeElementLocalization: React.FunctionComponent<AttributeElementLoca
 }) => {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (values: ElementLocalizationCreateDto) => {
-    await setAttributeElementLocalization(catalogId, attributeId, elementId, localizationId, values);
+  const handleSubmit = useCallback(
+    async (values: ElementLocalizationCreateDto) => {
+      await setAttributeElementLocalization(
+        catalogId,
+        attributeId,
+        elementId,
+        localizationId,
+        values,
+      );
 
-    router.refresh();
-  }, [catalogId, attributeId, elementId, localizationId, router]);
+      router.refresh();
+    },
+    [catalogId, attributeId, elementId, localizationId, router],
+  );
 
   return (
     <Formik
@@ -52,7 +60,7 @@ const AttributeElementLocalization: React.FunctionComponent<AttributeElementLoca
       }}
     >
       <Form>
-        <Input name="name" type="input"/>
+        <Input name="name" type="input" />
         <TextArea name="content" />
         <Button type="submit">Speichern</Button>
       </Form>

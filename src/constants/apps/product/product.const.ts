@@ -1,22 +1,26 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const ProductAppDefinition: AppDefinitionType = {
   name: 'Product',
   basePath: '/product',
   supportsCustomResources: true,
-  navigation: [{
-    name: 'Übersicht',
-    path: '/',
-    icon: 'layer-group',
-  }, {
-    name: 'Kataloge',
-    path: '/catalog',
-    icon: 'book',
-  }, {
-    name: 'Lokalisierungen',
-    path: '/localization',
-    icon: 'language',
-  }],
+  navigation: [
+    {
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    },
+    {
+      name: 'Kataloge',
+      path: '/catalog',
+      icon: 'book',
+    },
+    {
+      name: 'Lokalisierungen',
+      path: '/localization',
+      icon: 'language',
+    },
+  ],
   routes: {
     '/catalog/:catalogId{/*path}': {
       // Markiert diese Route (ohne den optionalen /*path-Rest) als
@@ -29,46 +33,53 @@ export const ProductAppDefinition: AppDefinitionType = {
           catalogId: { $type: 'jsonata', value: 'instance.id' },
         },
       },
-      navigation: [{
-        name: 'Katalog-Übersicht',
-        path: '/',
-        icon: 'book',
-      }, {
-        name: 'Übersicht',
-        path: {
-          $type: 'jsonata',
-          value: "'/catalog/' & params.catalogId",
+      navigation: [
+        {
+          name: 'Katalog-Übersicht',
+          path: '/',
+          icon: 'book',
         },
-        icon: 'layer-group',
-      }, {
-        name: 'Items',
-        path: {
-          $type: 'jsonata',
-          value: "'/catalog/' & params.catalogId & '/item'",
+        {
+          name: 'Übersicht',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId",
+          },
+          icon: 'layer-group',
         },
-        icon: 'sitemap',
-      }, {
-        name: 'Item-List',
-        path: {
-          $type: 'jsonata',
-          value: "'/catalog/' & params.catalogId & '/item-list'",
+        {
+          name: 'Items',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/item'",
+          },
+          icon: 'sitemap',
         },
-        icon: 'list',
-      }, {
-        name: 'Attributes',
-        path: {
-          $type: 'jsonata',
-          value: "'/catalog/' & params.catalogId & '/attribute'",
+        {
+          name: 'Item-List',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/item-list'",
+          },
+          icon: 'list',
         },
-        icon: 'hashtag',
-      }, {
-        name: 'Element-Types',
-        path: {
-          $type: 'jsonata',
-          value: "'/catalog/' & params.catalogId & '/item-type'",
+        {
+          name: 'Attributes',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/attribute'",
+          },
+          icon: 'hashtag',
         },
-        icon: 'puzzle-piece',
-      }],
+        {
+          name: 'Element-Types',
+          path: {
+            $type: 'jsonata',
+            value: "'/catalog/' & params.catalogId & '/item-type'",
+          },
+          icon: 'puzzle-piece',
+        },
+      ],
     },
     // Kein eigener navigation-Eintrag nötig: die Item-Detailseite matcht
     // zusätzlich zur obigen Katalog-Route, deren Katalog-Navigation bleibt

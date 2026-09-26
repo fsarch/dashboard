@@ -29,7 +29,6 @@ namespace FsArchApiCatalog {
   };
 
   declare interface PdfServerApi {
-
     /**
      * Creates a pdf document from the given html code
      * @param html

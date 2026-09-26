@@ -1,12 +1,13 @@
 import 'server-only';
 
-import React from 'react';
-import {
+import type React from 'react';
+import GeneratedClientForm from '@/components/universals/forms/generated/GeneratedClientForm.component';
+import type {
   TGeneratedFormDefinition,
-  TGeneratedFormInitialValues, TGeneratedFormSubmitResponse,
-} from "@/components/universals/forms/generated/GeneratedForm.type";
-import GeneratedClientForm from "@/components/universals/forms/generated/GeneratedClientForm.component";
-import { generatedFormUtils } from "@/components/universals/forms/generated/GeneratedForm.utils";
+  TGeneratedFormInitialValues,
+  TGeneratedFormSubmitResponse,
+} from '@/components/universals/forms/generated/GeneratedForm.type';
+import { generatedFormUtils } from '@/components/universals/forms/generated/GeneratedForm.utils';
 import { uacUtils } from '@/utils/uac.utils';
 
 type GeneratedFormProps = {
@@ -22,19 +23,22 @@ const GeneratedForm: React.FunctionComponent<GeneratedFormProps> = async ({
 }) => {
   const isDev = await uacUtils.isDeveloper();
 
-  const {
-    definition: evaluatedDefinition,
-    debugInfo,
-  } = await generatedFormUtils.evaluateDefinition(definition, {
-    args,
-    context: { ...context, args },
-    collectDebugInfo: isDev,
-  });
+  const { definition: evaluatedDefinition, debugInfo } =
+    await generatedFormUtils.evaluateDefinition(definition, {
+      args,
+      context: { ...context, args },
+      collectDebugInfo: isDev,
+    });
 
-  async function handleSubmit(data: TGeneratedFormInitialValues): Promise<TGeneratedFormSubmitResponse> {
+  async function handleSubmit(
+    data: TGeneratedFormInitialValues,
+  ): Promise<TGeneratedFormSubmitResponse> {
     'use server';
 
-    return generatedFormUtils.executePostSubmitAction(definition, data, args, { ...context, args });
+    return generatedFormUtils.executePostSubmitAction(definition, data, args, {
+      ...context,
+      args,
+    });
   }
 
   return (

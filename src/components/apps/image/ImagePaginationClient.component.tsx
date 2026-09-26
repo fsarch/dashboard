@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/components/universals/pagination/Pagination.component';
 
 type ImagePaginationClientProps = {
@@ -11,8 +11,16 @@ type ImagePaginationClientProps = {
   filter?: { isPublic?: boolean; tag?: string[] };
 };
 
-export default function ImagePaginationClient(props: ImagePaginationClientProps) {
-  const { currentPage, pageSize, totalItems, totalPages: totalPagesProp, filter } = props;
+export default function ImagePaginationClient(
+  props: ImagePaginationClientProps,
+) {
+  const {
+    currentPage,
+    pageSize,
+    totalItems,
+    totalPages: totalPagesProp,
+    filter,
+  } = props;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -58,7 +66,8 @@ export default function ImagePaginationClient(props: ImagePaginationClientProps)
   };
 
   // Berechne totalPages: zuerst aus Props, dann berechnen
-  const totalPages = totalPagesProp ?? Math.max(1, Math.ceil(totalItems / pageSize));
+  const totalPages =
+    totalPagesProp ?? Math.max(1, Math.ceil(totalItems / pageSize));
   const hasNextPage = actualCurrentPage < totalPages;
 
   return (

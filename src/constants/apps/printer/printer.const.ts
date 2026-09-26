@@ -1,4 +1,4 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const PrinterAppDefinition: AppDefinitionType = {
   name: 'Printer Server',

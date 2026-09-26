@@ -1,4 +1,4 @@
-import { TGeneratedFormDefinition } from "@/components/universals/forms/generated/GeneratedForm.type";
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
 export const MATERIAL_SHORT_CODE_DELETE_FORM: TGeneratedFormDefinition = {
   inputs: [],
@@ -6,7 +6,8 @@ export const MATERIAL_SHORT_CODE_DELETE_FORM: TGeneratedFormDefinition = {
   endpoint: {
     path: {
       $type: 'jsonata',
-      value: "'/v1/materials/' & args.materialId & '/short-codes/' & args.shortCode"
+      value:
+        "'/v1/materials/' & args.materialId & '/short-codes/' & args.shortCode",
     },
     method: 'DELETE',
     body: {

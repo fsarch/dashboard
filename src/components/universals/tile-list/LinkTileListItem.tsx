@@ -1,10 +1,9 @@
-import React from 'react';
-
+import clsx from 'clsx';
+import Link from 'next/link';
+import type React from 'react';
+import Icon from '@/components/universals/icon/Icon.component';
+import type { TIcon } from '@/components/universals/icon/Icon.type';
 import styles from './link-tile-list-item.module.scss';
-import Icon from "@/components/universals/icon/Icon.component";
-import { TIcon } from "@/components/universals/icon/Icon.type";
-import Link from "next/link";
-import clsx from "clsx";
 
 type LinkTileListItemProps = {
   name: string;
@@ -30,28 +29,26 @@ const LinkTileListItem: React.FunctionComponent<LinkTileListItemProps> = ({
   return (
     <Link
       href={href}
-      className={clsx(styles.root, small && styles.rootSmall, transparent && styles.rootTransparent)}
+      className={clsx(
+        styles.root,
+        small && styles.rootSmall,
+        transparent && styles.rootTransparent,
+      )}
       style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+        backgroundImage: backgroundImage
+          ? `url(${backgroundImage})`
+          : undefined,
       }}
       onContextMenu={onContextMenu}
     >
       {icon ? (
-        <div
-          className={styles.icon}
-        >
-          <Icon
-            icon={icon}
-          />
+        <div className={styles.icon}>
+          <Icon icon={icon} />
         </div>
       ) : null}
       {!icon && image ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img
-          className={styles.image}
-          src={image}
-          alt=""
-        />
+        <img className={styles.image} src={image} alt="" />
       ) : null}
       <div className={styles.name}>{name}</div>
     </Link>

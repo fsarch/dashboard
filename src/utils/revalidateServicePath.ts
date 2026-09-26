@@ -1,7 +1,8 @@
-import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
+import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 
-const ensureLeadingSlash = (value: string): string => value.startsWith('/') ? value : `/${value}`;
+const ensureLeadingSlash = (value: string): string =>
+  value.startsWith('/') ? value : `/${value}`;
 
 export async function revalidateServicePath(path: string): Promise<void> {
   const requestHeaders = await headers();
@@ -14,4 +15,3 @@ export async function revalidateServicePath(path: string): Promise<void> {
 
   revalidatePath(`/${serviceType}/${serviceId}${ensureLeadingSlash(path)}`);
 }
-

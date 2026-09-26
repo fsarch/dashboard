@@ -1,29 +1,26 @@
-import React, { useId, useState } from 'react';
-import Input from "@/components/universals/forms/Input";
-import { TGeneratedFormPasswordInput } from "@/components/universals/forms/generated/GeneratedForm.type";
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type React from 'react';
+import { useId, useState } from 'react';
 import FieldsetRow from '@/components/universals/forms/FieldsetRow.component';
-import { nestedFormUtils } from "@/components/universals/forms/generated/inputs/nested/nested-form.utils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import type { TGeneratedFormPasswordInput } from '@/components/universals/forms/generated/GeneratedForm.type';
+import { nestedFormUtils } from '@/components/universals/forms/generated/inputs/nested/nested-form.utils';
+import Input from '@/components/universals/forms/Input';
 import styles from './GeneratedFormPasswordInput.module.scss';
 
 type GeneratedFormPasswordInputProps = {
   input: TGeneratedFormPasswordInput;
 };
 
-const GeneratedFormPasswordInput: React.FunctionComponent<GeneratedFormPasswordInputProps> = ({
-  input,
-}) => {
+const GeneratedFormPasswordInput: React.FunctionComponent<
+  GeneratedFormPasswordInputProps
+> = ({ input }) => {
   const id = useId();
   const name = nestedFormUtils.useInputName(input.id);
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <FieldsetRow
-      label={(
-        <label htmlFor={id}>{input.label}</label>
-      )}
-    >
+    <FieldsetRow label={<label htmlFor={id}>{input.label}</label>}>
       <div className={styles.root}>
         <Input
           id={id}
@@ -47,4 +44,3 @@ const GeneratedFormPasswordInput: React.FunctionComponent<GeneratedFormPasswordI
 };
 
 export default GeneratedFormPasswordInput;
-

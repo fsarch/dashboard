@@ -1,4 +1,7 @@
-import { TCustomResourceApiRequest, TCustomResourceDefinition } from './custom-resources.type';
+import type {
+  TCustomResourceApiRequest,
+  TCustomResourceDefinition,
+} from './custom-resources.type';
 
 // Bewusst ohne serverseitige Imports (fetchService/getConfiguration), damit
 // diese Datei direkt aus einer Client-Komponente importierbar ist (siehe
@@ -18,11 +21,13 @@ export type TCustomResourceOpenReference = {
 // id einer Instanz eines anderen Custom-Resource-Typs desselben Service
 // (siehe @fsarch/server/custom-resource README, "Custom Resource
 // References"). Muss aufgelöst sein, bevor die Route aufrufbar ist.
-const OPEN_REFERENCE_PATTERN = /\{\{\s*(\$system\.crd\.([A-Za-z0-9_-]+)\.id)\s*\}\}/g;
+const OPEN_REFERENCE_PATTERN =
+  /\{\{\s*(\$system\.crd\.([A-Za-z0-9_-]+)\.id)\s*\}\}/g;
 
-const findReferencesIn = (value: string): TCustomResourceOpenReference[] => Array.from(
-  value.matchAll(OPEN_REFERENCE_PATTERN),
-).map(([, placeholder, resourceId]) => ({ placeholder, resourceId }));
+const findReferencesIn = (value: string): TCustomResourceOpenReference[] =>
+  Array.from(value.matchAll(OPEN_REFERENCE_PATTERN)).map(
+    ([, placeholder, resourceId]) => ({ placeholder, resourceId }),
+  );
 
 // Sammelt alle $system.crd.<resourceId>.id-Platzhalter aus Pfad und
 // Query-Parametern einer einzelnen Route.
@@ -31,10 +36,16 @@ export const getOpenCustomResourceReferences = (
 ): TCustomResourceOpenReference[] => {
   const values = [
     request.path,
-    ...Object.values(request.queryParams ?? {}).flatMap((value) => (Array.isArray(value) ? value : [value])),
+    ...Object.values(request.queryParams ?? {}).flatMap((value) =>
+      Array.isArray(value) ? value : [value],
+    ),
   ];
   const byPlaceholder = new Map<string, TCustomResourceOpenReference>();
-  values.forEach((value) => findReferencesIn(value).forEach((ref) => byPlaceholder.set(ref.placeholder, ref)));
+  values.forEach((value) =>
+    findReferencesIn(value).forEach((ref) =>
+      byPlaceholder.set(ref.placeholder, ref),
+    ),
+  );
   return Array.from(byPlaceholder.values());
 };
 
@@ -51,8 +62,10 @@ export const getOpenReferencesForResource = (
   ].filter((request): request is TCustomResourceApiRequest => Boolean(request));
 
   const byPlaceholder = new Map<string, TCustomResourceOpenReference>();
-  requests.forEach(
-    (request) => getOpenCustomResourceReferences(request).forEach((ref) => byPlaceholder.set(ref.placeholder, ref)),
+  requests.forEach((request) =>
+    getOpenCustomResourceReferences(request).forEach((ref) =>
+      byPlaceholder.set(ref.placeholder, ref),
+    ),
   );
   return Array.from(byPlaceholder.values());
 };

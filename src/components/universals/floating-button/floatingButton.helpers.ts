@@ -1,4 +1,4 @@
-import type { AppFloatingButton } from "@/constants/app.type";
+import type { AppFloatingButton } from '@/constants/app.type';
 
 // Isomorphic on purpose (no next/headers import) - used both server-side by
 // DefaultPage and client-side by AutoFloatingButton.

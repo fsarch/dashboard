@@ -1,4 +1,4 @@
-import { BarcodeDecodeResponse, IDecoder } from "./IDecoder";
+import type { BarcodeDecodeResponse, IDecoder } from './IDecoder';
 
 export class BrowserDecoder implements IDecoder {
   private barcodeDecoder: any;
@@ -8,7 +8,9 @@ export class BrowserDecoder implements IDecoder {
       return false;
     }
 
-    const supportedFormat = await (window as any).BarcodeDetector.getSupportedFormats();
+    const supportedFormat = await (
+      window as any
+    ).BarcodeDetector.getSupportedFormats();
     return true;
   }
 
@@ -28,5 +30,4 @@ export class BrowserDecoder implements IDecoder {
       })),
     };
   }
-
 }

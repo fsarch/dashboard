@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import TimeScale from './TimeScale.component';
-import TimeGridColumn from './TimeGridColumn.component';
-import { TTimeGridBlock, GRID_HEIGHT_PX } from './timeGrid.utils';
+import type React from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import styles from './TimeGridBody.module.scss';
+import TimeGridColumn from './TimeGridColumn.component';
+import TimeScale from './TimeScale.component';
+import { GRID_HEIGHT_PX, type TTimeGridBlock } from './timeGrid.utils';
 
 export type TTimeGridBodyColumn = {
   key: string;
@@ -34,7 +35,11 @@ const BOTTOM_SPACING_PX = 16;
 // Shared "scale + one column per day" renderer for the day/week time-grid views. Pulled out of
 // both pages so the viewport-fill measurement (a client-only concern) doesn't force the whole
 // page - which needs to stay a Server Component to fetch data - into client-side rendering.
-const TimeGridBody: React.FunctionComponent<TimeGridBodyProps> = ({ columns, eventHrefBase, fillViewport = false }) => {
+const TimeGridBody: React.FunctionComponent<TimeGridBodyProps> = ({
+  columns,
+  eventHrefBase,
+  fillViewport = false,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [heightPx, setHeightPx] = useState(GRID_HEIGHT_PX);
 
@@ -49,7 +54,10 @@ const TimeGridBody: React.FunctionComponent<TimeGridBodyProps> = ({ columns, eve
     }
 
     const recalculate = () => {
-      const available = window.innerHeight - element.getBoundingClientRect().top - BOTTOM_SPACING_PX;
+      const available =
+        window.innerHeight -
+        element.getBoundingClientRect().top -
+        BOTTOM_SPACING_PX;
       setHeightPx(Math.max(available, MIN_GRID_HEIGHT_PX));
     };
 

@@ -1,6 +1,8 @@
-import { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
+import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
-export const IP_ASN_DATA_CREATE_FORM = (datasourceId: string): TGeneratedFormDefinition => ({
+export const IP_ASN_DATA_CREATE_FORM = (
+  datasourceId: string,
+): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'prefix',
@@ -25,14 +27,16 @@ export const IP_ASN_DATA_CREATE_FORM = (datasourceId: string): TGeneratedFormDef
   ],
   initialValues: {
     $type: 'jsonata',
-    value: '{ "prefix": "", "asn": 0, "asnOrganization": "", "externalId": "" }',
+    value:
+      '{ "prefix": "", "asn": 0, "asnOrganization": "", "externalId": "" }',
   },
   endpoint: {
     path: `/v1/ip-asn/datasources/${datasourceId}/data`,
     method: 'POST',
     body: {
       $type: 'jsonata',
-      value: '{ "prefix": form.prefix, "asn": form.asn, "asnOrganization": form.asnOrganization, "externalId": form.externalId != "" ? form.externalId : null }',
+      value:
+        '{ "prefix": form.prefix, "asn": form.asn, "asnOrganization": form.asnOrganization, "externalId": form.externalId != "" ? form.externalId : null }',
     },
   },
 });

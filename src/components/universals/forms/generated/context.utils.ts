@@ -14,7 +14,7 @@ function merge(...args: Array<TContext | undefined>): TContext {
     Object.entries(arg).forEach(([key, value]) => {
       if (key === 'dataSource' && typeof value === 'object' && value !== null) {
         result[key] = {
-          ...(result[key] as Record<string, unknown> || {}),
+          ...((result[key] as Record<string, unknown>) || {}),
           ...(value as Record<string, unknown>),
         };
         return;

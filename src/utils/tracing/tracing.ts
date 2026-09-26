@@ -1,40 +1,45 @@
-import { NodeSDK } from "@opentelemetry/sdk-node";
+import { Metadata } from '@grpc/grpc-js';
+import {
+  type Span as OtelSpan,
+  SpanStatusCode,
+  type Tracer,
+  trace,
+} from '@opentelemetry/api';
+import { OTLPTraceExporter as OTLPTraceExporterGrpc } from '@opentelemetry/exporter-trace-otlp-grpc';
+import { OTLPTraceExporter as OTLPTraceExporterHttp } from '@opentelemetry/exporter-trace-otlp-http';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+import { UndiciInstrumentation } from '@opentelemetry/instrumentation-undici';
+import { resourceFromAttributes } from '@opentelemetry/resources';
+import { NodeSDK } from '@opentelemetry/sdk-node';
 import {
   AlwaysOffSampler,
   AlwaysOnSampler,
   ConsoleSpanExporter,
   ParentBasedSampler,
-  TraceIdRatioBasedSampler,
   type Sampler,
   type SpanExporter,
-} from "@opentelemetry/sdk-trace-base";
-import { OTLPTraceExporter as OTLPTraceExporterHttp } from "@opentelemetry/exporter-trace-otlp-http";
-import { OTLPTraceExporter as OTLPTraceExporterGrpc } from "@opentelemetry/exporter-trace-otlp-grpc";
-import { Metadata } from "@grpc/grpc-js";
-import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
-import { UndiciInstrumentation } from "@opentelemetry/instrumentation-undici";
-import { resourceFromAttributes } from "@opentelemetry/resources";
-import {
-  trace,
-  SpanStatusCode,
-  type Span as OtelSpan,
-  type Tracer,
-} from "@opentelemetry/api";
+  TraceIdRatioBasedSampler,
+} from '@opentelemetry/sdk-trace-base';
 import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
-} from "@opentelemetry/semantic-conventions";
-import { getConfiguration } from "@/utils/configuration.utils";
-import { TTracingExporterConfiguration, TTracingSamplerType } from "@/utils/configuration.type";
-import { ServerLogger } from "@/utils/ServerLogger";
-import { TRACING_CONFIG_VALIDATOR } from "./tracing-config.validator";
-import packageJson from "../../../package.json";
+} from '@opentelemetry/semantic-conventions';
+import type {
+  TTracingExporterConfiguration,
+  TTracingSamplerType,
+} from '@/utils/configuration.type';
+import { getConfiguration } from '@/utils/configuration.utils';
+import { ServerLogger } from '@/utils/ServerLogger';
+import packageJson from '../../../package.json';
+import { TRACING_CONFIG_VALIDATOR } from './tracing-config.validator';
 
 const DEFAULT_TRACER_NAME = 'dashboard';
 
 let sdk: NodeSDK | undefined;
 
-function createExporter(exporterConfig: TTracingExporterConfiguration): SpanExporter {
+function createExporter(
+  exporterConfig: TTracingExporterConfiguration,
+): SpanExporter {
   switch (exporterConfig.type) {
     case 'console':
       return new ConsoleSpanExporter();
@@ -78,7 +83,10 @@ function createExporter(exporterConfig: TTracingExporterConfiguration): SpanExpo
  * `parentbased_traceidratio` keeps a sampling ratio for root traces while
  * guaranteeing every downstream service stays part of the same trace.
  */
-function buildSampler(samplerType: TTracingSamplerType | undefined, sampleRatio: number | undefined): Sampler {
+function buildSampler(
+  samplerType: TTracingSamplerType | undefined,
+  sampleRatio: number | undefined,
+): Sampler {
   const ratio = sampleRatio ?? 1;
 
   switch (samplerType ?? 'parentbased_traceidratio') {
@@ -93,7 +101,9 @@ function buildSampler(samplerType: TTracingSamplerType | undefined, sampleRatio:
     case 'parentbased_always_off':
       return new ParentBasedSampler({ root: new AlwaysOffSampler() });
     case 'parentbased_traceidratio':
-      return new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(ratio) });
+      return new ParentBasedSampler({
+        root: new TraceIdRatioBasedSampler(ratio),
+      });
     default:
       throw new Error(`Tracing sampler type unknown: ${samplerType}`);
   }
@@ -128,7 +138,9 @@ export async function initializeTracing(): Promise<boolean> {
     abortEarly: false,
   });
   if (valid.error) {
-    ServerLogger.Instance.error('invalid tracing config', { error: valid.error });
+    ServerLogger.Instance.error('invalid tracing config', {
+      error: valid.error,
+    });
     throw new Error('invalid tracing config');
   }
 
@@ -139,7 +151,9 @@ export async function initializeTracing(): Promise<boolean> {
       [ATTR_SERVICE_NAME]: serviceName,
       [ATTR_SERVICE_VERSION]: packageJson.version,
     }),
-    traceExporter: createExporter(tracingConfig.exporter as TTracingExporterConfiguration),
+    traceExporter: createExporter(
+      tracingConfig.exporter as TTracingExporterConfiguration,
+    ),
     sampler: buildSampler(tracingConfig.sampler, tracingConfig.sampleRatio),
     instrumentations: [
       // Traces incoming requests handled by the Next.js node server.
@@ -189,7 +203,10 @@ export function registerShutdownHandler(): void {
 
     shutdownTracing()
       .catch((error) => {
-        ServerLogger.Instance.error('failed to flush tracing spans on shutdown', { error });
+        ServerLogger.Instance.error(
+          'failed to flush tracing spans on shutdown',
+          { error },
+        );
       })
       .finally(() => {
         process.exit(0);
@@ -211,7 +228,9 @@ export function getTracer(name: string = DEFAULT_TRACER_NAME): Tracer {
 
 function finishSpan(span: OtelSpan, error?: unknown): void {
   if (error !== undefined) {
-    span.recordException(error instanceof Error ? error : new Error(String(error)));
+    span.recordException(
+      error instanceof Error ? error : new Error(String(error)),
+    );
     span.setStatus({
       code: SpanStatusCode.ERROR,
       message: error instanceof Error ? error.message : String(error),
@@ -236,7 +255,10 @@ function finishSpan(span: OtelSpan, error?: unknown): void {
 export function withSpan<T>(
   name: string,
   fn: (span: OtelSpan) => T,
-  options?: { tracerName?: string; attributes?: Record<string, string | number | boolean> },
+  options?: {
+    tracerName?: string;
+    attributes?: Record<string, string | number | boolean>;
+  },
 ): T {
   const tracer = getTracer(options?.tracerName);
 

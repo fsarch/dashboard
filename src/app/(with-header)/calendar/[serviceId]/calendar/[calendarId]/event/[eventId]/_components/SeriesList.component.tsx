@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
-import { TPaginationResultDto, TEventSeriesDto } from '@/services/calendar/calendar.type';
-import List from '@/components/universals/list/List';
-import LinkListItem from '@/components/universals/list/LinkListItem';
-import Pagination from '@/components/universals/pagination/Pagination.component';
 import { useRouter } from 'next/navigation';
+import type React from 'react';
+import LinkListItem from '@/components/universals/list/LinkListItem';
+import List from '@/components/universals/list/List';
+import Pagination from '@/components/universals/pagination/Pagination.component';
+import type {
+  TEventSeriesDto,
+  TPaginationResultDto,
+} from '@/services/calendar/calendar.type';
 
 type SeriesListProps = {
   series: TPaginationResultDto<TEventSeriesDto>;
@@ -28,11 +31,15 @@ const SeriesList: React.FunctionComponent<SeriesListProps> = ({
   const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}?page=${newPage}&pageSize=${pageSize}`);
+    router.push(
+      `/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}?page=${newPage}&pageSize=${pageSize}`,
+    );
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    router.push(`/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}?page=1&pageSize=${newPageSize}`);
+    router.push(
+      `/calendar/${serviceId}/calendar/${calendarId}/event/${eventId}?page=1&pageSize=${newPageSize}`,
+    );
   };
 
   if (data.length === 0) {
@@ -41,7 +48,13 @@ const SeriesList: React.FunctionComponent<SeriesListProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div style={{ border: '1px solid var(--color-border)', borderRadius: '8px', padding: '1rem' }}>
+      <div
+        style={{
+          border: '1px solid var(--color-border)',
+          borderRadius: '8px',
+          padding: '1rem',
+        }}
+      >
         <List>
           {data.map((item) => (
             <LinkListItem
@@ -51,9 +64,11 @@ const SeriesList: React.FunctionComponent<SeriesListProps> = ({
               <strong>{item.rrule}</strong>
               <br />
               <small>
-                Zeitzone: {item.timezone} |
-                {' '}Gültig ab: {new Date(item.validFrom).toLocaleString()}
-                {item.validTo ? ` bis ${new Date(item.validTo).toLocaleString()}` : ''}
+                Zeitzone: {item.timezone} | Gültig ab:{' '}
+                {new Date(item.validFrom).toLocaleString()}
+                {item.validTo
+                  ? ` bis ${new Date(item.validTo).toLocaleString()}`
+                  : ''}
               </small>
             </LinkListItem>
           ))}

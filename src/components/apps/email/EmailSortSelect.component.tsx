@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import type React from 'react';
+import { useCallback } from 'react';
 import selectStyles from '@/components/universals/forms/Select.module.scss';
 
 const DEFAULT_SORT = 'desc:creationTime';
@@ -21,20 +22,23 @@ const EmailSortSelect: React.FunctionComponent = () => {
   const searchParams = useSearchParams();
   const currentSort = searchParams.get('sort') || DEFAULT_SORT;
 
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    const params = new URLSearchParams(searchParams.toString());
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = event.target.value;
+      const params = new URLSearchParams(searchParams.toString());
 
-    if (value && value !== DEFAULT_SORT) {
-      params.set('sort', value);
-    } else {
-      params.delete('sort');
-    }
+      if (value && value !== DEFAULT_SORT) {
+        params.set('sort', value);
+      } else {
+        params.delete('sort');
+      }
 
-    const queryString = params.toString();
-    router.replace(queryString ? `${pathname}?${queryString}` : pathname);
-    router.refresh();
-  }, [pathname, router, searchParams]);
+      const queryString = params.toString();
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+      router.refresh();
+    },
+    [pathname, router, searchParams],
+  );
 
   return (
     <select

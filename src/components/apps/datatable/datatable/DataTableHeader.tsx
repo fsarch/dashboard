@@ -1,5 +1,5 @@
-import React from 'react';
-import { DataTableDto } from "@/services/datatable/datatable.type";
+import type React from 'react';
+import type { DataTableDto } from '@/services/datatable/datatable.type';
 import styles from './DataTableHeader.module.scss';
 
 type DataTableHeaderProps = {
@@ -12,10 +12,7 @@ const DataTableHeader: React.FunctionComponent<DataTableHeaderProps> = ({
   return (
     <tr>
       {definition.mapping.map((mapping) => (
-        <th
-          className={styles.cell}
-          key={mapping.name}
-        >
+        <th className={styles.cell} key={mapping.name}>
           {mapping.name}
         </th>
       ))}

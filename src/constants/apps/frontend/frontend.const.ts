@@ -1,13 +1,15 @@
-import { AppDefinitionType } from "@/constants/app.type";
+import type { AppDefinitionType } from '@/constants/app.type';
 
 export const FrontendAppDefinition: AppDefinitionType = {
   name: 'Frontend',
   basePath: '/frontend',
-  navigation: [{
-    name: 'Übersicht',
-    path: '/',
-    icon: 'layer-group',
-  }],
+  navigation: [
+    {
+      name: 'Übersicht',
+      path: '/',
+      icon: 'layer-group',
+    },
+  ],
   routes: {
     '/{*path}': {
       navigation: [
@@ -31,7 +33,10 @@ export const FrontendAppDefinition: AppDefinitionType = {
         },
         {
           name: 'Versionen',
-          path: { $type: 'jsonata', value: "'/project/' & params.projectId & '/version'" },
+          path: {
+            $type: 'jsonata',
+            value: "'/project/' & params.projectId & '/version'",
+          },
           icon: 'code-branch',
         },
       ],

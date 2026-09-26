@@ -1,4 +1,4 @@
-import { ItemAttributeDto } from "@/services/product/item-attribute.type";
+import type { ItemAttributeDto } from '@/services/product/item-attribute.type';
 
 export type ItemCreateDto = {
   name: string;

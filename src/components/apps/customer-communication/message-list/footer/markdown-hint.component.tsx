@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
-import { useField } from "formik";
+import { useField } from 'formik';
+import type React from 'react';
+import { useCallback } from 'react';
 
 type MarkdownHintProps = {
   name: string;
@@ -23,10 +24,7 @@ const MarkdownHint: React.FunctionComponent<MarkdownHintProps> = ({
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-    >
+    <button type="button" onClick={handleClick}>
       Markdown aktivieren
     </button>
   );

@@ -8,7 +8,11 @@ export async function createRecordAction(
   collectionId: string,
   data: Record<string, unknown>,
 ): Promise<{ id: string }> {
-  const record = await dblightService.createRecord(collectionId, data, serviceId);
+  const record = await dblightService.createRecord(
+    collectionId,
+    data,
+    serviceId,
+  );
   revalidatePath(`/dblight/${serviceId}/collection/${collectionId}/record`);
   return { id: record.id };
 }
@@ -21,5 +25,7 @@ export async function replaceRecordAction(
 ): Promise<void> {
   await dblightService.replaceRecord(collectionId, recordId, data, serviceId);
   revalidatePath(`/dblight/${serviceId}/collection/${collectionId}/record`);
-  revalidatePath(`/dblight/${serviceId}/collection/${collectionId}/record/${recordId}`);
+  revalidatePath(
+    `/dblight/${serviceId}/collection/${collectionId}/record/${recordId}`,
+  );
 }
