@@ -3,12 +3,6 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN apk add --no-cache cairo \
-                       pango \
-                       giflib \
-                       jpeg \
-                       libpng
-
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app/.next/cache

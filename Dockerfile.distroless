@@ -1,0 +1,44 @@
+# Distroless variant - no shell/package manager, smaller attack surface
+# (most of the plain Dockerfile's OS-level CVEs come from tools this app
+# never runs at all: perl, util-linux, login, mount, ...).
+#
+# Unlike the other fsarch services, this Dockerfile still doesn't build
+# anything itself - it expects the same prebuilt artifacts in the build
+# context as ./Dockerfile (.next/standalone, .next/static, node_modules),
+# produced by `npm run build` outside Docker (see .github/workflows/image.yml).
+# The only other difference from ./Dockerfile is dropping the
+# cairo/pango/giflib/jpeg/libpng apk packages: nothing in the production
+# dependency tree actually needs them anymore (canvas, which does, is only
+# an optional peer dependency of the dev-only jsdom and is never installed -
+# verified by running the standalone build without them) - and distroless
+# has no package manager to install them with anyway.
+
+# distroless/nodejs is glibc-based (Debian 13/trixie) - use the same base
+# here to create the writable .next/cache dir with the right ownership
+# upfront, since the final stage below has no shell to mkdir/chown with.
+FROM node:24-trixie-slim AS cache-prep
+WORKDIR /app
+RUN mkdir -p .next/cache && chown -R 65532:65532 .next/cache
+
+
+FROM gcr.io/distroless/nodejs24-debian13:nonroot
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+# Expects prebuilt artifacts in build context:
+# - .next/standalone
+# - .next/static
+# - node_modules
+COPY --from=cache-prep --chown=nonroot:nonroot /app/.next/cache ./.next/cache
+COPY --chown=nonroot:nonroot .next/standalone ./
+COPY --chown=nonroot:nonroot .next/static ./.next/static
+COPY --chown=nonroot:nonroot node_modules ./node_modules
+
+# distroless/nodejs's ENTRYPOINT is already the node binary - CMD is just
+# its argv, no "node" prefix (and no USER - the :nonroot tag already runs
+# as the built-in nonroot user).
+CMD ["server.js"]
