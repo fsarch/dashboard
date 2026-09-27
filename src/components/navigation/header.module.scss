@@ -28,6 +28,19 @@
   background-color: rgba(var(--color-primary-rgb), 0.2);
 }
 
+// Same layout as .iconWrapper, but without its own :hover - the
+// EnvironmentSwitcher's select fills this wrapper completely (see
+// EnvironmentSwitcher.module.scss) and already highlights itself on hover,
+// so adding the wrapper's highlight too would just stack the same overlay
+// twice.
+.environmentSwitcherWrapper {
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 8px;
+}
+
 .visibleSpacer {
   height: 32px;
   border-left: 1px solid #333333;

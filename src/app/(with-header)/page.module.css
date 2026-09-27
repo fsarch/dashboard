@@ -30,3 +30,26 @@
 
   margin-bottom: 24px;
 }
+
+.environmentSwitcher {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+
+  /* No padding here - the (borderless, background:none) select inside is
+     sized to fill this box completely (see EnvironmentSwitcher's "plain"
+     variant), so its own padding is what insets the text. Fixed height
+     matches the Topbar's own icon row (header.module.scss .visibleSpacer),
+     since percentage heights need a definite reference and this box is
+     absolutely positioned (no flex parent to stretch it to one). */
+  height: 32px;
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  /* Light-gray in light mode, near-black in dark mode - same surface
+     tokens used for callouts elsewhere, see globals.scss. */
+  background: rgb(var(--callout-rgb));
+  color: rgb(var(--foreground-rgb));
+}

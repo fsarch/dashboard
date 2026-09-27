@@ -1,6 +1,8 @@
 import { decodeJwt } from 'jose';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import EnvironmentSwitcher from '@/components/navigation/EnvironmentSwitcher';
+import { getSelectedEnvironment } from '@/components/navigation/EnvironmentSwitcher.server-action';
 import SignOutButton from '@/components/navigation/SignOutButton';
 import BackgroundOrbs from '@/components/universals/background-orbs/BackgroundOrbs.component';
 import Section from '@/components/universals/section/Section';
@@ -8,7 +10,10 @@ import LinkTileListItem from '@/components/universals/tile-list/LinkTileListItem
 import TileList from '@/components/universals/tile-list/TileList';
 import { appUtils } from '@/utils/app/app.utils';
 import { EServiceType } from '@/utils/configuration.type';
-import { getServiceConfigurations } from '@/utils/configuration.utils';
+import {
+  getGlobalEnvironmentSwitcherOptions,
+  getServiceConfigurations,
+} from '@/utils/configuration.utils';
 import { getAccessToken } from '@/utils/getAccessToken';
 import { uacUtils } from '@/utils/uac.utils';
 import styles from './page.module.css';
@@ -46,18 +51,30 @@ export default async function Home() {
     given_name?: string;
     preferred_username: string;
   };
-  const apps = await appUtils.getApps();
   const greeting = getGreetingByHour();
+
+  const selectedEnvironment = await getSelectedEnvironment();
+  const environmentSwitcherConfiguration =
+    await getGlobalEnvironmentSwitcherOptions(selectedEnvironment);
+  const environmentFilter =
+    environmentSwitcherConfiguration?.currentEnvironmentId;
+
+  const apps = await appUtils.getApps(environmentFilter);
+
   const availableCustomApps = (
     await Promise.all(
-      customApps.map(async (app) => ({
-        app,
-        isAllowed: await uacUtils.hasAppPermission(
-          EServiceType.CUSTOM_APP,
-          app.id,
-          accessToken,
-        ),
-      })),
+      customApps
+        .filter((app) =>
+          environmentFilter ? app.environment === environmentFilter : true,
+        )
+        .map(async (app) => ({
+          app,
+          isAllowed: await uacUtils.hasAppPermission(
+            EServiceType.CUSTOM_APP,
+            app.id,
+            accessToken,
+          ),
+        })),
     )
   )
     .filter(({ isAllowed }) => isAllowed)
@@ -66,6 +83,14 @@ export default async function Home() {
   return (
     <main className={styles.root}>
       <BackgroundOrbs />
+      {environmentSwitcherConfiguration && (
+        <div className={styles.environmentSwitcher}>
+          <EnvironmentSwitcher
+            configuration={environmentSwitcherConfiguration}
+            variant="plain"
+          />
+        </div>
+      )}
       <div className={styles.content}>
         <h1 className={styles.pageTitle}>
           {greeting}{' '}

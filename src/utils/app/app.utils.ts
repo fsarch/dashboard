@@ -135,11 +135,14 @@ const apps: Array<TConfiguredApp> = [
   },
 ];
 
-const getApps = async () => {
+const getApps = async (environmentId?: string) => {
   const availableApps: TVisibleApp[] = [];
 
   for (const app of apps) {
-    const services = await getServiceConfigurations(app.serviceType);
+    let services = await getServiceConfigurations(app.serviceType);
+    if (environmentId) {
+      services = services.filter((s) => s.environment === environmentId);
+    }
 
     const hasInstalledService = services.length > 0;
     if (!hasInstalledService) {

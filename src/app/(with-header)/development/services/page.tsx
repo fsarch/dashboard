@@ -33,6 +33,7 @@ export default async function DevelopmentServicesPage() {
 
   const configuration = await getConfiguration();
   const services = configuration.services;
+  const environments = configuration.environments;
 
   return (
     <div className={styles.root}>
@@ -64,17 +65,25 @@ export default async function DevelopmentServicesPage() {
       <main className={styles.main}>
         <Section name="Verbundene Services">
           <List>
-            {services.map((service) => (
-              <LinkListItem
-                key={service.id}
-                href={`/development/services/${service.id}`}
-              >
-                <strong>{service.name ?? service.id}</strong>{' '}
-                <span style={{ opacity: 0.6, fontSize: '0.85em' }}>
-                  [{service.type}] — {service.id}
-                </span>
-              </LinkListItem>
-            ))}
+            {services.map((service) => {
+              const environmentName = service.environment
+                ? (environments?.find((e) => e.id === service.environment)
+                    ?.name ?? service.environment)
+                : undefined;
+
+              return (
+                <LinkListItem
+                  key={service.id}
+                  href={`/development/services/${service.id}`}
+                >
+                  <strong>{service.name ?? service.id}</strong>{' '}
+                  <span style={{ opacity: 0.6, fontSize: '0.85em' }}>
+                    [{service.type}] — {service.id}
+                    {environmentName ? ` — ${environmentName}` : ''}
+                  </span>
+                </LinkListItem>
+              );
+            })}
           </List>
           {services.length === 0 && (
             <p style={{ padding: '8px', opacity: 0.6 }}>
