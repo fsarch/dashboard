@@ -1,0 +1,31 @@
+.wrapper {
+  position: relative;
+}
+
+.cornerBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 140px;
+  overflow: hidden;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ribbon {
+  position: absolute;
+  top: 32px;
+  right: -50px;
+  width: 200px;
+  padding: 5px 0;
+  background: #cc1f1f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}

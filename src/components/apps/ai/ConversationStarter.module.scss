@@ -50,10 +50,31 @@
   color: var(--ai-text, #ffffff);
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .inputRow {
   display: flex;
   gap: 12px;
   align-items: stretch;
+}
+
+.advancedSettings {
+  color: var(--ai-text, #ffffff);
+  font-size: 14px;
+
+  summary {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  // Select already carries its own chrome via input-base.mixin - just space it from the summary.
+  select {
+    margin-top: 8px;
+  }
 }
 
 .input {

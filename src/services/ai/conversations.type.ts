@@ -32,10 +32,12 @@ export type CreateConversationDto = {
   owner_user_id?: string;
   name?: string;
   description?: string;
+  default_agent_id?: string;
   initial_message?: {
     external_id?: string;
     author_user_id?: string;
     content: string;
+    agent_id?: string;
   };
 };
 
