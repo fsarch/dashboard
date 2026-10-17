@@ -53,7 +53,7 @@ export const SCOPE_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
       method: 'GET',
       transformResponse: {
         $type: 'jsonata',
-        value: '{ "body": data.{"id": id, "value": id + "", "label": name} }',
+        value: '{ "body": [data.{"id": id, "value": id + "", "label": name}] }',
       },
     },
   },

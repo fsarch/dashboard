@@ -209,7 +209,12 @@ export type TJsonataExpression = {
  * - `method`: HTTP method (usually `'GET'`)
  * - `transformResponse`: JSONata expression to transform the API response
  *   ⚠️ IMPORTANT: MUST return an object with `{ body: ... }`!
- *   Example: `{ "body": data.{ "id": id, "value": id + "", "label": name } }`
+ *   For a `select` input's datasource, `body` MUST be an array - wrap the
+ *   mapping in `[...]` even when mapping a single field, e.g.
+ *   `{ "body": [data.{ "id": id, "value": id + "", "label": name }] }`.
+ *   Without the brackets, JSONata collapses the mapped result to a bare
+ *   object (not an array) whenever the source array has exactly one
+ *   element, which crashes the select at render time.
  * - `headers`: Optional additional request headers
  */
 export type TGeneratedFormDataSource = {

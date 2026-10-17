@@ -176,7 +176,8 @@ dataSources: {
     transformResponse: {
       $type: 'jsonata',
       // ⚠️ IMPORTANT: transformResponse MUST return an object with { body: ... }!
-      value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
+      // ⚠️ body MUST be an array - wrap the mapping in [...], see "Key Rule" below.
+      value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
     }
   }
 }
@@ -194,7 +195,25 @@ dataSources: {
 value: 'data.{ "id": id, "value": id, "label": name }'
 
 // ✅ CORRECT (wraps result in { body: ... })
+value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
+```
+
+> **⚠️ For a `select` input's datasource, `body` MUST itself be an array - wrap the mapping in `[...]`, even though it looks redundant!**
+>
+> JSONata's object-constructor mapping (`data.{ ... }`) collapses to a bare
+> object - not a one-element array - whenever the source array has exactly
+> one element (and to `undefined` when it has none). Without `[...]` the
+> select renders fine while testing against a list with several items, then
+> crashes in production the moment someone's data has only one or zero
+> entries. Always wrap it, even for datasources that currently return many
+> items.
+
+```typescript
+// ❌ WRONG (collapses to a single object for a list of exactly one item)
 value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
+
+// ✅ CORRECT (always an array, regardless of item count)
+value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
 ```
 
 ---
@@ -296,7 +315,7 @@ data.{
 value: 'data.{ "id": id, "value": id, "label": name }'
 
 // ✅ CORRECT
-value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
+value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
 ```
 
 ### 2. Select Shows No Options
@@ -309,7 +328,27 @@ value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
 | API call failed | Path is incorrect | Verify path (relative to service!) |
 | DataSource not referenced | Wrong key in `data` | Verify key matches dataSources |
 
-### 3. Submit Not Working
+### 3. Page crashes with `TypeError: ...find is not a function` / `...map is not a function` on a select
+
+**Cause:** `transformResponse` mapped the datasource's array without wrapping the result in `[...]`. JSONata
+collapses the mapped result to a bare object (not an array) whenever the source array has exactly one
+element, which then crashes the Select/SearchableSelect component. This usually only shows up once real
+data has a single item - easy to miss while developing against a list of several.
+
+**Solution:**
+```typescript
+// ❌ WRONG (breaks when the source array has exactly one element)
+value: '{ "body": data.{ "id": id, "value": id, "label": name } }'
+
+// ✅ CORRECT (always an array)
+value: '{ "body": [data.{ "id": id, "value": id, "label": name }] }'
+```
+
+GeneratedForm's server-side `evaluateDefinition` also validates this: if a select's datasource doesn't
+resolve to an array, it logs an error via `ServerLogger` (check your server logs for `GeneratedForm select
+datasource did not resolve to an array`) and falls back to an empty option list instead of crashing.
+
+### 4. Submit Not Working
 
 | Symptom | Cause | Solution |
 |---------|-------|----------|

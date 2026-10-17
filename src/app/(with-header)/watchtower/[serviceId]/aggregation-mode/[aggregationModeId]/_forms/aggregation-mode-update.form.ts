@@ -36,7 +36,7 @@ export const AGGREGATION_MODE_UPDATE_FORM: TGeneratedFormDefinition = {
       transformResponse: {
         $type: 'jsonata',
         value:
-          '{ "body": body.data.{ "id": id, "value": id + "", "label": name } }',
+          '{ "body": [body.data.{ "id": id, "value": id + "", "label": name }] }',
       },
     },
     aggregationMode: {

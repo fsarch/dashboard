@@ -34,7 +34,7 @@ export const UPDATE_PROJECT_FORM: TGeneratedFormDefinition = {
       transformResponse: {
         $type: 'jsonata',
         value:
-          '{ "body": body.{ "id": id, "value": id, "label": id & \' (\' & creationTime & \')\' } }',
+          '{ "body": [body.{ "id": id, "value": id, "label": id & \' (\' & creationTime & \')\' }] }',
       },
     },
   },
