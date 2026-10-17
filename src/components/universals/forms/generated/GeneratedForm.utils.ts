@@ -14,9 +14,9 @@ import type {
   TGeneratedFormStringConstantData,
   TGeneratedFormSubmitResponse,
 } from '@/components/universals/forms/generated/GeneratedForm.type';
+import { resolveSelectDatasourceOptions } from '@/components/universals/forms/generated/selectDatasource.utils';
 import { fetchService } from '@/utils/fetchService';
 import { getServiceLocalUrl } from '@/utils/getServiceLocalUrl';
-import { ServerLogger } from '@/utils/ServerLogger';
 
 // jsonata's object-constructor expressions (e.g. `{ "name": "" }`) build their
 // result via `Object.create(null)`, which yields plain-looking objects with a
@@ -330,31 +330,14 @@ const evaluateDefinition = async (
           dataSourceKey
         ];
 
-        // A select's datasource MUST resolve to an array. The most common
-        // way this breaks is a JSONata object-constructor mapping over an
-        // array (e.g. `body.{ "id": id, ... }`) without wrapping it in
-        // `[...]`: JSONata collapses that to a bare object when the input
-        // array has exactly one element (and to `undefined` when it has
-        // none), which then crashes the Select/SearchableSelect client
-        // component instead of failing here where it's actionable.
-        if (!Array.isArray(resolvedValue)) {
-          ServerLogger.Instance.error(
-            "GeneratedForm select datasource did not resolve to an array - check the datasource's transformResponse (likely missing `[...]` around a JSONata object-constructor mapping)",
-            {
-              inputId: input.id,
-              dataSourceKey,
-              resolvedValueType:
-                resolvedValue === null ? 'null' : typeof resolvedValue,
-            },
-            'GeneratedForm',
-          );
-        }
-
         return {
           ...input,
           data: {
             $type: 'constant',
-            value: Array.isArray(resolvedValue) ? resolvedValue : [],
+            value: resolveSelectDatasourceOptions(resolvedValue, {
+              inputId: input.id,
+              dataSourceKey,
+            }),
           } as TGeneratedFormSelectConstantData,
         };
       }

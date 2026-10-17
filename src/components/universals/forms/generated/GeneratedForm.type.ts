@@ -72,7 +72,8 @@ export type TGeneratedFormSelectConstantData = {
  * - `data` can be a reference to a DataSource (`{ $type: 'datasource', value: 'dataSourceKey' }`)
  *   or constant values (`{ $type: 'constant', value: [...] }`)
  * - `enableSearch` enables search functionality for large lists
- * - IMPORTANT: `value` in options MUST be a string (use `id + ""` for numeric IDs)
+ * - IMPORTANT: `value` in options MUST be a string (use `id & ""` for numeric IDs -
+ *   JSONata's `+` is numeric addition only and throws on a string operand, `&` concatenates)
  */
 export type TGeneratedFormSelectInput = TGeneratedFormBaseInput & {
   /** Input type identifier - always 'select' for dropdown inputs */
@@ -211,7 +212,7 @@ export type TJsonataExpression = {
  *   ⚠️ IMPORTANT: MUST return an object with `{ body: ... }`!
  *   For a `select` input's datasource, `body` MUST be an array - wrap the
  *   mapping in `[...]` even when mapping a single field, e.g.
- *   `{ "body": [data.{ "id": id, "value": id + "", "label": name }] }`.
+ *   `{ "body": [data.{ "id": id, "value": id & "", "label": name }] }`.
  *   Without the brackets, JSONata collapses the mapped result to a bare
  *   object (not an array) whenever the source array has exactly one
  *   element, which crashes the select at render time.

@@ -134,7 +134,7 @@ Select fields can get their options from **DataSources** or **constants**.
 }
 ```
 
-**⚠️ Important:** `value` in select options **MUST be a string**. Use `id + ""` for numeric IDs.
+**⚠️ Important:** `value` in select options **MUST be a string**. Use `id & ""` for numeric IDs.
 
 ---
 
@@ -177,7 +177,7 @@ dataSources: {
       $type: 'jsonata',
       // ⚠️ IMPORTANT: transformResponse MUST return an object with { body: ... }!
       // ⚠️ body MUST be an array - wrap the mapping in [...], see "Key Rule" below.
-      value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
+      value: '{ "body": [data.{ "id": id, "value": id & "", "label": name }] }'
     }
   }
 }
@@ -195,7 +195,7 @@ dataSources: {
 value: 'data.{ "id": id, "value": id, "label": name }'
 
 // ✅ CORRECT (wraps result in { body: ... })
-value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
+value: '{ "body": [data.{ "id": id, "value": id & "", "label": name }] }'
 ```
 
 > **⚠️ For a `select` input's datasource, `body` MUST itself be an array - wrap the mapping in `[...]`, even though it looks redundant!**
@@ -210,10 +210,10 @@ value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
 
 ```typescript
 // ❌ WRONG (collapses to a single object for a list of exactly one item)
-value: '{ "body": data.{ "id": id, "value": id + "", "label": name } }'
+value: '{ "body": data.{ "id": id, "value": id & "", "label": name } }'
 
 // ✅ CORRECT (always an array, regardless of item count)
-value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
+value: '{ "body": [data.{ "id": id, "value": id & "", "label": name }] }'
 ```
 
 ---
@@ -270,14 +270,16 @@ JSONata is used for dynamic values in `body`, `transformResponse`, and `url`.
 | `.field` | Field access | `data.name` |
 | `~>` | Deep descent (all elements recursively) | `data ~> | $ | name |` |
 | `{...}` | Object literal | `{ "id": id, "name": name }` |
-| `+` | String concatenation | `name + " (" + id + ")"` |
+| `&` | String concatenation | `name & " (" & id & ")"` |
 | Ternary | Conditional logic | `active ? "Active" : "Inactive"` |
+
+> **⚠️ `+` is numeric addition only, not string concatenation!** `id + ""` or `name + " - " + id` **throws** at evaluation time (`"The left/right side of the '+' operator must evaluate to a number"`) - it only looks like it works in a plain JS/TS string until you actually run it as JSONata. Use `&` for concatenation and coercing a number to a string (e.g. `id & ""`).
 
 ### Common Patterns
 
 #### Transform array of objects
 ```jsonata
-data.{ "id": id, "value": id + "", "label": name }
+data.{ "id": id, "value": id & "", "label": name }
 ```
 
 #### Filter array
@@ -289,7 +291,7 @@ data.[active = true].{ "id": id, "value": id, "label": name }
 ```jsonata
 data.{
   "id": id,
-  "label": name + " (" + category.name + ")"
+  "label": name & " (" & category.name & ")"
 }
 ```
 
@@ -315,7 +317,7 @@ data.{
 value: 'data.{ "id": id, "value": id, "label": name }'
 
 // ✅ CORRECT
-value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
+value: '{ "body": [data.{ "id": id, "value": id & "", "label": name }] }'
 ```
 
 ### 2. Select Shows No Options
@@ -324,7 +326,7 @@ value: '{ "body": [data.{ "id": id, "value": id + "", "label": name }] }'
 
 | Symptom | Cause | Solution |
 |---------|-------|----------|
-| Dropdown is empty | `value` is number, select expects string | Use `"value": id + ""` |
+| Dropdown is empty | `value` is number, select expects string | Use `"value": id & ""` |
 | API call failed | Path is incorrect | Verify path (relative to service!) |
 | DataSource not referenced | Wrong key in `data` | Verify key matches dataSources |
 
@@ -404,7 +406,7 @@ The Watchtower service supports **Aggregation Modes** and **Aggregation Mode Typ
 ## 📌 Best Practices
 
 1. ✅ **Always wrap `transformResponse` in `{ "body": ... }`**
-2. ✅ **Select `value` must be string** (use `id + ""` for numeric IDs)
+2. ✅ **Select `value` must be string** (use `id & ""` for numeric IDs)
 3. ✅ **Use relative paths** (e.g., `/v1/entities`)
 4. ✅ **Service context is set automatically** – No manual `serviceId` needed!
 5. ✅ **Store forms in `_forms/` directory** (convention)
