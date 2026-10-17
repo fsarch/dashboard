@@ -228,6 +228,7 @@ describe('generatedFormUtils.evaluateDefinition', () => {
             views: [
               {
                 $type: 'section',
+                label: 'Project',
                 views: [
                   {
                     $type: 'paragraph',
@@ -353,7 +354,7 @@ describe('generatedFormUtils.executePostSubmitAction', () => {
     );
 
     const definition = baseDefinition({
-      inputs: [{ id: 'attachments', $type: 'file-upload' }],
+      inputs: [{ id: 'attachments', $type: 'file-upload', label: 'Attachments' }],
       endpoint: {
         path: '/v1/entities',
         method: 'POST',
