@@ -1,6 +1,14 @@
 import type { TGeneratedFormDefinition } from '@/components/universals/forms/generated/GeneratedForm.type';
 
-export const MATERIAL_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
+// "manufacturer"-Custom-Resource-Typ des material-tracing-Backends (siehe
+// GET /v1/.meta/custom-resources) - der Auswahl-Dialog blättert seitenweise
+// durch alle Hersteller, statt wie ein select-Input nur die erste Seite
+// (Backend-Default take=25) von /v1/manufacturers zu laden.
+const MANUFACTURER_CUSTOM_RESOURCE_ID = 'manufacturer';
+
+export const buildMaterialTypeCreateForm = (
+  serviceId: string,
+): TGeneratedFormDefinition => ({
   inputs: [
     {
       id: 'name',
@@ -9,18 +17,13 @@ export const MATERIAL_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
     },
     {
       id: 'manufacturerId',
-      $type: 'select',
+      $type: 'custom-resource-picker',
       label: 'Manufacturer',
-      data: {
-        $type: 'datasource',
-        value: 'manufacturers',
-      },
+      serviceId,
+      resourceId: MANUFACTURER_CUSTOM_RESOURCE_ID,
     },
   ],
-  initialValues: {
-    $type: 'jsonata',
-    value: '{ "name": "", "manufacturerId": dataSource.manufacturers[0].id }',
-  },
+  initialValues: { name: '', manufacturerId: '' },
   endpoint: {
     path: '/v1/material-types',
     method: 'POST',
@@ -29,16 +32,4 @@ export const MATERIAL_TYPE_CREATE_FORM: TGeneratedFormDefinition = {
       value: 'form',
     },
   },
-  dataSources: {
-    manufacturers: {
-      $type: 'fetch',
-      path: '/v1/manufacturers',
-      method: 'GET',
-      transformResponse: {
-        $type: 'jsonata',
-        value:
-          '{ "body": [body.data.{ "id": id, "value": id, "label": name }] }',
-      },
-    },
-  },
-};
+});

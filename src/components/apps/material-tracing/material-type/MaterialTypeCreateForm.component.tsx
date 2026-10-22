@@ -1,8 +1,11 @@
 import 'server-only';
 
 import GeneratedForm from '@/components/universals/forms/generated/GeneratedForm.component';
-import { MATERIAL_TYPE_CREATE_FORM } from '@/services/material-tracing/material-type.forms';
+import { buildMaterialTypeCreateForm } from '@/services/material-tracing/material-type.forms';
+import { getCurrentServiceId } from '@/utils/configuration.utils';
 
 export const MaterialTypeCreateForm = async () => {
-  return <GeneratedForm definition={MATERIAL_TYPE_CREATE_FORM} />;
+  const serviceId = await getCurrentServiceId();
+
+  return <GeneratedForm definition={buildMaterialTypeCreateForm(serviceId)} />;
 };
